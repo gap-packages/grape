@@ -1,0 +1,247 @@
+                          GRAPE Version 4.2, 
+
+a GAP package for computing with graphs and groups, 
+by Leonard H. Soicher, Queen Mary, University of London.
+
+This README document tells you how to install GRAPE and lists changes made 
+to GRAPE since Version 2.2. 
+
+Installing GRAPE
+-----------------
+
+To install GRAPE 4.2 (as a GAP package, after installing GAP),
+first download the GRAPE archive file `grape4r2.zoo' available at 
+
+   http://www.maths.qmul.ac.uk/~leonard/grape/grape4r2.zoo
+
+and copy this archive file to into the `pkg' directory of the GAP
+root directory.  Note that it is possible to have several GAP root
+directories (see the GAP-manual section "GAP Root Directory"), and so
+it is easy to install GRAPE locally even if you have no permission to
+add files to the main GAP installation (see the GAP-manual section
+"Installing a GAP Package in your home directory"). Change to the
+appropriate `pkg' directory, and then run
+
+   unzoo -x grape4r2.zoo
+
+to unpack GRAPE.
+
+After unpacking GRAPE, the GAP-only part of GRAPE is installed.
+The parts of GRAPE depending on B.D. McKay's nauty package (for
+computing automorphism groups and testing graph isomorphism) are only
+available in a UNIX environment, where you should proceed as follows:
+
+Change to the newly created `grape' directory and run 
+
+   /bin/sh configure <path> 
+
+where <path> is the path to the home directory of the GAP
+distribution.  So for example, if you install GRAPE in the `pkg'
+directory of the GAP home directory, run
+
+   /bin/sh configure ../..
+
+This will fetch the name of the system architecture on which GAP
+has been compiled, and create a `Makefile'. Now run
+
+   make
+
+to give a list of target architectures for which nauty can be compiled 
+within GRAPE.  Select the most suitable target and run
+
+   make <target>
+
+to compile the binary and to install it in the appropriate place.
+For example, if you are on a LINUX system with gcc, run
+
+   make linux-gcc
+
+This completes the installation of GRAPE for a single architecture.
+If GAP is installed on different architectures on a common file system,
+this configuration process will only work for the *last* architecture
+for which GAP was compiled. Therefore, you should always follow
+the above procedure to install the GRAPE binaries immediately after
+compiling GAP on a given architecture. However, if you want to add
+GRAPE later, you can just run `/bin/sh configure' again in the main
+GAP directory for the architecture before installing the GRAPE binaries
+(as described above) for that architecture.
+
+You should now test GRAPE and the interface to nauty on each
+architecture on which you have installed GRAPE. Start up GAP
+and at the prompt type
+
+   LoadPackage( "grape" );
+
+On-line documentation for GRAPE should be available by typing 
+
+   ?GRAPE
+
+The command
+
+   IsIsomorphicGraph( JohnsonGraph(7,3), JohnsonGraph(7,4) );
+
+should return `true', and 
+
+   Size( AutGroupGraph( JohnsonGraph(4,2) ) );
+
+should be `48'.
+
+Both dvi and pdf versions of the GRAPE manual are available (as
+`manual.dvi' and `manual.pdf' respectively) in the `doc' directory of
+the home directory of GRAPE.
+
+If you install GRAPE, then please tell L.H.Soicher@qmul.ac.uk, where
+you should also send any comments and bug reports.
+
+-------------------------------------------------------------------------
+If you use GRAPE to solve a problem, then please email
+L.H.Soicher@qmul.ac.uk, and reference:
+
+L.H. Soicher, The GRAPE package for GAP, 
+http://www.maths.qmul.ac.uk/~leonard/grape/
+------------------------------------------------------------------------
+
+Main changes from GRAPE 4.1 to GRAPE 4.2:
+------------------------------------------
+
+(1) Including Steve Linton's `SmallestImageSet' function, and using
+this function for faster isomorph rejection in `CompleteSubgraphs',
+`CompleteSubgraphsOfGivenSize', and `PartialLinearSpaces'.
+
+(2) Further improvements to `CompleteSubgraphs' and
+`CompleteSubgraphsOfGivenSize', including functionality in the latter
+which will be required by the `Design' package.
+
+(3) All global function names are now read-only.
+ 
+(4) `OrbitalGraphIntersectionMatrices' is no longer an 
+alternative name for `OrbitalGraphColadjMats'.
+This change is *not* backward compatible.
+
+(5) The function `Vertices' is now an operation, so as not to
+conflict with the xgap package. 
+
+(6) The default value for GRAPE_NRANGRENS has been increased to 18.
+
+(7) Output streams are now used in `AutGroupGraph' and
+`SetAutGroupCanonicalLabelling'.
+
+Main changes from GRAPE 4.0 to GRAPE 4.1:
+------------------------------------------
+(1) Extended functionality of `CompleteSubgraphsOfGivenSize' so that a 
+user can request only *maximal* complete subgraphs of a given size to
+be returned.
+ 
+(2) Extended functionality of `CompleteSubgraphs' and
+`CompleteSubgraphsOfGivenSize' so that the required complete subgraphs
+can be classified up to equivalence under the permutation group associated
+with the input graph.
+
+(3) Improvements to `CompleteSubgraphs' and `CompleteSubgraphsOfGivenSize'
+which sometimes result in significant speed-ups.
+
+(4) The default UNIX file permissions for GRAPE files now include write
+permission for the owner. This is to make default file permissions more 
+in line with those of GAP.
+
+(5) The naming convention for the vertices of the graphs output (in a
+list) by `PartialLinearSpaces' has changed to be more consistent with
+vertex-naming conventions in GRAPE.  The point-vertices of such a graph
+<delta> are 1,...,`<ptgraph>.order', with the name of point-vertex <i>
+being the name of vertex <i> of <ptgraph>. A line-vertex of <delta>
+is named by a list (not necessarily ordered) of the point-vertex names
+for the points on that line.  
+Warning: This change is *not* backward compatible.
+
+(6) For non-simple input graphs, different nauty parameters than
+previously are set by `AutGroupGraph' and `SetAutGroupCanonicalLabelling'
+(which is called by `IsIsomorphicGraph').  This is in order to avoid a
+performance problem with certain sparse directed graphs.
+Warning: canonical labellings may be different than before.
+
+(7) Input graph to `CollapsedIndependentOrbitsGraph' must be simple.
+(The function did not always produce correct output for non-simple graphs.)
+
+(8) Bug fixed so that `AutGroupGraph' and `SetAutGroupCanonicalLabelling'
+always output ranges as full lists for processing as input to
+nauty/dreadnaut.
+
+(9) Bug fixed in function `Girth'. This bug could cause wrong answers to
+be returned. 
+
+(10) Improved documentation, including an example of research using GRAPE.
+
+(11) Better file management for the non-GAP part of GRAPE.
+
+(12) A p2c translation of tcfrontend4.p is now supplied and used.
+
+Main changes from GRAPE 2.31 to GRAPE 4.0:
+------------------------------------------
+(1) GRAPE 4.0 is compatible with GAP4, but not with GAP3.
+
+(2) The version of nauty now used is 2.0beta5, rather than 1.7, and
+canonical labellings may have changed.  All graphs stored from previous
+versions of GRAPE should have their canonicalLabelling component unbound
+before use with this version.
+
+(3) IsIsomorphicGraph by default now unbinds any canonicalLabelling
+components of the input graphs. This is always safe, but will downgrade
+performance if testing pairwise isomorphism for many graphs. See the 
+GRAPE manual documentation on changing the default.             
+
+(4) The no longer needed functions  MakeStabChainGivenLimit  and
+NextSizeCompleteSubgraphs  were removed.  
+
+(5) The  names  component of a graph (if present) is immutable
+(unless explicitly stored otherwise by the user, which is *not* recommended).
+Also the  representatives  and  schreierVector  components of a graph
+are immutable (and these should *never* be changed by a user).
+ 
+(6) The names of an EdgeGraph or a QuotientGraph are lists, but need
+no longer be sets (strictly sorted lists).  This also applies to 
+a CollapsedIndependentOrbitsGraph and a CollapsedCompleteOrbitsGraph.
+The reason for this is that GAP4 does not support a total order on
+all possible GAP4 objects. 
+
+(7) ConnectedComponents  returns a strictly sorted list.
+
+(8) The function  GraphIsomorphism  returns  fail  (instead of false)
+if the input graphs are not isomorphic.
+
+(9) GraphImage(gamma)  has appropriate names even when gamma.names is
+unbound.
+
+(10) The preferred name for  OrbitalGraphIntersectionMatrices  is 
+OrbitalGraphColadjMats.
+
+(11) CompleteSubgraphs  and  CompleteSubgraphsOfGivenSize  improved.
+The default for  arg[5]  is now  true  in  CompleteSubgraphsOfGivenSize.
+Cliques  is now another name for  CompleteSubgraphs,  and  
+CliquesOfGivenSize  is another name for  CompleteSubgraphsOfGivenSize.
+
+(12) The documentation has been expanded and improved.
+
+Main changes from GRAPE 2.2 to GRAPE 2.31:
+------------------------------------------
+(1) The new  CompleteSubgraphsOfGivenSize,  which allows for searching in
+a vertex-weighted graph for cliques with a given vertex-weight sum.
+
+(2) The new function  PartialLinearSpaces,  which classifies partial linear
+spaces with given point graph and parameters  s,t.  
+
+(3) The new function  VertexTransitiveDRGs,  which determines the 
+distance-regular generalized orbital graphs for a given transitive 
+permutation group.
+
+(4) New functions  CayleyGraph  and  SwitchedGraph.
+
+(5) A one-vertex graph is now considered to be bipartite, 
+with bicomponents = [[],[1]] (to be consistent with considering a 
+zero-vertex graph to be bipartite, with bicomponents = [[],[]]). 
+
+(6) A bug fixed in the function UnderlyingGraph. That bug had
+the effect that if the returned graph had loops, then it 
+might have had its isSimple component erroneously set to true.
+
+Leonard H. Soicher
+September 2003. 

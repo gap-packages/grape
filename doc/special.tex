@@ -1,0 +1,143 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%A  special.tex               GRAPE documentation              Leonard Soicher
+%
+%
+%
+\def\GRAPE{\sf GRAPE}
+\def\nauty{\it nauty}
+\def\G{\Gamma}
+\def\Aut{{\rm Aut}\,}
+\def\x{\times}
+\Chapter{Some special vertex subsets of a graph}
+
+This chapter describes functions to determine certain special vertex
+subsets of a graph.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{ConnectedComponent}
+
+\>ConnectedComponent( <gamma>, <v> )
+
+This function  returns the set  of all vertices  in <gamma> which  can be
+reached by a path starting at the vertex  <v>.  The graph <gamma> must be
+simple.
+
+See also "ConnectedComponents".
+
+\beginexample
+gap> ConnectedComponent( NullGraph( Group((1,2)) ), 2 );
+[ 2 ]
+gap> ConnectedComponent( JohnsonGraph(4,2), 2 );
+[ 1, 2, 3, 4, 5, 6 ] 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{ConnectedComponents}
+
+\>ConnectedComponents( <gamma> )
+
+This  function returns  a  list  of  the  vertex  sets  of  the connected
+components of <gamma>, which must be a simple graph.
+
+See also "ConnectedComponent".
+
+\beginexample
+gap> ConnectedComponents( NullGraph( Group((1,2,3,4)) ) );
+[ [ 1 ], [ 2 ], [ 3 ], [ 4 ] ]
+gap> ConnectedComponents( JohnsonGraph(4,2) );
+[ [ 1, 2, 3, 4, 5, 6 ] ] 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Bicomponents}
+
+\>Bicomponents( <gamma> )
+
+If the graph  <gamma>, which must be simple,  is bipartite, this function
+returns  a length 2 list  of  bicomponents or parts of <gamma>, otherwise
+the empty list is returned.
+
+*Note* If <gamma> is bipartite but not connected, then its set of
+bicomponents is not uniquely determined.  
+
+See also "IsBipartite".
+
+\beginexample
+gap> Bicomponents( NullGraph(SymmetricGroup(4)) );
+[ [ 1 .. 3 ], [ 4 ] ]
+gap> Bicomponents( JohnsonGraph(4,2) );
+[  ]
+gap> Bicomponents( BipartiteDouble( JohnsonGraph(4,2) ) );
+[ [ 1, 2, 3, 4, 5, 6 ], [ 7, 8, 9, 10, 11, 12 ] ]
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{DistanceSet}
+
+\>DistanceSet( <gamma>, <distances>, <V> )
+\>DistanceSet( <gamma>, <distances>, <V>, <G> )
+
+Let <V> be a vertex or a nonempty list of vertices of <gamma>.
+This function returns the set of vertices $w$ of <gamma>, such that
+$d(<V>,w)$ is in <distances> (a list or singleton distance).
+
+The optional  parameter <G>, if  present, is assumed to be  a subgroup of
+$\Aut(<gamma>)$  fixing <V> setwise.  Including  such a <G> can speed  up
+the function.
+
+See also "Distance" and "DistanceSetInduced".
+
+\beginexample
+gap> DistanceSet( JohnsonGraph(4,2), 1, [1,6] );
+[ 2, 3, 4, 5 ] 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Layers}
+
+\>Layers( <gamma>, <V> )
+\>Layers( <gamma>, <V>, <G> )
+
+
+Let <V> be a vertex or a nonempty list of vertices of <gamma>.  This
+function returns a list whose $i$-th element is the set of vertices of
+<gamma> at distance $i-1$ from <V>.
+
+The optional  parameter  <G>, if present, is assumed to  be a subgroup of
+$\Aut(<gamma>)$ which fixes <V>  setwise.  Including such a <G> can speed
+up the function.
+
+See also "Distance".
+
+\beginexample
+gap> Layers( JohnsonGraph(4,2), 6 );
+[ [ 6 ], [ 2, 3, 4, 5 ], [ 1 ] ] 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{IndependentSet}
+
+\>IndependentSet( <gamma> )
+\>IndependentSet( <gamma>, <indset> )
+\>IndependentSet( <gamma>, <indset>, <forbidden> )
+
+Returns a (hopefully large) independent set of the graph <gamma>, which
+must be simple.  An *independent set* of <gamma> is a set of vertices
+of <gamma>, no two of which are joined by an edge.  At present, a
+greedy algorithm is used.  The returned independent set will contain
+the (assumed) independent set <indset> (default: `[]'), and not contain
+any element of <forbidden> (default: `[]', in which case the returned
+independent set is maximal).
+
+An error is signalled if <indset> and <forbidden> have non-trivial
+intersection.
+
+See also "CompleteSubgraphs" and "CompleteSubgraphsOfGivenSize", which
+can be used on the complement graph of <gamma> to look seriously for
+independent sets.
+
+\beginexample
+gap> IndependentSet( JohnsonGraph(4,2), [3] );
+[ 3, 4 ] 
+\endexample

@@ -1,0 +1,401 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%A  inspect.tex               GRAPE documentation              Leonard Soicher
+%
+%
+%
+\def\GRAPE{\sf GRAPE}
+\def\nauty{\it nauty}
+\def\G{\Gamma}
+\def\Aut{{\rm Aut}\,}
+\def\x{\times}
+\Chapter{Functions to inspect graphs, vertices and edges}
+
+This chapter describes functions to inspect graphs, vertices and edges.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{IsGraph}
+
+\>IsGraph( <obj> )
+
+This boolean function  returns `true' if  and only if <obj>, which can be
+an object of arbitrary type, is a graph.
+
+\beginexample
+gap> IsGraph( 1 );
+false
+gap> IsGraph( JohnsonGraph( 3, 2 ) );
+true 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{OrderGraph}
+
+\>OrderGraph( <gamma> )
+
+This function returns the number of vertices (the *order*) of the graph
+<gamma>.
+
+\beginexample
+gap> OrderGraph( JohnsonGraph( 4, 2 ) );
+6 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{IsVertex}
+
+\>IsVertex( <gamma>, <v> )
+
+This  boolean  function returns `true' if  and  only if  <v> is vertex of
+the graph <gamma>.
+
+\beginexample
+gap> gamma := JohnsonGraph( 3, 2 );;
+gap> IsVertex( gamma, 1 );
+true
+gap> IsVertex( gamma, 4 );
+false 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{VertexName}
+
+\>VertexName( <gamma>, <v> )
+
+This function returns (an immutable copy of) the name of vertex <v> in
+the graph <gamma>. 
+
+See also "VertexNames" and "AssignVertexNames".
+
+\beginexample
+gap> VertexName( JohnsonGraph(4,2), 6 );
+[ 3, 4 ] 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{VertexNames}
+
+\>VertexNames( <gamma> )
+
+This function returns (an immutable copy of) the list of vertex-names
+for the graph <gamma>.  The <i>-th element of this list is the name of
+vertex <i>.
+
+See also "VertexName" and "AssignVertexNames".
+
+\beginexample
+gap> VertexNames( JohnsonGraph(4,2) );
+[ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ], [ 3, 4 ] ]                 
+\endexample
+                                                                               
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Vertices}
+
+\>Vertices( <gamma> )
+
+This function returns the vertex-set $\{1,\ldots, `<gamma>\.order'\}$
+of the graph <gamma>.
+
+\beginexample
+gap> Vertices( JohnsonGraph( 4, 2 ) );
+[ 1 .. 6 ] 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{VertexDegree}
+
+\>VertexDegree( <gamma>, <v> )
+
+This  function  returns the  (out)degree  of the vertex <v> of  the graph
+<gamma>.
+
+\beginexample
+gap> VertexDegree( JohnsonGraph( 3, 2 ), 1 );
+2 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{VertexDegrees}
+
+\>VertexDegrees( <gamma> )
+
+This function returns the set of vertex (out)degrees for the graph
+<gamma>.
+
+\beginexample
+gap> VertexDegrees( JohnsonGraph( 4, 2 ) );
+[ 4 ] 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{IsLoopy}
+
+\>IsLoopy( <gamma> )
+
+This boolean function returns `true' if and only if the graph <gamma> has
+a *loop*, i.e. an edge of the form $[x,x]$.
+
+\beginexample
+gap> IsLoopy( JohnsonGraph( 4, 2 ) );
+false
+gap> IsLoopy( CompleteGraph( Group( (1,2,3), (1,2) ), 3 ) );
+false
+gap> IsLoopy( CompleteGraph( Group( (1,2,3), (1,2) ), 3, true ) );
+true 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{IsSimpleGraph}
+
+\>IsSimpleGraph( <gamma> )
+
+This boolean function returns `true' if and only if the graph <gamma>
+is *simple*, i.e. has no loops and whenever $[x,y]$ is an edge then so
+is $[y,x]$.
+
+\beginexample
+gap> IsSimpleGraph( CompleteGraph( Group( (1,2,3) ), 3 ) );
+true
+gap> IsSimpleGraph( CompleteGraph( Group( (1,2,3) ), 3, true ) );
+false 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Adjacency}
+
+\>Adjacency( <gamma>, <v> )
+
+This function returns (a copy of) the set of vertices of the graph
+<gamma> adjacent to the vertex <v> of <gamma>.  A vertex $w$ is
+*adjacent* to <v> if and only if $[v,w]$ is an edge.
+
+\beginexample
+gap> Adjacency( JohnsonGraph( 4, 2 ), 1 );
+[ 2, 3, 4, 5 ]
+gap> Adjacency( JohnsonGraph( 4, 2 ), 6 );
+[ 2, 3, 4, 5 ] 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{IsEdge}
+
+\>IsEdge( <gamma>, <e> )
+
+This  boolean function returns `true' if and  only  if <e> is an  edge of
+the graph <gamma>.
+
+\beginexample
+gap> IsEdge( JohnsonGraph( 4, 2 ), [ 1, 2 ] );
+true
+gap> IsEdge( JohnsonGraph( 4, 2 ), [ 1, 6 ] );
+false 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{DirectedEdges}
+
+\>DirectedEdges( <gamma> )
+
+This function  returns the  set of directed  (ordered) edges of the graph
+<gamma>.
+
+See also "UndirectedEdges".
+
+\beginexample
+gap> gamma := JohnsonGraph( 4, 3 );
+rec( isGraph := true, order := 4, group := Group([ (1,4,3,2), (3,4) ]), 
+  schreierVector := [ -1, 1, 1, 1 ], adjacencies := [ [ 2, 3, 4 ] ], 
+  representatives := [ 1 ], 
+  names := [ [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 3, 4 ], [ 2, 3, 4 ] ], 
+  isSimple := true )
+gap> DirectedEdges( gamma );
+[ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 1 ], [ 2, 3 ], [ 2, 4 ], [ 3, 1 ], 
+  [ 3, 2 ], [ 3, 4 ], [ 4, 1 ], [ 4, 2 ], [ 4, 3 ] ]
+gap> UndirectedEdges( gamma );
+[ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ], [ 3, 4 ] ]
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{UndirectedEdges}
+
+\>UndirectedEdges( <gamma> )
+
+This function returns the set of undirected (unordered) edges of <gamma>,
+which must be a simple graph.
+
+See also "DirectedEdges".
+
+\beginexample
+gap> gamma := JohnsonGraph( 4, 3 );
+rec( isGraph := true, order := 4, group := Group([ (1,4,3,2), (3,4) ]), 
+  schreierVector := [ -1, 1, 1, 1 ], adjacencies := [ [ 2, 3, 4 ] ], 
+  representatives := [ 1 ], 
+  names := [ [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 3, 4 ], [ 2, 3, 4 ] ], 
+  isSimple := true )
+gap> DirectedEdges( gamma );
+[ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 1 ], [ 2, 3 ], [ 2, 4 ], [ 3, 1 ], 
+  [ 3, 2 ], [ 3, 4 ], [ 4, 1 ], [ 4, 2 ], [ 4, 3 ] ]
+gap> UndirectedEdges( gamma );
+[ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ], [ 3, 4 ] ]
+\endexample                                                                    
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Distance}
+
+\>Distance( <gamma>, <X>, <Y> )
+\>Distance( <gamma>, <X>, <Y>, <G> )
+
+This function returns the distance from <X> to <Y> in <gamma>. The
+parameters <X> and <Y> may be vertices or nonempty lists of vertices.
+We define the *distance* $d(<X>,<Y>)$ from <X> to <Y> to be the minimum
+length of a (directed) path joining a vertex of <X> to a vertex of <Y>
+if such a path exists, and $-1$ otherwise.
+
+The  optional parameter <G>,  if present, is assumed to  be a subgroup of
+$\Aut(<gamma>)$ fixing  <X>  setwise.  Including  such a <G> can speed up
+the function.
+
+See also "Diameter".
+
+\beginexample
+gap> Distance( JohnsonGraph(4,2), 1, 6 );
+2
+gap> Distance( JohnsonGraph(4,2), 1, 5 );
+1 
+gap> Distance( JohnsonGraph(4,2), [1], [5,6] );
+1
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Diameter}
+
+\>Diameter( <gamma> )
+
+This  function  returns the  diameter of <gamma>.  A diameter of $-1$
+is returned if <gamma> is not (strongly) connected.  Otherwise, the
+*diameter* of <gamma> is equal to the maximum (directed) distance
+$d(x,y)$ in <gamma> (as $x$ and $y$ range over all the vertices of 
+<gamma>).
+
+See also "Distance".
+
+\beginexample
+gap> Diameter( JohnsonGraph( 5, 3 ) );
+2
+gap> Diameter( JohnsonGraph( 5, 4 ) );
+1 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Girth}
+
+\>Girth( <gamma> )
+
+This function returns the girth of <gamma>, which must be a simple graph.
+A girth of $-1$ is returned if <gamma> is a forest.  Otherwise the *girth*
+is the length of a shortest cycle in <gamma>.
+
+\beginexample
+gap> Girth( JohnsonGraph( 4, 2 ) );
+3 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{IsConnectedGraph}
+
+\>IsConnectedGraph( <gamma> )
+
+This boolean function returns `true' if and only if the graph <gamma>
+is (strongly) *connected*, i.e. there is a (directed) path from $x$ to
+$y$ for every pair of vertices $x,y$ of <gamma>.
+
+\beginexample
+gap> IsConnectedGraph( JohnsonGraph(4,2) );
+true
+gap> IsConnectedGraph( NullGraph(SymmetricGroup(4)) );
+false 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{IsBipartite}
+
+\>IsBipartite( <gamma> )
+
+This boolean function returns `true' if and only if the graph <gamma>,
+which must be simple, is *bipartite*, i.e. if the vertex-set can be
+expressed as the disjoint union of two sets, on each of which <gamma>
+induces a null graph (these two sets are called the *bicomponents* or
+*parts* of <gamma>).
+
+See also "Bicomponents" and "BipartiteDouble".
+
+\beginexample
+gap> gamma := JohnsonGraph(4,2);
+rec(
+  isGraph := true,
+  order := 6,
+  group := Group( [ (1,4,6,3)(2,5), (2,4)(3,5) ] ),
+  schreierVector := [ -1, 2, 1, 1, 1, 1 ],
+  adjacencies := [ [ 2, 3, 4, 5 ] ],
+  representatives := [ 1 ],
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ], [ 3, 4 ] ],
+  isSimple := true )
+gap> IsBipartite(gamma);
+false
+gap> delta := BipartiteDouble(gamma);
+rec(
+  isGraph := true,
+  order := 12,
+  group := Group( [ ( 1, 4, 6, 3)( 2, 5)( 7,10,12, 9)( 8,11), 
+      ( 2, 4)( 3, 5)( 8,10)( 9,11), ( 1, 7)( 2, 8)( 3, 9)( 4,10)( 5,11)
+        ( 6,12) ] ),
+  schreierVector := [ -1, 2, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3 ],
+  adjacencies := [ [ 8, 9, 10, 11 ] ],
+  representatives := [ 1 ],
+  isSimple := true,
+  names := [ [ [ 1, 2 ], "+" ], [ [ 1, 3 ], "+" ], [ [ 1, 4 ], "+" ], 
+      [ [ 2, 3 ], "+" ], [ [ 2, 4 ], "+" ], [ [ 3, 4 ], "+" ], 
+      [ [ 1, 2 ], "-" ], [ [ 1, 3 ], "-" ], [ [ 1, 4 ], "-" ], 
+      [ [ 2, 3 ], "-" ], [ [ 2, 4 ], "-" ], [ [ 3, 4 ], "-" ] ] )
+gap> IsBipartite(delta);
+true
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{IsNullGraph}
+
+\>IsNullGraph( <gamma> )
+
+This boolean function returns `true' if and only if the graph <gamma> has
+no edges.
+
+See also "NullGraph".
+
+\beginexample
+gap> IsNullGraph( CompleteGraph( Group(()), 3 ) );
+false
+gap> IsNullGraph( CompleteGraph( Group(()), 1 ) );
+true 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{IsCompleteGraph}
+
+\>IsCompleteGraph( <gamma> )
+\>IsCompleteGraph( <gamma>, <mustloops> )
+
+This boolean function returns  `true' if and only if the graph <gamma> is
+a complete graph.  The optional boolean  parameter <mustloops> determines
+whether all loops must be present for <gamma> to be considered a complete
+graph (default: `false' (loops are ignored)).
+
+See also "CompleteGraph".
+
+\beginexample
+gap> IsCompleteGraph( NullGraph( Group(()), 3 ) );
+false
+gap> IsCompleteGraph( NullGraph( Group(()), 1 ) );
+true
+gap> IsCompleteGraph( CompleteGraph(SymmetricGroup(3)), true );
+false 
+\endexample
