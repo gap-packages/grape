@@ -15,7 +15,8 @@ The following sections describe functions for (proper) vertex-colouring
 or determining complete subgraphs of given graphs. The function
 `CompleteSubgraphsOfGivenSize' can also be used to determine the
 complete subgraphs with given vertex-weight sum in a vertex-weighted
-graph~\index{vertex-weighted graph}.
+graph~\index{vertex-weighted graph}, where the weights can be positive
+integers or non-zero vectors of non-negative integers.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{VertexColouring}
@@ -107,22 +108,15 @@ gap> CompleteSubgraphs(gamma,-1,0);
 \>CompleteSubgraphsOfGivenSize( <gamma>, <k>, <alls>, <maxi>, <col> )
 \>CompleteSubgraphsOfGivenSize( <gamma>, <k>, <alls>, <maxi>, <col>, <wts> ) 
 
-Let <gamma> be a simple graph and <k> a non-negative integer. This
-function returns a set <K> (possibly empty) of complete subgraphs of
-size <k> of <gamma>. The exact nature of the set <K> depends on the
-values of the parameters supplied to this function. A complete subgraph
-is represented by its vertex-set. `CompleteSubgraphsOfGivenSize' can
-handle the case where the vertices are assigned positive integer weights,
-in which case, a complete subgraph of size <k> means a complete subgraph
-whose vertex-weights sum to <k>.
-
-We remark that the parameter <maxi> provides a backward compatible
-extension to its use in versions of {\GRAPE} previous to 4.1, and now when
-<maxi>=`true' this function returns only *maximal* complete subgraphs
-of size <k>. The parameter <alls> also provides a new feature starting
-with version 4.1. Setting <alls>=2 specifies that this function should
-compute a set of `<gamma>.group'-orbit representatives of the required
-complete subgraphs.
+Let <gamma> be a simple graph, and <k> a non-negative integer or vector
+of non-negative integers.  This function returns a set <K> (possibly
+empty) of complete subgraphs of size <k> of <gamma>.  The vertices may
+have weights, which should be non-zero integers if <k> is an integer and
+non-zero $d$-vectors of non-negative integers if <k> is a $d$-vector,
+and in these cases, a complete subgraph of *size* <k> means a complete
+subgraph whose vertex-weights sum to <k>.  The exact nature of the set
+<K> depends on the values of the parameters supplied to this function. A
+complete subgraph is represented by its vertex-set.
 
 The optional parameter <alls> controls how many complete subgraphs are
 returned. The valid values for <alls> are 0, 1 (the default), and 2.
@@ -161,11 +155,26 @@ tree. The default is `true', which says to use this partial colouring
 (and which seems to be a good idea).  For backward compatibility, <col>
 a rational number means the same as <col>=`true'.
 
-If the optional parameter <wts> is given, then it is assumed to be a
-`<gamma>.group' invariant list (where the action permutes the list
-positions) of length `<gamma>.order' of positive integer weights
-corresponding to the vertices, in which case, a complete subgraph of
-size <k>  means a complete subgraph whose vertex-weights sum to <k>.
+The optional parameter <wts> should be a list of vertex-weights; the list
+should be of length `<gamma>.order', with the <i>-th element being the
+weight of vertex <i>. The weights must be all positive integers if <k>
+is an integer, and all non-zero $d$-vectors of non-negative integers
+if <k> is a $d$-vector. The default is that all weights are equal to~1.
+(Recall that a complete subgraph of *size* <k> means a complete subgraph
+whose vertex-weights sum to <k>.)
+
+If <wts> is a list of integers, then this list must be `<gamma>.group'
+invariant, where the action permutes the list positions in the natural
+way.
+
+If <wts> is a list of $d$-vectors then we assume that `<gamma>.group' acts
+on the set of all integer $d$-vectors by permuting vector positions, such
+that, for all $v$ in `[1..<gamma>.order]' and all $g$ in `<gamma>.group',
+we have $<wts>[v^g] = <wts>[v]^g$, (where the first action is `OnPoints'
+and the second action is the assumed one on integer $d$-vectors), and
+that $<k>^g=<k>$ (where this action is the assumed one on $d$-vectors).
+These assumptions are *not* checked by the function, and the use of
+vector-weights is primarily for advanced users of {\GRAPE}.
 
 An alternative name for this function is 
 `CliquesOfGivenSize'~\index{CliquesOfGivenSize}.

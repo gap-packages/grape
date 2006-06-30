@@ -1,14 +1,18 @@
 /* coladjg4t.c
    Copyright L.H.Soicher, 1992.
-   Slightly modified September, 1998. */
+   Slightly modified September, 1998. 
+   Slightly modified September, 2005. 
+   Slightly modified June, 2006. */
 
+#include <stdlib.h>
 #include <stdio.h>
+#ifndef NULL
 #define NULL 0
+#endif
 #define MAXREP 255 /* must be <= 255 */
 #define MAXGEN 255 /* must be <= 255 */
 
 typedef unsigned char byte;
-extern char *malloc();
 
 void memoryerror()
 {
