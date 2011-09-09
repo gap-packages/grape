@@ -1,14 +1,9 @@
 binaries:
-	if test ! -d bin;  then mkdir bin;  fi
-	if test ! -d bin/@GAPARCH@;  then mkdir bin/@GAPARCH@;  fi
+	if test ! -d bin;  then mkdir bin;  chmod 755 bin;  fi
+	if test ! -d bin/@GAPARCH_SYSTEM@;  then mkdir bin/@GAPARCH_SYSTEM@;  chmod 755 bin/@GAPARCH_SYSTEM@;  fi
+	if test ! -d bin/@GAPARCH_SYSTEM@/@GAPARCH_ABI@;  then mkdir bin/@GAPARCH_SYSTEM@/@GAPARCH_ABI@;  chmod 755 bin/@GAPARCH_SYSTEM@/@GAPARCH_ABI@;  fi
 	( cd nauty22; rm -f *.o config.log config.cache config.status makefile; ./configure; make dreadnautB; mv dreadnautB ../bin/@GAPARCH@; chmod 755 ../bin/@GAPARCH@/dreadnautB; rm -f *.o )
-	( cd src; make BINDIR="@GAPARCH@" )
-
-others:
-	if test ! -d bin;  then mkdir bin;  fi
-	if test ! -d bin/@GAPARCH@;  then mkdir bin/@GAPARCH@;  fi
-	( cd src; make BINDIR="@GAPARCH@" others )
 
 clean:
 	( cd nauty22; make clean )
-	( cd src; make BINDIR="@GAPARCH@" clean )
+	rm -rf bin/@GAPARCH@

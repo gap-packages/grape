@@ -1,8 +1,8 @@
 ##############################################################################
 ##
-##  grape.g  (Version 4.3)       GRAPE Library               Leonard Soicher
+##  grape.g  (Version 4.4)       GRAPE Library               Leonard Soicher
 ##
-##  Copyright (C) 1992-2006 Leonard Soicher, School of Mathematical Sciences, 
+##  Copyright (C) 1992-2011 Leonard Soicher, School of Mathematical Sciences, 
 ##                      Queen Mary, University of London, London E1 4NS, U.K.
 ##
 
@@ -22,7 +22,7 @@ GRAPE_RANDOM := false; # Determines if certain random methods are to be used
 GRAPE_NRANGENS := 18;  # The number of random generators taken for a subgroup
 		       # when  GRAPE_RANDOM=true.
 
-BindGlobal("OrbitRepresentatives",function(arg)
+BindGlobal("GRAPE_OrbitRepresentatives",function(arg)
 #
 # Let  G=arg[1],  L=arg[2],  act=arg[3]  (default: OnPoints).  Then this 
 # function returns a list of representatives of  Orbits(G,L,act)  
@@ -38,7 +38,7 @@ else
    act:=OnPoints;
 fi;
 if not (IsGroup(G) and IsList(L) and IsFunction(act)) then 
-   Error("usage: OrbitRepresentatives( <Group>, <List> [, <Function> ] )");
+   Error("usage: GRAPE_OrbitRepresentatives( <Group>, <List> [, <Function> ] )");
 fi;
 reps:=[];
 for x in L do
@@ -50,7 +50,7 @@ od;
 return reps;
 end);
 
-BindGlobal("OrbitNumbers",function(G,n)
+BindGlobal("GRAPE_OrbitNumbers",function(G,n)
 #
 # Returns the orbits of  G  on  [1..n]  in the form of a record 
 # containing the orbit representatives and a length  n  list 
@@ -59,7 +59,7 @@ BindGlobal("OrbitNumbers",function(G,n)
 #
 local i,j,orbnum,reps,im,norb,g,orb;
 if not IsPermGroup(G) or not IsInt(n) then 
-   Error("usage: OrbitNumbers( <PermGroup>, <Int> )");
+   Error("usage: GRAPE_OrbitNumbers( <PermGroup>, <Int> )");
 fi;
 orbnum:=[];
 for i in [1..n] do
@@ -87,14 +87,14 @@ od;
 return rec(representatives:=reps,orbitNumbers:=orbnum);
 end);
 
-BindGlobal("NumbersToSets",function(vec)
+BindGlobal("GRAPE_NumbersToSets",function(vec)
 #
 # Returns a list of sets as described by the numbers in vec, i.e.
 # i is in the j-th set iff vec[i]=j>0.
 #
 local list,i,j;
 if not IsList(vec) then 
-   Error("usage: NumbersToSets( <List> )");
+   Error("usage: GRAPE_NumbersToSets( <List> )");
 fi;
 if Length(vec)=0 then
    return [];
@@ -115,7 +115,7 @@ od;
 return list;
 end);
 
-BindGlobal("IntransitiveGroupGenerators",function(arg)
+BindGlobal("GRAPE_IntransitiveGroupGenerators",function(arg)
 local conjperm,i,newgens,gens1,gens2,max1,max2;
 gens1:=arg[1];
 gens2:=arg[2];
@@ -131,7 +131,7 @@ else
 fi;
 if not (IsList(gens1) and IsList(gens2) and IsInt(max1) and IsInt(max2)) then 
    Error(
-   "usage: IntransitiveGroupGenerators( <List>, <List> [,<Int> [,<Int> ]] )");
+   "usage: GRAPE_IntransitiveGroupGenerators( <List>, <List> [,<Int> [,<Int> ]] )");
 fi;
 if Length(gens1)<>Length(gens2) then
    Error("Length(<gens1>) <> Length(<gens2>)");
@@ -213,10 +213,10 @@ if not IsPermGroup(G) or not IsInt(pt) or not IsInt(n) then
    Error(
    "usage: ProbablyStabilizerOrbitNumbers( <PermGroup>, <Int>, <Int>  )");
 fi;
-return OrbitNumbers(ProbablyStabilizer(G,pt),n);
+return GRAPE_OrbitNumbers(ProbablyStabilizer(G,pt),n);
 end);
 
-BindGlobal("RepWord",function(gens,sch,r)
+BindGlobal("GRAPE_RepWord",function(gens,sch,r)
 #
 # Given a sequence  gens  of group generators, and a  (word type)
 # schreier vector  sch  made using  gens,  this function returns a 
@@ -338,20 +338,20 @@ od;
 return gamma;
 end);
 
-BindGlobal("Graph",function(arg)
+BindGlobal("GRAPE_Graph",function(arg)
 #
 # First suppose that  arg[5]  is unbound or has value  false.
 # Then  L=arg[2]  is a list of elements of a set  S  on which 
 # G=arg[1]  acts with action  act=arg[3].  Also  rel=arg[4]  is a boolean
 # function defining a  G-invariant relation on  S  (so that 
 # for  g in G,  rel(x,y)  iff  rel(act(x,g),act(y,g)) ). 
-# Then function  Graph  returns the graph  gamma  with vertex-names
+# Then function  GRAPE_Graph  returns the graph  gamma  with vertex-names
 # Immutable(Concatenation(Orbits(G,L,act))),  and  x  is joined to  y
 # in  gamma  iff  rel(VertexName(gamma,x),VertexName(gamma,y)).
 #
 # If  arg[5]  has value  true  then it is assumed that  L=arg[2] 
 # is invariant under  G=arg[1]  with action  act=arg[3]. Then
-# the function  Graph  behaves as above, except that  gamma.names
+# the function  GRAPE_Graph  behaves as above, except that  gamma.names
 # becomes an immutable copy of  L.
 #
 local G,L,act,rel,invt,gamma,vertexnames,i,reps,H,orb,x,y,adj;
@@ -366,7 +366,7 @@ else
 fi;
 if not (IsGroup(G) and IsList(L) and IsFunction(act) and IsFunction(rel) 
 	and IsBool(invt)) then
-   Error("usage: Graph( <Group>, <List>, <Function>, <Function> [, <Bool> ] )");
+   Error("usage: GRAPE_Graph( <Group>, <List>, <Function>, <Function> [, <Bool> ] )");
 fi;
 if invt then
    vertexnames:=Immutable(L);
@@ -405,6 +405,13 @@ od;
 return gamma;
 end);
 
+DeclareOperation("Graph",[IsGroup,IsList,IsFunction,IsFunction]);
+InstallMethod(Graph,"for use in GRAPE with 4 parameters",
+   [IsGroup,IsList,IsFunction,IsFunction],0,GRAPE_Graph);
+DeclareOperation("Graph",[IsGroup,IsList,IsFunction,IsFunction,IsBool]);
+InstallMethod(Graph,"for use in GRAPE with 5 parameters",
+   [IsGroup,IsList,IsFunction,IsFunction,IsBool],0,GRAPE_Graph);
+
 BindGlobal("JohnsonGraph",function(n,e)
 #
 # Returns the Johnson graph, whose vertices are the e-subsets
@@ -428,9 +435,10 @@ end);
 
 BindGlobal("IsGraph",function(obj)
 #
-# Returns  true  iff  obj  is a graph.
+# Returns  true  iff  obj  is a (GRAPE) graph.
 #
-return IsRecord(obj) and IsBound(obj.isGraph) and obj.isGraph=true;
+return IsRecord(obj) and IsBound(obj.isGraph) and obj.isGraph=true
+   and IsBound(obj.group) and IsBound(obj.schreierVector); 
 end);
 
 BindGlobal("CopyGraph",function(gamma)
@@ -465,7 +473,7 @@ end);
 
 DeclareOperation("Vertices",[IsRecord]);
 # to avoid the clash with `Vertices' defined in the xgap package
-InstallMethod(Vertices,"for graph",[IsRecord],100, 
+InstallMethod(Vertices,"for GRAPE graph",[IsRecord],0, 
 function(gamma)
 #
 # Returns the vertex-set of graph  gamma.
@@ -476,12 +484,14 @@ fi;
 return [1..gamma.order];
 end);
 
-BindGlobal("IsVertex",function(gamma,v)
+DeclareOperation("IsVertex",[IsRecord,IsObject]);
+InstallMethod(IsVertex,"for GRAPE graph",[IsRecord,IsObject],0, 
+function(gamma,v)
 #
 # Returns  true  iff  v  is vertex of  gamma.
 #
 if not IsGraph(gamma) then
-   Error("usage: IsVertex( <Graph>, <obj> )");
+   TryNextMethod();
 fi;
 return IsInt(v) and v >= 1 and v <= gamma.order;
 end);
@@ -541,7 +551,7 @@ if v<1 or v>gamma.order then
    Error("<v> is not a vertex of <gamma>");
 fi;
 sch:=gamma.schreierVector;
-rw:=RepWord(GeneratorsOfGroup(gamma.group),sch,v);
+rw:=GRAPE_RepWord(GeneratorsOfGroup(gamma.group),sch,v);
 return Length(gamma.adjacencies[-sch[rw.representative]]); 
 end);
 
@@ -577,12 +587,14 @@ od;
 return y in gamma.adjacencies[-w];
 end);
 
-BindGlobal("IsEdge",function(gamma,e)
+DeclareOperation("IsEdge",[IsRecord,IsObject]);
+InstallMethod(IsEdge,"for GRAPE graph",[IsRecord,IsObject],0, 
+function(gamma,e)
 #
 # Returns  true  iff  e  is an edge of  gamma.
 #
-if not IsGraph(gamma) then 
-   Error("usage: IsEdge( <Graph>, <obj> )");
+if not IsGraph(gamma) then
+   TryNextMethod();
 fi;
 if not IsList(e) or Length(e)<>2 or not IsVertex(gamma,e[1])
 		 or not IsVertex(gamma,e[2]) then
@@ -601,7 +613,7 @@ if sch[v] < 0 then
    return ShallowCopy(gamma.adjacencies[-sch[v]]);
 fi;
 gens:=GeneratorsOfGroup(gamma.group);
-rw:=RepWord(gens,sch,v);
+rw:=GRAPE_RepWord(gens,sch,v);
 adj:=gamma.adjacencies[-sch[rw.representative]]; 
 for w in rw.word do 
    adj:=OnTuples(adj,gens[w]); 
@@ -955,7 +967,7 @@ else
       return [];
    fi;
 fi;
-orbs:=OrbitNumbers(G,gamma.order);
+orbs:=GRAPE_OrbitNumbers(G,gamma.order);
 orbnum:=orbs.orbitNumbers;
 reps:=orbs.representatives;
 n:=Length(reps);
@@ -999,7 +1011,7 @@ if not IsTransitive(G,[1..deg]) then
    Error("<G> not transitive");
 fi;
 gamma:=NullGraph(G,deg);
-orbs:=OrbitNumbers(H,gamma.order);
+orbs:=GRAPE_OrbitNumbers(H,gamma.order);
 orbnum:=orbs.orbitNumbers;
 reps:=orbs.representatives;
 if reps[1]<>1 then # this cannot happen!
@@ -1098,7 +1110,7 @@ if IsBound(arg[5]) then
    if not IsPermGroup(arg[5]) then 
       Error("<arg[5]> must be a permutation group (<= Stab(<V>)");
    fi;
-   orbs:=OrbitNumbers(arg[5],gamma.order);
+   orbs:=GRAPE_OrbitNumbers(arg[5],gamma.order);
 else
    if Length(V)=1 then
       if IsBound(gamma.autGroup) then
@@ -1401,14 +1413,17 @@ else
 fi;
 end);
 
-BindGlobal("Diameter",function(gamma)
+DeclareOperation("Diameter",[IsRecord]);
+# to avoid the clash with `Diameter' defined in gap4r5
+InstallMethod(Diameter,"for GRAPE graph",[IsRecord],0, 
+function(gamma)
 #
 # Returns the diameter of  gamma. 
 # A diameter of  -1  means that gamma is not (strongly) connected.  
 #
 local r,d,loc;
-if not IsGraph(gamma) then 
-   Error("usage: Diameter( <Graph> )");
+if not IsGraph(gamma) then
+   TryNextMethod();
 fi;
 if gamma.order=0 then
    Error("<gamma> has no vertices");
@@ -1426,14 +1441,16 @@ od;
 return d;
 end);
 
-BindGlobal("Girth",function(gamma)
+DeclareOperation("Girth",[IsRecord]);
+InstallMethod(Girth,"for GRAPE graph",[IsRecord],0, 
+function(gamma)
 #
 # Returns the girth of  gamma,  which must be a simple graph. 
 # A girth of  -1  means that gamma is a forest.  
 #
 local r,g,locgirth,stoplayer,adj;
-if not IsGraph(gamma) then 
-   Error("usage: Girth( <Graph> )");
+if not IsGraph(gamma) then
+   TryNextMethod();
 fi;
 if gamma.order=0 then
    return -1;
@@ -1554,12 +1571,14 @@ od;
 return false;
 end);
 
-BindGlobal("IsConnectedGraph",function(gamma)
+DeclareOperation("IsConnectedGraph",[IsRecord]);
+InstallMethod(IsConnectedGraph,"for GRAPE graph",[IsRecord],0, 
+function(gamma)
 #
 # Returns true iff  gamma  is (strongly) connected.
 #
-if not IsGraph(gamma) then 
-   Error("usage: IsConnectedGraph( <Graph> )");
+if not IsGraph(gamma) then
+   TryNextMethod();
 fi;
 if gamma.order=0 then
    return true;
@@ -1698,7 +1717,9 @@ od;
 return bicomps;
 end);
 
-BindGlobal("IsBipartite",function(gamma)
+DeclareOperation("IsBipartite",[IsRecord]);
+InstallMethod(IsBipartite,"for GRAPE graph",[IsRecord],0, 
+function(gamma)
 #
 # Returns  true  iff  gamma  is bipartite. 
 # *** This function is only for simple  gamma.
@@ -1708,8 +1729,8 @@ BindGlobal("IsBipartite",function(gamma)
 # GRAPE 2.2 view that a zero vertex graph is bipartite, but not a one 
 # vertex graph.
 #
-if not IsGraph(gamma) then 
-   Error("usage: IsBipartite( <Graph> )");
+if not IsGraph(gamma) then
+   TryNextMethod();
 fi;
 if not IsSimpleGraph(gamma) then
    Error("<gamma> not a simple graph");
@@ -1736,9 +1757,9 @@ if not IsGraph(gamma) or not IsList(V)
    Error("usage: Layers( <Graph>, <Int> or <List>, [, <PermGroup>] )");
 fi;
 if IsBound(arg[3]) then
-   return NumbersToSets(LocalInfo(gamma,V,0,[],arg[3]).layerNumbers);
+   return GRAPE_NumbersToSets(LocalInfo(gamma,V,0,[],arg[3]).layerNumbers);
 else
-   return NumbersToSets(LocalInfo(gamma,V).layerNumbers);
+   return GRAPE_NumbersToSets(LocalInfo(gamma,V).layerNumbers);
 fi;
 end);
 
@@ -1815,14 +1836,16 @@ od;
 return pars;
 end);
 
-BindGlobal("IsDistanceRegular",function(gamma)
+DeclareOperation("IsDistanceRegular",[IsRecord]);
+InstallMethod(IsDistanceRegular,"for GRAPE graph",[IsRecord],0, 
+function(gamma)
 #
 # Returns  true  iff  gamma  is distance-regular 
 # (a graph must be simple to be distance-regular).
 #
 local i,reps,pars,lp,loc,d;
-if not IsGraph(gamma) then 
-   Error("usage: IsDistanceRegular( <Graph> )");
+if not IsGraph(gamma) then
+   TryNextMethod();
 fi;
 if gamma.order=0 then
    return true;
@@ -2232,7 +2255,7 @@ if gamma.order=0 then
    return CopyGraph(gamma);
 fi;
 n:=gamma.order;
-gens:=IntransitiveGroupGenerators
+gens:=GRAPE_IntransitiveGroupGenerators
 	 (GeneratorsOfGroup(gamma.group),GeneratorsOfGroup(gamma.group),n,n);
 g:=[];
 for i in [1..n] do
@@ -2352,8 +2375,8 @@ for i in [1..gamma.order] do
 od;
 H:=ProbablyStabilizer(gamma.group,y);
 gens:=GeneratorsOfGroup(gamma.group);
-rwx:=RepWord(gens,gamma.schreierVector,x);
-rwy:=RepWord(gens,gamma.schreierVector,y);
+rwx:=GRAPE_RepWord(gens,gamma.schreierVector,x);
+rwy:=GRAPE_RepWord(gens,gamma.schreierVector,y);
 g:=();
 if rwx.representative=rwy.representative then
    for w in Reversed(rwx.word) do 
@@ -3704,15 +3727,49 @@ od;
 return result;
 end);
 
+BindGlobal("IsGraphWithColourClasses",function(obj) 
+return IsRecord(obj) and IsBound(obj.graph) and IsGraph(obj.graph) and IsBound(obj.colourClasses);
+end);
+
+BindGlobal("MonochromaticColourClasses",function(gamma) 
+# Returns colour-classes list with all vertices having the same 
+# colour for the vertices of the graph  gamma.
+if not IsGraph(gamma) then
+   Error("usage: MonochromaticColourClasses( <Graph> )"); 
+fi;
+if gamma.order=0 then 
+   return [];
+else
+   return [[1..gamma.order]];
+fi; 
+end);
+
+BindGlobal("CheckColourClasses",function(gamma,col) 
+#
+# Checks whether col  is a valid list of colour-classes for the 
+# graph  gamma. 
+#
+if not (IsGraph(gamma) and IsList(col)) then
+   Error("usage: CheckColourClasses( <Graph>, <List> )"); 
+fi;
+if not ForAll(col,x->IsSet(x) and x<>[]) then 
+    Error("each colour-class must be a non-empty set");
+fi;
+if Union(col)<>[1..gamma.order] then
+   Error("the union of the colour-classes is not equal to the vertex set of <gamma>"); 
+fi; 
+if Sum(List(col,Length))>gamma.order then
+   Error("the colour-classes must be pairwise disjoint");
+fi;
+return;
+end);
+
 #######################################################################
 #
 # Next comes the part of  GRAPE  depending on B.D.McKay's  nauty 
 # system.
 #
 # define some global variables so as not to get warning messages
-GRAPE_dr_sgens:=0; 
-GRAPE_dr_base:=0; 
-GRAPE_dr_canon:=0;
 
 BindGlobal("GRAPE_nautytmpdir",DirectoryTemporary());
 
@@ -3723,243 +3780,370 @@ Add(POST_RESTORE_FUNCS,function()
   return;
 end);
 
+BindGlobal("PrintStreamNautyGraph",function(stream,gamma,col)
+  local adj, i, j;
+  PrintTo(stream,"d\n$1n",gamma.order,"g\n");
+  for i in [1..gamma.order] do 
+    adj:=Adjacency(gamma,i);
+    if adj=[] then 
+      if i<gamma.order then
+	AppendTo(stream,";\n");
+      else
+	AppendTo(stream,".\n");
+      fi;
+    else 
+      for j in [1..Length(adj)] do
+        if j<Length(adj) then
+	  AppendTo(stream,adj[j],"\n");
+        elif i<gamma.order then
+	  AppendTo(stream,adj[j],";\n");
+        else
+  	  AppendTo(stream,adj[j],".\n");
+        fi;
+      od;
+    fi;
+  od;
+  AppendTo(stream,"f[\n");
+  if col<>MonochromaticColourClasses(gamma) then 
+    for i in [1..Length(col)] do
+      for j in [1..Length(col[i])] do
+        AppendTo(stream,col[i][j]);
+	if j<Length(col[i]) then
+	  AppendTo(stream,",");
+	elif i<Length(col) then
+	  AppendTo(stream,"|");
+	fi;
+	AppendTo(stream,"\n");
+      od;
+    od;
+  fi;
+  AppendTo(stream,"]\n");
+end);
+
+BindGlobal("ReadOutputNauty",function(file)
+# by Alexander Hulpke
+  local f, bas, sgens, l, s, p, i, deg, processperm, pi;
+
+  processperm:=function()
+    if Length(pi)=0 then return; fi;
+    if deg=fail then
+      deg:=Length(pi);
+    else
+      if Length(pi)<>deg then
+        Info(InfoWarning,1,"degree discrepancy in nauty output!",
+	     Length(pi),"vs",deg);
+      fi;
+    fi;
+    Add(sgens,PermList(pi));
+    pi:=[];
+  end;
+
+  deg:=fail;
+  f:=InputTextFile(file);
+  if f=fail then
+    Error("cannot find output produced by `dreadnaut'");
+  fi;
+  bas:=[];
+  sgens:=[];
+  pi:=[];
+  while not IsEndOfStream(f) do
+    l:=ReadLine(f);
+    if l<>fail then
+      l:=Chomp(l);
+# Print(l,"\n");
+      if Length(l)>4 and l{[1..5]}="level" then
+	processperm();
+        s:=SplitString(l,";");
+	s:=s[Length(s)-1]; # should be " x...x fixed"
+	if Length(s)<4 or s{[Length(s)-4..Length(s)]}<>"fixed" then
+	  Error("unparsable line ",l);
+	fi;
+	s:=s{[1..Length(s)-6]};
+	while s[1]=' ' do
+	  s:=s{[2..Length(s)]};
+	od;
+	Add(bas,Int(s));
+      elif ForAll(l,x->x in CHARS_DIGITS or x=' ') then
+	if Length(pi)>0 and (Length(l)<5 or l{[1..4]}<>"    ") then
+	  processperm(); # permutation starts -- clean out old
+	fi;
+	s:=SplitString(l,[]," ");
+	Append(pi,List(s,Int));
+      elif deg<>fail then
+	processperm();
+      fi;
+
+    fi;
+  od;
+  bas:=Reversed(bas);
+  CloseStream(f);
+  return [sgens,bas];
+end);
+
+BindGlobal("ReadCanonNauty",function(file)
+# by Alexander Hulpke
+  local f, can, l, deg, s, i;
+  f:=InputTextFile(file);
+  if f=fail then
+    Error("cannot find canonization produced by `dreadnaut'");
+  fi;
+  can:=[];
+  # first line: degree
+  l:=ReadLine(f);l:=Chomp(l);
+# Print(l,"\n");
+  deg:=Int(l);
+  # now read in until you have enough integers for the permutation -- the
+  # rest is the relabelled graph and can be discarded
+  while Length(can)<deg do
+    l:=ReadLine(f);l:=Chomp(l);
+# Print(l,"\n");
+    s:=SplitString(l,' ');
+    for i in s do
+      if Length(i)>0 and Length(can)<deg then
+        Add(can,Int(i));
+      fi;
+    od;
+  od;
+  CloseStream(f);
+  return PermList(can);
+end);
+
+BindGlobal("SetAutGroupCanonicalLabelling",function(arg) 
+#
+# Let  gr:=arg[1]  and  setcanon:=arg[2]  (default: true).
+# Sets the  autGroup  component (if not already bound) and the
+# canonicalLabelling  component (if not already bound and setcanon=true) 
+# of the graph or graph with colour-classes  gr.
+#
+  local gr,setcanon,gamma,col,ftmp1,ftmp2,fdre,fg,ftmp1_stream,ftmp2_stream,
+        fdre_stream,gp;
+  gr:=arg[1];
+  if IsBound(arg[2]) then
+    setcanon:=arg[2];
+  else
+    setcanon:=true;
+  fi;
+  if not (IsGraph(gr) or IsGraphWithColourClasses(gr)) or not IsBool(setcanon) then
+    Error("usage: SetAutGroupCanonicalLabelling( <Graph> or <GraphWithColourClasses> [, <Bool> ] )");
+  fi;
+  if IsBound(gr.canonicalLabelling) then
+    setcanon:=false;
+  fi;
+  if IsBound(gr.autGroup) and not setcanon then
+    return;
+  fi;
+  if IsGraph(gr) then
+    gamma:=gr;
+    col:=MonochromaticColourClasses(gamma);
+  else
+    gamma:=gr.graph;
+    col:=gr.colourClasses;
+    CheckColourClasses(gamma,col);
+  fi;
+  if gamma.order<=1 then 
+    if not IsBound(gr.autGroup) then
+      gr.autGroup:=Group([],());
+    fi;
+    if setcanon then
+      gr.canonicalLabelling:=();
+    fi;
+    return;
+  fi;
+
+  ftmp1:=Filename(GRAPE_nautytmpdir,"ftmp1");
+  ftmp2:=Filename(GRAPE_nautytmpdir,"ftmp2");
+  fdre:=Filename(GRAPE_nautytmpdir,"fdre");
+  
+  # In principle redundant, but a failed call might have left files sitting
+  # -- just throw out what will be overwritten anyhow.
+  RemoveFile(ftmp1);
+  RemoveFile(ftmp2);
+  RemoveFile(fdre);
+
+  fdre_stream:=OutputTextFile(fdre,false); 
+  
+  SetPrintFormattingStatus(fdre_stream,false);
+  PrintStreamNautyGraph(fdre_stream,gamma,col);
+  
+  if not setcanon then
+    if IsSimpleGraph(gamma) then
+      AppendTo( fdre_stream, "> ", ftmp1, " p,xq\n" );
+    else
+      AppendTo( fdre_stream, "> ", ftmp1, " p,*=13,k=1 10,xq\n" );
+    fi;
+  else
+    if IsSimpleGraph(gamma) then
+      AppendTo( fdre_stream, "> ", ftmp1, " p,cx\n>> ", ftmp2, " bq\n" );
+    else
+      AppendTo( fdre_stream, "> ", ftmp1, " p,*=13,k=1 10,cx\n>> ", ftmp2,
+               " bq\n" );
+    fi;
+  fi;
+
+  CloseStream(fdre_stream);
+
+  # initialize tmp2 file with degree
+  ftmp2_stream:=OutputTextFile(ftmp2,false);
+  SetPrintFormattingStatus(ftmp2_stream,false);
+  PrintTo(ftmp2_stream,gamma.order,"\n"); 
+  CloseStream(ftmp2_stream);
+
+  if ARCH_IS_WINDOWS() then
+    # we need to use `ShortFileName' to get rid of blanks in the file paths,
+    # converting to the old style 8+3 format
+    Exec(ShortFileNameWindows(
+      Filename(DirectoriesPackageLibrary("grape","bin"),"dreadnautB.exe")),
+	"<",fdre);
+  else
+    Exec(Filename(DirectoriesPackagePrograms("grape"),"dreadnautB"),
+        "<",fdre);
+  fi;
+
+  if not IsBound(gr.autGroup) then 
+    fg:=ReadOutputNauty(ftmp1);
+    # fg[1]=stronggens, fg[2]=base
+    gp:=GroupWithGenerators(fg[1],());
+    SetStabChainMutable(gp,StabChainBaseStrongGenerators(fg[2],fg[1],()));
+    gr.autGroup:=gp;
+  fi;
+  if setcanon then
+    gr.canonicalLabelling:=ReadCanonNauty(ftmp2);
+  fi;
+
+  RemoveFile(ftmp1);
+  RemoveFile(ftmp2);
+  RemoveFile(fdre);
+   
+  return;
+
+end);
+
 BindGlobal("AutGroupGraph",function(arg) 
 #
-# Returns automorphism group of (directed) graph arg[1], using B.McKay's 
-# dreadnaut, nauty  programs.
-# If arg[2] exists then it is a vertex-colouring (not necessarily proper)
-# for the graph, and the subgroup of Aut(graph) preserving this colouring 
+# Let  gr:=arg[1]  be a graph or a graph with colour-classes.
+#
+# If arg[2] is unbound (the ususal case) then this function returns 
+# the automorphism group of  gr  (making use of B.McKay's 
+# dreadnaut, nauty  programs).
+# 
+# If arg[2] is bound then  gr  must be a graph and arg[2] is 
+# a vertex-colouring (not necessarily proper) for  gr
+# (i.e. a list of colour-classes for the vertices of gr),
+# in which case the subgroup of Aut(gr) preserving this colouring 
 # is returned instead of the full automorphism group.
 # (Here a vertex-colouring is a list of sets, forming an ordered
-#  partition of the vertices. The set for the last colour may be omitted, 
-# and the "sets" may in fact be lists.)
+# partition of the vertices. The set for the last colour may be omitted.)
 #
-# Note: From GRAPE version 4.1, a new nauty vertex-invariant is being 
-# used when  gamma  is not simple.
-#
-local gamma,gp,col,adj,ftmp,fdre,fg,i,ftmp_stream,fdre_stream; 
-gamma:=arg[1];
-if not IsGraph(gamma) or (IsBound(arg[2]) and not IsList(arg[2])) then
-   Error("usage: AutGroupGraph( <Graph> [, <List> ] )");
-fi;
-if IsBound(arg[2]) then 
-   col:=List(arg[2],SSortedList); 
-   col:=List(col,x->List(x,y->y));  # to make sure all elements print out
+local gr,gamma,col;
+if IsBound(arg[2]) then
+   if not IsGraph(arg[1]) or not IsList(arg[2]) then 
+      Error("usage: AutGroupGraph( <Graph> [, <List> ] ) or AutGroupGraph( <GraphWithColourClasses> )");
+   fi;
+   gamma:=arg[1];
+   col:=arg[2];
+   if Union(col)<>[1..gamma.order] then
+      # for backward compatibility
+      Add(col,Difference([1..gamma.order],Union(col)));
+   fi; 
+   CheckColourClasses(gamma,col);
+   if col<>MonochromaticColourClasses(gamma) then 
+      gr:=rec(graph:=gamma,colourClasses:=col);
+   else
+      gr:=gamma;
+   fi;
 else 
-   col:=[]; 
+   gr:=arg[1];
 fi;
-if IsBound(gamma.autGroup) and (col=[] or col=[[1..gamma.order]]) then
-   return gamma.autGroup;
+# Now deal with <gr>.
+if not (IsGraph(gr) or IsGraphWithColourClasses(gr)) then 
+   Error("usage: AutGroupGraph( <Graph> [, <List> ] ) or AutGroupGraph( <GraphWithColourClasses> )");
 fi;
-if gamma.order=0 then 
-   gamma.autGroup:=Group([],());
-   return gamma.autGroup;
-fi;
-ftmp:=Filename(GRAPE_nautytmpdir,"ftmp");
-fdre:=Filename(GRAPE_nautytmpdir,"fdre");
-fg:=Filename(GRAPE_nautytmpdir,"fg");
-ftmp_stream:=OutputTextFile(ftmp,false);
-SetPrintFormattingStatus(ftmp_stream,false);
-PrintTo(ftmp_stream,gamma.order,"[\n"); 
-for i in [1..gamma.order-1] do 
-   adj:=Adjacency(gamma,i);
-   if IsRange(adj) then
-      adj:=List(adj,x->x); # to print in full
-   fi;
-   AppendTo(ftmp_stream,adj,",\n");
-od;
-adj:=Adjacency(gamma,gamma.order);
-if IsRange(adj) then
-   adj:=List(adj,x->x); # to print in full
-fi;
-AppendTo(ftmp_stream,adj,"]\n",col,"\n");
-CloseStream(ftmp_stream);
-Exec(Filename(DirectoriesPackagePrograms("grape"),"gap4todr"),
-              "<",ftmp,">",fdre);
-fdre_stream:=OutputTextFile(fdre,true);
-SetPrintFormattingStatus(fdre_stream,false);
-if IsSimpleGraph(gamma) then
-   AppendTo( fdre_stream, "> ", ftmp, " xq\n" );
-else
-   AppendTo( fdre_stream, "> ", ftmp, " *=13,k=1 10,xq\n" );
-fi;
-CloseStream(fdre_stream);
-Exec(Filename(DirectoriesPackagePrograms("grape"),"dreadnautB"),
-        "<",fdre);
-Exec(Filename(DirectoriesPackagePrograms("grape"),"drtogap4"),
-	"<",ftmp,">",fg);
-Read(fg);
-gp:=Group(GRAPE_dr_sgens,());
-SetStabChainMutable(gp,
-  StabChainBaseStrongGenerators(GRAPE_dr_base,GRAPE_dr_sgens,()));
-if col=[] or col=[[1..gamma.order]] then
-   gamma.autGroup:=gp;
-fi;
-RemoveFile(ftmp);
-RemoveFile(fdre);
-RemoveFile(fg);
-return gp;
+SetAutGroupCanonicalLabelling(gr,false);
+return gr.autGroup;
 end);
 
-InstallOtherMethod(AutomorphismGroup,"for graph",[IsRecord],100,
+InstallOtherMethod(AutomorphismGroup,"for graph or graph with colour-classes",
+   [IsRecord],100,
 function(gamma)
-  if not IsGraph(gamma) then
-     TryNextMethod();
-  fi;
-  return AutGroupGraph(gamma);
+if not IsGraph(gamma) and not IsGraphWithColourClasses(gamma) then
+  TryNextMethod();
+fi;
+return AutGroupGraph(gamma);
 end);
 
-BindGlobal("SetAutGroupCanonicalLabelling",function(gamma) 
+BindGlobal("IsGraphIsomorphism",function(gr1,gr2,perm)
 #
-# Sets the  autGroup  and  canonicalLabelling  fields of  gamma,
-# if these fields are not bound.
-#
-# Note: From GRAPE version 4.1, a new nauty vertex-invariant is being
-# used when  gamma  is not simple.
-#
-local ftmp1,ftmp2,fdre,fg,adj,i,ftmp1_stream,ftmp2_stream,fdre_stream;
-if not IsGraph(gamma) then
-   Error("usage: SetAutGroupCanonicalLabelling( <Graph> )");
+# Let  gr1  and   gr2  both be graphs or both be graphs with colour-classes.  
+# Then this function returns  true  if  perm  is an
+# isomorphism from  gr1  to  gr2  (and  false  if not).
+# 
+local gamma1,gamma2,col1,col2,u,g,i,j,x,aut1,aut2,adj1,adj2,reps1;
+if not ((IsGraph(gr1) and IsGraph(gr2)) or (IsGraphWithColourClasses(gr1) and IsGraphWithColourClasses(gr2))) or not IsPerm(perm) then
+   Error("usage: IsGraphIsomorphism( <Graph>, <Graph>, <Perm> ) or IsGraphIsomorphism( <GraphWithColourClasses>, <GraphWithColourClasses>, <Perm> )"); 
 fi;
-if IsBound(gamma.autGroup) and IsBound(gamma.canonicalLabelling) then
-   return; 
-fi;
-if gamma.order=0 then 
-   gamma.autGroup:=Group([],());
-   gamma.canonicalLabelling:=();
-   return;
-fi;
-ftmp1:=Filename(GRAPE_nautytmpdir,"ftmp1");
-ftmp2:=Filename(GRAPE_nautytmpdir,"ftmp2");
-fdre:=Filename(GRAPE_nautytmpdir,"fdre");
-fg:=Filename(GRAPE_nautytmpdir,"fg");
-ftmp1_stream:=OutputTextFile(ftmp1,false);
-SetPrintFormattingStatus(ftmp1_stream,false);
-PrintTo(ftmp1_stream,gamma.order,"[\n"); 
-for i in [1..gamma.order-1] do 
-   adj:=Adjacency(gamma,i);
-   if IsRange(adj) then
-      adj:=List(adj,x->x); # to print in full
-   fi;
-   AppendTo(ftmp1_stream,adj,",\n");
-od;
-adj:=Adjacency(gamma,gamma.order);
-if IsRange(adj) then
-   adj:=List(adj,x->x); # to print in full
-fi;
-AppendTo(ftmp1_stream,adj,"]\n",[],"\n");
-CloseStream(ftmp1_stream);
-ftmp2_stream:=OutputTextFile(ftmp2,false);
-SetPrintFormattingStatus(ftmp2_stream,false);
-PrintTo(ftmp2_stream,gamma.order,"\n"); 
-CloseStream(ftmp2_stream);
-Exec(Filename(DirectoriesPackagePrograms("grape"),"gap4todr"),
-        "<",ftmp1,">",fdre);
-fdre_stream:=OutputTextFile(fdre,true);
-SetPrintFormattingStatus(fdre_stream,false);
-if IsSimpleGraph(gamma) then
-   AppendTo( fdre_stream, "> ", ftmp1, " cx\n>> ", ftmp2, " bq\n" );
+if IsGraphWithColourClasses(gr1) then 
+   # both gr1 and gr2 are graphs with colour-classes
+   gamma1:=gr1.graph;
+   col1:=gr1.colourClasses;
+   CheckColourClasses(gamma1,col1);
+   gamma2:=gr2.graph;
+   col2:=gr2.colourClasses;
+   CheckColourClasses(gamma2,col2);
 else
-   AppendTo( fdre_stream, "> ", ftmp1, " *=13,k=1 10,cx\n>> ", ftmp2, " bq\n" );
+   # both gr1 and gr2 are graphs 
+   gamma1:=gr1;
+   col1:=MonochromaticColourClasses(gamma1);
+   gamma2:=gr2;
+   col2:=MonochromaticColourClasses(gamma2);
 fi;
-CloseStream(fdre_stream);
-Exec(Filename(DirectoriesPackagePrograms("grape"),"dreadnautB"),"<",fdre);
-Exec(Filename(DirectoriesPackagePrograms("grape"),"drtogap4"),
-	"<",ftmp1,">",fg);
-Exec(Filename(DirectoriesPackagePrograms("grape"),"drcanon4"),
-	"<",ftmp2,">>",fg);
-Read(fg);
-if not IsBound(gamma.autGroup) then 
-   gamma.autGroup:=Group(GRAPE_dr_sgens,());
-   SetStabChainMutable(gamma.autGroup,
-     StabChainBaseStrongGenerators(GRAPE_dr_base,GRAPE_dr_sgens,()));
+if LargestMovedPoint(perm)>gamma1.order then
+   return false;
 fi;
-if not IsBound(gamma.canonicalLabelling) then 
-   gamma.canonicalLabelling:=GRAPE_dr_canon; 
-fi;
-RemoveFile(ftmp1);
-RemoveFile(ftmp2);
-RemoveFile(fdre);
-RemoveFile(fg);
-end);
-
-BindGlobal("IsIsomorphicGraph",function(arg)
-#
-# Let  gamma1=arg[1]  and   gamma2=arg[2]  be graphs.  Then this boolean 
-# function returns  true  iff  gamma1  and  gamma2  are isomorphic.           
-#
-# The optional boolean parameter  firstunbindcanon=arg[3]  determines
-# whether or not the  canonicalLabelling  components of both gamma1 and
-# gamma2  are first made unbound before testing isomorphism.   If
-# firstunbindcanon=true (the default, safe and possibly slower option) 
-# then these components are first unbound.  
-# If firstunbindcanon=false,  then an old canonical labelling
-# is used when it exists, which was the behaviour in versions
-# of GRAPE before 4.0.  However, canonical labellings can depend on
-# the version of nauty, the version of GRAPE, certain settings
-# of nauty, and the compiler and computer used.  
-# Thus, if firstunbindcanon=false, the user must be 
-# sure that any canonicalLabelling component(s) which may already 
-# exist for gamma1 or gamma2 were created in exactly the same 
-# environment in which the user is presently computing. 
-#
-local gamma1,gamma2,firstunbindcanon,g,i,j,adj1,adj2,x,aut1,aut2,reps1;
-gamma1:=arg[1];
-gamma2:=arg[2];
-if IsBound(arg[3]) then
-   firstunbindcanon:=arg[3];
-else
-   firstunbindcanon:=true;
-fi;
-if not (IsGraph(gamma1) and IsGraph(gamma2) and IsBool(firstunbindcanon)) then
-   Error("usage: IsIsomorphicGraph( <Graph>, <Graph> [, <Bool> ])");
-fi;
-if firstunbindcanon then
-   Unbind(gamma1.canonicalLabelling);
-   Unbind(gamma2.canonicalLabelling);
-fi;
-if gamma1.order <> gamma2.order 
-  or VertexDegrees(gamma1) <> VertexDegrees(gamma2) then 
+if gamma1.order<>gamma2.order or
+   VertexDegrees(gamma1) <> VertexDegrees(gamma2) then 
+   # the graphs are not isomorphic
    return false; 
+elif gamma1.order<=1 then
+   return true;
 fi;
-SetAutGroupCanonicalLabelling(gamma1);
-SetAutGroupCanonicalLabelling(gamma2);
-aut1:=gamma1.autGroup;
-aut2:=gamma2.autGroup;
-if Size(aut1) <> Size(aut2) then 
-   return false; 
+if List(col1,c->OnSets(c,perm))<>col2 then
+   return false;
 fi;
-x:=gamma1.canonicalLabelling^-1*gamma2.canonicalLabelling;
-for g in GeneratorsOfGroup(aut1) do 
-   if not g^x in aut2 then
+# So now we know that perm takes col1 to col2.
+if IsBound(gamma1.autGroup) and IsBound(gamma2.autGroup) then
+   aut1:=gamma1.autGroup;
+   aut2:=gamma2.autGroup;
+   if aut1^perm<>aut2 then
       return false;
    fi;
-od; 
-reps1:=OrbitNumbers(aut1,gamma1.order).representatives;
+else
+   aut1:=Group(());
+   aut2:=Group(());
+fi;
+# So now, either aut1 and aut2 are both trivial, or they
+# are the full aut groups of gamma1 and gamma2, respectively,
+# and  aut1^perm=aut2.
+reps1:=GRAPE_OrbitNumbers(aut1,gamma1.order).representatives;
 for i in reps1 do 
    adj1:=Adjacency(gamma1,i);
-   adj2:=Adjacency(gamma2,i^x);
-   if Length(adj1)<>Length(adj2) then 
+   adj2:=Adjacency(gamma2,i^perm);
+   if OnSets(adj1,perm)<>adj2 then
       return false;
    fi;
-   for j in adj1 do
-      if not (j^x in adj2) then 
-	 return false; 
-      fi;
-   od;
 od;
 return true;
 end);
 
 BindGlobal("GraphIsomorphism",function(arg)
 #
-# Let  gamma1=arg[1]  and   gamma2=arg[2]  be graphs.  Then this 
-# function returns an isomorphism from  gamma1  to  gamma2,  if
-# gamma1  and  gamma2  are isomorphic,  else returns  fail.
-#
+# Let  gr1:=arg[1]  and  gr2:=arg[2]  both be graphs or both be 
+# graphs with colour-classes.  
+# Then this function returns an isomorphism from  gr1  to  gr2,  if
+# gr1  and  gr2  are isomorphic,  else returns  fail.
+# 
 # The optional boolean parameter  firstunbindcanon=arg[3]  determines
-# whether or not the  canonicalLabelling  components of both gamma1 and
-# gamma2  are first made unbound before proceeding.   If
+# whether or not the  canonicalLabelling  components of both gr1 and
+# gr2  are first made unbound before proceeding.   If
 # firstunbindcanon=true (the default, safe and possibly slower option) 
 # then these components are first unbound.  
 # If  firstunbindcanon=false,  then an old canonical labelling
@@ -3968,36 +4152,93 @@ BindGlobal("GraphIsomorphism",function(arg)
 # of nauty, and the compiler and computer used.  
 # Thus, if firstunbindcanon=false, the user must be 
 # sure that any canonicalLabelling component(s) which may already 
-# exist for gamma1 or gamma2 were created in exactly the same 
+# exist for gr1 or gr2 were created in exactly the same 
 # environment in which the user is presently computing. 
 #
-local gamma1,gamma2,firstunbindcanon;
-gamma1:=arg[1];
-gamma2:=arg[2];
+local gr1,gr2,gamma1,gamma2,col1,col2,firstunbindcanon,g,i,j,x;
+gr1:=arg[1];
+gr2:=arg[2];
 if IsBound(arg[3]) then
    firstunbindcanon:=arg[3];
 else
    firstunbindcanon:=true;
 fi;
-if not (IsGraph(gamma1) and IsGraph(gamma2) and IsBool(firstunbindcanon)) then
-   Error("usage: GraphIsomorphism( <Graph>, <Graph> [, <Bool> ])");
+if not ((IsGraph(gr1) and IsGraph(gr2)) or (IsGraphWithColourClasses(gr1) and IsGraphWithColourClasses(gr2))) or not IsBool(firstunbindcanon) then
+   Error("usage: GraphIsomorphism( <Graph>, <Graph> [, <Bool>] ) or GraphIsomorphism( <GraphWithColourClasses>, <GraphWithColourClasses> [, <Bool>] )"); 
+fi;
+if IsGraphWithColourClasses(gr1) then 
+   # both gr1 and gr2 are graphs with colour-classes
+   gamma1:=gr1.graph;
+   col1:=gr1.colourClasses;
+   CheckColourClasses(gamma1,col1);
+   gamma2:=gr2.graph;
+   col2:=gr2.colourClasses;
+   CheckColourClasses(gamma2,col2);
+else
+   # both gr1 and gr2 are graphs 
+   gamma1:=gr1;
+   col1:=MonochromaticColourClasses(gamma1);
+   gamma2:=gr2;
+   col2:=MonochromaticColourClasses(gamma2);
 fi;
 if firstunbindcanon then
-   Unbind(gamma1.canonicalLabelling);
-   Unbind(gamma2.canonicalLabelling);
+  Unbind(gr1.canonicalLabelling);
+  Unbind(gr2.canonicalLabelling);
 fi;
-if not IsIsomorphicGraph(gamma1,gamma2,firstunbindcanon) then
+if gamma1.order<>gamma2.order or
+   VertexDegrees(gamma1) <> VertexDegrees(gamma2) then 
+   # the graphs are not isomorphic 
+   return fail; 
+elif List(col1,Length)<>List(col2,Length) then
+   # incompatible colourings
    return fail;
+elif gamma1.order<=1 then
+   return ();
+fi;
+SetAutGroupCanonicalLabelling(gr1,true);
+SetAutGroupCanonicalLabelling(gr2,true);
+x:=LeftQuotient(gr1.canonicalLabelling,gr2.canonicalLabelling);
+if IsGraphIsomorphism(gr1,gr2,x) then
+   return x;
 else
-   SetAutGroupCanonicalLabelling(gamma1);
-   SetAutGroupCanonicalLabelling(gamma2);
-   return gamma1.canonicalLabelling^-1*gamma2.canonicalLabelling;
+   return fail;
+fi;
+end);
+
+BindGlobal("IsIsomorphicGraph",function(arg)
+#
+# Let  gr1:=arg[1]  and  gr2:=arg[2]  both be graphs or both be 
+# graphs with colour-classes.  
+# Then this function returns true if  gr1  and  gr2  are isomorphic,
+# else returns  false.
+# 
+# The optional boolean parameter  firstunbindcanon=arg[3]  determines
+# whether or not the  canonicalLabelling  components of both gr1 and
+# gr2  are first made unbound before proceeding.   If
+# firstunbindcanon=true (the default, safe and possibly slower option) 
+# then these components are first unbound.  
+# If  firstunbindcanon=false,  then an old canonical labelling
+# is used when it exists.  However, canonical labellings can depend on
+# the version of nauty, the version of GRAPE, certain settings
+# of nauty, and the compiler and computer used.  
+# Thus, if firstunbindcanon=false, the user must be 
+# sure that any canonicalLabelling component(s) which may already 
+# exist for gr1 or gr2 were created in exactly the same 
+# environment in which the user is presently computing. 
+#
+if Length(arg)=2 then
+   return IsPerm(GraphIsomorphism(arg[1],arg[2]));
+elif Length(arg)=3 then
+   return IsPerm(GraphIsomorphism(arg[1],arg[2],arg[3]));
+else
+   Error("number of arguments must be 2 or 3");
 fi;
 end);
 
 BindGlobal("GraphIsomorphismClassRepresentatives",function(arg)
 #
-# Given a list  L=arg[1]  of graphs, this function returns a list
+# Given a list  L:=arg[1]  of graphs, or of graphs with colour-classes, 
+# this function returns a list
 # containing pairwise non-isomorphic elements of  L,  representing
 # all the isomorphism classes of elements of  L. 
 #
@@ -4015,7 +4256,7 @@ BindGlobal("GraphIsomorphismClassRepresentatives",function(arg)
 # exist for graphs in L were created in exactly the same 
 # environment in which the user is presently computing. 
 #
-local L,firstunbindcanon,gamma,reps,i,found;
+local L,firstunbindcanon,reps,i,x,found;
 L:=arg[1];
 if IsBound(arg[2]) then
    firstunbindcanon:=arg[2];
@@ -4023,14 +4264,14 @@ else
    firstunbindcanon:=true;
 fi;
 if not (IsList(L) and IsBool(firstunbindcanon)) then
-   Error("usage: GraphIsomorphismClassRepresentatives( <List> [, <Bool>] )");
+   Error("usage: GraphIsomorphismClassRepresentatives( <List> [, <Bool> ] )");
 fi;
-if not ForAll(L,IsGraph) then
-   Error("each element of <L> must be a graph");
-fi;
+if not (ForAll(L,IsGraph) or ForAll(L,IsGraphWithColourClasses)) then
+   Error("<L> must be a list of graphs or a list of graphs with colour-classes");
+fi; 
 if firstunbindcanon then
-   for gamma in L do
-      Unbind(gamma.canonicalLabelling);
+   for x in L do
+      Unbind(x.canonicalLabelling);
    od;
 fi;
 if Length(L)<=1 then
@@ -4039,8 +4280,8 @@ fi;
 reps:=[L[1]];
 for i in [2..Length(L)] do
    found:=false;
-   for gamma in reps do
-      if IsIsomorphicGraph(L[i],gamma,false) then
+   for x in reps do
+      if IsIsomorphicGraph(x,L[i],false) then
          found:=true;
          break;
       fi;
@@ -4335,188 +4576,3 @@ od;
 return ans;
 end);
 
-#######################################################################
-#
-# Now comes the part of  GRAPE  depending on the  enum4  and  enum4ca  
-# standalones. 
-#
-
-# define some global variables so as not to get warning messages
-GRAPE_coladjmatseq:=0;
-GRAPE_tc_permgens:=0; 
-
-BindGlobal("Enum",function(arg) 
-# 
-# Function to run the  enum  coset enumerator. The parameter  arg[1]
-# is the file containing coset enumerator input (default: "", which 
-# means take the input from stdin).  
-# The boolean parameter  arg[2]  is true iff a list of group generators 
-# should be returned by the function (the default is true, which assumes
-# a successful coset enumeration (otherwise an error will occur)). 
-# The boolean parameter  arg[3]  is true iff various information 
-# is to be printed (default: true).
-#  arg[4]  is the file to keep a record of the enumeration performed 
-# (default: record not kept).
-#
-# The enumerator input in the ASCII file arg[1] should have the format 
-# described, below. 
-# 
-# The input has five main sections which should be separated by full stops
-# as follows:
-# 
-#    all generators.generators not known to be involutions.
-#    subgroup generators.coxeter relations.other relations.
-# 
-# Here are two presentations for Alt(5) in this form (the first
-# enumerates over the identity, the second over <a,b>):
-#
-#   ab.b...b3,(ab)5.  
-#   abc..a,b.ab5bc3.(abc)5.
-#
-# Throughout, blanks and linefeeds are ignored, commas and semicolons are
-# equivalent, and upper and lower case letters are distinguished. In
-# addition, in sections 1, 2, and 4, commas and semicolons are ignored.
-#
-# The generators must come from the set {A,B,...,Z,a,b,...,z}.
-# Generators to be used are given in the first section, where
-# you must give at least one generator.
-#
-# The generators x for which you do NOT want the assumption that 1=xx
-# should be put in the second section.
-#
-# The third section contains words for the generators of the subgroup
-# over which you want to enumerate. These words should be separated by
-# commas (or semicolons).
-#
-# We give the syntax for a word ({ } means zero or more times):
-#     word ::= null | term word 
-#     term ::= '1' | factor power 
-#     factor ::= generator | '(' word ')' | commutator 
-#     commutator ::= '[' word ',' word {',' word} ']' 
-#     power ::= null | unsigned integer | '-' | '-' unsigned integer 
-#
-# Multiplication is denoted by juxtaposition, a factor is inverted by
-# following it with '-', and a factor is raised to the n-th power when
-# followed by the integer n.  Commutators are left normed so that
-# [a,b,c,...] means [[a,b],c,...].  A term consisting of just '1' is the
-# empty term, and so a word consisting of just '1' is the empty word.
-# Additions to the above syntax are that left parenthesis '(' and left
-# square bracket '[' are equivalent in words, as are ')' and ']'.
-#
-# The fourth section contains the Coxeter relations. If you do not want
-# any of the implications which follow then leave this section empty. If
-# X and Y are generators, and n is an unsigned integer then 'XYn' in this
-# section denotes the relator (XY)n.  If  A,B,C,...,V,W,X,Y,Z,...  are
-# generators, and  k,m,n,...  are unsigned integers then
-# 'ABC ... VWXkYmZn ...' is a shorthand for 
-# 'AB3 BC3 ... VW3 WXk WYm WZn ...'.  
-# Such a shorthand expression should always end with an (unsigned)
-# integer.  Each unordered pair of generators should be specified in this
-# section at most once. If a pair X,Y is not specified then the relator
-# (XY)2 is assumed. Specifying 'XY0' means that no relator is entered or
-# assumed for the X,Y pair.  Note: no assumptions or implications about
-# the orders of the generators are made in this section.  Here is an
-# example presentation for the Weyl group of E6 (to be enumerated over
-# the Weyl group of D5):
-#   abcdef..a,b,c,d,f.abcde3 cf3..  
-#
-# The fifth section is for relations which are not of Coxeter type.
-# They should be separated by commas (or semicolons), and each should be
-# a word by itself (a relator) or an expression of the form
-# word1=word2=...=wordk . This is translated to be 
-# (word1)-1 word2,...,(word1)-1 wordk, so it is usually most efficient
-# if word1 is the shortest word amongst word1,word2,...,wordk.  Here is
-# an example presentation for Alt(5)wr2:
-#  wabcd.w.w,a,b,c.abcd3 wa0b0c0.w3,[w,a],[w,b],a=(wc)3.
-#
-local infile,gensfile,recordfile,outputtext,tmpdir,printinfo,savegens;
-if not IsBound(arg[1]) then 
-   infile:="";                          
-else 
-   infile:=arg[1]; 
-fi;
-if not IsBound(arg[2]) then 
-   savegens:=true;
-else
-   savegens:=arg[2];
-fi;
-if not IsBound(arg[3]) then 
-   printinfo:=true;
-else
-   printinfo:=arg[3];
-fi;
-if not IsString(infile) or not IsBool(savegens) or not IsBool(printinfo) or
-  (IsBound(arg[4]) and not IsString(arg[4])) then
-   Error("usage: Enum([ <String> [, <Bool> [, <Bool> [, <String> ]]]])"); 
-fi; 
-tmpdir:=DirectoryTemporary();
-if infile="" then
-   Exec(Concatenation("cat  > ",Filename(tmpdir,"GRAPE_tcfein")));
-else 
-   Exec(Concatenation("cp ",infile," ",Filename(tmpdir,"GRAPE_tcfein")));
-fi;
-if savegens then 
-   gensfile:=Filename(tmpdir,"GRAPE_tc_permgens.g"); 
-else 
-   gensfile:="''"; 
-fi;
-if printinfo then 
-   outputtext:=OutputTextUser();
-else 
-   outputtext:=OutputTextNone();
-fi;
-recordfile:=Filename(tmpdir,"GRAPE_tc_record"); 
-Process(tmpdir,Filename(DirectoriesSystemPrograms(),"sh"),
-        InputTextNone(),outputtext,
-        ["-c",
-         Concatenation(Filename(DirectoriesPackagePrograms("grape"),"enum4"),
-	               " ",recordfile," ", gensfile)]);
-if IsBound(arg[4]) then
-   Exec(Concatenation("cat ",recordfile," >> ",arg[4]));
-fi;
-if savegens then 
-   Read(gensfile); 
-   RemoveFile(gensfile);
-   return GRAPE_tc_permgens;
-fi;
-end);
-
-BindGlobal("EnumColadj",function(arg) 
-#
-# Function to run the  enum4ca  programs, and return a sequence
-# of collapsed adjacency matrices for the orbital graphs for
-# the (transitive) permutation group produced by the enumerator
-# (assuming a successful enumeration).
-# Note: before GRAPE 2.1 the intersection matrix for the trivial 
-# orbital graph was not included.
-#
-# arg[1] is the file containing the coset enumerator input (default: "",
-# which means take the input from stdin).
-# See the documentation for function  Enum  for the format of this input.
-#
-local infile,n,tmpdir;
-if not IsBound(arg[1]) then 
-   infile:=""; 
-else 
-   infile:=arg[1]; 
-fi;
-if not IsString(infile) then
-   Error("usage: EnumColadj([ <String> ])");
-fi;
-tmpdir:=DirectoryTemporary();
-if infile="" then
-   Exec(Concatenation("cat  > ",Filename(tmpdir,"GRAPE_tcfein")));
-else 
-   Exec(Concatenation("cp ",infile," ",Filename(tmpdir,"GRAPE_tcfein")));
-fi;
-Process(tmpdir,Filename(DirectoriesSystemPrograms(),"sh"),
-        InputTextNone(),OutputTextNone(),
-        ["-c",Filename(DirectoriesPackagePrograms("grape"),"enum4ca")]);
-Read(Filename(tmpdir,"GRAPE_coladj.g")); 
-if GRAPE_coladjmatseq=[] then
-   n:=1;
-else
-   n:=Length(GRAPE_coladjmatseq[1]);
-fi;
-return Concatenation([IdentityMat(n)],GRAPE_coladjmatseq);
-end);
