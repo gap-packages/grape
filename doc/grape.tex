@@ -10,7 +10,7 @@
 
 \Chapter{Grape}
 
-This manual describes the {\GRAPE} (Version~4.4) package for computing
+This manual describes the {\GRAPE} (Version~4.5) package for computing
 with graphs and groups.
 
 {\GRAPE} is primarily designed for the construction and analysis of
@@ -45,7 +45,7 @@ If you use {\GRAPE} to solve a problem then please send a short email
 about it to \Mailto{L.H.Soicher@qmul.ac.uk}, and reference the {\GRAPE} 
 package as follows:
 
-L.H. Soicher, The {GRAPE} package for {GAP}, Version~4.4, 2011,
+L.H. Soicher, The {GRAPE} package for {GAP}, Version~4.5, 2011,
 \URL{http://www.maths.qmul.ac.uk/~leonard/grape/}.
 
 If your work made use a function depending on the {\nauty} package then
@@ -57,14 +57,25 @@ HCM grant in ``Computational Group Theory''.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Installing the GRAPE Package}
 
-From {\GAP}~4.5, {\GRAPE} is included in the standard {\GAP} distribution.
-If appropriate binary files are not included, you will need to perform
-compilation of B.D.~McKay's dreadnaut/nauty programs included with
-{\GRAPE}. For example, in a Unix environment, after installing {\GAP}, go
-to the {\GRAPE} home directory (usually the directory `pkg/grape' of the
-{\GAP} home directory), and run `./configure <path>', where <path> is the
-path of the {\GAP} home directory.  So for example, if the {\GRAPE} home
-directory is the `pkg/grape' directory of the {\GAP} home directory, run
+The {\GRAPE} package files are included in the standard {\GAP}~4.5
+distribution, so you do not need to download and unpack an archive for
+{\GRAPE} unless you need to install the package locally or are installing
+an upgrade of {\GRAPE} to an existing installation of {\GAP} (see the main
+{\GAP} reference section "Reference: Installing a GAP Package").  If you
+do need to download {\GRAPE}, you can find archive files for the package
+in various formats at \URL{http://www.gap-system.org/Packages/grape.html},
+and then your archive file of choice should be downloaded and unpacked
+in the `pkg' subdirectory of an appropriate {\GAP} root directory (see
+the main {\GAP} reference section "Reference: GAP Root Directory").
+
+Regardless of whether you needed to download and unpack an archive file,
+you will need to perform compilation of B.D.~McKay's nauty/dreadnaut
+programs included with {\GRAPE}, and this can only be done on a Unix
+system.  After installing {\GAP}, go to the {\GRAPE} home directory
+(usually the directory `pkg/grape' of the {\GAP} home directory),
+and run `./configure <path>', where <path> is the path of the {\GAP}
+home directory.  So for example, if the {\GRAPE} home directory is the
+`pkg/grape' directory of the {\GAP} home directory, run
 
 \begintt
 ./configure ../..

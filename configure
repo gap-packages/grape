@@ -4,8 +4,6 @@
 rm -f Makefile sedfile
 cat ${1:-"../.."}/sysinfo.gap > Makefile
 echo "echo s?@GAPARCH@?\$GAParch?g >> sedfile" >> Makefile
-echo "echo s?@GAPARCH_SYSTEM@?\$GAParch_system?g >> sedfile" >> Makefile
-echo "echo s?@GAPARCH_ABI@?\$GAParch_abi?g >> sedfile" >> Makefile
 chmod +x Makefile
 ./Makefile
 rm -f Makefile

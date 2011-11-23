@@ -1,7 +1,7 @@
-                          GRAPE Version 4.4, 
+                          GRAPE Version 4.5, 
 
 a GAP package for computing with graphs and groups, 
-by Leonard H. Soicher, Queen Mary University of London,
+by Leonard H. Soicher, 
 with contributions from Steve Linton and Alexander Hulpke.
 
 This README document tells you how to install GRAPE and lists changes
@@ -10,63 +10,79 @@ made to GRAPE since Version 2.2.
 Installing GRAPE
 -----------------
 
-From GAP 4.5, GRAPE is included in the standard GAP distribution.
-If appropriate binary files are not included, you will need to perform
-compilation of B.D. Mckay's dreadnaut/nauty programs included with
-GRAPE. For example, in a Unix environment, after installing GAP, go to
-the GRAPE home directory (usually the directory `pkg/grape' of the GAP
-home directory), and run
+The {\GRAPE} package files are included in the standard {\GAP}~4.5
+distribution, so you do not need to download and unpack an archive for
+{\GRAPE} unless you need to install the package locally or are installing
+an upgrade of {\GRAPE} to an existing installation of {\GAP} (see the main
+{\GAP} reference section "Reference: Installing a GAP Package").  If you
+do need to download {\GRAPE}, you can find archive files for the package
+in various formats at \URL{http://www.gap-system.org/Packages/grape.html},
+and then your archive file of choice should be downloaded and unpacked
+in the `pkg' subdirectory of an appropriate {\GAP} root directory (see
+the main {\GAP} reference section "Reference: GAP Root Directory").
 
-   ./configure <path> 
+Regardless of whether you needed to download and unpack an archive
+file, you will need to perform compilation of B.D.~McKay's
+nauty/dreadnaut programs included with {\GRAPE}, and this can only be
+done on a Unix system.  After installing {\GAP}, go to the {\GRAPE}
+home directory (usually the directory `pkg/grape' of the {\GAP} home
+directory), and run `./configure <path>', where <path> is the path of the
+{\GAP} home directory.  So for example, if the {\GRAPE} home directory
+is the `pkg/grape' directory of the {\GAP} home directory, run
 
-where <path> is the path to the GAP home directory.  So for example,
-if the GRAPE home directory is the `pkg/grape' directory of the GAP home
-directory, run
+./configure ../..
 
-   ./configure ../..
+This will create a `Makefile'. Now run
 
-This will create a Makefile. Now run
+make
 
-   make
-
-This completes the installation of GRAPE for a single architecture.
-If GAP is installed on different architectures on a common file system,
+to create the binaries and to put them in the appropriate place.
+This completes the installation of {\GRAPE} for a single architecture.
+If {\GAP} is installed on different architectures on a common file system,
 this configuration process will only work for the *last* architecture for
-which GAP was compiled. Therefore, you should always follow the above
-procedure to install the GRAPE binaries immediately after compiling
-GAP on a given architecture. 
+which {\GAP} was compiled. Therefore, you should always follow the above
+procedure to install the {\GRAPE} binaries immediately after compiling
+{\GAP} on a given architecture.
 
-You should now test GRAPE and the interface to nauty on each
-architecture on which you have installed GRAPE. Start up GAP
+You should now test {\GRAPE} and the interface to {\nauty} on each
+architecture on which you have installed {\GRAPE}. Start up {\GAP}
 and at the prompt type
 
-   LoadPackage( "grape" );
+LoadPackage( "grape" );
 
-On-line documentation for GRAPE should be available by typing 
+On-line documentation for {\GRAPE} should be available by typing 
 
-   ?GRAPE
+?GRAPE
 
 The command
 
-   IsIsomorphicGraph( JohnsonGraph(7,3), JohnsonGraph(7,4) );
+IsIsomorphicGraph( JohnsonGraph(7,3), JohnsonGraph(7,4) );
 
 should return `true', and 
 
-   Size( AutGroupGraph( JohnsonGraph(4,2) ) );
+Size( AutGroupGraph( JohnsonGraph(4,2) ) );
 
 should be `48'.
 
-Both dvi and pdf versions of the GRAPE manual are available (as
-`manual.dvi' and `manual.pdf' respectively) in the `doc' directory of
-the home directory of GRAPE.
-
+Both dvi and pdf versions of the {\GRAPE} manual are available
+(as `manual.dvi' and `manual.pdf' respectively) in the `doc' directory
+of the home directory of {\GRAPE}.
 -------------------------------------------------------------------------
 If you use GRAPE to solve a problem, then please email
 L.H.Soicher@qmul.ac.uk, and reference:
 
-L.H. Soicher, The GRAPE package for GAP, Version 4.4, 2011, 
+L.H. Soicher, The GRAPE package for GAP, Version 4.5, 2011, 
 http://www.maths.qmul.ac.uk/~leonard/grape/
 ------------------------------------------------------------------------
+
+Main changes from GRAPE 4.4 to GRAPE 4.5:
+------------------------------------------
+
+(1) Makefile.in revised.
+
+(2) Installation instructions revised.
+
+(3) Default banner now used.
 
 Main changes from GRAPE 4.3 to GRAPE 4.4:
 ------------------------------------------
@@ -74,7 +90,8 @@ Main changes from GRAPE 4.3 to GRAPE 4.4:
 (1) With much help from Alexander Hulpke, and using new features in GAP
 4.5, the interface between GRAPE and dreadnaut is now done entirely in
 GAP code. This means that as long as nauty/dreadnaut can be compiled on
-a given computer, then GRAPE should work on that computer.
+a given computer, then GRAPE should work on that computer, although there
+are still problems with Windows machines.
 
 (2) Graphs with colour-classes can now be handled by the automorphism group
 and graph isomorphism functions. 
@@ -274,4 +291,4 @@ the effect that if the returned graph had loops, then it
 might have had its isSimple component erroneously set to true.
 
 Leonard H. Soicher
-September 2011 
+November 2011 
