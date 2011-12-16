@@ -1,0 +1,85 @@
+## do not edit these definitions #############################################
+SHELL=/bin/sh
+
+## show makefile options ####################################################
+default: unknown
+
+unknown:
+	@echo "usage: 'make <target>' where target is one of"
+	@echo "'linux-gcc'            for LINUX with gcc"
+	@echo "'dec-mips-ultrix-cc'   for DECstations running Ultrix with cc"
+	@echo "'dec-alpha-cc'         for DECalpha running OSF1 with cc"
+	@echo "'hp-hppa1.1-hpux-cc'   for HP 9000/700 under HP-UX with cc"
+	@echo "'hp-hppa1.0-hpux-cc'   for HP 9000/800 under HP-UX with cc"
+	@echo "'ibm-i386-386bsd-gcc2' for IBM PCs under 386BSD with GNU cc 2"
+	@echo "'ibm-i386-386bsd-cc'   for IBM PCs under 386BSD with cc (GNU)"
+	@echo "'sun-sparc-sunos-cc'   for SUN SPARC under SunOS with cc"
+	@echo "'bsd-gcc'              for others under Berkeley UNIX with GNU cc 2"
+	@echo "'bsd'                  for others under Berkeley UNIX with cc"
+	@echo "'usg-gcc'              for others under System V UNIX with GNU cc 2"
+	@echo "'usg'                  for others under System V UNIX with cc"
+	@echo
+
+linux-gcc:
+	make binaries CC=gcc NCOPTS="$(COPTS) -O -DSYS_UNIX=1" \
+	UCOPTS="$(COPTS) -O"
+
+bsd-gcc:
+	make binaries CC=gcc NCOPTS="$(COPTS) -O -DSYS_BSDUNIX=1" \
+	UCOPTS="$(COPTS) -O"
+
+bsd:
+	make binaries CC=cc  NCOPTS="$(COPTS) -O -DSYS_BSDUNIX=1" \
+	UCOPTS="$(COPTS) -O"
+
+usg-gcc:
+	make binaries CC=gcc NCOPTS="$(COPTS) -O -DSYS_UNIX=1" \
+	UCOPTS="$(COPTS) -O"
+
+usg:
+	make binaries CC=cc NCOPTS="$(COPTS) -O -DSYS_UNIX=1" \
+	UCOPTS="$(COPTS) -O"
+
+sun-sparc-sunos-cc:
+	make binaries CC=cc NCOPTS="$(COPTS) -O -DSYS_UNIX=1" \
+	UCOPTS="$(COPTS) -O"
+
+ibm-i386-386bsd-gcc2:
+	make binaries CC=gcc NCOPTS="$(COPTS) -O2 -DSYS_BSDUNIX=1" \
+	UCOPTS="$(COPTS) -O2" 
+
+ibm-i386-386bsd-cc:
+	make binaries CC=cc NCOPTS="$(COPTS) -O -DSYS_BSDUNIX=1" \
+	UCOPTS="$(COPTS) -O" 
+
+dec-mips-ultrix-cc:
+	make binaries CC=cc \
+	NCOPTS="$(COPTS) -O -Olimit 600 -DSYS_BSDUNIX=1" \
+	UCOPTS="$(COPTS) -O"
+
+dec-alpha-cc:
+	make binaries CC=cc \
+	NCOPTS="$(COPTS) -O3 -Olimit 900 -DSYS_ALPHA=1" \
+	UCOPTS="$(COPTS) -O3"
+
+hp-hppa1.1-hpux-cc:
+	make binaries CC=cc NCOPTS="$(COPTS) -O -DSYS_UNIX=1" \
+	UCOPTS="$(COPTS) -O"
+
+hp-hppa1.0-hpux-cc: 
+	make binaries CC=cc NCOPTS="$(COPTS) -O -DSYS_UNIX=1" \
+	UCOPTS="$(COPTS) -O"
+
+binaries:
+	if test ! -d bin;  then mkdir bin;  fi
+	if test ! -d bin/@target@-@CC@;  then mkdir bin/@GAPARCH@;  fi
+	( cd nauty20; rm -f *.o; make CC=$(CC) BINDIR="@GAPARCH@" LDFLAGS="$(LOPTS)" CFLAGS="$(NCOPTS)"; rm -f *.o )
+	( cd src; make CC=$(CC) BINDIR="@GAPARCH@" LDFLAGS="$(LOPTS)" CFLAGS="$(UCOPTS)" )
+
+others:
+	if test ! -d bin/@GAPARCH@;  then mkdir bin/@GAPARCH@;  fi
+	( cd src; make others CC=$(CC) BINDIR="@GAPARCH@" LDFLAGS="$(LOPTS)" CFLAGS="$(UCOPTS)")
+
+clean:
+	( cd nauty20; make BINDIR="@GAPARCH@" clean )
+	( cd src; make BINDIR="@GAPARCH@" clean )

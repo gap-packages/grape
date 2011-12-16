@@ -1,0 +1,246 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%A  determin.tex               GRAPE documentation              Leonard Soicher
+%
+%
+%
+\def\GRAPE{\sf GRAPE}
+\def\nauty{\it nauty}
+\def\Aut{{\rm Aut}\,}
+
+\Chapter{Functions to determine regularity properties of graphs}
+
+This chapter describes functions to determine regularity properties of
+graphs, and a function `VertexTransitiveDRGs' which determines the
+distance-regular graphs on which a given transitive permutation group
+acts as a vertex-transitive group of automorphisms.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{IsRegularGraph}
+
+\>IsRegularGraph( <gamma> )
+
+This boolean function returns `true'  if and only if the graph <gamma> is
+(out)regular.
+
+\beginexample
+gap> IsRegularGraph( JohnsonGraph(4,2) );
+true
+gap> IsRegularGraph( EdgeOrbitsGraph(Group(()),[[1,2]],2) );
+false 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{LocalParameters}
+
+\>LocalParameters( <gamma>, <V> )
+\>LocalParameters( <gamma>, <V>, <G> )
+
+Let <gamma> be a simple connected graph.  Then this function determines
+all local parameters $c_i(<V>)$, $a_i(<V>)$, and $b_i(<V>)$ that <gamma>
+may have, with respect to the singleton vertex or nonempty list of
+vertices <V>.  We say that <gamma> has the *local parameter* $c_i(V)$
+(respectively $a_i(V)$, $b_i(V)$), with respect to $V$, if the number
+of vertices at distance $i-1$ (respectively $i$, $i+1$) from $V$ that
+are adjacent to a vertex $w$ at distance $i$ from $V$ (see "Distance")
+is the constant $c_i(V)$ (respectively $a_i(V)$, $b_i(V)$) depending
+only on $i$ and $V$ (and not $w$).
+
+The function `LocalParameters' returns a list whose $i$-th element is
+the list $[c_{i-1}(<V>), a_{i-1}(<V>), b_{i-1}(<V>)]$, except that if
+some local parameter does not exist then $-1$ is put in its place.
+
+This function can be used to determine whether a given subset of the
+vertices of a graph is a distance-regular code in that graph.
+
+The optional parameter <G>, if present, is assumed to be a subgroup of
+$\Aut(<gamma>)$ fixing <V> setwise. Including such a <G> can speed up
+the function.
+
+\beginexample
+gap> gamma := JohnsonGraph(4,2);;
+gap> LocalParameters( gamma, 1 );
+[ [ 0, 0, 4 ], [ 1, 2, 1 ], [ 4, 0, 0 ] ]
+gap> LocalParameters( gamma, [1,6] );
+[ [ 0, 0, 4 ], [ 2, 2, 0 ] ]
+gap> LocalParameters( gamma, [1,2] );
+[ [ 0, 1, 3 ], [ -1, -1, 0 ] ]
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{GlobalParameters}
+
+\>GlobalParameters( <gamma> )
+
+Let <gamma> be a simple connected graph, and $0 \le i \le
+`Diameter(<gamma>)'$.  This function determines all global parameters
+$c_i$, $a_i$, and $b_i$ that <gamma> may have. We say that <gamma> has
+the *global parameter* $c_i$ (respectively $a_i$, $b_i$) if the number
+of vertices at distance $i-1$ (respectively $i$, $i+1$) from a vertex
+$v$ that are adjacent to a vertex $w$ at distance $i$ from $v$ is the
+constant $c_i$ (respectively $a_i$, $b_i$) depending only on $i$ (and
+not $v$ and $w$).
+
+The function `GlobalParameters' returns a list of length
+`Diameter'(<gamma>)+1, whose $i$-th element is the list $[c_{i-1},
+a_{i-1}, b_{i-1}]$, except that if some global parameter does not exist
+then $-1$ is put in its place.
+
+Note that <gamma> is *distance-regular* if and only if this function
+returns no $-1$ in place of a global parameter (see \cite{BCN89}).
+
+See also "LocalParameters" and "IsDistanceRegular".
+
+\beginexample
+gap> gamma := JohnsonGraph(4,2);;
+gap> GlobalParameters( gamma );
+[ [ 0, 0, 4 ], [ 1, 2, 1 ], [ 4, 0, 0 ] ]
+gap> GlobalParameters( BipartiteDouble(gamma) );
+[ [ 0, 0, 4 ], [ 1, 0, 3 ], [ -1, 0, -1 ], [ 4, 0, 0 ] ]
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{IsDistanceRegular}
+
+\>IsDistanceRegular( <gamma> )
+
+This boolean function returns `true' if and only if <gamma> is
+*distance-regular*, i.e. <gamma> is simple, connected, and all global
+parameters $c_i,a_i,b_i$ exist for $0 \le i \le `Diameter(<gamma>)'$
+(see \cite{BCN89}).
+
+See also "GlobalParameters".
+
+\beginexample
+gap> gamma := JohnsonGraph(4,2);;
+gap> IsDistanceRegular( gamma );
+true
+gap> IsDistanceRegular( BipartiteDouble(gamma) );
+false 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{CollapsedAdjacencyMat}
+
+\>CollapsedAdjacencyMat( <gamma> )
+\>CollapsedAdjacencyMat( <G>, <gamma> )
+
+The second form of this function returns  the  collapsed adjacency
+matrix for <gamma>, where the  collapsing group  is <G>.  It is
+assumed that <G> is a subgroup of $\Aut(<gamma>)$.
+
+The $(i,j)$-entry of the collapsed adjacency matrix  equals the number of
+edges in   $\{ [x,y]\mid  y \in j$-th <G>-orbit$\}$, where  $x$ is  a fixed
+vertex in the $i$-th <G>-orbit.
+
+In the case where this function is given just one argument, then it must
+be a graph <gamma> with the property that `<gamma>.group' is transitive on
+the vertex-set of <gamma>.  In this case, the returned collapsed adjacency
+matrix for <gamma> is with respect to the stabilizer in `<gamma>.group'
+of 1.
+
+The reader is warned that collapsed adjacency matrices can have different,
+but related meanings depending on the setting and the author.
+
+See also "OrbitalGraphColadjMats".
+
+\beginexample
+gap> gamma := JohnsonGraph(4,2);
+rec( isGraph := true, order := 6,
+  group := Group([ (1,4,6,3)(2,5), (2,4)(3,5) ]),
+  schreierVector := [ -1, 2, 1, 1, 1, 1 ], adjacencies := [ [ 2, 3, 4, 5 ] ],
+  representatives := [ 1 ],
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ], [ 3, 4 ] ],
+  isSimple := true )
+gap> G := Stabilizer( gamma.group, [1,6], OnSets );;
+gap> CollapsedAdjacencyMat( G, gamma );
+[ [ 0, 4 ], [ 2, 2 ] ]
+gap> CollapsedAdjacencyMat( gamma );
+[ [ 0, 4, 0 ], [ 1, 2, 1 ], [ 0, 4, 0 ] ]
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{OrbitalGraphColadjMats}
+
+\>OrbitalGraphColadjMats( <G> )
+\>OrbitalGraphColadjMats( <G>, <H> )
+
+This function returns a list of collapsed adjacency matrices for the
+orbital digraphs of the transitive permutation group <G>, collapsed
+with respect to `Stabilizer(<G>,1)' (creating collapsed adjacency
+matrices for the orbital digraphs in the sense of \cite{PS97}). Also,
+the matrices are collapsed with respect to a fixed ordering of the
+orbits of `Stabilizer(<G>,1)', with the trivial orbit `[1]' coming
+first.
+
+The optional parameter <H>, if included, should be equal to
+`Stabilizer(<G>,1)'. The knowledge of this stabilizer can speed up the
+function.
+
+The reader is warned that collapsed adjacency matrices can have different,
+but related meanings depending on the setting and the author.
+
+See also "CollapsedAdjacencyMat".
+
+\beginexample
+gap> OrbitalGraphColadjMats( SymmetricGroup(7) );
+[ [ [ 1, 0 ], [ 0, 1 ] ], [ [ 0, 6 ], [ 1, 5 ] ] ] 
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{VertexTransitiveDRGs}
+
+\>VertexTransitiveDRGs( <coladjmats> )
+\>VertexTransitiveDRGs( <G> )
+
+This function can determine (among other things) all the
+distance-regular graphs on which a given transitive permutation group
+<G> acts as a vertex-transitive group of automorphisms (as long as the
+permutation rank of <G> is not too large).
+
+In the first form of this function, the input parameter <coladjmats>
+must be a list of collapsed adjacency matrices for the orbital digraphs
+of some transitive permutation group <G>, collapsed with respect to a
+point stabilizer (such as the list of matrices produced by the function
+`OrbitalGraphColadjMats').  It is assumed that the orbital/suborbit
+indexing used is the same as that for the rows (and columns) of each of
+the matrices, as well as for the indexing of the matrices themselves,
+with the trivial orbital first, so that, in particular,
+`<coladjmats>[1]' must be an identity matrix.
+
+In the second form of this function, the input parameter <G> must be a
+transitive permutation group, and then the result returned will be
+the same as `VertexTransitiveDRGs( OrbitalGraphColadjMats( <G> ) )'.
+
+In either case, this function returns a record <result>, which gives
+information on the transitive group <G> acting on its natural set $V$.
+The most important component of this record is the list
+`orbitalCombinations', whose elements give the sets of (the indices of)
+the <G>-orbitals whose union gives the edge-set of a distance-regular
+graph with vertex-set $V$. The component `intersectionArrays' gives the
+corresponding intersection arrays. The component `degree' is the degree
+of the permutation group <G>, `rank' is its (permutation) rank, and
+`isPrimitive' is true if <G> is primitive, and `false' otherwise.
+
+The techniques used in this function and definitions of the terms used
+above can be found in \cite{PS97}.
+
+*Warning* This function checks all subsets of `[2..<result>.rank]', so
+the permutation rank of <G> must not be large!
+
+\beginexample
+gap> m22:=PrimitiveGroup(22,1);;
+gap> syl:=SylowSubgroup(m22,11);;
+gap> part:=Set(Orbit(syl,1));;
+gap> l211:=Stabilizer(m22,part,OnSets);;
+gap> rt:=RightTransversal(m22,l211);;
+gap> m22big:=Action(m22,rt,OnRight);;
+gap> v:=VertexTransitiveDRGs(m22big);
+rec( degree := 672, rank := 6, isPrimitive := true, 
+  orbitalCombinations := [ [ 2, 3, 4, 5, 6 ], [ 2, 4 ], [ 3, 5, 6 ], [ 3, 6 ] 
+     ], 
+  intersectionArrays := [ [ [ 0, 0, 671 ], [ 1, 670, 0 ] ], [ [ 0, 0, 495 ], 
+          [ 1, 366, 128 ], [ 360, 135, 0 ] ], 
+      [ [ 0, 0, 176 ], [ 1, 40, 135 ], [ 48, 128, 0 ] ], 
+      [ [ 0, 0, 110 ], [ 1, 28, 81 ], [ 18, 80, 12 ], [ 90, 20, 0 ] ] ] )
+\endexample

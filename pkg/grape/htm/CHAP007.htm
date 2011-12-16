@@ -1,0 +1,208 @@
+<html><head><title>[GRAPE] 7 Vertex-Colouring and Complete Subgraphs</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP006.htm">Previous</a>] [<a href ="CHAP008.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>7 Vertex-Colouring and Complete Subgraphs</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP007.htm#SECT001">VertexColouring</a>
+<li> <A HREF="CHAP007.htm#SECT002">CompleteSubgraphs</a>
+<li> <A HREF="CHAP007.htm#SECT003">CompleteSubgraphsOfGivenSize</a>
+</ol><p>
+<p>
+The following sections describe functions for (proper) vertex-colouring
+or determining complete subgraphs of given graphs. The function
+<code>CompleteSubgraphsOfGivenSize</code> can also be used to determine the
+complete subgraphs with given vertex-weight sum in a vertex-weighted
+graph&nbsp;indexvertex-weighted graph.
+<p>
+<p>
+<h2><a name="SECT001">7.1 VertexColouring</a></h2>
+<p><p>
+<a name = "SSEC001.1"></a>
+<li><code>VertexColouring( </code><var>gamma</var><code> )</code>
+<p>
+This function returns a proper vertex-colouring <var>C</var> for the graph
+<var>gamma</var>, which must be simple.
+<p>
+This <strong>proper vertex-colouring</strong> <var>C</var> is a list of positive integers,
+indexed by the vertices of <var>gamma</var>, with the property that
+<var><var>C</var>[i]not=<var>C</var>[j]</var> whenever <var>[i,j]</var> is an edge of <var>gamma</var>. At present
+a greedy algorithm is used.
+<p>
+<pre>
+gap&gt; VertexColouring( JohnsonGraph(4,2) );
+[ 1, 3, 2, 2, 3, 1 ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT002">7.2 CompleteSubgraphs</a></h2>
+<p><p>
+<a name = "SSEC002.1"></a>
+<li><code>CompleteSubgraphs( </code><var>gamma</var><code> )</code>
+<li><code>CompleteSubgraphs( </code><var>gamma</var><code>, </code><var>k</var><code> )</code>
+<li><code>CompleteSubgraphs( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code> )</code>
+<p>
+Let <var>gamma</var> be a simple graph and <var>k</var> an integer. This function returns
+a set <var>K</var> of complete subgraphs of <var>gamma</var>, where a complete subgraph is
+represented by its vertex-set.  If <var>k</var> is non-negative then the elements
+of <var>K</var> each have size <var>k</var>, otherwise the elements of <var>K</var> represent maximal
+complete subgraphs of <var>gamma</var>.  The default for <var>k</var> is <var>-1</var>, i.e. maximal
+complete subgraphs.  See also <code>CompleteSubgraphsOfGivenSize</code>, which
+can be used to compute the <strong>maximal</strong> complete subgraphs of given size,
+and can also be used to determine the (maximal or otherwise) complete
+subgraphs with given vertex-weight sum in a vertex-weighted graph.
+<p>
+The optional parameter <var>alls</var> controls how many complete subgraphs are
+returned. The valid values for <var>alls</var> are 0, 1 (the default), and 2.
+The value 2 provides a new feature in GRAPE from version 4.1, and
+specifies that this function should compute a set of <code></code><var>gamma</var><code>.group</code>-orbit
+representatives of the required complete subgraphs.
+<p>
+If <var>alls</var>=0 (or <code>false</code> for backward compatibility) then <var>K</var> will contain
+at most one element. In this case, if <var>k</var> is negative then <var>K</var> will
+contain just one maximal complete subgraph, and if <var>k</var> is non-negative
+then <var>K</var> will contain a complete subgraph of size <var>k</var> if and only if
+such a subgraph is contained in <var>gamma</var>.
+<p>
+If <var>alls</var>=1 (or <code>true</code> for backward compatibility) then <var>K</var> will contain
+(perhaps properly) a set of <code></code><var>gamma</var><code>.group</code> orbit-representatives of
+the maximal (if <var>k</var> is negative) or size <var>k</var> (if <var>k</var> is non-negative)
+complete subgraphs of <var>gamma</var>.
+<p>
+If <var>alls</var>=2 then <var>K</var> will be a set of <code></code><var>gamma</var><code>.group</code>
+orbit-representatives of the maximal (if <var>k</var> is negative) or size <var>k</var>
+(if <var>k</var> is non-negative) complete subgraphs of <var>gamma</var>.  This option
+can be more costly than when <var>alls</var>=1.
+<p>
+Before applying <code>CompleteSubgraphs</code>, one may want to associate the full
+automorphism group of <var>gamma</var> with <var>gamma</var>, via <code></code><var>gamma</var><code> :=
+NewGroupGraph( AutGroupGraph(</code><var>gamma</var><code>), </code><var>gamma</var><code> );</code>.
+<p>
+An alternative name for this function is <code>Cliques</code>&nbsp;indexCliques.
+<p>
+See also <a href="CHAP007.htm#SSEC003.1">CompleteSubgraphsOfGivenSize</a>.
+<p>
+<pre>
+gap&gt; gamma := JohnsonGraph(5,2);
+rec( isGraph := true, order := 10, 
+  group := Group([ ( 1, 5, 8,10, 4)( 2, 6, 9, 3, 7), ( 2, 5)( 3, 6)( 4, 7) ]),
+  schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 ], 
+  adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], representatives := [ 1 ], 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], isSimple := true )
+gap&gt; CompleteSubgraphs(gamma);
+[ [ 1, 2, 3, 4 ], [ 1, 2, 5 ] ]
+gap&gt;  CompleteSubgraphs(gamma,3,2);
+[ [ 1, 2, 3 ], [ 1, 2, 5 ] ]
+gap&gt; CompleteSubgraphs(gamma,-1,0);
+[ [ 1, 2, 5 ] ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT003">7.3 CompleteSubgraphsOfGivenSize</a></h2>
+<p><p>
+<a name = "SSEC003.1"></a>
+<li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code> )</code>
+<li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code> )</code>
+<li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code>, </code><var>maxi</var><code> )</code>
+<li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code>, </code><var>maxi</var><code>, </code><var>col</var><code> )</code>
+<li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code>, </code><var>maxi</var><code>, </code><var>col</var><code>, </code><var>wts</var><code> )</code>
+<p>
+Let <var>gamma</var> be a simple graph and <var>k</var> a non-negative integer. This
+function returns a set <var>K</var> (possibly empty) of complete subgraphs of
+size <var>k</var> of <var>gamma</var>. The exact nature of the set <var>K</var> depends on the
+values of the parameters supplied to this function. A complete subgraph
+is represented by its vertex-set. <code>CompleteSubgraphsOfGivenSize</code> can
+handle the case where the vertices are assigned positive integer weights,
+in which case, a complete subgraph of size <var>k</var> means a complete subgraph
+whose vertex-weights sum to <var>k</var>.
+<p>
+We remark that the parameter <var>maxi</var> provides a backward compatible
+extension to its use in versions of GRAPE previous to 4.1, and now when
+<var>maxi</var>=<code>true</code> this function returns only <strong>maximal</strong> complete subgraphs
+of size <var>k</var>. The parameter <var>alls</var> also provides a new feature starting
+with version 4.1. Setting <var>alls</var>=2 specifies that this function should
+compute a set of <code></code><var>gamma</var><code>.group</code>-orbit representatives of the required
+complete subgraphs.
+<p>
+The optional parameter <var>alls</var> controls how many complete subgraphs are
+returned. The valid values for <var>alls</var> are 0, 1 (the default), and 2.
+<p>
+If <var>alls</var>=0 (or <code>false</code> for backward compatibility) then <var>K</var> will
+contain at most one element.  If <var>maxi</var>=<code>false</code> then <var>K</var> will contain one
+element if and only if <var>gamma</var> contains a complete subgraph of size <var>k</var>.
+If <var>maxi</var>=<code>true</code> then <var>K</var> will contain one element if and only if <var>gamma</var>
+contains a <strong>maximal</strong> complete subgraph of size <var>k</var> (in which case <var>K</var>
+will contain (the vertex-set of) such a maximal complete subgraph).
+<p>
+If <var>alls</var>=1 (or <code>true</code> for backward compatibility) and <var>maxi</var>=<code>false</code>,
+then <var>K</var> will contain (perhaps properly) a set of <code></code><var>gamma</var><code>.group</code>
+orbit-representatives of the size <var>k</var> complete subgraphs of <var>gamma</var>.
+If <var>alls</var>=1 (the default) and <var>maxi</var>=<code>true</code>, then <var>K</var> will contain
+(perhaps properly) a set of <code></code><var>gamma</var><code>.group</code> orbit-representatives of
+the size <var>k</var> <strong>maximal</strong> complete subgraphs of <var>gamma</var>.
+<p>
+If <var>alls</var>=2 and <var>maxi</var>=<code>false</code>, then <var>K</var> will be a set of <code></code><var>gamma</var><code>.group</code>
+orbit-representatives of the size <var>k</var> complete subgraphs of <var>gamma</var>.
+If <var>alls</var>=2 and <var>maxi</var>=<code>true</code> then <var>K</var> will be a set of <code></code><var>gamma</var><code>.group</code>
+orbit-representatives of the size <var>k</var> <strong>maximal</strong> complete subgraphs
+of <var>gamma</var>.  This option can be more costly than when <var>alls</var>=1.
+<p>
+The optional parameter <var>maxi</var> controls whether only maximal complete
+subgraphs of size <var>k</var> are returned.  The default is <code>false</code>, which means
+that non-maximal as well as maximal complete subgraphs of size <var>k</var> are
+returned. If <var>maxi</var>=<code>true</code> then only maximal complete subgraphs of size
+<var>k</var> are returned. (Previous to version 4.1 of GRAPE, <var>maxi</var>=<code>true</code>
+meant that it was assumed (but not checked) that all complete subgraphs
+of size <var>k</var> were maximal.)
+<p>
+The optional boolean parameter <var>col</var> is used to determine whether or
+not partial proper vertex-colouring is used to cut down the search
+tree. The default is <code>true</code>, which says to use this partial colouring
+(and which seems to be a good idea).  For backward compatibility, <var>col</var>
+a rational number means the same as <var>col</var>=<code>true</code>.
+<p>
+If the optional parameter <var>wts</var> is given, then it is assumed to be a
+<code></code><var>gamma</var><code>.group</code> invariant list (where the action permutes the list
+positions) of length <code></code><var>gamma</var><code>.order</code> of positive integer weights
+corresponding to the vertices, in which case, a complete subgraph of
+size <var>k</var>  means a complete subgraph whose vertex-weights sum to <var>k</var>.
+<p>
+An alternative name for this function is 
+<code>CliquesOfGivenSize</code>&nbsp;indexCliquesOfGivenSize.
+<p>
+See also <a href="CHAP007.htm#SSEC002.1">CompleteSubgraphs</a>.
+<p>
+<pre>
+gap&gt; gamma:=JohnsonGraph(6,2);                         
+rec( isGraph := true, order := 15, 
+  group := Group([ ( 1, 6,10,13,15, 5)( 2, 7,11,14, 4, 9)( 3, 8,12), 
+      ( 2, 6)( 3, 7)( 4, 8)( 5, 9) ]), 
+  schreierVector := [ -1, 2, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1 ], 
+  adjacencies := [ [ 2, 3, 4, 5, 6, 7, 8, 9 ] ], representatives := [ 1 ], 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 1, 6 ], [ 2, 3 ], 
+      [ 2, 4 ], [ 2, 5 ], [ 2, 6 ], [ 3, 4 ], [ 3, 5 ], [ 3, 6 ], [ 4, 5 ], 
+      [ 4, 6 ], [ 5, 6 ] ], isSimple := true )
+gap&gt; CompleteSubgraphsOfGivenSize(gamma,4);
+[ [ 1, 2, 3, 4 ] ]
+gap&gt; CompleteSubgraphsOfGivenSize(gamma,4,1,true);
+[  ]
+gap&gt; CompleteSubgraphsOfGivenSize(gamma,5,2,true);
+[ [ 1, 2, 3, 4, 5 ] ]
+gap&gt; delta:=NewGroupGraph(Group(()),gamma);;
+gap&gt; CompleteSubgraphsOfGivenSize(delta,5,2,true);
+[ [ 1, 2, 3, 4, 5 ], [ 1, 6, 7, 8, 9 ], [ 2, 6, 10, 11, 12 ], 
+  [ 3, 7, 10, 13, 14 ], [ 4, 8, 11, 13, 15 ], [ 5, 9, 12, 14, 15 ] ]
+gap&gt; CompleteSubgraphsOfGivenSize(delta,5,0);
+[ [ 1, 2, 3, 4, 5 ] ]
+gap&gt; CompleteSubgraphsOfGivenSize(delta,5,1,false,true,
+&gt; &gt;       [1,2,3,4,5,6,7,8,7,6,5,4,3,2,1]);
+[ [ 1, 4 ], [ 2, 3 ], [ 3, 14 ], [ 4, 15 ], [ 5 ], [ 11 ], [ 12, 15 ], 
+  [ 13, 14 ] ]
+</pre>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP006.htm">Previous</a>] [<a href ="CHAP008.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>GRAPE manual<br>September 2003
+</address></body></html>

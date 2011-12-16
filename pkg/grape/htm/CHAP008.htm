@@ -1,0 +1,89 @@
+<html><head><title>[GRAPE] 8 Automorphism groups and isomorphism testing for graphs</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP007.htm">Previous</a>] [<a href ="CHAP009.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>8 Automorphism groups and isomorphism testing for graphs</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP008.htm#SECT001">AutGroupGraph</a>
+<li> <A HREF="CHAP008.htm#SECT002">IsIsomorphicGraph</a>
+</ol><p>
+<p>
+GRAPE provides a basic interface to B.D.&nbsp;McKay's nauty
+(Version&nbsp;2.0b5) package for calculating automorphism groups of
+(possibly vertex-coloured) graphs and for testing graph isomorphism
+(see <a href="biblio.htm#Nau90"><cite>Nau90</cite></a>). To use functions depending on nauty, GRAPE
+must be fully installed on a computer running UNIX (see <a href="CHAP001.htm#SECT001">Installing the GRAPE Package</a>).
+<p>
+<p>
+<h2><a name="SECT001">8.1 AutGroupGraph</a></h2>
+<p><p>
+<a name = "SSEC001.1"></a>
+<li><code>AutGroupGraph( </code><var>gamma</var><code> )</code>
+<li><code>AutGroupGraph( </code><var>gamma</var><code>, </code><var>colourclasses</var><code> )</code>
+<p>
+The first version of this function returns the automorphism group of the
+(directed) graph <var>gamma</var>, using nauty (this can also be accomplished
+by typing <code>AutomorphismGroup(</code><var>gamma</var><code>)</code>). The <strong>automorphism group</strong>
+<var>Aut(<var>gamma</var>)</var> of <var>gamma</var> is the group consisting of the permutations
+of the vertices of <var>gamma</var> which preserve the edge-set of <var>gamma</var>.
+<p>
+In the second version, <var>colourclasses</var> is an ordered partition of
+the vertices of <var>gamma</var> (into <strong>colour-classes</strong>), and the subgroup
+of <var>Aut(<var>gamma</var>)</var> preserving this ordered partition is returned. The
+ordered partition should be given as a list of sets, although the last
+set in the list may be omitted.  Note that we do not require that adjacent
+vertices be in different colour-classes.
+<p>
+<pre>
+gap&gt; gamma := JohnsonGraph(4,2);                   
+rec( isGraph := true, order := 6, 
+  group := Group([ (1,4,6,3)(2,5), (2,4)(3,5) ]), 
+  schreierVector := [ -1, 2, 1, 1, 1, 1 ], adjacencies := [ [ 2, 3, 4, 5 ] ], 
+  representatives := [ 1 ], 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ], [ 3, 4 ] ], 
+  isSimple := true )
+gap&gt; Size(AutGroupGraph(gamma)); 
+48
+gap&gt; Size(AutGroupGraph(gamma,[[1,2,3],[4,5,6]])); 
+6
+gap&gt; Size(AutGroupGraph(gamma,[[1,6]]));          
+16
+</pre>
+<p>
+<p>
+<h2><a name="SECT002">8.2 IsIsomorphicGraph</a></h2>
+<p><p>
+<a name = "SSEC002.1"></a>
+<li><code>IsIsomorphicGraph( </code><var>gamma1</var><code>, </code><var>gamma2</var><code> )</code>
+<li><code>IsIsomorphicGraph( </code><var>gamma1</var><code>, </code><var>gamma2</var><code>, </code><var>firstunbindcanon</var><code> )</code>
+<p>
+This boolean function uses the nauty package to test whether graphs
+<var>gamma1</var> and <var>gamma2</var> are isomorphic. The value <code>true</code> is returned if
+and only if the graphs are isomorphic (as directed, uncoloured
+graphs).
+<p>
+The optional boolean parameter <var>firstunbindcanon</var> determines whether or
+not the <code>canonicalLabelling</code> components of both <var>gamma1</var> and <var>gamma2</var>
+are first unbound before testing isomorphism.  If <var>firstunbindcanon</var>
+is <code>true</code> (the default, safe and possibly slower option) then these
+components are first unbound.  If <var>firstunbindcanon</var> is <code>false</code>, then any
+existing <code>canonicalLabelling</code> components are used, which was the behaviour
+in versions of GRAPE before 4.0.  However, since canonical labellings
+can depend on the version of nauty, the version of GRAPE, parameter
+settings of nauty, and the compiler and computer used, you must be
+sure that if <var>firstunbindcanon</var>=<code>false</code> then the <code>canonicalLabelling</code>
+component(s) which may already exist for <var>gamma1</var> or <var>gamma2</var> were created
+in exactly the same environment in which you are presently computing.
+<p>
+<pre>
+gap&gt; gamma := JohnsonGraph(7,4);;
+gap&gt; delta := JohnsonGraph(7,3);;
+gap&gt; IsIsomorphicGraph( gamma, delta );
+true 
+</pre>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP007.htm">Previous</a>] [<a href ="CHAP009.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>GRAPE manual<br>September 2003
+</address></body></html>

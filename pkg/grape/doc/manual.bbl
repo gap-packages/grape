@@ -1,0 +1,62 @@
+\begin{thebibliography}{BCN89}
+
+\bibitem[BCN89]{BCN89}
+A.~E. Brouwer, A.~M. Cohen, and A.~Neumaier.
+\newblock {\em Distance-Regular Graphs}.
+\newblock Springer, Berlin, Heidelberg and New York, 1989.
+
+\bibitem[Cam99]{Cam99}
+Peter~J. Cameron.
+\newblock {\em Permutation Groups}.
+\newblock Cambridge University Press, 1999.
+\newblock book's web-page:
+  \URL{http://www.maths.qmul.ac.uk/~pjc/permgps/pgbook.html}.
+
+\bibitem[CSS99]{CSS99}
+Hans Cuypers, Leonard~H. Soicher, and Hans Sterk.
+\newblock The small mathieu groups (project).
+\newblock In Arjeh~M. Cohen, Hans Cuypers, and Hans Sterk, editors, {\em Some
+  Tapas of Computer Algebra}, volume~4 of {\em Algorithms and Computation in
+  Mathematics}, pages 323--337. Springer, Berlin, Heidelberg and New York,
+  1999.
+
+\bibitem[Hae81]{Haemers81}
+Willem Haemers.
+\newblock A new partial geometry constructed from the hoffman-singleton graph.
+\newblock In P.~J. Cameron, J.~W.~P. Hirschfeld, and D.~R. Hughes, editors,
+  {\em Finite Geometries and Designs: Proceedings of the Second Isle of Thorns
+  Conference 1980}, volume~49 of {\em London Mathematical Society Lecture Note
+  Series}, pages 119--127. Cambridge University Press, 1981.
+
+\bibitem[HL99]{HL99}
+Alexander Hulpke and Steve Linton.
+\newblock Construction of {Co3}. {An} example of the use of an integrated
+  system for {Computational} {Group} {Theory}.
+\newblock In C.~M. Campbell, E.~F. Robertson, N.~Ruskuc, and G.~C. Smith,
+  editors, {\em Groups St Andrews 1997 in Bath}, volume 260/261 of {\em London
+  Mathematical Society Lecture Note Series}, pages 394--409. Cambridge
+  University Press, 1999.
+
+\bibitem[McK90]{Nau90}
+Brendan~D. McKay.
+\newblock {\em {nauty} user's guide (version 1.5), Technical report
+  TR-CS-90-02}.
+\newblock Australian National University, Computer Science Department, 1990.
+\newblock nauty homepage: \URL{http://cs.anu.edu.au/people/bdm/nauty/}.
+
+\bibitem[PS97]{PS97}
+Cheryl~E. Praeger and Leonard~H. Soicher.
+\newblock {\em Low rank representations and graphs for sporadic groups},
+  volume~8 of {\em Australian Mathematical Society Lecture Series}.
+\newblock Cambridge University Press, 1997.
+
+\bibitem[Soi93]{Soi93}
+Leonard~H. Soicher.
+\newblock {GRAPE}: a system for computing with graphs and groups.
+\newblock In Larry Finkelstein and William~M. Kantor, editors, {\em Groups and
+  Computation}, volume~11 of {\em DIMACS Series in Discrete Mathematics and
+  Theoretical Computer Science}, pages 287--291. American Mathematical Society,
+  1993.
+\newblock GRAPE homepage: \URL{http://www.maths.qmul.ac.uk/~leonard/grape/}.
+
+\end{thebibliography}

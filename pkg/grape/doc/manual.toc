@@ -1,0 +1,79 @@
+\chapcontents {1}{Grape}{5}
+\seccontents {1.1}{Installing the GRAPE Package} {5}
+\seccontents {1.2}{Loading GRAPE} {7}
+\seccontents {1.3}{The structure of a graph in GRAPE} {7}
+\seccontents {1.4}{Examples of the use of GRAPE} {7}
+\chapcontents {2}{Functions to construct and modify graphs}{9}
+\seccontents {2.1}{Graph} {9}
+\seccontents {2.2}{EdgeOrbitsGraph} {10}
+\seccontents {2.3}{NullGraph} {10}
+\seccontents {2.4}{CompleteGraph} {11}
+\seccontents {2.5}{JohnsonGraph} {11}
+\seccontents {2.6}{CayleyGraph} {11}
+\seccontents {2.7}{AddEdgeOrbit} {12}
+\seccontents {2.8}{RemoveEdgeOrbit} {13}
+\seccontents {2.9}{AssignVertexNames} {13}
+\chapcontents {3}{Functions to inspect graphs, vertices and edges}{15}
+\seccontents {3.1}{IsGraph} {15}
+\seccontents {3.2}{OrderGraph} {15}
+\seccontents {3.3}{IsVertex} {15}
+\seccontents {3.4}{VertexName} {15}
+\seccontents {3.5}{VertexNames} {16}
+\seccontents {3.6}{Vertices} {16}
+\seccontents {3.7}{VertexDegree} {16}
+\seccontents {3.8}{VertexDegrees} {16}
+\seccontents {3.9}{IsLoopy} {16}
+\seccontents {3.10}{IsSimpleGraph} {17}
+\seccontents {3.11}{Adjacency} {17}
+\seccontents {3.12}{IsEdge} {17}
+\seccontents {3.13}{DirectedEdges} {17}
+\seccontents {3.14}{UndirectedEdges} {18}
+\seccontents {3.15}{Distance} {18}
+\seccontents {3.16}{Diameter} {18}
+\seccontents {3.17}{Girth} {19}
+\seccontents {3.18}{IsConnectedGraph} {19}
+\seccontents {3.19}{IsBipartite} {19}
+\seccontents {3.20}{IsNullGraph} {20}
+\seccontents {3.21}{IsCompleteGraph} {20}
+\chapcontents {4}{Functions to determine regularity properties of graphs}{21}
+\seccontents {4.1}{IsRegularGraph} {21}
+\seccontents {4.2}{LocalParameters} {21}
+\seccontents {4.3}{GlobalParameters} {22}
+\seccontents {4.4}{IsDistanceRegular} {22}
+\seccontents {4.5}{CollapsedAdjacencyMat} {22}
+\seccontents {4.6}{OrbitalGraphColadjMats} {23}
+\seccontents {4.7}{VertexTransitiveDRGs} {23}
+\chapcontents {5}{Some special vertex subsets of a graph}{25}
+\seccontents {5.1}{ConnectedComponent} {25}
+\seccontents {5.2}{ConnectedComponents} {25}
+\seccontents {5.3}{Bicomponents} {25}
+\seccontents {5.4}{DistanceSet} {26}
+\seccontents {5.5}{Layers} {26}
+\seccontents {5.6}{IndependentSet} {26}
+\chapcontents {6}{Functions to construct new graphs from old}{27}
+\seccontents {6.1}{InducedSubgraph} {27}
+\seccontents {6.2}{DistanceSetInduced} {27}
+\seccontents {6.3}{DistanceGraph} {28}
+\seccontents {6.4}{ComplementGraph} {28}
+\seccontents {6.5}{PointGraph} {29}
+\seccontents {6.6}{EdgeGraph} {29}
+\seccontents {6.7}{SwitchedGraph} {30}
+\seccontents {6.8}{UnderlyingGraph} {30}
+\seccontents {6.9}{QuotientGraph} {31}
+\seccontents {6.10}{BipartiteDouble} {31}
+\seccontents {6.11}{GeodesicsGraph} {32}
+\seccontents {6.12}{CollapsedIndependentOrbitsGraph} {32}
+\seccontents {6.13}{CollapsedCompleteOrbitsGraph} {33}
+\seccontents {6.14}{NewGroupGraph} {34}
+\chapcontents {7}{Vertex-Colouring and Complete Subgraphs}{35}
+\seccontents {7.1}{VertexColouring} {35}
+\seccontents {7.2}{CompleteSubgraphs} {35}
+\seccontents {7.3}{CompleteSubgraphsOfGivenSize} {36}
+\chapcontents {8}{Automorphism groups and isomorphism testing for graphs}{38}
+\seccontents {8.1}{AutGroupGraph} {38}
+\seccontents {8.2}{IsIsomorphicGraph} {39}
+\chapcontents {9}{Partial Linear Spaces}{40}
+\seccontents {9.1}{PartialLinearSpaces} {40}
+\seccontents {9.2}{A research application of PartialLinearSpaces} {41}
+\chapcontents {}{Bibliography}{44}
+\chapcontents {}{Index}{45}

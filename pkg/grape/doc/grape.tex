@@ -1,0 +1,246 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%A  grape.tex               GRAPE documentation              Leonard Soicher
+%
+%
+%
+\def\GRAPE{\sf GRAPE}
+\def\nauty{\it nauty}
+\def\Aut{{\rm Aut}\,} 
+
+\Chapter{Grape}
+
+This manual describes the {\GRAPE} (Version~4.2) package for computing
+with graphs and groups.
+
+{\GRAPE} is primarily designed for the construction and analysis of
+finite graphs related to groups, designs, and geometries. Special
+emphasis is placed on the determination of regularity properties and
+subgraph structure. The {\GRAPE} philosophy is that a graph <gamma>
+always comes together with a known subgroup <G> of the automorphism
+group of <gamma>, and that <G> is used to reduce the storage and
+CPU-time requirements for calculations with <gamma> (see
+\cite{Soi93}).  Of course <G> may be the trivial group, and in this
+case {\GRAPE} algorithms may perform more slowly than strictly
+combinatorial algorithms (although this degradation in performance is
+hopefully never more than a fixed constant factor).
+
+Most {\GRAPE} functions are written entirely in the {\GAP} language.
+However, the {\GRAPE} functions `AutomorphismGroup', `AutGroupGraph',
+`IsIsomorphicGraph' and `PartialLinearSpaces' make direct or indirect
+use of B.~D.~McKay{\pif}s {\nauty} (Version~2.0b5) package \cite{Nau90},
+via a {\GRAPE} interface.  These functions can only be used on a fully
+installed version of {\GRAPE} in a UNIX environment.  Installation of
+{\GRAPE} is described in its `README' file and in its manual section
+"Installing the GRAPE Package".
+
+Except for the {\nauty} package included with {\GRAPE}, and the function
+`SmallestImageSet' by Steve Linton, the {\GRAPE} package was designed
+and written by Leonard H. Soicher, School of Mathematical Sciences,
+Queen Mary, University of London.
+
+If you use {\GRAPE} to solve a problem then please send a short email
+about it to \Mailto{L.H.Soicher@qmul.ac.uk}, and reference the {\GRAPE} 
+package as follows:
+
+L.H. Soicher, The {GRAPE} package for {GAP},
+\URL{http://www.maths.qmul.ac.uk/~leonard/grape/}.
+
+If your work made use a function depending on the {\nauty} package then
+you should also reference {\nauty} as follows:
+
+B.D. McKay, The {nauty} package,
+\URL{http://cs.anu.edu.au/people/bdm/nauty/}.
+
+The development of {\GRAPE} was partially supported by a European Union
+HCM grant in ``Computational Group Theory''.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Installing the GRAPE Package}
+
+To install {\GRAPE}~4.2 (after installing {\GAP}), first
+obtain the {\GRAPE} archive file `grape4r2.zoo', available at
+\URL{http://www.maths.qmul.ac.uk/~leonard/grape/grape4r2.zoo} and
+then copy this archive file into the `pkg' directory of the {\GAP}
+root directory. Actually, it is possible to have several {\GAP} root
+directories (see "ref:GAP Root Directory"), and so it is easy to install
+{\GRAPE} locally even if you have no permission to add files to the
+main {\GAP} installation (see "ref:Installing a GAP Package in your
+home directory"). Now go to the appropriate `pkg' directory containing
+`grape4r2.zoo', and then run
+\begintt
+unzoo -x grape4r2.zoo
+\endtt
+to unpack {\GRAPE}.
+
+After unpacking {\GRAPE}, the {\GAP}-only part of {\GRAPE} is installed.
+The parts of {\GRAPE} depending on B.~D.~Mckay's {\nauty} package (for
+computing automorphism groups and testing graph isomorphism) are only
+available in a UNIX environment, where you should proceed as follows:
+
+Go to the newly created `grape' directory (which we shall refer to as
+the *home directory* of {\GRAPE}) and run `/bin/sh configure <path>',
+where <path> is the path to the home directory of the {\GAP} distribution.
+So for example, if you install {\GRAPE} in the `pkg' directory of the
+{\GAP} home directory, run
+\begintt
+/bin/sh configure ../..
+\endtt
+
+This will fetch the name of the system architecture on which {\GAP}
+has been compiled, and create a `Makefile'. Now run
+\begintt
+make
+\endtt
+to give a list of target architectures for which {\nauty} can be compiled 
+within {\GRAPE}.  Select the most suitable target and run
+\begintt   
+make <target>
+\endtt
+to create the binaries and to put them in the appropriate place.
+For example, if you are on a LINUX system with gcc, run
+\begintt
+make linux-gcc
+\endtt
+
+This completes the installation of {\GRAPE} for a single architecture.
+If {\GAP} is installed on different architectures on a common file system,
+this configuration process will only work for the *last* architecture
+for which {\GAP} was compiled. Therefore, you should always follow
+the above procedure to install the {\GRAPE} binaries immediately after
+compiling {\GAP} on a given architecture. However, if you want to add
+{\GRAPE} later, you can just run `/bin/sh configure' again in the main
+{\GAP} directory for the architecture before installing the {\GRAPE}
+binaries for that architecture.
+
+You should now test {\GRAPE} and the interface to {\nauty} on each
+architecture on which you have installed {\GRAPE}. Start up {\GAP}
+and at the prompt type
+\begintt
+LoadPackage( "grape" );
+\endtt
+On-line documentation for {\GRAPE} should be available by typing 
+\begintt
+?GRAPE
+\endtt
+The command
+\begintt
+IsIsomorphicGraph( JohnsonGraph(7,3), JohnsonGraph(7,4) );
+\endtt
+should return `true', and 
+\begintt
+Size( AutGroupGraph( JohnsonGraph(4,2) ) );
+\endtt
+should be `48'.
+
+Both dvi and pdf versions of the {\GRAPE} manual are available
+(as `manual.dvi' and `manual.pdf' respectively) in the `doc' directory
+of the home directory of {\GRAPE}.
+
+If you install {\GRAPE}, then please tell \Mailto{L.H.Soicher@qmul.ac.uk},
+where you should also send any comments or bug reports.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Loading GRAPE}
+
+Before using {\GRAPE} you must load the package within {\GAP} by calling 
+the statement
+
+\begintt
+gap> LoadPackage("grape");
+
+Loading  GRAPE 4.2  (GRaph Algorithms using PErmutation groups),
+by L.H.Soicher@qmul.ac.uk.
+
+true
+\endtt
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{The structure of a graph in GRAPE}
+ 
+In general {\GRAPE} deals with finite directed graphs which may have
+loops but have no multiple edges. However, many {\GRAPE} functions only
+work for *simple* graphs (i.e. no loops, and whenever $[x,y]$ is an
+edge then so is $[y,x]$), but these functions will check if an input
+graph is simple.
+
+In {\GRAPE}, a graph <gamma> is stored as a record, with mandatory
+components `isGraph', `order', `group', `schreierVector',
+`representatives', and `adjacencies'. Usually, the user need not be
+aware of this record structure, and is strongly advised only to use
+{\GRAPE} functions to construct and modify graphs.
+
+The `order' component contains the number of vertices of <gamma>. The
+vertices of <gamma> are always 1,2,...,`<gamma>.order', but they may also
+be given *names*, either by a user (using `AssignVertexNames') or by a
+function constructing a graph (e.g. `InducedSubgraph', `BipartiteDouble',
+`QuotientGraph'). The `names' component, if present, records these
+names, with `<gamma>.names[<i>]' the name of vertex <i>.  If the `names'
+component is not present (the user may, for example, choose to unbind
+it), then the names are taken to be 1,2,...,`<gamma>.order'. The `group'
+component records the {\GAP} permutation group associated with <gamma>
+(this group must be a subgroup of the automorphism group of <gamma>). The
+`representatives' component records a set of orbit representatives
+for the action of `<gamma>.group' on the vertices of <gamma>, with
+`<gamma>.adjacencies[<i>]' being the set of vertices adjacent to
+`<gamma>.representatives[<i>]'. The `group' and `schreierVector'
+components are used to compute the adjacency-set of an arbitrary vertex
+of <gamma> (this is done by the function `Adjacency').
+
+The only mandatory component which may change once a graph is initially
+constructed is `adjacencies' (when an edge-orbit of `<gamma>.group' is
+added to, or removed from, <gamma>). A graph record may also have some
+of the optional components `isSimple', `autGroup', and
+`canonicalLabelling', which record information about that graph.
+
+*Note* All global variables used by {\GRAPE} start with `GRAPE\_'.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Examples of the use of GRAPE}
+
+We give here a simple example to illustrate the use of {\GRAPE}. All
+functions used are described in detail in this manual. More
+sophisticated examples of the use of {\GRAPE} can be found in
+chapter "Partial Linear Spaces", as part of the the web-page
+\URL{http://www.maths.qmul.ac.uk/~leonard/partialspreads/}, and also 
+in the references \cite{Cam99}, \cite{CSS99} and \cite{HL99}.
+
+In the example here, we construct the Petersen graph $P$, and its edge
+graph (also called line graph) $EP$. We compute the global parameters
+of $EP$, and so verify that $EP$ is distance-regular (see \cite{BCN89}).
+
+\beginexample
+gap> LoadPackage("grape");
+
+Loading  GRAPE 4.2  (GRaph Algorithms using PErmutation groups),
+by L.H.Soicher@qmul.ac.uk.
+
+true
+gap> P := Graph( SymmetricGroup(5), [[1,2]], OnSets,
+>             function(x,y) return Intersection(x,y)=[]; end );
+rec( isGraph := true, order := 10, 
+  group := Group([ ( 1, 2, 3, 5, 7)( 4, 6, 8, 9,10), ( 2, 4)( 6, 9)( 7,10) ]),
+  schreierVector := [ -1, 1, 1, 2, 1, 1, 1, 1, 2, 2 ], 
+  adjacencies := [ [ 3, 5, 8 ] ], representatives := [ 1 ], 
+  names := [ [ 1, 2 ], [ 2, 3 ], [ 3, 4 ], [ 1, 3 ], [ 4, 5 ], [ 2, 4 ], 
+      [ 1, 5 ], [ 3, 5 ], [ 1, 4 ], [ 2, 5 ] ] )
+gap> Diameter(P);
+2
+gap> Girth(P);
+5
+gap> EP := EdgeGraph(P);
+rec( isGraph := true, order := 15, 
+  group := Group([ ( 1, 4, 7, 2, 5)( 3, 6, 8, 9,12)(10,13,14,15,11), 
+      ( 4, 9)( 5,11)( 6,10)( 7, 8)(12,15)(13,14) ]), 
+  schreierVector := [ -1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 2 ], 
+  adjacencies := [ [ 2, 3, 7, 8 ] ], representatives := [ 1 ], 
+  isSimple := true, 
+  names := [ [ [ 1, 2 ], [ 3, 4 ] ], [ [ 1, 2 ], [ 4, 5 ] ], 
+      [ [ 1, 2 ], [ 3, 5 ] ], [ [ 2, 3 ], [ 4, 5 ] ], [ [ 2, 3 ], [ 1, 5 ] ], 
+      [ [ 2, 3 ], [ 1, 4 ] ], [ [ 3, 4 ], [ 1, 5 ] ], [ [ 3, 4 ], [ 2, 5 ] ], 
+      [ [ 1, 3 ], [ 4, 5 ] ], [ [ 1, 3 ], [ 2, 4 ] ], [ [ 1, 3 ], [ 2, 5 ] ], 
+      [ [ 2, 4 ], [ 1, 5 ] ], [ [ 2, 4 ], [ 3, 5 ] ], [ [ 3, 5 ], [ 1, 4 ] ], 
+      [ [ 1, 4 ], [ 2, 5 ] ] ] )
+gap> GlobalParameters(EP);
+[ [ 0, 0, 4 ], [ 1, 1, 2 ], [ 1, 2, 1 ], [ 4, 0, 0 ] ]
+\endexample
