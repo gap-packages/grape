@@ -1,3 +1,4 @@
+grape/Makefile
 grape/Makefile.in
 grape/prs/U
 grape/prs/E8
@@ -28,7 +29,6 @@ grape/doc/manual.log
 grape/doc/manual.ilg
 grape/doc/manual.toc
 grape/doc/manual.bbl
-grape/doc/tthout
 grape/doc/make_doc
 grape/doc/manual.dvi
 grape/doc/manual.blg
@@ -36,3 +36,4 @@ grape/doc/manual.mst
 grape/doc/manual.aux
 grape/doc/manual.lab
 grape/doc/manual.idx
+grape/bin/dreadnautB.exe

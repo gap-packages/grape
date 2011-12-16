@@ -66,11 +66,11 @@ gap&gt; GlobalParameters(square);
 <p>
 Let <var>V</var> be a vertex or a nonempty list of vertices of <var>gamma</var>.
 This function returns the subgraph of <var>gamma</var> induced on the set of
-vertices <var>w</var> of <var>gamma</var> such that <var>d(<var>V</var>,w)</var> is in <var>distances</var> (a list
+vertices <i>w</i> of <var>gamma</var> such that <i>d</i>(<i>V</i> ,<i>w</i>) is in <var>distances</var> (a list
 or singleton distance).
 <p>
 The optional  parameter <var>G</var>,  if present, is assumed to be a subgroup  of
-<var>Aut(<var>gamma</var>)</var>  fixing <var>V</var> setwise.   Including such a  <var>G</var> can speed up
+\Aut(<i>gamma</i> )  fixing <var>V</var> setwise.   Including such a  <var>G</var> can speed up
 the function.
 <p>
 See also <a href="CHAP003.htm#SSEC015.1">Distance</a> and <a href="CHAP005.htm#SSEC004.1">DistanceSet</a>. 
@@ -95,8 +95,8 @@ rec(
 <li><code>DistanceGraph( </code><var>gamma</var><code>, </code><var>distances</var><code> )</code>
 <p>
 This function returns the graph <var>delta</var>, with the same vertex-set
-(and vertex-names) as <var>gamma</var>, such that <var>[x,y]</var> is an edge of <var>delta</var>
-if and only if <var>d(x,y)</var> (in <var>gamma</var>) is in <var>distances</var> (a list or
+(and vertex-names) as <var>gamma</var>, such that [<i>x</i>,<i>y</i>] is an edge of <var>delta</var>
+if and only if <i>d</i>(<i>x</i>,<i>y</i>) (in <var>gamma</var>) is in <var>distances</var> (a list or
 singleton distance).
 <p>
 <pre>
@@ -152,7 +152,7 @@ true
 Assuming that <var>gamma</var>  is simple, connected, and bipartite, this function
 returns   the  induced   subgraph   on   the   connected   component   of
 <code>DistanceGraph(</code><var>gamma</var><code>,2)</code>   containing  the   vertex   <var>v</var>  (default:
-<var><var>v</var>=1</var>).
+<i>v</i> =1).
 <p>
 Thus, if <var>gamma</var> is the incidence graph of a connected geometry of rank
 2, and <var>v</var> represents a point, then the point graph of the geometry is
@@ -184,9 +184,9 @@ This function return a graph isomorphic to the the edge graph (also
 called the line graph) of the simple graph <var>gamma</var>.
 <p>
 This <strong>edge graph</strong> <var>delta</var> has the unordered edges of <var>gamma</var>
-as vertices, and <var>e</var> is joined to <var>f</var> in <var>delta</var> precisely when
-<var>|ecapf|=1</var>.  The name of the vertex of the returned graph
-corresponding to the unordered edge <var>[v,w]</var> of <var>gamma</var> (with <var>v&lt; w</var>)
+as vertices, and <i>e</i> is joined to <i>f</i> in <var>delta</var> precisely when
+<font face="symbol">|</font><i>e</i><font face="symbol">Ç</font><i>f</i><font face="symbol">|</font>=1.  The name of the vertex of the returned graph
+corresponding to the unordered edge [<i>v</i>,<i>w</i>] of <var>gamma</var> (with <i>v</i> &lt;  <i>w</i>)
 is <code>[VertexName(</code><var>gamma</var><code>,</code><var>v</var><code>),VertexName(</code><var>gamma</var><code>,</code><var>w</var><code>)]</code>.
 <p>
 <pre>
@@ -217,10 +217,10 @@ This function returns the switched graph <var>delta</var> of the graph <var>gamm
 switched with respect to the vertex list (or singleton vertex) <var>V</var>.
 <p>
 The returned graph <var>delta</var>  has vertex-set (and vertex-names) the same
-as <var>gamma</var>.  If vertices <var>x,y</var> of <var>delta</var> are both in <var>V</var> or both not
-in <var>V</var>, then <var>[x,y]</var> is an edge of <var>delta</var> if and only if <var>[x,y]</var> is an
-edge of <var>gamma</var>; otherwise <var>[x,y]</var> is an edge of <var>delta</var> if and only if
-<var>[x,y]</var> is not an edge of <var>gamma</var>.  If the optional third argument <var>H</var>
+as <var>gamma</var>.  If vertices <i>x</i>,<i>y</i> of <var>delta</var> are both in <var>V</var> or both not
+in <var>V</var>, then [<i>x</i>,<i>y</i>] is an edge of <var>delta</var> if and only if [<i>x</i>,<i>y</i>] is an
+edge of <var>gamma</var>; otherwise [<i>x</i>,<i>y</i>] is an edge of <var>delta</var> if and only if
+[<i>x</i>,<i>y</i>] is not an edge of <var>gamma</var>.  If the optional third argument <var>H</var>
 is given, then it is assumed to be a subgroup of Aut(<var>gamma</var>) stabilizing
 <var>V</var> setwise.
 <p>
@@ -256,8 +256,8 @@ gap&gt; ConnectedComponents(S);
 <p>
 This function returns the underlying graph <var>delta</var> of <var>gamma</var>. The graph
 <var>delta</var> has the same vertex-set (and vertex-names) as <var>gamma</var>, and has
-an edge <var>[x,y]</var> precisely when <var>gamma</var> has an edge <var>[x,y]</var> or an edge
-<var>[y,x]</var>. This function also sets the <code>isSimple</code> components of <var>gamma</var>
+an edge [<i>x</i>,<i>y</i>] precisely when <var>gamma</var> has an edge [<i>x</i>,<i>y</i>] or an edge
+[<i>y</i>,<i>x</i>]. This function also sets the <code>isSimple</code> components of <var>gamma</var>
 and <var>delta</var>.
 <p>
 <pre>
@@ -287,16 +287,16 @@ rec(
 <a name = "SSEC009.1"></a>
 <li><code>QuotientGraph( </code><var>gamma</var><code>, </code><var>R</var><code> )</code>
 <p>
-Let <var>S</var> be the smallest <code></code><var>gamma</var><code>.group</code>-invariant equivalence relation
-on the vertices of <var>gamma</var>, such that <var>S</var> contains the relation <var>R</var>
+Let <i>S</i> be the smallest <code></code><var>gamma</var><code>.group</code>-invariant equivalence relation
+on the vertices of <var>gamma</var>, such that <i>S</i> contains the relation <var>R</var>
 (which should be a list of ordered pairs (length 2 lists) of vertices
 of <var>gamma</var>). Then this function returns a graph isomorphic to the
 quotient <var>delta</var> of the graph <var>gamma</var>, defined as follows. The vertices
-of <var>delta</var> are the equivalence classes of <var>S</var>, and <var>[X,Y]</var> is an edge of
-<var>delta</var> if and only if <var>[x,y]</var> is an edge of <var>gamma</var> for some <var>xinX</var>,
-<var>yinY</var>.  The name of a vertex <var>v</var> in the returned graph is a list (not
+of <var>delta</var> are the equivalence classes of <i>S</i>, and [<i>X</i>,<i>Y</i>] is an edge of
+<var>delta</var> if and only if [<i>x</i>,<i>y</i>] is an edge of <var>gamma</var> for some <i>x</i> <font face="symbol">Î</font> <i>X</i>,
+<i>y</i> <font face="symbol">Î</font> <i>Y</i>.  The name of a vertex <i>v</i> in the returned graph is a list (not
 necessarily ordered) of the vertex-names of <var>gamma</var> for the vertices in
-the equivalence class corresponding to <var>v</var>.
+the equivalence class corresponding to <i>v</i>.
 <p>
 <pre>
 gap&gt; gamma := JohnsonGraph(4,2);;
@@ -382,14 +382,14 @@ gap&gt; GlobalParameters(last);
 Given a subgroup <var>G</var> of the automorphism group of the simple graph
 <var>gamma</var>, this function returns a graph isomorphic to <var>delta</var>, defined as
 follows. The vertices of <var>delta</var> are those <var>G</var>-orbits of the vertices of
-<var>gamma</var> that are independent sets in <var>gamma</var>, and <var>x</var> is joined to <var>y</var> in
-<var>delta</var> if and only if <var>xcupy</var> is <strong>not</strong> an independent set in <var>gamma</var>.
-The name of a vertex <var>v</var> in the returned graph is a list (not necessarily
+<var>gamma</var> that are independent sets in <var>gamma</var>, and <i>x</i> is joined to <i>y</i> in
+<var>delta</var> if and only if <i>x</i><font face="symbol">È</font><i>y</i> is <strong>not</strong> an independent set in <var>gamma</var>.
+The name of a vertex <i>v</i> in the returned graph is a list (not necessarily
 ordered) of the vertex-names of <var>gamma</var> for the vertices in the <var>G</var>-orbit
-corresponding to <var>v</var>.
+corresponding to <i>v</i>.
 <p>
-If the optional parameter <var>N</var> is given, then it is assumed to be a
-subgroup of <var>Aut(<var>gamma</var>)</var> preserving the set of <var>G</var>-orbits of the
+If the optional parameter <i>N</i> is given, then it is assumed to be a
+subgroup of \Aut(<i>gamma</i> ) preserving the set of <var>G</var>-orbits of the
 vertices of <var>gamma</var> (for example, the normalizer in <code></code><var>gamma</var><code>.group</code> of
 <var>G</var>). This information can make the function more efficient.
 <p>
@@ -429,15 +429,15 @@ rec(
 Given a subgroup <var>G</var> of the automorphism group of the simple graph
 <var>gamma</var>, this function returns a graph isomorphic to <var>delta</var>, defined as
 follows. The vertices of <var>delta</var> are those <var>G</var>-orbits of the vertices
-of <var>gamma</var> on which complete subgraphs are induced in <var>gamma</var>, and <var>x</var>
-is joined to <var>y</var> in <var>delta</var> if and only if <var>xnot=y</var> and the subgraph of
-<var>gamma</var> induced on <var>xcupy</var> is a complete graph.  The name of a vertex
-<var>v</var> in the returned graph is a list (not necessarily ordered) of the
+of <var>gamma</var> on which complete subgraphs are induced in <var>gamma</var>, and <i>x</i>
+is joined to <i>y</i> in <var>delta</var> if and only if <i>x</i> <font face="symbol">¹</font> <i>y</i> and the subgraph of
+<var>gamma</var> induced on <i>x</i><font face="symbol">È</font><i>y</i> is a complete graph.  The name of a vertex
+<i>v</i> in the returned graph is a list (not necessarily ordered) of the
 vertex-names of <var>gamma</var> for the vertices in the <var>G</var>-orbit corresponding
-to <var>v</var>.
+to <i>v</i>.
 <p>
 If the optional  parameter  <var>N</var>  is given, then  it is assumed  to  be  a
-subgroup of  <var>Aut(<var>gamma</var>)</var>  preserving  the  set of  <var>G</var>-orbits  of the
+subgroup of  \Aut(<i>gamma</i> )  preserving  the  set of  <var>G</var>-orbits  of the
 vertices  of  <var>gamma</var> (for  example, the normalizer in <code></code><var>gamma</var><code>.group</code> of
 <var>G</var>).  This information can make the function more efficient.
 <p>
@@ -475,7 +475,7 @@ rec(
 <p>
 This  function returns a  copy <var>delta</var> of <var>gamma</var>,  except that the group
 associated with  <var>delta</var> is <var>G</var>,  which  is assumed to be  a subgroup  of
-<var>Aut(<var>delta</var>)</var>.
+\Aut(<i>delta</i> ).
 <p>
 Note that the results of some functions  of  a graph  depend on the group
 associated  with  that graph  (which must always  be  a  subgroup  of the
@@ -498,5 +498,5 @@ true
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP005.htm">Previous</a>] [<a href ="CHAP007.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>June 2006
+<address>grape manual<br>September 2011
 </address></body></html>

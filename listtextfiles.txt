@@ -59,17 +59,6 @@ grape/nauty22/catg.c
 grape/nauty22/showg.c
 grape/nauty22/checks6.c
 grape/nauty22/geng.c
-grape/src/tcmainca4.f
-grape/src/enum4.in
-grape/src/enum4ca.in
-grape/src/tcfrontend4.p
-grape/src/gap4todr.c
-grape/src/Makefile
-grape/src/drtogap4.c
-grape/src/tcfrontend4.c
-grape/src/tcmaingap4.f
-grape/src/coladjg4t.c
-grape/src/drcanon4.c
 grape/doc/manual.bib
 grape/doc/manual.tex
 grape/doc/constr.tex
@@ -80,7 +69,6 @@ grape/doc/grape.tex
 grape/doc/partlin.tex
 grape/doc/inspect.tex
 grape/doc/cnauty.tex
-grape/doc/tthmacros.tex
 grape/doc/determin.tex
 grape/doc/colour.tex
 grape/htm/indxV.htm

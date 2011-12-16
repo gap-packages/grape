@@ -116,7 +116,7 @@ gap&gt; VertexNames( JohnsonGraph(4,2) );
 <a name = "SSEC006.1"></a>
 <li><code>Vertices( </code><var>gamma</var><code> )</code>
 <p>
-This function returns the vertex-set <var>{1,..., <code></code><var>gamma</var><code>.order</code>}</var>
+This function returns the vertex-set {1,<font face="symbol">¼</font>, <i>gamma</i> <tt>.</tt><tt>order</tt>}
 of the graph <var>gamma</var>.
 <p>
 <pre>
@@ -159,7 +159,7 @@ gap&gt; VertexDegrees( JohnsonGraph( 4, 2 ) );
 <li><code>IsLoopy( </code><var>gamma</var><code> )</code>
 <p>
 This boolean function returns <code>true</code> if and only if the graph <var>gamma</var> has
-a <strong>loop</strong>, i.e. an edge of the form <var>[x,x]</var>.
+a <strong>loop</strong>, i.e. an edge of the form [<i>x</i>,<i>x</i>].
 <p>
 <pre>
 gap&gt; IsLoopy( JohnsonGraph( 4, 2 ) );
@@ -177,8 +177,8 @@ true
 <li><code>IsSimpleGraph( </code><var>gamma</var><code> )</code>
 <p>
 This boolean function returns <code>true</code> if and only if the graph <var>gamma</var>
-is <strong>simple</strong>, i.e. has no loops and whenever <var>[x,y]</var> is an edge then so
-is <var>[y,x]</var>.
+is <strong>simple</strong>, i.e. has no loops and whenever [<i>x</i>,<i>y</i>] is an edge then so
+is [<i>y</i>,<i>x</i>].
 <p>
 <pre>
 gap&gt; IsSimpleGraph( CompleteGraph( Group( (1,2,3) ), 3 ) );
@@ -194,8 +194,8 @@ false
 <li><code>Adjacency( </code><var>gamma</var><code>, </code><var>v</var><code> )</code>
 <p>
 This function returns (a copy of) the set of vertices of the graph
-<var>gamma</var> adjacent to the vertex <var>v</var> of <var>gamma</var>.  A vertex <var>w</var> is
-<strong>adjacent</strong> to <var>v</var> if and only if <var>[v,w]</var> is an edge.
+<var>gamma</var> adjacent to the vertex <var>v</var> of <var>gamma</var>.  A vertex <i>w</i> is
+<strong>adjacent</strong> to <var>v</var> if and only if [<i>v</i>,<i>w</i>] is an edge.
 <p>
 <pre>
 gap&gt; Adjacency( JohnsonGraph( 4, 2 ), 1 );
@@ -279,12 +279,12 @@ gap&gt; UndirectedEdges( gamma );
 <p>
 This function returns the distance from <var>X</var> to <var>Y</var> in <var>gamma</var>. The
 parameters <var>X</var> and <var>Y</var> may be vertices or nonempty lists of vertices.
-We define the <strong>distance</strong> <var>d(<var>X</var>,<var>Y</var>)</var> from <var>X</var> to <var>Y</var> to be the minimum
+We define the <strong>distance</strong> <i>d</i>(<i>X</i> ,<i>Y</i> ) from <var>X</var> to <var>Y</var> to be the minimum
 length of a (directed) path joining a vertex of <var>X</var> to a vertex of <var>Y</var>
-if such a path exists, and <var>-1</var> otherwise.
+if such a path exists, and <font face="symbol">-</font>1 otherwise.
 <p>
 The  optional parameter <var>G</var>,  if present, is assumed to  be a subgroup of
-<var>Aut(<var>gamma</var>)</var> fixing  <var>X</var>  setwise.  Including  such a <var>G</var> can speed up
+\Aut(<i>gamma</i> ) fixing  <var>X</var>  setwise.  Including  such a <var>G</var> can speed up
 the function.
 <p>
 See also <a href="CHAP003.htm#SSEC016.1">Diameter</a>.
@@ -304,10 +304,10 @@ gap&gt; Distance( JohnsonGraph(4,2), [1], [5,6] );
 <a name = "SSEC016.1"></a>
 <li><code>Diameter( </code><var>gamma</var><code> )</code>
 <p>
-This  function  returns the  diameter of <var>gamma</var>.  A diameter of <var>-1</var>
+This  function  returns the  diameter of <var>gamma</var>.  A diameter of <font face="symbol">-</font>1
 is returned if <var>gamma</var> is not (strongly) connected.  Otherwise, the
 <strong>diameter</strong> of <var>gamma</var> is equal to the maximum (directed) distance
-<var>d(x,y)</var> in <var>gamma</var> (as <var>x</var> and <var>y</var> range over all the vertices of 
+<i>d</i>(<i>x</i>,<i>y</i>) in <var>gamma</var> (as <i>x</i> and <i>y</i> range over all the vertices of 
 <var>gamma</var>).
 <p>
 See also <a href="CHAP003.htm#SSEC015.1">Distance</a>.
@@ -326,7 +326,7 @@ gap&gt; Diameter( JohnsonGraph( 5, 4 ) );
 <li><code>Girth( </code><var>gamma</var><code> )</code>
 <p>
 This function returns the girth of <var>gamma</var>, which must be a simple graph.
-A girth of <var>-1</var> is returned if <var>gamma</var> is a forest.  Otherwise the <strong>girth</strong>
+A girth of <font face="symbol">-</font>1 is returned if <var>gamma</var> is a forest.  Otherwise the <strong>girth</strong>
 is the length of a shortest cycle in <var>gamma</var>.
 <p>
 <pre>
@@ -341,8 +341,8 @@ gap&gt; Girth( JohnsonGraph( 4, 2 ) );
 <li><code>IsConnectedGraph( </code><var>gamma</var><code> )</code>
 <p>
 This boolean function returns <code>true</code> if and only if the graph <var>gamma</var>
-is (strongly) <strong>connected</strong>, i.e. there is a (directed) path from <var>x</var> to
-<var>y</var> for every pair of vertices <var>x,y</var> of <var>gamma</var>.
+is (strongly) <strong>connected</strong>, i.e. there is a (directed) path from <i>x</i> to
+<i>y</i> for every pair of vertices <i>x</i>,<i>y</i> of <var>gamma</var>.
 <p>
 <pre>
 gap&gt; IsConnectedGraph( JohnsonGraph(4,2) );
@@ -440,5 +440,5 @@ false
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Previous</a>] [<a href ="CHAP004.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>June 2006
+<address>grape manual<br>September 2011
 </address></body></html>

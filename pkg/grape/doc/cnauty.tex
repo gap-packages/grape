@@ -13,10 +13,31 @@
 
 {\GRAPE} provides a basic interface to B.D.~McKay{\pif}s {\nauty}
 (Version~2.2 final) package for calculating automorphism groups of
-(possibly vertex-coloured) graphs and for testing graph isomorphism (see
-\cite{Nau90}). To use a function described in this chapter, which depends
-on {\nauty}, {\GRAPE} must be fully installed on a computer running UNIX
-(see "Installing the GRAPE Package").
+graphs and for testing graph isomorphism (see \cite{Nau90}). To use a
+function described in this chapter, which depends on {\nauty}, {\GRAPE}
+must be fully installed (see "Installing the GRAPE Package").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Graphs with colour-classes}
+
+For each of the functions described in this chapter, each graph parameter
+may be replaced by a graph with colour-classes, which is a record having
+(at least) the components `graph' (which should be a graph in {\GRAPE}
+format), and `colourClasses', which should be an ordered partition of the
+vertices of the graph, and so define *colour-classes* for the vertices.
+This ordered partition should be given as a list of (pairwise-disjoint
+non-empty) sets partitioning the vertex-set.  When these functions are
+called with graphs with colour-classes, then it is understood that an
+*automorphism* of a graph with colour-classes is an automorphism of the
+graph which additionally preserves the list of colour-classes (classwise),
+and an *isomorphism* from one graph with colour-classes to a second is a
+graph isomorphism from the first graph to the second which additionally
+maps the first list of colour-classes to the second (classwise). The
+record for a graph with colour-classes may also optionally contain the
+additional components `autGroup' and/or `canonicalLabelling', and these
+are handled in an analogous way to those for a graph (such as when using
+the parameter <firstunbindcanon>).  Note that we do not require that
+adjacent vertices be in different colour-classes.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{AutGroupGraph}
@@ -24,113 +45,38 @@ on {\nauty}, {\GRAPE} must be fully installed on a computer running UNIX
 \>AutGroupGraph( <gamma> )
 \>AutGroupGraph( <gamma>, <colourclasses> )
 
-The first version of this function returns the automorphism group of the
-(directed) graph <gamma>, using {\nauty} (this can also be accomplished
-by typing `AutomorphismGroup(<gamma>)'). The *automorphism group*
-$\Aut(<gamma>)$ of <gamma> is the group consisting of the permutations
-of the vertices of <gamma> which preserve the edge-set of <gamma>.
+The first version of this function returns the automorphism group of
+the graph (or graph with colour-classes) <gamma>, using {\nauty} (this
+can also be accomplished by typing `AutomorphismGroup(<gamma>)'). The
+*automorphism group* $\Aut(<gamma>)$ of a graph <gamma> is the
+group consisting of the permutations of the vertices of <gamma> which
+preserve the edge-set of <gamma>.  The *automorphism group* of a graph
+with colour-classes is the subgroup of the automorphism group of the
+graph which preserves the colour-classes (classwise).
 
-In the second version, <colourclasses> is an ordered partition of
-the vertices of <gamma> (into *colour-classes*), and the subgroup
-of $\Aut(<gamma>)$ preserving this ordered partition is returned. The
-ordered partition should be given as a list of sets, although the last
-set in the list may be omitted.  Note that we do not require that adjacent
-vertices be in different colour-classes.
+The second version of this function is maintained only for backward
+compatibility. For this version <gamma> must be a graph, <colourclasses>
+is an ordered partition of the vertices of <gamma>, and the subgroup of
+$\Aut(<gamma>)$ preserving this ordered partition is returned. The ordered
+partition should be given as a list of (pairwise-disjoint non-empty) sets
+partitioning the vertices of <gamma>, although for backward compatibility
+and only in this situation, the last set in the ordered partition need
+not be included explicitly.
 
 \beginexample
 gap> gamma := JohnsonGraph(4,2);                   
-rec( isGraph := true, order := 6, 
-  group := Group([ (1,4,6,3)(2,5), (2,4)(3,5) ]), 
-  schreierVector := [ -1, 2, 1, 1, 1, 1 ], adjacencies := [ [ 2, 3, 4, 5 ] ], 
-  representatives := [ 1 ], 
+rec( adjacencies := [ [ 2, 3, 4, 5 ] ], 
+  group := Group([ (1,4,6,3)(2,5), (2,4)(3,5) ]), isGraph := true, 
+  isSimple := true, 
   names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ], [ 3, 4 ] ], 
-  isSimple := true )
+  order := 6, representatives := [ 1 ], 
+  schreierVector := [ -1, 2, 1, 1, 1, 1 ] )
 gap> Size(AutGroupGraph(gamma)); 
 48
-gap> Size(AutGroupGraph(gamma,[[1,2,3],[4,5,6]])); 
-6
-gap> Size(AutGroupGraph(gamma,[[1,6]]));          
+gap> AutGroupGraph( rec(graph:=gamma,colourClasses:=[[1,2,3],[4,5,6]]) ); 
+Group([ (2,3)(4,5), (1,2)(5,6) ])
+gap> Size(AutomorphismGroup( rec(graph:=gamma,colourClasses:=[[1,6],[2,3,4,5]]) )); 
 16
-\endexample
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{IsIsomorphicGraph}
-
-\>IsIsomorphicGraph( <gamma1>, <gamma2> )
-\>IsIsomorphicGraph( <gamma1>, <gamma2>, <firstunbindcanon> )
-
-This boolean function uses the {\nauty} package to test whether graphs
-<gamma1> and <gamma2> are isomorphic. The value `true' is returned if
-and only if the graphs are isomorphic (as directed, uncoloured
-graphs).
-
-The optional boolean parameter <firstunbindcanon> determines whether or
-not the `canonicalLabelling' components of both <gamma1> and <gamma2>
-are first unbound before testing isomorphism.  If <firstunbindcanon>
-is `true' (the default, safe and possibly slower option) then these
-components are first unbound.  If <firstunbindcanon> is `false', then any
-existing `canonicalLabelling' components are used, which was the behaviour
-in versions of {\GRAPE} before 4.0.  However, since canonical labellings
-can depend on the version of {\nauty}, the version of {\GRAPE}, parameter
-settings of {\nauty}, and the compiler and computer used, you must be
-sure that if <firstunbindcanon>=`false' then the `canonicalLabelling'
-component(s) which may already exist for <gamma1> or <gamma2> were created
-in exactly the same environment in which you are presently computing.
-
-See also "GraphIsomorphism".  For pairwise isomorphism testing of three
-or more graphs, see "GraphIsomorphismClassRepresentatives".
-
-\beginexample
-gap> gamma := JohnsonGraph(7,4);;
-gap> delta := JohnsonGraph(7,3);;
-gap> IsIsomorphicGraph( gamma, delta );
-true 
-\endexample
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{GraphIsomorphismClassRepresentatives}
-
-\>GraphIsomorphismClassRepresentatives( <L> )
-\>GraphIsomorphismClassRepresentatives( <L>, <firstunbindcanon> )
-
-Given a list <L> of graphs, this function uses {\nauty} to return a list
-consisting of pairwise non-isomorphic elements of <L>, representing all
-the isomorphism classes of elements of <L>.
-
-The optional boolean parameter <firstunbindcanon> determines whether
-or not the `canonicalLabelling' components of all elements of <L>
-are first unbound before proceeding.  If <firstunbindcanon> is `true'
-(the default, safe and possibly slower option) then these components
-are first unbound.  If <firstunbindcanon> is `false', then any existing
-`canonicalLabelling' components of elements of <L> are used.  However,
-since canonical labellings can depend on the version of {\nauty}, the
-version of {\GRAPE}, parameter settings of {\nauty}, and the compiler
-and computer used, you must be sure that if <firstunbindcanon>=`false'
-then the `canonicalLabelling' component(s) which may already exist for
-elements of <L> were created in exactly the same environment in which
-you are presently computing.
-
-\beginexample 
-gap> A:=JohnsonGraph(5,2);
-rec( isGraph := true, order := 10, 
-  group := Group([ (1,5,8,10,4)(2,6,9,3,7), (2,5)(3,6)(4,7) ]), 
-  schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 ], 
-  adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], representatives := [ 1 ], 
-  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
-      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], isSimple := true )
-gap> B:=JohnsonGraph(5,3);
-rec( isGraph := true, order := 10, 
-  group := Group([ (1,7,10,6,3)(2,8,4,9,5), (4,7)(5,8)(6,9) ]), 
-  schreierVector := [ -1, 1, 1, 2, 1, 1, 1, 2, 1, 1 ], 
-  adjacencies := [ [ 2, 3, 4, 5, 7, 8 ] ], representatives := [ 1 ], 
-  names := [ [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 2, 5 ], [ 1, 3, 4 ], [ 1, 3, 5 ], 
-      [ 1, 4, 5 ], [ 2, 3, 4 ], [ 2, 3, 5 ], [ 2, 4, 5 ], [ 3, 4, 5 ] ], 
-  isSimple := true )
-gap> R:=GraphIsomorphismClassRepresentatives([A,B,ComplementGraph(A)]);;
-gap> Length(R);
-2
-gap> List(R,VertexDegrees);
-[ [ 6 ], [ 3 ] ]
 \endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -139,11 +85,16 @@ gap> List(R,VertexDegrees);
 \>GraphIsomorphism( <gamma1>, <gamma2> )
 \>GraphIsomorphism( <gamma1>, <gamma2>, <firstunbindcanon> )
 
-If graphs <gamma1> and <gamma2> are isomorphic, then this function
-uses {\nauty} to return an isomorphism from <gamma1> to <gamma2>. This
-isomorphism will be a permutation of `[1..<gamma1>.order]' which maps
-the edge-set of <gamma1> to that of <gamma2>. If <gamma1> and <gamma2>
-are not isomorphic then this function  returns `fail'.
+Let <gamma1> and <gamma2> both be graphs or both be graphs with
+colour-classes.  Then this function makes use of the {\nauty} package to
+(try to) determine an isomorphism from <gamma1> to <gamma2>.  If <gamma1>
+and <gamma2> are isomorphic, then this function returns an isomorphism
+from <gamma1> to <gamma2>. This isomorphism will be a permutation of
+the vertices of <gamma1> which maps the edge-set of <gamma1> onto that
+of <gamma2>, and if <gamma1> and <gamma2> are graphs with colour-classes,
+this isomorphism will also map the colour-class list of <gamma1> to that
+of <gamma2> (classwise). If <gamma1> and <gamma2> are not isomorphic
+then this function returns `fail'.
 
 The optional boolean parameter <firstunbindcanon> determines whether or
 not the `canonicalLabelling' components of both <gamma1> and <gamma2>
@@ -161,23 +112,146 @@ are presently computing.
 See also "IsIsomorphicGraph".
 
 \beginexample
-gap> A:=JohnsonGraph(5,2);
-rec( isGraph := true, order := 10, 
-  group := Group([ (1,5,8,10,4)(2,6,9,3,7), (2,5)(3,6)(4,7) ]), 
-  schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 ], 
-  adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], representatives := [ 1 ], 
-  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
-      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], isSimple := true )
-gap> B:=JohnsonGraph(5,3);
-rec( isGraph := true, order := 10, 
+gap> gamma := JohnsonGraph(5,3);
+rec( adjacencies := [ [ 2, 3, 4, 5, 7, 8 ] ], 
   group := Group([ (1,7,10,6,3)(2,8,4,9,5), (4,7)(5,8)(6,9) ]), 
-  schreierVector := [ -1, 1, 1, 2, 1, 1, 1, 2, 1, 1 ], 
-  adjacencies := [ [ 2, 3, 4, 5, 7, 8 ] ], representatives := [ 1 ], 
+  isGraph := true, isSimple := true, 
   names := [ [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 2, 5 ], [ 1, 3, 4 ], [ 1, 3, 5 ], 
       [ 1, 4, 5 ], [ 2, 3, 4 ], [ 2, 3, 5 ], [ 2, 4, 5 ], [ 3, 4, 5 ] ], 
-  isSimple := true )
-gap> GraphIsomorphism(A,B);
-(3,4,7,8,6,5)
-gap> GraphIsomorphism(A,ComplementGraph(A));
+  order := 10, representatives := [ 1 ], 
+  schreierVector := [ -1, 1, 1, 2, 1, 1, 1, 2, 1, 1 ] )
+gap> delta := JohnsonGraph(5,2);
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], 
+  group := Group([ (1,5,8,10,4)(2,6,9,3,7), (2,5)(3,6)(4,7) ]), 
+  isGraph := true, isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
+gap> GraphIsomorphism( gamma, delta );
+(3,5,6,8,7,4)
+gap> GraphIsomorphism( 
+>       rec(graph:=gamma, colourClasses:=[[7],[1,2,3,4,5,6,8,9,10]]), 
+>       rec(graph:=delta, colourClasses:=[[10],[1..9]]) ); 
+(1,3)(2,6,5)(4,8)(7,10,9)
+gap> GraphIsomorphism( 
+>       rec(graph:=gamma, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]), 
+>       rec(graph:=delta, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) ); 
 fail
 \endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{IsIsomorphicGraph}
+
+\>IsIsomorphicGraph( <gamma1>, <gamma2> )
+\>IsIsomorphicGraph( <gamma1>, <gamma2>, <firstunbindcanon> )
+
+Let <gamma1> and <gamma2> both be graphs or both be graphs with
+colour-classes.  Then this boolean function makes use of the {\nauty}
+package to test whether <gamma1> and <gamma2> are isomorphic (as graphs or
+as graphs with colour-classes, respectively). The value `true' is returned
+if and only if the graphs (or graphs with colour-classes) are isomorphic.
+
+The optional boolean parameter <firstunbindcanon> determines whether or
+not the `canonicalLabelling' components of both <gamma1> and <gamma2>
+are first unbound before testing isomorphism.  If <firstunbindcanon>
+is `true' (the default, safe and possibly slower option) then these
+components are first unbound.  If <firstunbindcanon> is `false', then any
+existing `canonicalLabelling' components are used, which was the behaviour
+in versions of {\GRAPE} before 4.0.  However, since canonical labellings
+can depend on the version of {\nauty}, the version of {\GRAPE}, parameter
+settings of {\nauty}, and the compiler and computer used, you must be
+sure that if <firstunbindcanon>=`false' then the `canonicalLabelling'
+component(s) which may already exist for <gamma1> or <gamma2> were created
+in exactly the same environment in which you are presently computing.
+
+See also "GraphIsomorphism".  For pairwise isomorphism testing
+of three or more graphs (or graphs with colour-classes), see
+"GraphIsomorphismClassRepresentatives".
+
+\beginexample
+gap> gamma := JohnsonGraph(5,3);
+rec( adjacencies := [ [ 2, 3, 4, 5, 7, 8 ] ], 
+  group := Group([ (1,7,10,6,3)(2,8,4,9,5), (4,7)(5,8)(6,9) ]), 
+  isGraph := true, isSimple := true, 
+  names := [ [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 2, 5 ], [ 1, 3, 4 ], [ 1, 3, 5 ], 
+      [ 1, 4, 5 ], [ 2, 3, 4 ], [ 2, 3, 5 ], [ 2, 4, 5 ], [ 3, 4, 5 ] ], 
+  order := 10, representatives := [ 1 ], 
+  schreierVector := [ -1, 1, 1, 2, 1, 1, 1, 2, 1, 1 ] )
+gap> delta := JohnsonGraph(5,2);
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], 
+  group := Group([ (1,5,8,10,4)(2,6,9,3,7), (2,5)(3,6)(4,7) ]), 
+  isGraph := true, isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
+gap> IsIsomorphicGraph( gamma, delta );
+true
+gap> IsIsomorphicGraph( 
+>       rec(graph:=gamma, colourClasses:=[[7],[1,2,3,4,5,6,8,9,10]]), 
+>       rec(graph:=delta, colourClasses:=[[10],[1..9]]) ); 
+true
+gap> IsIsomorphicGraph( 
+>       rec(graph:=gamma, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]), 
+>       rec(graph:=delta, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) ); 
+false
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{GraphIsomorphismClassRepresentatives}
+
+\>GraphIsomorphismClassRepresentatives( <L> )
+\>GraphIsomorphismClassRepresentatives( <L>, <firstunbindcanon> )
+
+Given a list <L> of graphs, or of graphs with colour-classes,
+this function uses {\nauty} to return a list consisting of pairwise
+non-isomorphic elements of <L>, representing all the isomorphism classes
+of elements of <L>.
+
+The optional boolean parameter <firstunbindcanon> determines whether
+or not the `canonicalLabelling' components of all elements of <L>
+are first unbound before proceeding.  If <firstunbindcanon> is `true'
+(the default, safe and possibly slower option) then these components
+are first unbound.  If <firstunbindcanon> is `false', then any existing
+`canonicalLabelling' components of elements of <L> are used.  However,
+since canonical labellings can depend on the version of {\nauty}, the
+version of {\GRAPE}, parameter settings of {\nauty}, and the compiler
+and computer used, you must be sure that if <firstunbindcanon>=`false'
+then the `canonicalLabelling' component(s) which may already exist for
+elements of <L> were created in exactly the same environment in which
+you are presently computing.
+
+It is assumed that the computing environment is constant throughout the 
+execution of this function.
+
+\beginexample 
+gap> A:=JohnsonGraph(5,3);
+rec( adjacencies := [ [ 2, 3, 4, 5, 7, 8 ] ], 
+  group := Group([ (1,7,10,6,3)(2,8,4,9,5), (4,7)(5,8)(6,9) ]), 
+  isGraph := true, isSimple := true, 
+  names := [ [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 2, 5 ], [ 1, 3, 4 ], [ 1, 3, 5 ], 
+      [ 1, 4, 5 ], [ 2, 3, 4 ], [ 2, 3, 5 ], [ 2, 4, 5 ], [ 3, 4, 5 ] ], 
+  order := 10, representatives := [ 1 ], 
+  schreierVector := [ -1, 1, 1, 2, 1, 1, 1, 2, 1, 1 ] )
+gap> B:=JohnsonGraph(5,2);
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], 
+  group := Group([ (1,5,8,10,4)(2,6,9,3,7), (2,5)(3,6)(4,7) ]), 
+  isGraph := true, isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
+gap> R:=GraphIsomorphismClassRepresentatives([A,B,ComplementGraph(A)]);;
+gap> Length(R);
+2
+gap> List(R,VertexDegrees);
+[ [ 6 ], [ 3 ] ]
+gap> R:=GraphIsomorphismClassRepresentatives( 
+>    [ rec(graph:=gamma, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]), 
+>      rec(graph:=delta, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]), 
+>      rec(graph:=ComplementGraph(gamma), colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) ] );; 
+gap> Length(R);
+3
+\endexample
+

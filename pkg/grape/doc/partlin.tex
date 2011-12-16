@@ -39,9 +39,9 @@ application of this function.
 \>PartialLinearSpaces( <ptgraph>, <s>, <t>, <nspaces>, <printlevel> )
 \>PartialLinearSpaces( <ptgraph>, <s>, <t>, <nspaces>, <printlevel>, <cliques> )
 
-This function classifies the partial linear spaces with given point graph
-<ptgraph>, and parameters (<s>,<t>). It calls functions making use of
-the {\nauty} package within {\GRAPE}, and so can only be used on UNIX
+This function classifies the partial linear spaces with given point
+graph <ptgraph>, and parameters (<s>,<t>). It calls functions making
+use of the {\nauty} package within {\GRAPE}, and so can only be used on
 systems on which {\GRAPE} has been fully installed.
 
 The function `PartialLinearSpaces' returns a list of representatives
@@ -136,10 +136,6 @@ CPU-seconds on a Pentium II running at 350 MHz.
 
 \beginexample
 gap> LoadPackage("grape");
-
-Loading  GRAPE 4.3  (GRaph Algorithms using PErmutation groups),
-by L.H.Soicher@qmul.ac.uk.
-
 true
 gap> 
 gap> OnSetsRecursive:=function(x,g)
@@ -203,5 +199,4 @@ gap> DisplayCompositionSeries(dualhaemers.group);
 G (4 gens, size 2520)
  | A(7)
 1 (0 gens, size 1)
-gap> quit;
 \endexample

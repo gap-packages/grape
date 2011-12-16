@@ -10,7 +10,7 @@
 
 \Chapter{Grape}
 
-This manual describes the {\GRAPE} (Version~4.3) package for computing
+This manual describes the {\GRAPE} (Version~4.4) package for computing
 with graphs and groups.
 
 {\GRAPE} is primarily designed for the construction and analysis of
@@ -31,20 +31,21 @@ However, the {\GRAPE} functions `AutomorphismGroup', `AutGroupGraph',
 `GraphIsomorphism'  and `PartialLinearSpaces' make direct or indirect use
 of B.D.~McKay{\pif}s {\nauty} (Version~2.2 final) package \cite{Nau90},
 via a {\GRAPE} interface.  These functions can only be used on a fully
-installed version of {\GRAPE} in a UNIX environment.  Installation of
-{\GRAPE} is described in its `README' file and in its manual section
-"Installing the GRAPE Package".
+installed version of {\GRAPE}. Installation of {\GRAPE} is described
+in its `README' file and in its manual section "Installing the GRAPE
+Package".
 
-Except for the {\nauty} package included with {\GRAPE}, and the function
-`SmallestImageSet' by Steve Linton, the {\GRAPE} package was designed
-and written by Leonard H. Soicher, School of Mathematical Sciences,
-Queen Mary, University of London.
+Except for the {\nauty} package included with {\GRAPE}, the function
+`SmallestImageSet' by Steve Linton, and the new {\nauty} interface
+by Alexander Hulpke, the {\GRAPE} package was designed and written
+by Leonard H. Soicher, School of Mathematical Sciences, Queen Mary,
+University of London.
 
 If you use {\GRAPE} to solve a problem then please send a short email
 about it to \Mailto{L.H.Soicher@qmul.ac.uk}, and reference the {\GRAPE} 
 package as follows:
 
-L.H. Soicher, The {GRAPE} package for {GAP}, Version~4.3, 2006,
+L.H. Soicher, The {GRAPE} package for {GAP}, Version~4.4, 2011,
 \URL{http://www.maths.qmul.ac.uk/~leonard/grape/}.
 
 If your work made use a function depending on the {\nauty} package then
@@ -56,50 +57,30 @@ HCM grant in ``Computational Group Theory''.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Installing the GRAPE Package}
 
-To install {\GRAPE}~4.3 (after installing {\GAP}), first
-obtain the {\GRAPE} archive file `grape4r3.tar.gz', available at
-\URL{http://www.maths.qmul.ac.uk/~leonard/grape/grape4r3.tar.gz} and
-then copy this archive file into the `pkg' directory of the {\GAP}
-root directory. Actually, it is possible to have several {\GAP} root
-directories (see "ref:GAP Root Directory"), and so it is easy to install
-{\GRAPE} locally even if you have no permission to add files to the main
-{\GAP} installation.  Now go to the appropriate `pkg' directory containing
-`grape4r3.tar.gz', and then run
-\begintt
-gunzip grape4r3.tar.gz
-tar -xf grape4r3.tar
-\endtt
-to unpack {\GRAPE}.
+From {\GAP}~4.5, {\GRAPE} is included in the standard {\GAP} distribution.
+If appropriate binary files are not included, you will need to perform
+compilation of B.D.~McKay's dreadnaut/nauty programs included with
+{\GRAPE}. For example, in a Unix environment, after installing {\GAP}, go
+to the {\GRAPE} home directory (usually the directory `pkg/grape' of the
+{\GAP} home directory), and run `./configure <path>', where <path> is the
+path of the {\GAP} home directory.  So for example, if the {\GRAPE} home
+directory is the `pkg/grape' directory of the {\GAP} home directory, run
 
-After unpacking {\GRAPE}, the {\GAP}-only part of {\GRAPE} is installed.
-The parts of {\GRAPE} depending on B.~D.~Mckay's {\nauty} package (for
-computing automorphism groups and testing graph isomorphism) are only
-available in a UNIX environment, where you should proceed as follows:
-
-Go to the newly created `grape' directory (which we shall refer to as
-the *home directory* of {\GRAPE}) and run `/bin/sh configure <path>',
-where <path> is the path to the home directory of the {\GAP} distribution.
-So for example, if you install {\GRAPE} in the `pkg' directory of the
-{\GAP} home directory, run
 \begintt
-/bin/sh configure ../..
+./configure ../..
 \endtt
 
-This will fetch the name of the system architecture on which {\GAP}
-has been compiled, and create a `Makefile'. Now run
+This will create a `Makefile'. Now run
 \begintt
 make
 \endtt
 to create the binaries and to put them in the appropriate place.
 This completes the installation of {\GRAPE} for a single architecture.
 If {\GAP} is installed on different architectures on a common file system,
-this configuration process will only work for the *last* architecture
-for which {\GAP} was compiled. Therefore, you should always follow
-the above procedure to install the {\GRAPE} binaries immediately after
-compiling {\GAP} on a given architecture. However, if you want to add
-{\GRAPE} later, you can just run `/bin/sh configure' again in the main
-{\GAP} directory for the architecture before installing the {\GRAPE}
-binaries for that architecture.
+this configuration process will only work for the *last* architecture for
+which {\GAP} was compiled. Therefore, you should always follow the above
+procedure to install the {\GRAPE} binaries immediately after compiling
+{\GAP} on a given architecture.
 
 You should now test {\GRAPE} and the interface to {\nauty} on each
 architecture on which you have installed {\GRAPE}. Start up {\GAP}
@@ -136,10 +117,6 @@ the statement
 
 \begintt
 gap> LoadPackage("grape");
-
-Loading  GRAPE 4.3  (GRaph Algorithms using PErmutation groups),
-by L.H.Soicher@qmul.ac.uk.
-
 true
 \endtt
 
@@ -181,8 +158,6 @@ added to, or removed from, <gamma>). A graph record may also have some
 of the optional components `isSimple', `autGroup', and
 `canonicalLabelling', which record information about that graph.
 
-*Note* All global variables used by {\GRAPE} start with `GRAPE\_'.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Examples of the use of GRAPE}
 
@@ -198,10 +173,6 @@ of $EP$, and so verify that $EP$ is distance-regular (see \cite{BCN89}).
 
 \beginexample
 gap> LoadPackage("grape");
-
-Loading  GRAPE 4.3  (GRaph Algorithms using PErmutation groups),
-by L.H.Soicher@qmul.ac.uk.
-
 true
 gap> P := Graph( SymmetricGroup(5), [[1,2]], OnSets,
 >             function(x,y) return Intersection(x,y)=[]; end );

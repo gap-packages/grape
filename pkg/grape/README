@@ -1,60 +1,40 @@
-                          GRAPE Version 4.3, 
+                          GRAPE Version 4.4, 
 
 a GAP package for computing with graphs and groups, 
-by Leonard H. Soicher, Queen Mary, University of London.
+by Leonard H. Soicher, Queen Mary University of London,
+with contributions from Steve Linton and Alexander Hulpke.
 
-This README document tells you how to install GRAPE and lists changes made 
-to GRAPE since Version 2.2. 
+This README document tells you how to install GRAPE and lists changes
+made to GRAPE since Version 2.2.
 
 Installing GRAPE
 -----------------
 
-To install GRAPE 4.3 (as a GAP package, after installing GAP),
-first download the GRAPE archive file `grape4r3.tar.gz' available at 
+From GAP 4.5, GRAPE is included in the standard GAP distribution.
+If appropriate binary files are not included, you will need to perform
+compilation of B.D. Mckay's dreadnaut/nauty programs included with
+GRAPE. For example, in a Unix environment, after installing GAP, go to
+the GRAPE home directory (usually the directory `pkg/grape' of the GAP
+home directory), and run
 
-   http://www.maths.qmul.ac.uk/~leonard/grape/grape4r3.tar.gz
+   ./configure <path> 
 
-and copy this archive file to into the `pkg' directory of the GAP
-root directory.  Note that it is possible to have several GAP root
-directories (see the GAP-manual section "GAP Root Directory"), and so
-it is easy to install GRAPE locally even if you have no permission to
-add files to the main GAP installation. Change to the appropriate `pkg'
-directory, and then run
+where <path> is the path to the GAP home directory.  So for example,
+if the GRAPE home directory is the `pkg/grape' directory of the GAP home
+directory, run
 
-   gunzip grape4r3.tar.gz
-   tar -xf grape4r3.tar
+   ./configure ../..
 
-to unpack GRAPE.
-
-After unpacking GRAPE, the GAP-only part of GRAPE is installed.
-The parts of GRAPE depending on B.D. McKay's nauty package (for
-computing automorphism groups and testing graph isomorphism) are only
-available in a UNIX environment, where you should proceed as follows:
-
-Change to the newly created `grape' directory and run 
-
-   /bin/sh configure <path> 
-
-where <path> is the path to the home directory of the GAP
-distribution.  So for example, if you install GRAPE in the `pkg'
-directory of the GAP home directory, run
-
-   /bin/sh configure ../..
-
-This will fetch the name of the system architecture on which GAP
-has been compiled, and create a `Makefile'. Now run
+This will create a Makefile. Now run
 
    make
 
 This completes the installation of GRAPE for a single architecture.
 If GAP is installed on different architectures on a common file system,
-this configuration process will only work for the *last* architecture
-for which GAP was compiled. Therefore, you should always follow
-the above procedure to install the GRAPE binaries immediately after
-compiling GAP on a given architecture. However, if you want to add
-GRAPE later, you can just run `/bin/sh configure' again in the main
-GAP directory for the architecture before installing the GRAPE binaries
-(as described above) for that architecture.
+this configuration process will only work for the *last* architecture for
+which GAP was compiled. Therefore, you should always follow the above
+procedure to install the GRAPE binaries immediately after compiling
+GAP on a given architecture. 
 
 You should now test GRAPE and the interface to nauty on each
 architecture on which you have installed GRAPE. Start up GAP
@@ -80,16 +60,41 @@ Both dvi and pdf versions of the GRAPE manual are available (as
 `manual.dvi' and `manual.pdf' respectively) in the `doc' directory of
 the home directory of GRAPE.
 
-If you install GRAPE, then please tell L.H.Soicher@qmul.ac.uk, where
-you should also send any comments or bug reports.
-
 -------------------------------------------------------------------------
 If you use GRAPE to solve a problem, then please email
 L.H.Soicher@qmul.ac.uk, and reference:
 
-L.H. Soicher, The GRAPE package for GAP, Version 4.3, 2006, 
+L.H. Soicher, The GRAPE package for GAP, Version 4.4, 2011, 
 http://www.maths.qmul.ac.uk/~leonard/grape/
 ------------------------------------------------------------------------
+
+Main changes from GRAPE 4.3 to GRAPE 4.4:
+------------------------------------------
+
+(1) With much help from Alexander Hulpke, and using new features in GAP
+4.5, the interface between GRAPE and dreadnaut is now done entirely in
+GAP code. This means that as long as nauty/dreadnaut can be compiled on
+a given computer, then GRAPE should work on that computer.
+
+(2) Graphs with colour-classes can now be handled by the automorphism group
+and graph isomorphism functions. 
+
+(3) The functions Graph, Diameter, Girth, IsBipartite, IsConnectedGraph,
+IsDistanceRegular, IsVertex, and IsEdge are now operations to avoid
+possible name conflicts with GAP, GAP users, or other packages.
+
+(4) The internal functions OrbitRepresentatives, RepWord,
+OrbitNumbers, NumbersToSets, and IntransitiveGroupGenerators renamed
+GRAPE_OrbitRepresentatives, GRAPE_RepWord, GRAPE_OrbitNumbers,
+GRAPE_NumbersToSets, and GRAPE_IntransitiveGroupGenerators, respectively,
+to avoid possible name conflicts with GAP, GAP users, or other packages.
+
+(5) Documentation upgraded.
+
+(6) GAP code and standalone programs for the undocumented functions Enum
+and EnumColadj removed.  It appears no one uses them now, and their
+functionality can largely be handled by current documented GAP/GRAPE
+functions.
 
 Main changes from GRAPE 4.2 to GRAPE 4.3:
 ------------------------------------------
@@ -269,4 +274,4 @@ the effect that if the returned graph had loops, then it
 might have had its isSimple component erroneously set to true.
 
 Leonard H. Soicher
-June 2006. 
+September 2011 

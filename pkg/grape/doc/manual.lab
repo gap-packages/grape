@@ -162,18 +162,19 @@
 \makelabel{grape:CompleteSubgraphsOfGivenSize}{7.3.1}
 \makelabel{grape:CompleteSubgraphsOfGivenSize}{7.3.1}
 \makelabel{grape:Automorphism groups and isomorphism testing for graphs}{8}
-\makelabel{grape:AutGroupGraph}{8.1}
-\makelabel{grape:AutGroupGraph}{8.1.1}
-\makelabel{grape:AutGroupGraph}{8.1.1}
-\makelabel{grape:IsIsomorphicGraph}{8.2}
-\makelabel{grape:IsIsomorphicGraph}{8.2.1}
-\makelabel{grape:IsIsomorphicGraph}{8.2.1}
-\makelabel{grape:GraphIsomorphismClassRepresentatives}{8.3}
-\makelabel{grape:GraphIsomorphismClassRepresentatives}{8.3.1}
-\makelabel{grape:GraphIsomorphismClassRepresentatives}{8.3.1}
-\makelabel{grape:GraphIsomorphism}{8.4}
-\makelabel{grape:GraphIsomorphism}{8.4.1}
-\makelabel{grape:GraphIsomorphism}{8.4.1}
+\makelabel{grape:Graphs with colour-classes}{8.1}
+\makelabel{grape:AutGroupGraph}{8.2}
+\makelabel{grape:AutGroupGraph}{8.2.1}
+\makelabel{grape:AutGroupGraph}{8.2.1}
+\makelabel{grape:GraphIsomorphism}{8.3}
+\makelabel{grape:GraphIsomorphism}{8.3.1}
+\makelabel{grape:GraphIsomorphism}{8.3.1}
+\makelabel{grape:IsIsomorphicGraph}{8.4}
+\makelabel{grape:IsIsomorphicGraph}{8.4.1}
+\makelabel{grape:IsIsomorphicGraph}{8.4.1}
+\makelabel{grape:GraphIsomorphismClassRepresentatives}{8.5}
+\makelabel{grape:GraphIsomorphismClassRepresentatives}{8.5.1}
+\makelabel{grape:GraphIsomorphismClassRepresentatives}{8.5.1}
 \makelabel{grape:Partial Linear Spaces}{9}
 \makelabel{grape:PartialLinearSpaces}{9.1}
 \makelabel{grape:PartialLinearSpaces}{9.1.1}

@@ -14,7 +14,7 @@ The following sections describe functions for (proper) vertex-colouring
 or determining complete subgraphs of given graphs. The function
 <code>CompleteSubgraphsOfGivenSize</code> can also be used to determine the
 complete subgraphs with given vertex-weight sum in a vertex-weighted
-graph&nbsp;indexvertex-weighted graph, where the weights can be positive
+graphindexvertex-weighted graph, where the weights can be positive
 integers or non-zero vectors of non-negative integers.
 <p>
 <p>
@@ -23,13 +23,14 @@ integers or non-zero vectors of non-negative integers.
 <a name = "SSEC001.1"></a>
 <li><code>VertexColouring( </code><var>gamma</var><code> )</code>
 <p>
-This function returns a proper vertex-colouring <var>C</var> for the graph
-<var>gamma</var>, which must be simple.
+This function returns a proper vertex-colouring <var>C</var> for the graph <var>gamma</var>,
+which must be simple.
 <p>
-This <strong>proper vertex-colouring</strong> <var>C</var> is a list of positive integers,
-indexed by the vertices of <var>gamma</var>, with the property that
-<var><var>C</var>[i]not=<var>C</var>[j]</var> whenever <var>[i,j]</var> is an edge of <var>gamma</var>. At present
-a greedy algorithm is used.
+This <strong>proper vertex-colouring</strong> <var>C</var> is a list of positive integers (the
+<strong>colours</strong>), indexed by the vertices of <var>gamma</var>, with the property that
+<i>C</i> [<i>i</i>] <font face="symbol">¹</font> <i>C</i> [<i>j</i>] whenever [<i>i</i>,<i>j</i>] is an edge of <var>gamma</var>. At present a
+greedy algorithm is used, and the number of colours used is by no means
+guaranteed to be minimal.
 <p>
 <pre>
 gap&gt; VertexColouring( JohnsonGraph(4,2) );
@@ -48,17 +49,23 @@ Let <var>gamma</var> be a simple graph and <var>k</var> an integer. This functio
 a set <var>K</var> of complete subgraphs of <var>gamma</var>, where a complete subgraph is
 represented by its vertex-set.  If <var>k</var> is non-negative then the elements
 of <var>K</var> each have size <var>k</var>, otherwise the elements of <var>K</var> represent maximal
-complete subgraphs of <var>gamma</var>.  The default for <var>k</var> is <var>-1</var>, i.e. maximal
-complete subgraphs.  See also <code>CompleteSubgraphsOfGivenSize</code>, which
-can be used to compute the <strong>maximal</strong> complete subgraphs of given size,
-and can also be used to determine the (maximal or otherwise) complete
-subgraphs with given vertex-weight sum in a vertex-weighted graph.
+complete subgraphs of <var>gamma</var>. (A <strong>maximal complete subgraph</strong> of <var>gamma</var>
+is a complete subgraph of <var>gamma</var> which is not properly contained in
+another complete subgraph of <var>gamma</var>.) The default for <var>k</var> is <font face="symbol">-</font>1,
+i.e. maximal complete subgraphs.  See also <code>CompleteSubgraphsOfGivenSize</code>,
+which can be used to compute the maximal complete subgraphs of given
+size, and can also be used to determine the (maximal or otherwise)
+complete subgraphs with given vertex-weight sum in a vertex-weighted
+graph.
 <p>
 The optional parameter <var>alls</var> controls how many complete subgraphs are
 returned. The valid values for <var>alls</var> are 0, 1 (the default), and 2.
-The value 2 provides a new feature in GRAPE from version 4.1, and
-specifies that this function should compute a set of <code></code><var>gamma</var><code>.group</code>-orbit
-representatives of the required complete subgraphs.
+<p>
+<strong>Warning:</strong> Using the default value of 1 for <var>alls</var> (see below) means that
+more than one element may be returned for some <code></code><var>gamma</var><code>.group</code> orbit(s)
+of the required complete subgraphs.  To obtain just one element from each
+<code></code><var>gamma</var><code>.group</code> orbit of the required complete subgraphs, you must give
+the value 2 to the parameter <var>alls</var>.
 <p>
 If <var>alls</var>=0 (or <code>false</code> for backward compatibility) then <var>K</var> will contain
 at most one element. In this case, if <var>k</var> is negative then <var>K</var> will
@@ -114,7 +121,7 @@ Let <var>gamma</var> be a simple graph, and <var>k</var> a non-negative integer 
 of non-negative integers.  This function returns a set <var>K</var> (possibly
 empty) of complete subgraphs of size <var>k</var> of <var>gamma</var>.  The vertices may
 have weights, which should be non-zero integers if <var>k</var> is an integer and
-non-zero <var>d</var>-vectors of non-negative integers if <var>k</var> is a <var>d</var>-vector,
+non-zero <i>d</i>-vectors of non-negative integers if <var>k</var> is a <i>d</i>-vector,
 and in these cases, a complete subgraph of <strong>size</strong> <var>k</var> means a complete
 subgraph whose vertex-weights sum to <var>k</var>.  The exact nature of the set
 <var>K</var> depends on the values of the parameters supplied to this function. A
@@ -123,12 +130,21 @@ complete subgraph is represented by its vertex-set.
 The optional parameter <var>alls</var> controls how many complete subgraphs are
 returned. The valid values for <var>alls</var> are 0, 1 (the default), and 2.
 <p>
+<strong>Warning:</strong> Using the default value of 1 for <var>alls</var> (see below) means that
+more than one element may be returned for some <code></code><var>gamma</var><code>.group</code> orbit(s)
+of the required complete subgraphs.  To obtain just one element from each
+<code></code><var>gamma</var><code>.group</code> orbit of the required complete subgraphs, you must give
+the value 2 to the parameter <var>alls</var>.
+<p>
 If <var>alls</var>=0 (or <code>false</code> for backward compatibility) then <var>K</var> will
 contain at most one element.  If <var>maxi</var>=<code>false</code> then <var>K</var> will contain one
 element if and only if <var>gamma</var> contains a complete subgraph of size <var>k</var>.
 If <var>maxi</var>=<code>true</code> then <var>K</var> will contain one element if and only if <var>gamma</var>
-contains a <strong>maximal</strong> complete subgraph of size <var>k</var> (in which case <var>K</var>
-will contain (the vertex-set of) such a maximal complete subgraph).
+contains a maximal complete subgraph of size <var>k</var>, in which case <var>K</var>
+will contain (the vertex-set of) such a maximal complete subgraph.
+(A <strong>maximal complete subgraph</strong> of <var>gamma</var> is a complete subgraph of
+<var>gamma</var> which is not properly contained in another complete subgraph
+of <var>gamma</var>.)
 <p>
 If <var>alls</var>=1 (or <code>true</code> for backward compatibility) and <var>maxi</var>=<code>false</code>,
 then <var>K</var> will contain (perhaps properly) a set of <code></code><var>gamma</var><code>.group</code>
@@ -160,8 +176,8 @@ a rational number means the same as <var>col</var>=<code>true</code>.
 The optional parameter <var>wts</var> should be a list of vertex-weights; the list
 should be of length <code></code><var>gamma</var><code>.order</code>, with the <var>i</var>-th element being the
 weight of vertex <var>i</var>. The weights must be all positive integers if <var>k</var>
-is an integer, and all non-zero <var>d</var>-vectors of non-negative integers
-if <var>k</var> is a <var>d</var>-vector. The default is that all weights are equal to&nbsp;1.
+is an integer, and all non-zero <i>d</i>-vectors of non-negative integers
+if <var>k</var> is a <i>d</i>-vector. The default is that all weights are equal to&nbsp;1.
 (Recall that a complete subgraph of <strong>size</strong> <var>k</var> means a complete subgraph
 whose vertex-weights sum to <var>k</var>.)
 <p>
@@ -169,14 +185,14 @@ If <var>wts</var> is a list of integers, then this list must be <code></code><va
 invariant, where the action permutes the list positions in the natural
 way.
 <p>
-If <var>wts</var> is a list of <var>d</var>-vectors then we assume that <code></code><var>gamma</var><code>.group</code> acts
-on the set of all integer <var>d</var>-vectors by permuting vector positions, such
-that, for all <var>v</var> in <code>[1..</code><var>gamma</var><code>.order]</code> and all <var>g</var> in <code></code><var>gamma</var><code>.group</code>,
-we have <var><var>wts</var>[v<sup>g</sup>] = <var>wts</var>[v]<sup>g</sup></var>, (where the first action is <code>OnPoints</code>
-and the second action is the assumed one on integer <var>d</var>-vectors), and
-that <var><var>k</var><sup>g</sup>=<var>k</var></var> (where this action is the assumed one on <var>d</var>-vectors).
-These assumptions are <strong>not</strong> checked by the function, and the use of
-vector-weights is primarily for advanced users of GRAPE.
+If <var>wts</var> is a list of <i>d</i>-vectors then we assume that <code></code><var>gamma</var><code>.group</code> acts
+on the set of all integer <i>d</i>-vectors by permuting vector positions, such
+that, for all <i>v</i> in <code>[1..</code><var>gamma</var><code>.order]</code> and all <i>g</i> in <code></code><var>gamma</var><code>.group</code>,
+we have <i>wts</i> [<i>v</i><sup><i>g</i></sup>] = <i>wts</i> [<i>v</i>]<sup><i>g</i></sup> (where the first action is <code>OnPoints</code>
+and for the second action, if <i>i</i><sup><i>g</i></sup>=<i>j</i> then (<i>wts</i> [<i>v</i>]<sup><i>g</i></sup>)[<i>j</i>]=<i>wts</i> [<i>v</i>][<i>i</i>]),
+and that we also have <i>k</i> <sup><i>g</i></sup>=<i>k</i> .  These assumptions are <strong>not</strong> checked
+by the function, and the use of vector-weights is primarily for advanced
+users of GRAPE.
 <p>
 An alternative name for this function is 
 <code>CliquesOfGivenSize</code>&nbsp;indexCliquesOfGivenSize.
@@ -206,12 +222,12 @@ gap&gt; CompleteSubgraphsOfGivenSize(delta,5,2,true);
 gap&gt; CompleteSubgraphsOfGivenSize(delta,5,0);
 [ [ 1, 2, 3, 4, 5 ] ]
 gap&gt; CompleteSubgraphsOfGivenSize(delta,5,1,false,true,
-&gt; &gt;       [1,2,3,4,5,6,7,8,7,6,5,4,3,2,1]);
+&gt;       [1,2,3,4,5,6,7,8,7,6,5,4,3,2,1]);
 [ [ 1, 4 ], [ 2, 3 ], [ 3, 14 ], [ 4, 15 ], [ 5 ], [ 11 ], [ 12, 15 ], 
   [ 13, 14 ] ]
 </pre>
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP006.htm">Previous</a>] [<a href ="CHAP008.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>June 2006
+<address>grape manual<br>September 2011
 </address></body></html>

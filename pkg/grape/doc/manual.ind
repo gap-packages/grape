@@ -1,156 +1,157 @@
 \letter A
-  `AddEdgeOrbit', 12
-  AddEdgeOrbit, \indexit{12}
-  `Adjacency', 17
-  Adjacency, \indexit{17}
-  A research application of PartialLinearSpaces, \indexit{42}
-  `AssignVertexNames', 13
-  AssignVertexNames, \indexit{13}
+  `AddEdgeOrbit', 11
+  AddEdgeOrbit, \indexit{11}
+  `Adjacency', 16
+  Adjacency, \indexit{16}
+  A research application of PartialLinearSpaces, \indexit{43}
+  `AssignVertexNames', 12
+  AssignVertexNames, \indexit{12}
   `AutGroupGraph', 38
   AutGroupGraph, \indexit{38}
 \letter B
-  `Bicomponents', 25
-  Bicomponents, \indexit{25}
-  `BipartiteDouble', 31
-  BipartiteDouble, \indexit{31}
+  `Bicomponents', 24
+  Bicomponents, \indexit{24}
+  `BipartiteDouble', 30
+  BipartiteDouble, \indexit{30}
 \letter C
-  `CayleyGraph', 11
-  CayleyGraph, \indexit{11}
-  cliques, 36
-  cliquesofgivensize, 37
-  `CollapsedAdjacencyMat', 22
-  CollapsedAdjacencyMat, \indexit{22}
-  `CollapsedCompleteOrbitsGraph', 33
-  CollapsedCompleteOrbitsGraph, \indexit{33}
-  `CollapsedIndependentOrbitsGraph', 32
-  CollapsedIndependentOrbitsGraph, \indexit{32}
-  `ComplementGraph', 28
-  ComplementGraph, \indexit{28}
-  `CompleteGraph', 11
-  CompleteGraph, \indexit{11}
-  `CompleteSubgraphs', 35
-  CompleteSubgraphs, \indexit{35}
-  `CompleteSubgraphsOfGivenSize', 36
-  CompleteSubgraphsOfGivenSize, \indexit{36}
-  `ConnectedComponent', 25
-  ConnectedComponent, \indexit{25}
-  `ConnectedComponents', 25
-  ConnectedComponents, \indexit{25}
+  `CayleyGraph', 10
+  CayleyGraph, \indexit{10}
+  cliques, 35
+  cliquesofgivensize, 36
+  `CollapsedAdjacencyMat', 21
+  CollapsedAdjacencyMat, \indexit{21}
+  `CollapsedCompleteOrbitsGraph', 32
+  CollapsedCompleteOrbitsGraph, \indexit{32}
+  `CollapsedIndependentOrbitsGraph', 31
+  CollapsedIndependentOrbitsGraph, \indexit{31}
+  `ComplementGraph', 27
+  ComplementGraph, \indexit{27}
+  `CompleteGraph', 10
+  CompleteGraph, \indexit{10}
+  `CompleteSubgraphs', 34
+  CompleteSubgraphs, \indexit{34}
+  `CompleteSubgraphsOfGivenSize', 35
+  CompleteSubgraphsOfGivenSize, \indexit{35}
+  `ConnectedComponent', 24
+  ConnectedComponent, \indexit{24}
+  `ConnectedComponents', 24
+  ConnectedComponents, \indexit{24}
 \letter D
-  `Diameter', 18
-  Diameter, \indexit{18}
-  `DirectedEdges', 17
-  DirectedEdges, \indexit{17}
-  `Distance', 18
-  Distance, \indexit{18}
-  `DistanceGraph', 28
-  DistanceGraph, \indexit{28}
-  `DistanceSet', 26
-  DistanceSet, \indexit{26}
-  `DistanceSetInduced', 27
-  DistanceSetInduced, \indexit{27}
+  `Diameter', 17
+  Diameter, \indexit{17}
+  `DirectedEdges', 16
+  DirectedEdges, \indexit{16}
+  `Distance', 17
+  Distance, \indexit{17}
+  `DistanceGraph', 27
+  DistanceGraph, \indexit{27}
+  `DistanceSet', 25
+  DistanceSet, \indexit{25}
+  `DistanceSetInduced', 26
+  DistanceSetInduced, \indexit{26}
 \letter E
-  `EdgeGraph', 29
-  EdgeGraph, \indexit{29}
-  `EdgeOrbitsGraph', 10
-  EdgeOrbitsGraph, \indexit{10}
+  `EdgeGraph', 28
+  EdgeGraph, \indexit{28}
+  `EdgeOrbitsGraph', 9
+  EdgeOrbitsGraph, \indexit{9}
   Examples of the use of GRAPE, \indexit{7}
 \letter G
-  `GeodesicsGraph', 32
-  GeodesicsGraph, \indexit{32}
-  `Girth', 19
-  Girth, \indexit{19}
-  `GlobalParameters', 22
-  GlobalParameters, \indexit{22}
-  `Graph', 9
-  Graph, \indexit{9}
-  `GraphIsomorphism', 40
-  GraphIsomorphism, \indexit{40}
-  `GraphIsomorphismClassRepresentatives', 39
-  GraphIsomorphismClassRepresentatives, \indexit{39}
+  `GeodesicsGraph', 31
+  GeodesicsGraph, \indexit{31}
+  `Girth', 18
+  Girth, \indexit{18}
+  `GlobalParameters', 21
+  GlobalParameters, \indexit{21}
+  `Graph', 8
+  Graph, \indexit{8}
+  `GraphIsomorphism', 39
+  GraphIsomorphism, \indexit{39}
+  `GraphIsomorphismClassRepresentatives', 41
+  GraphIsomorphismClassRepresentatives, \indexit{41}
+  Graphs with colour-classes, \indexit{38}
 \letter I
-  `IndependentSet', 26
-  IndependentSet, \indexit{26}
-  `InducedSubgraph', 27
-  InducedSubgraph, \indexit{27}
+  `IndependentSet', 25
+  IndependentSet, \indexit{25}
+  `InducedSubgraph', 26
+  InducedSubgraph, \indexit{26}
   Installing the GRAPE Package, \indexit{5}
-  `IsBipartite', 19
-  IsBipartite, \indexit{19}
-  `IsCompleteGraph', 20
-  IsCompleteGraph, \indexit{20}
-  `IsConnectedGraph', 19
-  IsConnectedGraph, \indexit{19}
-  `IsDistanceRegular', 22
-  IsDistanceRegular, \indexit{22}
-  `IsEdge', 17
-  IsEdge, \indexit{17}
-  `IsGraph', 15
-  IsGraph, \indexit{15}
-  `IsIsomorphicGraph', 39
-  IsIsomorphicGraph, \indexit{39}
-  `IsLoopy', 16
-  IsLoopy, \indexit{16}
-  `IsNullGraph', 20
-  IsNullGraph, \indexit{20}
-  `IsRegularGraph', 21
-  IsRegularGraph, \indexit{21}
-  `IsSimpleGraph', 17
-  IsSimpleGraph, \indexit{17}
-  `IsVertex', 15
-  IsVertex, \indexit{15}
+  `IsBipartite', 18
+  IsBipartite, \indexit{18}
+  `IsCompleteGraph', 19
+  IsCompleteGraph, \indexit{19}
+  `IsConnectedGraph', 18
+  IsConnectedGraph, \indexit{18}
+  `IsDistanceRegular', 21
+  IsDistanceRegular, \indexit{21}
+  `IsEdge', 16
+  IsEdge, \indexit{16}
+  `IsGraph', 14
+  IsGraph, \indexit{14}
+  `IsIsomorphicGraph', 40
+  IsIsomorphicGraph, \indexit{40}
+  `IsLoopy', 15
+  IsLoopy, \indexit{15}
+  `IsNullGraph', 19
+  IsNullGraph, \indexit{19}
+  `IsRegularGraph', 20
+  IsRegularGraph, \indexit{20}
+  `IsSimpleGraph', 16
+  IsSimpleGraph, \indexit{16}
+  `IsVertex', 14
+  IsVertex, \indexit{14}
 \letter J
-  `JohnsonGraph', 11
-  JohnsonGraph, \indexit{11}
+  `JohnsonGraph', 10
+  JohnsonGraph, \indexit{10}
 \letter L
-  `Layers', 26
-  Layers, \indexit{26}
+  `Layers', 25
+  Layers, \indexit{25}
   Loading GRAPE, \indexit{6}
-  `LocalParameters', 21
-  LocalParameters, \indexit{21}
+  `LocalParameters', 20
+  LocalParameters, \indexit{20}
 \letter N
-  `NewGroupGraph', 34
-  NewGroupGraph, \indexit{34}
-  `NullGraph', 10
-  NullGraph, \indexit{10}
+  `NewGroupGraph', 33
+  NewGroupGraph, \indexit{33}
+  `NullGraph', 9
+  NullGraph, \indexit{9}
 \letter O
-  `OrbitalGraphColadjMats', 23
-  OrbitalGraphColadjMats, \indexit{23}
-  `OrderGraph', 15
-  OrderGraph, \indexit{15}
+  `OrbitalGraphColadjMats', 22
+  OrbitalGraphColadjMats, \indexit{22}
+  `OrderGraph', 14
+  OrderGraph, \indexit{14}
 \letter P
-  `PartialLinearSpaces', 41
-  PartialLinearSpaces, \indexit{41}
-  `PointGraph', 29
-  PointGraph, \indexit{29}
+  `PartialLinearSpaces', 42
+  PartialLinearSpaces, \indexit{42}
+  `PointGraph', 28
+  PointGraph, \indexit{28}
 \letter Q
-  `QuotientGraph', 31
-  QuotientGraph, \indexit{31}
+  `QuotientGraph', 30
+  QuotientGraph, \indexit{30}
 \letter R
-  `RemoveEdgeOrbit', 13
-  RemoveEdgeOrbit, \indexit{13}
+  `RemoveEdgeOrbit', 12
+  RemoveEdgeOrbit, \indexit{12}
 \letter S
-  `SwitchedGraph', 30
-  SwitchedGraph, \indexit{30}
+  `SwitchedGraph', 29
+  SwitchedGraph, \indexit{29}
 \letter T
-  The structure of a graph in GRAPE, \indexit{7}
+  The structure of a graph in GRAPE, \indexit{6}
 \letter U
-  `UnderlyingGraph', 30
-  UnderlyingGraph, \indexit{30}
-  `UndirectedEdges', 18
-  UndirectedEdges, \indexit{18}
+  `UnderlyingGraph', 29
+  UnderlyingGraph, \indexit{29}
+  `UndirectedEdges', 17
+  UndirectedEdges, \indexit{17}
 \letter V
-  vertex-weighted graph, 35
-  `VertexColouring', 35
-  VertexColouring, \indexit{35}
-  `VertexDegree', 16
-  VertexDegree, \indexit{16}
-  `VertexDegrees', 16
-  VertexDegrees, \indexit{16}
-  `VertexName', 15
-  VertexName, \indexit{15}
-  `VertexNames', 16
-  VertexNames, \indexit{16}
-  `VertexTransitiveDRGs', 23
-  VertexTransitiveDRGs, \indexit{23}
-  `Vertices', 16
-  Vertices, \indexit{16}
+  vertex-weighted graph, 34
+  `VertexColouring', 34
+  VertexColouring, \indexit{34}
+  `VertexDegree', 15
+  VertexDegree, \indexit{15}
+  `VertexDegrees', 15
+  VertexDegrees, \indexit{15}
+  `VertexName', 14
+  VertexName, \indexit{14}
+  `VertexNames', 15
+  VertexNames, \indexit{15}
+  `VertexTransitiveDRGs', 22
+  VertexTransitiveDRGs, \indexit{22}
+  `Vertices', 15
+  Vertices, \indexit{15}

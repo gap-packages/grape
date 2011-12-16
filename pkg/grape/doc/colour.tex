@@ -15,7 +15,7 @@ The following sections describe functions for (proper) vertex-colouring
 or determining complete subgraphs of given graphs. The function
 `CompleteSubgraphsOfGivenSize' can also be used to determine the
 complete subgraphs with given vertex-weight sum in a vertex-weighted
-graph~\index{vertex-weighted graph}, where the weights can be positive
+graph\index{vertex-weighted graph}, where the weights can be positive
 integers or non-zero vectors of non-negative integers.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -23,13 +23,14 @@ integers or non-zero vectors of non-negative integers.
 
 \>VertexColouring( <gamma> )
 
-This function returns a proper vertex-colouring <C> for the graph
-<gamma>, which must be simple.
+This function returns a proper vertex-colouring <C> for the graph <gamma>,
+which must be simple.
 
-This *proper vertex-colouring* <C> is a list of positive integers,
-indexed by the vertices of <gamma>, with the property that
-$<C>[i]\not=<C>[j]$ whenever $[i,j]$ is an edge of <gamma>. At present
-a greedy algorithm is used.
+This *proper vertex-colouring* <C> is a list of positive integers (the
+*colours*), indexed by the vertices of <gamma>, with the property that
+$<C>[i]\not=<C>[j]$ whenever $[i,j]$ is an edge of <gamma>. At present a
+greedy algorithm is used, and the number of colours used is by no means
+guaranteed to be minimal.
 
 \beginexample
 gap> VertexColouring( JohnsonGraph(4,2) );
@@ -47,17 +48,23 @@ Let <gamma> be a simple graph and <k> an integer. This function returns
 a set <K> of complete subgraphs of <gamma>, where a complete subgraph is
 represented by its vertex-set.  If <k> is non-negative then the elements
 of <K> each have size <k>, otherwise the elements of <K> represent maximal
-complete subgraphs of <gamma>.  The default for <k> is $-1$, i.e. maximal
-complete subgraphs.  See also `CompleteSubgraphsOfGivenSize', which
-can be used to compute the *maximal* complete subgraphs of given size,
-and can also be used to determine the (maximal or otherwise) complete
-subgraphs with given vertex-weight sum in a vertex-weighted graph.
+complete subgraphs of <gamma>. (A *maximal complete subgraph* of <gamma>
+is a complete subgraph of <gamma> which is not properly contained in
+another complete subgraph of <gamma>.) The default for <k> is $-1$,
+i.e. maximal complete subgraphs.  See also `CompleteSubgraphsOfGivenSize',
+which can be used to compute the maximal complete subgraphs of given
+size, and can also be used to determine the (maximal or otherwise)
+complete subgraphs with given vertex-weight sum in a vertex-weighted
+graph.
 
 The optional parameter <alls> controls how many complete subgraphs are
 returned. The valid values for <alls> are 0, 1 (the default), and 2.
-The value 2 provides a new feature in {\GRAPE} from version 4.1, and
-specifies that this function should compute a set of `<gamma>.group'-orbit
-representatives of the required complete subgraphs.
+
+*Warning:* Using the default value of 1 for <alls> (see below) means that
+more than one element may be returned for some `<gamma>.group' orbit(s)
+of the required complete subgraphs.  To obtain just one element from each
+`<gamma>.group' orbit of the required complete subgraphs, you must give
+the value 2 to the parameter <alls>.
 
 If <alls>=0 (or `false' for backward compatibility) then <K> will contain
 at most one element. In this case, if <k> is negative then <K> will
@@ -121,12 +128,21 @@ complete subgraph is represented by its vertex-set.
 The optional parameter <alls> controls how many complete subgraphs are
 returned. The valid values for <alls> are 0, 1 (the default), and 2.
 
+*Warning:* Using the default value of 1 for <alls> (see below) means that
+more than one element may be returned for some `<gamma>.group' orbit(s)
+of the required complete subgraphs.  To obtain just one element from each
+`<gamma>.group' orbit of the required complete subgraphs, you must give
+the value 2 to the parameter <alls>.
+
 If <alls>=0 (or `false' for backward compatibility) then <K> will
 contain at most one element.  If <maxi>=`false' then <K> will contain one
 element if and only if <gamma> contains a complete subgraph of size <k>.
 If <maxi>=`true' then <K> will contain one element if and only if <gamma>
-contains a *maximal* complete subgraph of size <k> (in which case <K>
-will contain (the vertex-set of) such a maximal complete subgraph).
+contains a maximal complete subgraph of size <k>, in which case <K>
+will contain (the vertex-set of) such a maximal complete subgraph.
+(A *maximal complete subgraph* of <gamma> is a complete subgraph of
+<gamma> which is not properly contained in another complete subgraph
+of <gamma>.)
 
 If <alls>=1 (or `true' for backward compatibility) and <maxi>=`false',
 then <K> will contain (perhaps properly) a set of `<gamma>.group'
@@ -170,11 +186,11 @@ way.
 If <wts> is a list of $d$-vectors then we assume that `<gamma>.group' acts
 on the set of all integer $d$-vectors by permuting vector positions, such
 that, for all $v$ in `[1..<gamma>.order]' and all $g$ in `<gamma>.group',
-we have $<wts>[v^g] = <wts>[v]^g$, (where the first action is `OnPoints'
-and the second action is the assumed one on integer $d$-vectors), and
-that $<k>^g=<k>$ (where this action is the assumed one on $d$-vectors).
-These assumptions are *not* checked by the function, and the use of
-vector-weights is primarily for advanced users of {\GRAPE}.
+we have $<wts>[v^g] = <wts>[v]^g$ (where the first action is `OnPoints'
+and for the second action, if $i^g=j$ then $(<wts>[v]^g)[j]=<wts>[v][i]$),
+and that we also have $<k>^g=<k>$.  These assumptions are *not* checked
+by the function, and the use of vector-weights is primarily for advanced
+users of {\GRAPE}.
 
 An alternative name for this function is 
 `CliquesOfGivenSize'~\index{CliquesOfGivenSize}.
@@ -204,7 +220,7 @@ gap> CompleteSubgraphsOfGivenSize(delta,5,2,true);
 gap> CompleteSubgraphsOfGivenSize(delta,5,0);
 [ [ 1, 2, 3, 4, 5 ] ]
 gap> CompleteSubgraphsOfGivenSize(delta,5,1,false,true,
-> >       [1,2,3,4,5,6,7,8,7,6,5,4,3,2,1]);
+>       [1,2,3,4,5,6,7,8,7,6,5,4,3,2,1]);
 [ [ 1, 4 ], [ 2, 3 ], [ 3, 14 ], [ 4, 15 ], [ 5 ], [ 11 ], [ 12, 15 ], 
   [ 13, 14 ] ]
 \endexample

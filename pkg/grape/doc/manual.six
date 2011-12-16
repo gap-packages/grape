@@ -165,18 +165,19 @@ F 7.3. CompleteSubgraphsOfGivenSize
 F 7.3. CompleteSubgraphsOfGivenSize
 I 7.3. CliquesOfGivenSize
 C cnauty.tex 8. Automorphism groups and isomorphism testing for graphs
-S 8.1. AutGroupGraph
-F 8.1. AutGroupGraph
-F 8.1. AutGroupGraph
-S 8.2. IsIsomorphicGraph
-F 8.2. IsIsomorphicGraph
-F 8.2. IsIsomorphicGraph
-S 8.3. GraphIsomorphismClassRepresentatives
-F 8.3. GraphIsomorphismClassRepresentatives
-F 8.3. GraphIsomorphismClassRepresentatives
-S 8.4. GraphIsomorphism
-F 8.4. GraphIsomorphism
-F 8.4. GraphIsomorphism
+S 8.1. Graphs with colour-classes
+S 8.2. AutGroupGraph
+F 8.2. AutGroupGraph
+F 8.2. AutGroupGraph
+S 8.3. GraphIsomorphism
+F 8.3. GraphIsomorphism
+F 8.3. GraphIsomorphism
+S 8.4. IsIsomorphicGraph
+F 8.4. IsIsomorphicGraph
+F 8.4. IsIsomorphicGraph
+S 8.5. GraphIsomorphismClassRepresentatives
+F 8.5. GraphIsomorphismClassRepresentatives
+F 8.5. GraphIsomorphismClassRepresentatives
 C partlin.tex 9. Partial Linear Spaces
 S 9.1. PartialLinearSpaces
 F 9.1. PartialLinearSpaces
