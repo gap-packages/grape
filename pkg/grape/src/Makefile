@@ -1,10 +1,10 @@
-CC="cc"
-CFLAGS="-O"
+CC=cc
+CFLAGS=-O
 
-all:
-	$(CC) ${LDFLAGS} $(CFLAGS) -o ../bin/$(BINDIR)/drcanon4  drcanon4.c
-	$(CC) ${LDFLAGS} $(CFLAGS) -o ../bin/$(BINDIR)/drtogap4  drtogap4.c
-	$(CC) ${LDFLAGS} $(CFLAGS) -o ../bin/$(BINDIR)/gap4todr  gap4todr.c
+main:
+	$(CC) $(CFLAGS) -o ../bin/$(BINDIR)/drcanon4  drcanon4.c
+	$(CC) $(CFLAGS) -o ../bin/$(BINDIR)/drtogap4  drtogap4.c
+	$(CC) $(CFLAGS) -o ../bin/$(BINDIR)/gap4todr  gap4todr.c
 
 others:
 	# gnu-compile other programs for GRAPE 

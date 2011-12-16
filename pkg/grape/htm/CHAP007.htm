@@ -1,4 +1,4 @@
-<html><head><title>[GRAPE] 7 Vertex-Colouring and Complete Subgraphs</title></head>
+<html><head><title>[grape] 7 Vertex-Colouring and Complete Subgraphs</title></head>
 <body text="#000000" bgcolor="#ffffff">
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP006.htm">Previous</a>] [<a href ="CHAP008.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <h1>7 Vertex-Colouring and Complete Subgraphs</h1><p>
@@ -14,7 +14,8 @@ The following sections describe functions for (proper) vertex-colouring
 or determining complete subgraphs of given graphs. The function
 <code>CompleteSubgraphsOfGivenSize</code> can also be used to determine the
 complete subgraphs with given vertex-weight sum in a vertex-weighted
-graph&nbsp;indexvertex-weighted graph.
+graph&nbsp;indexvertex-weighted graph, where the weights can be positive
+integers or non-zero vectors of non-negative integers.
 <p>
 <p>
 <h2><a name="SECT001">7.1 VertexColouring</a></h2>
@@ -109,22 +110,15 @@ gap&gt; CompleteSubgraphs(gamma,-1,0);
 <li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code>, </code><var>maxi</var><code>, </code><var>col</var><code> )</code>
 <li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code>, </code><var>maxi</var><code>, </code><var>col</var><code>, </code><var>wts</var><code> )</code>
 <p>
-Let <var>gamma</var> be a simple graph and <var>k</var> a non-negative integer. This
-function returns a set <var>K</var> (possibly empty) of complete subgraphs of
-size <var>k</var> of <var>gamma</var>. The exact nature of the set <var>K</var> depends on the
-values of the parameters supplied to this function. A complete subgraph
-is represented by its vertex-set. <code>CompleteSubgraphsOfGivenSize</code> can
-handle the case where the vertices are assigned positive integer weights,
-in which case, a complete subgraph of size <var>k</var> means a complete subgraph
-whose vertex-weights sum to <var>k</var>.
-<p>
-We remark that the parameter <var>maxi</var> provides a backward compatible
-extension to its use in versions of GRAPE previous to 4.1, and now when
-<var>maxi</var>=<code>true</code> this function returns only <strong>maximal</strong> complete subgraphs
-of size <var>k</var>. The parameter <var>alls</var> also provides a new feature starting
-with version 4.1. Setting <var>alls</var>=2 specifies that this function should
-compute a set of <code></code><var>gamma</var><code>.group</code>-orbit representatives of the required
-complete subgraphs.
+Let <var>gamma</var> be a simple graph, and <var>k</var> a non-negative integer or vector
+of non-negative integers.  This function returns a set <var>K</var> (possibly
+empty) of complete subgraphs of size <var>k</var> of <var>gamma</var>.  The vertices may
+have weights, which should be non-zero integers if <var>k</var> is an integer and
+non-zero <var>d</var>-vectors of non-negative integers if <var>k</var> is a <var>d</var>-vector,
+and in these cases, a complete subgraph of <strong>size</strong> <var>k</var> means a complete
+subgraph whose vertex-weights sum to <var>k</var>.  The exact nature of the set
+<var>K</var> depends on the values of the parameters supplied to this function. A
+complete subgraph is represented by its vertex-set.
 <p>
 The optional parameter <var>alls</var> controls how many complete subgraphs are
 returned. The valid values for <var>alls</var> are 0, 1 (the default), and 2.
@@ -163,11 +157,26 @@ tree. The default is <code>true</code>, which says to use this partial colouring
 (and which seems to be a good idea).  For backward compatibility, <var>col</var>
 a rational number means the same as <var>col</var>=<code>true</code>.
 <p>
-If the optional parameter <var>wts</var> is given, then it is assumed to be a
-<code></code><var>gamma</var><code>.group</code> invariant list (where the action permutes the list
-positions) of length <code></code><var>gamma</var><code>.order</code> of positive integer weights
-corresponding to the vertices, in which case, a complete subgraph of
-size <var>k</var>  means a complete subgraph whose vertex-weights sum to <var>k</var>.
+The optional parameter <var>wts</var> should be a list of vertex-weights; the list
+should be of length <code></code><var>gamma</var><code>.order</code>, with the <var>i</var>-th element being the
+weight of vertex <var>i</var>. The weights must be all positive integers if <var>k</var>
+is an integer, and all non-zero <var>d</var>-vectors of non-negative integers
+if <var>k</var> is a <var>d</var>-vector. The default is that all weights are equal to&nbsp;1.
+(Recall that a complete subgraph of <strong>size</strong> <var>k</var> means a complete subgraph
+whose vertex-weights sum to <var>k</var>.)
+<p>
+If <var>wts</var> is a list of integers, then this list must be <code></code><var>gamma</var><code>.group</code>
+invariant, where the action permutes the list positions in the natural
+way.
+<p>
+If <var>wts</var> is a list of <var>d</var>-vectors then we assume that <code></code><var>gamma</var><code>.group</code> acts
+on the set of all integer <var>d</var>-vectors by permuting vector positions, such
+that, for all <var>v</var> in <code>[1..</code><var>gamma</var><code>.order]</code> and all <var>g</var> in <code></code><var>gamma</var><code>.group</code>,
+we have <var><var>wts</var>[v<sup>g</sup>] = <var>wts</var>[v]<sup>g</sup></var>, (where the first action is <code>OnPoints</code>
+and the second action is the assumed one on integer <var>d</var>-vectors), and
+that <var><var>k</var><sup>g</sup>=<var>k</var></var> (where this action is the assumed one on <var>d</var>-vectors).
+These assumptions are <strong>not</strong> checked by the function, and the use of
+vector-weights is primarily for advanced users of GRAPE.
 <p>
 An alternative name for this function is 
 <code>CliquesOfGivenSize</code>&nbsp;indexCliquesOfGivenSize.
@@ -204,5 +213,5 @@ gap&gt; CompleteSubgraphsOfGivenSize(delta,5,1,false,true,
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP006.htm">Previous</a>] [<a href ="CHAP008.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>GRAPE manual<br>September 2003
+<address>grape manual<br>June 2006
 </address></body></html>

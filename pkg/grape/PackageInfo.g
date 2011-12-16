@@ -10,16 +10,16 @@ PackageName := "GRAPE",
 
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers.
-Version := "4.2",
+Version := "4.3",
 
 ##  Release date of the current version in dd/mm/yyyy format.
-Date := "22/09/2003",
+Date := "30/06/2006",
 
 ##  URL of the archive(s) of the current package release, but *without*
 ##  the format extension(s), like '.zoo', which are given next.
 ##  The archive file name *must be changed* with each version of the archive
 ##  (and probably somehow contain the package name and version).
-ArchiveURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r2",
+ArchiveURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r3",
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -34,7 +34,7 @@ ArchiveURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r2",
 ##  In the future we may also provide .deb or .rpm formats which allow
 ##  a convenient installation and upgrading on Linux systems.
 ##  
-ArchiveFormats := ".zoo", # the others are generated automatically
+ArchiveFormats := ".tar.gz", # the others are generated automatically
 
 ##  If not all of the archive formats mentioned above are provided, these 
 ##  can be produced at the GAP side. Therefore it is necessary to know which
@@ -58,7 +58,7 @@ ArchiveFormats := ".zoo", # the others are generated automatically
 ##  
 ##  These entries are *optional*.
 #TextFiles := ["init.g", ......],
-#BinaryFiles := ["doc/manual.dvi", ......],
+BinaryFiles := ["doc/manual.dvi","doc/manual.pdf","nauty22/nug.pdf"],
 
 
 ##  Information about authors and maintainers. Specify for each person a 
@@ -227,7 +227,7 @@ Dependencies := rec(
 AvailabilityTest := 
   function()
     if not ARCH_IS_UNIX() or
-       ForAny( ["drcanon4", "dreadnaut", "drtogap4", "gap4todr"],
+       ForAny( ["drcanon4", "dreadnautB", "drtogap4", "gap4todr"],
                 file -> Filename(DirectoriesPackagePrograms("grape"),
                                  file) = fail ) then
       Info(InfoWarning, 1, "Package `GRAPE': non-Unix architecture or binaries not compiled");
@@ -246,7 +246,7 @@ Autoload := false,
 ##  printed when the package is loaded (not when it is autoloaded or if
 ##  command line options `-b' or `-q' are given).
 BannerString := 
-"\nLoading  GRAPE 4.2  (GRaph Algorithms using PErmutation groups),\n\
+"\nLoading  GRAPE 4.3  (GRaph Algorithms using PErmutation groups),\n\
 by L.H.Soicher@qmul.ac.uk.\n\n",
 
 Subtitle := "GRaph Algorithms using PErmutation groups",

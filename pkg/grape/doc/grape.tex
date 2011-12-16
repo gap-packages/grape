@@ -10,7 +10,7 @@
 
 \Chapter{Grape}
 
-This manual describes the {\GRAPE} (Version~4.2) package for computing
+This manual describes the {\GRAPE} (Version~4.3) package for computing
 with graphs and groups.
 
 {\GRAPE} is primarily designed for the construction and analysis of
@@ -20,15 +20,16 @@ subgraph structure. The {\GRAPE} philosophy is that a graph <gamma>
 always comes together with a known subgroup <G> of the automorphism
 group of <gamma>, and that <G> is used to reduce the storage and
 CPU-time requirements for calculations with <gamma> (see
-\cite{Soi93}).  Of course <G> may be the trivial group, and in this
-case {\GRAPE} algorithms may perform more slowly than strictly
+\cite{Soi93} and \cite{Soi04}).  Of course <G> may be the trivial group,
+and in this case {\GRAPE} algorithms may perform more slowly than strictly
 combinatorial algorithms (although this degradation in performance is
 hopefully never more than a fixed constant factor).
 
 Most {\GRAPE} functions are written entirely in the {\GAP} language.
 However, the {\GRAPE} functions `AutomorphismGroup', `AutGroupGraph',
-`IsIsomorphicGraph' and `PartialLinearSpaces' make direct or indirect
-use of B.~D.~McKay{\pif}s {\nauty} (Version~2.0b5) package \cite{Nau90},
+`IsIsomorphicGraph', `GraphIsomorphismClassRepresentatives',
+`GraphIsomorphism'  and `PartialLinearSpaces' make direct or indirect use
+of B.D.~McKay{\pif}s {\nauty} (Version~2.2 final) package \cite{Nau90},
 via a {\GRAPE} interface.  These functions can only be used on a fully
 installed version of {\GRAPE} in a UNIX environment.  Installation of
 {\GRAPE} is described in its `README' file and in its manual section
@@ -43,14 +44,11 @@ If you use {\GRAPE} to solve a problem then please send a short email
 about it to \Mailto{L.H.Soicher@qmul.ac.uk}, and reference the {\GRAPE} 
 package as follows:
 
-L.H. Soicher, The {GRAPE} package for {GAP},
+L.H. Soicher, The {GRAPE} package for {GAP}, Version~4.3, 2006,
 \URL{http://www.maths.qmul.ac.uk/~leonard/grape/}.
 
 If your work made use a function depending on the {\nauty} package then
-you should also reference {\nauty} as follows:
-
-B.D. McKay, The {nauty} package,
-\URL{http://cs.anu.edu.au/people/bdm/nauty/}.
+you should also reference {\nauty} \cite{Nau90}.
 
 The development of {\GRAPE} was partially supported by a European Union
 HCM grant in ``Computational Group Theory''.
@@ -58,18 +56,18 @@ HCM grant in ``Computational Group Theory''.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Installing the GRAPE Package}
 
-To install {\GRAPE}~4.2 (after installing {\GAP}), first
-obtain the {\GRAPE} archive file `grape4r2.zoo', available at
-\URL{http://www.maths.qmul.ac.uk/~leonard/grape/grape4r2.zoo} and
+To install {\GRAPE}~4.3 (after installing {\GAP}), first
+obtain the {\GRAPE} archive file `grape4r3.tar.gz', available at
+\URL{http://www.maths.qmul.ac.uk/~leonard/grape/grape4r3.tar.gz} and
 then copy this archive file into the `pkg' directory of the {\GAP}
 root directory. Actually, it is possible to have several {\GAP} root
 directories (see "ref:GAP Root Directory"), and so it is easy to install
-{\GRAPE} locally even if you have no permission to add files to the
-main {\GAP} installation (see "ref:Installing a GAP Package in your
-home directory"). Now go to the appropriate `pkg' directory containing
-`grape4r2.zoo', and then run
+{\GRAPE} locally even if you have no permission to add files to the main
+{\GAP} installation.  Now go to the appropriate `pkg' directory containing
+`grape4r3.tar.gz', and then run
 \begintt
-unzoo -x grape4r2.zoo
+gunzip grape4r3.tar.gz
+tar -xf grape4r3.tar
 \endtt
 to unpack {\GRAPE}.
 
@@ -92,17 +90,7 @@ has been compiled, and create a `Makefile'. Now run
 \begintt
 make
 \endtt
-to give a list of target architectures for which {\nauty} can be compiled 
-within {\GRAPE}.  Select the most suitable target and run
-\begintt   
-make <target>
-\endtt
 to create the binaries and to put them in the appropriate place.
-For example, if you are on a LINUX system with gcc, run
-\begintt
-make linux-gcc
-\endtt
-
 This completes the installation of {\GRAPE} for a single architecture.
 If {\GAP} is installed on different architectures on a common file system,
 this configuration process will only work for the *last* architecture
@@ -149,7 +137,7 @@ the statement
 \begintt
 gap> LoadPackage("grape");
 
-Loading  GRAPE 4.2  (GRaph Algorithms using PErmutation groups),
+Loading  GRAPE 4.3  (GRaph Algorithms using PErmutation groups),
 by L.H.Soicher@qmul.ac.uk.
 
 true
@@ -201,9 +189,8 @@ of the optional components `isSimple', `autGroup', and
 We give here a simple example to illustrate the use of {\GRAPE}. All
 functions used are described in detail in this manual. More
 sophisticated examples of the use of {\GRAPE} can be found in
-chapter "Partial Linear Spaces", as part of the the web-page
-\URL{http://www.maths.qmul.ac.uk/~leonard/partialspreads/}, and also 
-in the references \cite{Cam99}, \cite{CSS99} and \cite{HL99}.
+chapter "Partial Linear Spaces", and also in the references \cite{Cam99},
+\cite{CSS99}, \cite{HL99} and \cite{Soi06}.
 
 In the example here, we construct the Petersen graph $P$, and its edge
 graph (also called line graph) $EP$. We compute the global parameters
@@ -212,7 +199,7 @@ of $EP$, and so verify that $EP$ is distance-regular (see \cite{BCN89}).
 \beginexample
 gap> LoadPackage("grape");
 
-Loading  GRAPE 4.2  (GRaph Algorithms using PErmutation groups),
+Loading  GRAPE 4.3  (GRaph Algorithms using PErmutation groups),
 by L.H.Soicher@qmul.ac.uk.
 
 true

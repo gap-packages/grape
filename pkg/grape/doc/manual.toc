@@ -1,6 +1,6 @@
 \chapcontents {1}{Grape}{5}
 \seccontents {1.1}{Installing the GRAPE Package} {5}
-\seccontents {1.2}{Loading GRAPE} {7}
+\seccontents {1.2}{Loading GRAPE} {6}
 \seccontents {1.3}{The structure of a graph in GRAPE} {7}
 \seccontents {1.4}{Examples of the use of GRAPE} {7}
 \chapcontents {2}{Functions to construct and modify graphs}{9}
@@ -72,8 +72,10 @@
 \chapcontents {8}{Automorphism groups and isomorphism testing for graphs}{38}
 \seccontents {8.1}{AutGroupGraph} {38}
 \seccontents {8.2}{IsIsomorphicGraph} {39}
-\chapcontents {9}{Partial Linear Spaces}{40}
-\seccontents {9.1}{PartialLinearSpaces} {40}
-\seccontents {9.2}{A research application of PartialLinearSpaces} {41}
-\chapcontents {}{Bibliography}{44}
-\chapcontents {}{Index}{45}
+\seccontents {8.3}{GraphIsomorphismClassRepresentatives} {39}
+\seccontents {8.4}{GraphIsomorphism} {40}
+\chapcontents {9}{Partial Linear Spaces}{41}
+\seccontents {9.1}{PartialLinearSpaces} {41}
+\seccontents {9.2}{A research application of PartialLinearSpaces} {42}
+\chapcontents {}{Bibliography}{45}
+\chapcontents {}{Index}{46}

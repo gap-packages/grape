@@ -1,4 +1,4 @@
-                          GRAPE Version 4.2, 
+                          GRAPE Version 4.3, 
 
 a GAP package for computing with graphs and groups, 
 by Leonard H. Soicher, Queen Mary, University of London.
@@ -9,20 +9,20 @@ to GRAPE since Version 2.2.
 Installing GRAPE
 -----------------
 
-To install GRAPE 4.2 (as a GAP package, after installing GAP),
-first download the GRAPE archive file `grape4r2.zoo' available at 
+To install GRAPE 4.3 (as a GAP package, after installing GAP),
+first download the GRAPE archive file `grape4r3.tar.gz' available at 
 
-   http://www.maths.qmul.ac.uk/~leonard/grape/grape4r2.zoo
+   http://www.maths.qmul.ac.uk/~leonard/grape/grape4r3.tar.gz
 
 and copy this archive file to into the `pkg' directory of the GAP
 root directory.  Note that it is possible to have several GAP root
 directories (see the GAP-manual section "GAP Root Directory"), and so
 it is easy to install GRAPE locally even if you have no permission to
-add files to the main GAP installation (see the GAP-manual section
-"Installing a GAP Package in your home directory"). Change to the
-appropriate `pkg' directory, and then run
+add files to the main GAP installation. Change to the appropriate `pkg'
+directory, and then run
 
-   unzoo -x grape4r2.zoo
+   gunzip grape4r3.tar.gz
+   tar -xf grape4r3.tar
 
 to unpack GRAPE.
 
@@ -45,16 +45,6 @@ This will fetch the name of the system architecture on which GAP
 has been compiled, and create a `Makefile'. Now run
 
    make
-
-to give a list of target architectures for which nauty can be compiled 
-within GRAPE.  Select the most suitable target and run
-
-   make <target>
-
-to compile the binary and to install it in the appropriate place.
-For example, if you are on a LINUX system with gcc, run
-
-   make linux-gcc
 
 This completes the installation of GRAPE for a single architecture.
 If GAP is installed on different architectures on a common file system,
@@ -91,19 +81,54 @@ Both dvi and pdf versions of the GRAPE manual are available (as
 the home directory of GRAPE.
 
 If you install GRAPE, then please tell L.H.Soicher@qmul.ac.uk, where
-you should also send any comments and bug reports.
+you should also send any comments or bug reports.
 
 -------------------------------------------------------------------------
 If you use GRAPE to solve a problem, then please email
 L.H.Soicher@qmul.ac.uk, and reference:
 
-L.H. Soicher, The GRAPE package for GAP, 
+L.H. Soicher, The GRAPE package for GAP, Version 4.3, 2006, 
 http://www.maths.qmul.ac.uk/~leonard/grape/
 ------------------------------------------------------------------------
 
-Main changes from GRAPE 4.1 to GRAPE 4.2:
+Main changes from GRAPE 4.2 to GRAPE 4.3:
 ------------------------------------------
 
+(1) GRAPE can now be installed via `/bin/sh configure ../..; make'.
+
+(2) The version of nauty now used is 2.2 final, rather than 2.0beta5,
+and canonical labellings may have changed.  Moreover, dreadnautB is now
+used instead of dreadnaut, so there is no practical upper bound on the
+number of vertices when using nauty.  All graphs stored from previous
+versions of GRAPE should have their `canonicalLabelling' component
+unbound before use with this version.
+
+(3) Added function `GraphIsomorphismClassRepresentatives', which should be
+used for efficient pairwise isomorphism testing of three or more graphs.
+
+(4) `CompleteSubgraphsOfGivenSize' now fully documented to include
+the functionality of finding cliques with given vertex vector-weight
+sum.
+
+(5) `GraphIsomorphism' now documented, and for safety, `GraphIsomorphism'
+now has a third parameter <firstunbindcanon>, behaving as in
+`IsIsomorphicGraph'.
+
+(6) For safety, (possibly old) canonical labellings are no longer copied
+over to a graph returned by `CopyGraph', `GraphImage' or `NewGroupGraph'.
+
+(7) Changed call to  `StabChainBaseStrongGenerators'  to have three
+parameters to conform with the changed functionality in this procedure
+from GAP 4.4.5.
+
+(8) Fixed minor problem in Makefile.in (reported by A.E. Brouwer).
+
+(9) The standard archive format is now tar.gz, rather than zoo.
+
+(10) grape.bib moved to manual.bib.
+
+Main changes from GRAPE 4.1 to GRAPE 4.2:
+------------------------------------------
 (1) Including Steve Linton's `SmallestImageSet' function, and using
 this function for faster isomorph rejection in `CompleteSubgraphs',
 `CompleteSubgraphsOfGivenSize', and `PartialLinearSpaces'.
@@ -244,4 +269,4 @@ the effect that if the returned graph had loops, then it
 might have had its isSimple component erroneously set to true.
 
 Leonard H. Soicher
-September 2003. 
+June 2006. 

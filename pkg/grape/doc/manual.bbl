@@ -20,7 +20,7 @@ Hans Cuypers, Leonard~H. Soicher, and Hans Sterk.
   Mathematics}, pages 323--337. Springer, Berlin, Heidelberg and New York,
   1999.
 
-\bibitem[Hae81]{Haemers81}
+\bibitem[Hae81]{Hae81}
 Willem Haemers.
 \newblock A new partial geometry constructed from the hoffman-singleton graph.
 \newblock In P.~J. Cameron, J.~W.~P. Hirschfeld, and D.~R. Hughes, editors,
@@ -58,5 +58,17 @@ Leonard~H. Soicher.
   Theoretical Computer Science}, pages 287--291. American Mathematical Society,
   1993.
 \newblock GRAPE homepage: \URL{http://www.maths.qmul.ac.uk/~leonard/grape/}.
+
+\bibitem[Soi04]{Soi04}
+Leonard~H. Soicher.
+\newblock Computing with graphs and groups.
+\newblock In Lowell~W. Beineke and Robin~J. Wilson, editors, {\em Topics in
+  Algebraic Graph Theory}, volume 102 of {\em Encyclopedia of Mathematics and
+  its Applications}, pages 250--266. Cambridge University Press, 2004.
+
+\bibitem[Soi06]{Soi06}
+Leonard~H. Soicher.
+\newblock Is there a {M}c{L}aughlin geometry?
+\newblock {\em J. Algebra}, 300:248--255, 2006.
 
 \end{thebibliography}

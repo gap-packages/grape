@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdio.h>
 #define MAXSTRING 100
 #define MAXBASE 10000

@@ -171,6 +171,12 @@ F 8.1. AutGroupGraph
 S 8.2. IsIsomorphicGraph
 F 8.2. IsIsomorphicGraph
 F 8.2. IsIsomorphicGraph
+S 8.3. GraphIsomorphismClassRepresentatives
+F 8.3. GraphIsomorphismClassRepresentatives
+F 8.3. GraphIsomorphismClassRepresentatives
+S 8.4. GraphIsomorphism
+F 8.4. GraphIsomorphism
+F 8.4. GraphIsomorphism
 C partlin.tex 9. Partial Linear Spaces
 S 9.1. PartialLinearSpaces
 F 9.1. PartialLinearSpaces

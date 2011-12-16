@@ -1,9 +1,8 @@
 ##############################################################################
 ##
-##  grape.g  (Version 4.2)       GRAPE Library               Leonard Soicher
+##  grape.g  (Version 4.3)       GRAPE Library               Leonard Soicher
 ##
-##
-##  Copyright (C) 1992-2003 Leonard Soicher, School of Mathematical Sciences, 
+##  Copyright (C) 1992-2006 Leonard Soicher, School of Mathematical Sciences, 
 ##                      Queen Mary, University of London, London E1 4NS, U.K.
 ##
 
@@ -392,7 +391,7 @@ for i in [1..Length(reps)] do
       gamma.adjacencies[i]:=Filtered([1..gamma.order],j->rel(x,vertexnames[j]));
    else
       adj:=[];
-      for orb in Orbits(H,[1..gamma.order]) do
+      for orb in OrbitsDomain(H,[1..gamma.order]) do
 	 y:=vertexnames[orb[1]];
 	 if rel(x,y) then
 	    Append(adj,orb);
@@ -450,6 +449,7 @@ delta.schreierVector:=Immutable(delta.schreierVector);
 if IsBound(delta.names) then
    delta.names:=Immutable(delta.names);
 fi;
+Unbind(delta.canonicalLabelling); # for safety
 return delta;
 end);
 
@@ -630,7 +630,7 @@ for i in [1..Length(gamma.adjacencies)] do
       return false;
    fi;
    H:=ProbablyStabilizer(gamma.group,x);
-   for orb in Orbits(H,adj) do
+   for orb in OrbitsDomain(H,adj) do
       if not IsVertexPairEdge(gamma,orb[1],x) then
 	 gamma.isSimple:=false;
 	 return false;
@@ -2285,7 +2285,7 @@ for i in [1..Length(delta.adjacencies)] do
    adj:=delta.adjacencies[i];
    x:=delta.representatives[i];
    H:=ProbablyStabilizer(delta.group,x);
-   for orb in Orbits(H,adj) do
+   for orb in OrbitsDomain(H,adj) do
       if not IsVertexPairEdge(delta,orb[1],x) then
 	 AddEdgeOrbit(delta,[orb[1],x]);
       fi;
@@ -2312,9 +2312,9 @@ fi;
 if IsBound(gamma.autGroup) then
    delta.autGroup:=gamma.autGroup;
 fi;
-if IsBound(gamma.canonicalLabelling) then
-   delta.canonicalLabelling:=gamma.canonicalLabelling;
-fi;
+# if IsBound(gamma.canonicalLabelling) then
+#    delta.canonicalLabelling:=gamma.canonicalLabelling;
+# fi;
 if IsBound(gamma.names) then
    delta.names:=Immutable(gamma.names);
 fi;
@@ -2488,7 +2488,7 @@ fi;
 if not IsSimpleGraph(gamma) then
    Error("<gamma> must be a simple graph");
 fi;
-orbs:=List(Orbits(G,[1..gamma.order]),Set);
+orbs:=List(OrbitsDomain(G,[1..gamma.order]),Set);
 i:=1;
 L:=[];
 rel:=[];
@@ -2546,10 +2546,10 @@ if not IsGraph(gamma) or not IsPerm(perm) then
    Error("usage: GraphImage( <Graph>, <Perm> )");
 fi;
 if LargestMovedPoint(perm) > gamma.order then
-   Error("<perm> must be a permutation of [1..<gamma.order>]");
+   Error("<perm> must be a permutation of [1..<gamma>.order]");
 fi;
 delta:=NullGraph(Group(List(GeneratorsOfGroup(gamma.group),x->x^perm),()),
-                 gamma.order);
+   gamma.order);
 if HasSize(gamma.group) or HasStabChainMutable(gamma.group) then
    SetSize(delta.group,Size(gamma.group));
 fi;
@@ -2564,9 +2564,9 @@ if IsBound(gamma.autGroup) then
       SetSize(delta.autGroup,Size(gamma.autGroup));
    fi;
 fi;
-if IsBound(gamma.canonicalLabelling) then
-   delta.canonicalLabelling:=gamma.canonicalLabelling*perm;
-fi;
+# if IsBound(gamma.canonicalLabelling) then
+#    delta.canonicalLabelling:=gamma.canonicalLabelling*perm;
+# fi;
 perminv:=perm^-1;
 delta.names:=Immutable(List([1..delta.order],i->VertexName(gamma,i^perminv)));
 for i in [1..Length(delta.representatives)] do
@@ -3714,7 +3714,6 @@ GRAPE_dr_sgens:=0;
 GRAPE_dr_base:=0; 
 GRAPE_dr_canon:=0;
 
-BindGlobal("GRAPE_nautymax",32765);  # maximum order of a graph in nauty 
 BindGlobal("GRAPE_nautytmpdir",DirectoryTemporary());
 
 Add(POST_RESTORE_FUNCS,function()
@@ -3756,9 +3755,6 @@ if gamma.order=0 then
    gamma.autGroup:=Group([],());
    return gamma.autGroup;
 fi;
-if gamma.order>GRAPE_nautymax then
-   Error("<gamma>.order too large for nauty");
-fi;
 ftmp:=Filename(GRAPE_nautytmpdir,"ftmp");
 fdre:=Filename(GRAPE_nautytmpdir,"fdre");
 fg:=Filename(GRAPE_nautytmpdir,"fg");
@@ -3788,14 +3784,14 @@ else
    AppendTo( fdre_stream, "> ", ftmp, " *=13,k=1 10,xq\n" );
 fi;
 CloseStream(fdre_stream);
-Exec(Filename(DirectoriesPackagePrograms("grape"),"dreadnaut"),
+Exec(Filename(DirectoriesPackagePrograms("grape"),"dreadnautB"),
         "<",fdre);
 Exec(Filename(DirectoriesPackagePrograms("grape"),"drtogap4"),
 	"<",ftmp,">",fg);
 Read(fg);
 gp:=Group(GRAPE_dr_sgens,());
 SetStabChainMutable(gp,
-  StabChainBaseStrongGenerators(GRAPE_dr_base,GRAPE_dr_sgens));
+  StabChainBaseStrongGenerators(GRAPE_dr_base,GRAPE_dr_sgens,()));
 if col=[] or col=[[1..gamma.order]] then
    gamma.autGroup:=gp;
 fi;
@@ -3833,9 +3829,6 @@ if gamma.order=0 then
    gamma.canonicalLabelling:=();
    return;
 fi;
-if gamma.order>GRAPE_nautymax then
-   Error("<gamma>.order too large for nauty");
-fi;
 ftmp1:=Filename(GRAPE_nautytmpdir,"ftmp1");
 ftmp2:=Filename(GRAPE_nautytmpdir,"ftmp2");
 fdre:=Filename(GRAPE_nautytmpdir,"fdre");
@@ -3870,7 +3863,7 @@ else
    AppendTo( fdre_stream, "> ", ftmp1, " *=13,k=1 10,cx\n>> ", ftmp2, " bq\n" );
 fi;
 CloseStream(fdre_stream);
-Exec(Filename(DirectoriesPackagePrograms("grape"),"dreadnaut"),"<",fdre);
+Exec(Filename(DirectoriesPackagePrograms("grape"),"dreadnautB"),"<",fdre);
 Exec(Filename(DirectoriesPackagePrograms("grape"),"drtogap4"),
 	"<",ftmp1,">",fg);
 Exec(Filename(DirectoriesPackagePrograms("grape"),"drcanon4"),
@@ -3879,7 +3872,7 @@ Read(fg);
 if not IsBound(gamma.autGroup) then 
    gamma.autGroup:=Group(GRAPE_dr_sgens,());
    SetStabChainMutable(gamma.autGroup,
-     StabChainBaseStrongGenerators(GRAPE_dr_base,GRAPE_dr_sgens));
+     StabChainBaseStrongGenerators(GRAPE_dr_base,GRAPE_dr_sgens,()));
 fi;
 if not IsBound(gamma.canonicalLabelling) then 
    gamma.canonicalLabelling:=GRAPE_dr_canon; 
@@ -3958,15 +3951,42 @@ od;
 return true;
 end);
 
-BindGlobal("GraphIsomorphism",function(gamma1,gamma2)
+BindGlobal("GraphIsomorphism",function(arg)
 #
-# Returns an isomorphism from  gamma1  to  gamma2,  if  gamma1  and
-# gamma2  are isomorphic,  else returns  fail.
+# Let  gamma1=arg[1]  and   gamma2=arg[2]  be graphs.  Then this 
+# function returns an isomorphism from  gamma1  to  gamma2,  if
+# gamma1  and  gamma2  are isomorphic,  else returns  fail.
 #
-if not IsGraph(gamma1) or not IsGraph(gamma2) then
-   Error("usage: GraphIsomorphism( <Graph>, <Graph> )");
+# The optional boolean parameter  firstunbindcanon=arg[3]  determines
+# whether or not the  canonicalLabelling  components of both gamma1 and
+# gamma2  are first made unbound before proceeding.   If
+# firstunbindcanon=true (the default, safe and possibly slower option) 
+# then these components are first unbound.  
+# If  firstunbindcanon=false,  then an old canonical labelling
+# is used when it exists.  However, canonical labellings can depend on
+# the version of nauty, the version of GRAPE, certain settings
+# of nauty, and the compiler and computer used.  
+# Thus, if firstunbindcanon=false, the user must be 
+# sure that any canonicalLabelling component(s) which may already 
+# exist for gamma1 or gamma2 were created in exactly the same 
+# environment in which the user is presently computing. 
+#
+local gamma1,gamma2,firstunbindcanon;
+gamma1:=arg[1];
+gamma2:=arg[2];
+if IsBound(arg[3]) then
+   firstunbindcanon:=arg[3];
+else
+   firstunbindcanon:=true;
 fi;
-if not IsIsomorphicGraph(gamma1,gamma2) then
+if not (IsGraph(gamma1) and IsGraph(gamma2) and IsBool(firstunbindcanon)) then
+   Error("usage: GraphIsomorphism( <Graph>, <Graph> [, <Bool> ])");
+fi;
+if firstunbindcanon then
+   Unbind(gamma1.canonicalLabelling);
+   Unbind(gamma2.canonicalLabelling);
+fi;
+if not IsIsomorphicGraph(gamma1,gamma2,firstunbindcanon) then
    return fail;
 else
    SetAutGroupCanonicalLabelling(gamma1);
@@ -3975,6 +3995,63 @@ else
 fi;
 end);
 
+BindGlobal("GraphIsomorphismClassRepresentatives",function(arg)
+#
+# Given a list  L=arg[1]  of graphs, this function returns a list
+# containing pairwise non-isomorphic elements of  L,  representing
+# all the isomorphism classes of elements of  L. 
+#
+# The optional boolean parameter  firstunbindcanon=arg[2]  determines
+# whether or not the  canonicalLabelling  components of all 
+# the graphs in L are first made unbound before proceeding. 
+# If firstunbindcanon=true (the default, safe and possibly slower option) 
+# then these components are first unbound.  
+# If  firstunbindcanon=false,  then an old canonical labelling
+# is used when it exists.  However, canonical labellings can depend on
+# the version of nauty, the version of GRAPE, certain settings
+# of nauty, and the compiler and computer used.  
+# Thus, if firstunbindcanon=false, the user must be 
+# sure that any canonicalLabelling component(s) which may already 
+# exist for graphs in L were created in exactly the same 
+# environment in which the user is presently computing. 
+#
+local L,firstunbindcanon,gamma,reps,i,found;
+L:=arg[1];
+if IsBound(arg[2]) then
+   firstunbindcanon:=arg[2];
+else
+   firstunbindcanon:=true;
+fi;
+if not (IsList(L) and IsBool(firstunbindcanon)) then
+   Error("usage: GraphIsomorphismClassRepresentatives( <List> [, <Bool>] )");
+fi;
+if not ForAll(L,IsGraph) then
+   Error("each element of <L> must be a graph");
+fi;
+if firstunbindcanon then
+   for gamma in L do
+      Unbind(gamma.canonicalLabelling);
+   od;
+fi;
+if Length(L)<=1 then
+   return ShallowCopy(L);
+fi;
+reps:=[L[1]];
+for i in [2..Length(L)] do
+   found:=false;
+   for gamma in reps do
+      if IsIsomorphicGraph(L[i],gamma,false) then
+         found:=true;
+         break;
+      fi;
+   od;
+   if not found then 
+      Add(reps,L[i]);
+   fi;
+od;
+return reps;
+end);
+   
 BindGlobal("PartialLinearSpaces",function(arg)
 #
 # Let  s  and  t  be positive integers.  Then a *partial linear space*  

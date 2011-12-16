@@ -1,0 +1,115 @@
+This is pdfTeX, Version 3.14159-1.10b (Web2C 7.4.5) (format=pdftex 2003.12.10)  30 JUN 2006 09:21
+**manual
+(./manual.tex{/usr/share/texmf/pdftex/config/pdftex.cfg}
+(../../../doc/gapmacro.tex (/usr/share/texmf/tex/plain/amsfonts/amssym.tex
+(/usr/share/texmf/tex/plain/amsfonts/amssym.def
+\msafam=\fam8
+\msbfam=\fam9
+\eufmfam=\fam10
+))
+Running PDFTeX
+\pagewidth=\dimen16
+\pageheight=\dimen17
+\colwidth=\dimen18
+\partialpage=\box16
+\origvsize=\dimen19
+\manindent=\dimen20
+\smallmanindent=\dimen21
+\msbfam=\fam11
+\labelout=\write0
+\indexout=\write1
+\secindout=\write2
+\tocout=\write3
+\citeout=\write4
+\ans=\write5
+\labelin=\read0
+\indexin=\read1
+\tocin=\read2
+\citein=\read3
+\secno=\count26
+\subsecno=\count27
+\exno=\count28
+\indentno=\count29
+\chapnum=\count30
+\ortoks=\toks12
+) (../../../doc/ext/manual.lab) (../../../doc/ref/manual.lab) [1{/usr/share/tex
+mf/dvips/config/pdftex.map}]
+\makelabel{grape:Contents}{{\setbox 0=\hbox {1}\vrule width 0pt height\ht 0}}
+Chapter `Contents' .
+(./manual.toc [2.1
+\chapcontents {\tocstrut }{Contents}{2}
+]
+Overfull \hbox (0.29198pt too wide) in paragraph at lines 75--75
+[]|/cmr10/GraphIsomorphismClassRepresentatives  |[]  |
+
+\hbox(8.5+3.5)x176.99998, glue set - 1.0
+.\hbox(6.44444+0.0)x0.0, glue set - 36.0fil
+..\glue 0.0 plus 1.0fil minus 1.0fil
+..\hbox(6.44444+0.0)x36.0, glue set 11.22218fil
+...\glue 0.0 plus 1.0fil minus 1.0fil
+.../cmr10/8
+.../cmr10/.
+.../cmr10/3
+...\kern 12.0
+.\rule(8.5+3.5)x0.0
+./cmr10/G
+./cmr10/r
+./cmr10/a
+.etc.
+
+) [3.1] (./manual.lab)
+\openout3 = `manual.toc'.
+
+\openout0 = `manual.lab'.
+
+\openout1 = `manual.idx'.
+
+\openout2 = `manual.six'.
+
+\openout4 = `manual.aux'.
+
+ [4.1] (./grape.tex
+Chapter `Grape' .
+[5.1] [6.1] [7.1]) (./consmod.tex [8.1]
+Chapter `Functions to construct and modify graphs' .
+[9.2] [10.2] [11.2] [12.2] [13.2]) (./inspect.tex [14.2]
+Chapter `Functions to inspect graphs, vertices and edges' .
+[15.3] [16.3] [17.3] [18.3] [19.3]) (./determin.tex [20.3]
+Chapter `Functions to determine regularity properties of graphs' .
+[21.4] [22.4] [23.4]) (./special.tex [24.4]
+Chapter `Some special vertex subsets of a graph' .
+[25.5]) (./constr.tex [26.5]
+Chapter `Functions to construct new graphs from old' .
+[27.6] [28.6] [29.6] [30.6] [31.6] [32.6] [33.6]) (./colour.tex [34.6]
+Chapter `Vertex-Colouring and Complete Subgraphs' .
+[35.7] [36.7]) (./cnauty.tex [37.7]
+Chapter `Automorphism groups and isomorphism testing for graphs' .
+[38.8] [39.8]) (./partlin.tex [40.8]
+Chapter `Partial Linear Spaces' .
+[41.9] [42.9] [43.9]) [44.9]
+Chapter `Bibliography' .
+(./manual.bbl) [45.10]
+Chapter `Index' .
+(./manual.ind [46.11]) [47.11]
+##
+## Citations for BibTeX written on manual.aux.
+## Index entries for makeindex written on manual.idx.
+## Section index entries written on manual.six.
+## Label definitions written on manual.lab.
+## Table of contents written on manual.toc.
+## Labels have changed, run again. (Or they were multiply defined.)
+##
+ ){/usr/share/texmf/dvips/tetex/f7b6d320.enc}</usr/share/texmf/fonts/type1/blue
+sky/cm/cmsl10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr7.pfb>{/usr/share
+/texmf/dvips/tetex/bbad153f.enc}</usr/share/texmf/fonts/type1/bluesky/cm/cmsy7.
+pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmsy10.pfb></usr/share/texmf/fonts
+/type1/bluesky/symbols/msam7.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr8.
+pfb>{/usr/share/texmf/dvips/tetex/aae443f0.enc}</usr/share/texmf/fonts/type1/bl
+uesky/cm/cmmi10.pfb>{/usr/share/texmf/dvips/tetex/09fbbfac.enc}</usr/share/texm
+f/fonts/type1/bluesky/cm/cmtt10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cm
+ss10.pfb>{/usr/share/texmf/dvips/tetex/1b6d048e.enc}</usr/share/texmf/fonts/typ
+e1/bluesky/cm/cminch.pfb>{/usr/share/texmf/dvips/tetex/74afc74c.enc}</usr/share
+/texmf/fonts/type1/bluesky/cm/cmti10.pfb></usr/share/texmf/fonts/type1/bluesky/
+cm/cmr10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmbx10.pfb></usr/share/te
+xmf/fonts/type1/bluesky/cm/cmssdc10.pfb>
+Output written on manual.pdf (47 pages, 256294 bytes).
