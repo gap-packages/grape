@@ -3,19 +3,19 @@
   AddEdgeOrbit, \indexit{11}
   `Adjacency', 16
   Adjacency, \indexit{16}
-  A research application of PartialLinearSpaces, \indexit{43}
+  A research application of PartialLinearSpaces, \indexit{42}
   `AssignVertexNames', 12
   AssignVertexNames, \indexit{12}
-  `AutGroupGraph', 38
-  AutGroupGraph, \indexit{38}
+  `AutGroupGraph', 37
+  AutGroupGraph, \indexit{37}
 \letter B
   `Bicomponents', 24
   Bicomponents, \indexit{24}
   `BipartiteDouble', 30
   BipartiteDouble, \indexit{30}
 \letter C
-  `CayleyGraph', 10
-  CayleyGraph, \indexit{10}
+  `CayleyGraph', 11
+  CayleyGraph, \indexit{11}
   cliques, 35
   cliquesofgivensize, 36
   `CollapsedAdjacencyMat', 21
@@ -64,11 +64,11 @@
   GlobalParameters, \indexit{21}
   `Graph', 8
   Graph, \indexit{8}
-  `GraphIsomorphism', 39
-  GraphIsomorphism, \indexit{39}
-  `GraphIsomorphismClassRepresentatives', 41
-  GraphIsomorphismClassRepresentatives, \indexit{41}
-  Graphs with colour-classes, \indexit{38}
+  `GraphIsomorphism', 38
+  GraphIsomorphism, \indexit{38}
+  `GraphIsomorphismClassRepresentatives', 40
+  GraphIsomorphismClassRepresentatives, \indexit{40}
+  Graphs with colour-classes, \indexit{37}
 \letter I
   `IndependentSet', 25
   IndependentSet, \indexit{25}
@@ -87,8 +87,8 @@
   IsEdge, \indexit{16}
   `IsGraph', 14
   IsGraph, \indexit{14}
-  `IsIsomorphicGraph', 40
-  IsIsomorphicGraph, \indexit{40}
+  `IsIsomorphicGraph', 39
+  IsIsomorphicGraph, \indexit{39}
   `IsLoopy', 15
   IsLoopy, \indexit{15}
   `IsNullGraph', 19
@@ -119,8 +119,8 @@
   `OrderGraph', 14
   OrderGraph, \indexit{14}
 \letter P
-  `PartialLinearSpaces', 42
-  PartialLinearSpaces, \indexit{42}
+  `PartialLinearSpaces', 41
+  PartialLinearSpaces, \indexit{41}
   `PointGraph', 28
   PointGraph, \indexit{28}
 \letter Q

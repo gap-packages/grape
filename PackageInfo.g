@@ -10,16 +10,16 @@ PackageName := "GRAPE",
 
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers.
-Version := "4.4",
+Version := "4.5",
 
 ##  Release date of the current version in dd/mm/yyyy format.
-Date := "09/09/2011",
+Date := "23/11/2011",
 
 ##  URL of the archive(s) of the current package release, but *without*
 ##  the format extension(s), like '.zoo', which are given next.
 ##  The archive file name *must be changed* with each version of the archive
 ##  (and probably somehow contain the package name and version).
-ArchiveURL := "http://www.maths.qmul.ac.uk/~leonard/pkgbeta/grape/grape4r4",
+ArchiveURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r5/grape4r5",
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -138,8 +138,8 @@ AcceptDate := "07/1993",
 ##  the updating of package information on the GAP Website, and inclusion
 ##  and updating of the package in the GAP distribution.
 ##  
-README_URL := "http://www.maths.qmul.ac.uk/~leonard/pkgbeta/grape/README.grape",
-PackageInfoURL := "http://www.maths.qmul.ac.uk/~leonard/pkgbeta/grape/PackageInfo.g",
+README_URL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r5/README",
+PackageInfoURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r5/PackageInfo.g",
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 
@@ -153,7 +153,7 @@ computing with graphs and groups, \
 and is primarily designed for constructing and analysing graphs \
 related to groups, finite geometries, and designs.",
 
-PackageWWWHome := "http://www.maths.qmul.ac.uk/~leonard/pkgbeta/grape/",
+PackageWWWHome := "http://www.maths.qmul.ac.uk/~leonard/grape/",
                   
 ##  On the GAP Website there is an online version of all manuals in the
 ##  GAP distribution. To handle the documentation of a package it is
@@ -226,16 +226,16 @@ Dependencies := rec(
 # AvailabilityTest := ReturnTrue,
 AvailabilityTest := 
   function()
-    if not ARCH_IS_WINDOWS() then
+#   if not ARCH_IS_WINDOWS() then
       if Filename(DirectoriesPackagePrograms("grape"),"dreadnautB") = fail then 
         Info(InfoWarning, 1, "Package `GRAPE': nauty/dreadnaut binaries not installed");
         Info(InfoWarning, 1, "Package `GRAPE': functions depending on nauty will not work");
       fi;
-    elif ShortFileNameWindows(Filename(DirectoriesPackageLibrary(
-           "grape","bin"),"dreadnautB.exe")) = fail then
-      Info(InfoWarning, 1, "Package `GRAPE': nauty/dreadnaut binaries for Windows not installed");
-      Info(InfoWarning, 1, "Package `GRAPE': functions depending on nauty will not work");
-    fi;
+#   elif ShortFileNameWindows(Filename(DirectoriesPackageLibrary(
+#          "grape","bin"),"dreadnautB.exe")) = fail then
+#     Info(InfoWarning, 1, "Package `GRAPE': nauty/dreadnaut binaries for Windows not installed");
+#     Info(InfoWarning, 1, "Package `GRAPE': functions depending on nauty will not work");
+#   fi;
     return true;
   end,
 
@@ -249,9 +249,9 @@ Autoload := false,
 ##  If the default banner does not suffice then provide a string that is
 ##  printed when the package is loaded (not when it is autoloaded or if
 ##  command line options `-b' or `-q' are given).
-BannerString := 
-"\nLoading  GRAPE 4.4  (GRaph Algorithms using PErmutation groups),\n\
-by L.H.Soicher@qmul.ac.uk.\n\n",
+# BannerString := 
+# "\nLoading  GRAPE 4.5  (GRaph Algorithms using PErmutation groups),\n\
+# by L.H.Soicher@qmul.ac.uk.\n\n",
 
 Subtitle := "GRaph Algorithms using PErmutation groups",
 

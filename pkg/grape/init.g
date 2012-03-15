@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#W    init.g               share package `grape'              Leonard Soicher
+#W    init.g               package GRAPE              Leonard Soicher
 ##
 ##    
 ##

@@ -1,6 +1,6 @@
 ##############################################################################
 ##
-##  grape.g  (Version 4.4)       GRAPE Library               Leonard Soicher
+##  grape.g  (Version 4.5)       GRAPE Library               Leonard Soicher
 ##
 ##  Copyright (C) 1992-2011 Leonard Soicher, School of Mathematical Sciences, 
 ##                      Queen Mary, University of London, London E1 4NS, U.K.
@@ -3988,16 +3988,16 @@ BindGlobal("SetAutGroupCanonicalLabelling",function(arg)
   PrintTo(ftmp2_stream,gamma.order,"\n"); 
   CloseStream(ftmp2_stream);
 
-  if ARCH_IS_WINDOWS() then
-    # we need to use `ShortFileName' to get rid of blanks in the file paths,
-    # converting to the old style 8+3 format
-    Exec(ShortFileNameWindows(
-      Filename(DirectoriesPackageLibrary("grape","bin"),"dreadnautB.exe")),
-	"<",fdre);
-  else
+# if ARCH_IS_WINDOWS() then
+#   # we need to use `ShortFileName' to get rid of blanks in the file paths,
+#   # converting to the old style 8+3 format
+#   Exec(ShortFileNameWindows(
+#     Filename(DirectoriesPackageLibrary("grape","bin"),"dreadnautB.exe")),
+#        "<",fdre);
+# else
     Exec(Filename(DirectoriesPackagePrograms("grape"),"dreadnautB"),
         "<",fdre);
-  fi;
+# fi;
 
   if not IsBound(gr.autGroup) then 
     fg:=ReadOutputNauty(ftmp1);

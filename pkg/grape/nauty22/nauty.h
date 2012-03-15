@@ -19,7 +19,7 @@ it is necessary to check they are correct.
 #define HAVE_STRING_H  1    /* <string.h> */
 #define MALLOC_DEC 1  /* 1 = malloc() is declared in stdlib.h,
 				 2 = in malloc.h, 0 = in neither place */
-#define HAS_MATH_INF 0 /* INFINITY is defined in math.h or
+#define HAS_MATH_INF 1 /* INFINITY is defined in math.h or
 				some system header likely to be used */
 
 #define SIZEOF_INT 4

@@ -17,10 +17,10 @@
 \indexentry {CompleteGraph@`CompleteGraph'}{10}
 \indexentry {JohnsonGraph@JohnsonGraph|indexit}{10}
 \indexentry {JohnsonGraph@`JohnsonGraph'}{10}
-\indexentry {CayleyGraph@CayleyGraph|indexit}{10}
-\indexentry {CayleyGraph@`CayleyGraph'}{10}
-\indexentry {CayleyGraph@`CayleyGraph'}{10}
-\indexentry {CayleyGraph@`CayleyGraph'}{10}
+\indexentry {CayleyGraph@CayleyGraph|indexit}{11}
+\indexentry {CayleyGraph@`CayleyGraph'}{11}
+\indexentry {CayleyGraph@`CayleyGraph'}{11}
+\indexentry {CayleyGraph@`CayleyGraph'}{11}
 \indexentry {AddEdgeOrbit@AddEdgeOrbit|indexit}{11}
 \indexentry {AddEdgeOrbit@`AddEdgeOrbit'}{11}
 \indexentry {AddEdgeOrbit@`AddEdgeOrbit'}{11}
@@ -157,22 +157,22 @@
 \indexentry {CompleteSubgraphsOfGivenSize@`CompleteSubgraphsOfGivenSize'}{35}
 \indexentry {CompleteSubgraphsOfGivenSize@`CompleteSubgraphsOfGivenSize'}{35}
 \indexentry {CliquesOfGivenSize}{36}
-\indexentry {Graphs with colour-classes@Graphs with colour-classes|indexit}{38}
-\indexentry {AutGroupGraph@AutGroupGraph|indexit}{38}
-\indexentry {AutGroupGraph@`AutGroupGraph'}{38}
-\indexentry {AutGroupGraph@`AutGroupGraph'}{38}
-\indexentry {GraphIsomorphism@GraphIsomorphism|indexit}{39}
-\indexentry {GraphIsomorphism@`GraphIsomorphism'}{39}
-\indexentry {GraphIsomorphism@`GraphIsomorphism'}{39}
-\indexentry {IsIsomorphicGraph@IsIsomorphicGraph|indexit}{40}
-\indexentry {IsIsomorphicGraph@`IsIsomorphicGraph'}{40}
-\indexentry {IsIsomorphicGraph@`IsIsomorphicGraph'}{40}
-\indexentry {GraphIsomorphismClassRepresentatives@GraphIsomorphismClassRepresentatives|indexit}{41}
-\indexentry {GraphIsomorphismClassRepresentatives@`GraphIsomorphismClassRepresentatives'}{41}
-\indexentry {GraphIsomorphismClassRepresentatives@`GraphIsomorphismClassRepresentatives'}{41}
-\indexentry {PartialLinearSpaces@PartialLinearSpaces|indexit}{42}
-\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{42}
-\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{42}
-\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{42}
-\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{42}
-\indexentry {A research application of PartialLinearSpaces@A research application of PartialLinearSpaces|indexit}{43}
+\indexentry {Graphs with colour-classes@Graphs with colour-classes|indexit}{37}
+\indexentry {AutGroupGraph@AutGroupGraph|indexit}{37}
+\indexentry {AutGroupGraph@`AutGroupGraph'}{37}
+\indexentry {AutGroupGraph@`AutGroupGraph'}{37}
+\indexentry {GraphIsomorphism@GraphIsomorphism|indexit}{38}
+\indexentry {GraphIsomorphism@`GraphIsomorphism'}{38}
+\indexentry {GraphIsomorphism@`GraphIsomorphism'}{38}
+\indexentry {IsIsomorphicGraph@IsIsomorphicGraph|indexit}{39}
+\indexentry {IsIsomorphicGraph@`IsIsomorphicGraph'}{39}
+\indexentry {IsIsomorphicGraph@`IsIsomorphicGraph'}{39}
+\indexentry {GraphIsomorphismClassRepresentatives@GraphIsomorphismClassRepresentatives|indexit}{40}
+\indexentry {GraphIsomorphismClassRepresentatives@`GraphIsomorphismClassRepresentatives'}{40}
+\indexentry {GraphIsomorphismClassRepresentatives@`GraphIsomorphismClassRepresentatives'}{40}
+\indexentry {PartialLinearSpaces@PartialLinearSpaces|indexit}{41}
+\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{41}
+\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{41}
+\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{41}
+\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{41}
+\indexentry {A research application of PartialLinearSpaces@A research application of PartialLinearSpaces|indexit}{42}

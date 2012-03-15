@@ -9,7 +9,7 @@
 \seccontents {2.3}{NullGraph} {9}
 \seccontents {2.4}{CompleteGraph} {10}
 \seccontents {2.5}{JohnsonGraph} {10}
-\seccontents {2.6}{CayleyGraph} {10}
+\seccontents {2.6}{CayleyGraph} {11}
 \seccontents {2.7}{AddEdgeOrbit} {11}
 \seccontents {2.8}{RemoveEdgeOrbit} {12}
 \seccontents {2.9}{AssignVertexNames} {12}
@@ -69,14 +69,14 @@
 \seccontents {7.1}{VertexColouring} {34}
 \seccontents {7.2}{CompleteSubgraphs} {34}
 \seccontents {7.3}{CompleteSubgraphsOfGivenSize} {35}
-\chapcontents {8}{Automorphism groups and isomorphism testing for graphs}{38}
-\seccontents {8.1}{Graphs with colour-classes} {38}
-\seccontents {8.2}{AutGroupGraph} {38}
-\seccontents {8.3}{GraphIsomorphism} {39}
-\seccontents {8.4}{IsIsomorphicGraph} {40}
-\seccontents {8.5}{GraphIsomorphismClassRepresentatives} {41}
-\chapcontents {9}{Partial Linear Spaces}{42}
-\seccontents {9.1}{PartialLinearSpaces} {42}
-\seccontents {9.2}{A research application of PartialLinearSpaces} {43}
-\chapcontents {}{Bibliography}{46}
-\chapcontents {}{Index}{47}
+\chapcontents {8}{Automorphism groups and isomorphism testing for graphs}{37}
+\seccontents {8.1}{Graphs with colour-classes} {37}
+\seccontents {8.2}{AutGroupGraph} {37}
+\seccontents {8.3}{GraphIsomorphism} {38}
+\seccontents {8.4}{IsIsomorphicGraph} {39}
+\seccontents {8.5}{GraphIsomorphismClassRepresentatives} {40}
+\chapcontents {9}{Partial Linear Spaces}{41}
+\seccontents {9.1}{PartialLinearSpaces} {41}
+\seccontents {9.2}{A research application of PartialLinearSpaces} {42}
+\chapcontents {}{Bibliography}{45}
+\chapcontents {}{Index}{46}
