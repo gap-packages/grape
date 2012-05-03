@@ -3,8 +3,8 @@
 
 SHELL = /bin/sh
 CC=gcc
-CFLAGS= -O4 -march=i686 
-SAFECFLAGS= -O4 -march=i686
+CFLAGS= -O4 
+SAFECFLAGS= -O4
 LDFLAGS=
 LOK=1         # 0 if no 64-bit integers
 TESTPROGS=dreadtest dreadtestB dreadtestS dreadtestS1 dreadtest4K dreadtest1 dreadtestW1 dreadtestL1 dreadtestL
