@@ -36,3 +36,4 @@ grape/nauty22/gread.me
 grape/grh/Soicher
 grape/grh/McL
 grape/grh/E8
+grape/bin/i686-pc-cygwin-gcc-default32/dreadnautB.exe

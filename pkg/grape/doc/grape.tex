@@ -10,7 +10,7 @@
 
 \Chapter{Grape}
 
-This manual describes the {\GRAPE} (Version~4.5) package for computing
+This manual describes the {\GRAPE} (Version~4.6) package for computing
 with graphs and groups.
 
 {\GRAPE} is primarily designed for the construction and analysis of
@@ -45,11 +45,11 @@ If you use {\GRAPE} to solve a problem then please send a short email
 about it to \Mailto{L.H.Soicher@qmul.ac.uk}, and reference the {\GRAPE} 
 package as follows:
 
-L.H. Soicher, The {GRAPE} package for {GAP}, Version~4.5, 2011,
+L.H. Soicher, The {GRAPE} package for {GAP}, Version~4.6, 2012,
 \URL{http://www.maths.qmul.ac.uk/~leonard/grape/}.
 
-If your work made use a function depending on the {\nauty} package then
-you should also reference {\nauty} \cite{Nau90}.
+If your work made use of a function depending on the {\nauty} package
+then you should also reference {\nauty} \cite{Nau90}.
 
 The development of {\GRAPE} was partially supported by a European Union
 HCM grant in ``Computational Group Theory''.
@@ -57,60 +57,56 @@ HCM grant in ``Computational Group Theory''.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Installing the GRAPE Package}
 
-The {\GRAPE} package files are included in the standard {\GAP}~4.5
-distribution, so you do not need to download and unpack an archive for
-{\GRAPE} unless you need to install the package locally or are installing
-an upgrade of {\GRAPE} to an existing installation of {\GAP} (see the main
-{\GAP} reference section "Reference: Installing a GAP Package").  If you
-do need to download {\GRAPE}, you can find archive files for the package
-in various formats at \URL{http://www.gap-system.org/Packages/grape.html},
-and then your archive file of choice should be downloaded and unpacked
-in the `pkg' subdirectory of an appropriate {\GAP} root directory (see
-the main {\GAP} reference section "Reference: GAP Root Directory").
+The {\GAP}~4.5 distribution includes the {\GRAPE} package, which now
+includes a 32-bit nauty/dreadnaut binary for Windows (XP and later
+versions).  Thus, {\GRAPE} normally requires no further installation
+for Windows users of {\GAP}~4.5.
 
-Regardless of whether you needed to download and unpack an archive file,
-you will need to perform compilation of B.D.~McKay's nauty/dreadnaut
-programs included with {\GRAPE}, and this can only be done on a Unix
-system.  After installing {\GAP}, go to the {\GRAPE} home directory
-(usually the directory `pkg/grape' of the {\GAP} home directory),
-and run `./configure <path>', where <path> is the path of the {\GAP}
-home directory.  So for example, if the {\GRAPE} home directory is the
-`pkg/grape' directory of the {\GAP} home directory, run
+You do not need to download and unpack an archive for {\GRAPE}
+unless you want to install the package separately from your main
+{\GAP} installation or are installing an upgrade of {\GRAPE} to an
+existing installation of {\GAP} (see the main {\GAP} reference section
+"Reference:Installing a GAP Package").  If you do need to download
+{\GRAPE}, you can find archive files for the package in various formats
+at \URL{http://www.gap-system.org/Packages/grape.html}, and then your
+archive file of choice should be downloaded and unpacked in the `pkg'
+subdirectory of an appropriate {\GAP} root directory (see the main {\GAP}
+reference section "Reference:GAP Root Directories").
 
-\begintt
-./configure ../..
+Unless you are running {\GRAPE} under Windows (XP or later), you will
+normally need to perform compilation of B.D.~McKay's nauty/dreadnaut
+programs included with {\GRAPE}, and in a Unix environment, you should
+proceed as follows.  After installing {\GAP}, go to the {\GRAPE}
+home directory (usually the directory `pkg/grape' of the {\GAP} home
+directory), and run `./configure <path>', where <path> is the path of the
+{\GAP} home directory.  So for example, if the {\GRAPE} home directory
+is the `pkg/grape' directory of the {\GAP} home directory, run
+\begintt 
+./configure ../..  
 \endtt
-
 This will create a `Makefile'. Now run
 \begintt
 make
 \endtt
-to create the binaries and to put them in the appropriate place.
-This completes the installation of {\GRAPE} for a single architecture.
-If {\GAP} is installed on different architectures on a common file system,
-this configuration process will only work for the *last* architecture for
-which {\GAP} was compiled. Therefore, you should always follow the above
-procedure to install the {\GRAPE} binaries immediately after compiling
-{\GAP} on a given architecture.
+to create the nauty/dreadnaut binary and to put it in the appropriate place.
 
-You should now test {\GRAPE} and the interface to {\nauty} on each
-architecture on which you have installed {\GRAPE}. Start up {\GAP}
-and at the prompt type
-\begintt
-LoadPackage( "grape" );
+You should test {\GRAPE} and its interface to {\nauty}.  Start up
+{\GAP} and at the prompt type 
+\begintt 
+LoadPackage( "grape" ); 
 \endtt
 On-line documentation for {\GRAPE} should be available by typing 
 \begintt
-?GRAPE
-\endtt
-The command
-\begintt
-IsIsomorphicGraph( JohnsonGraph(7,3), JohnsonGraph(7,4) );
-\endtt
+?GRAPE 
+\endtt 
+The command 
+\begintt 
+IsIsomorphicGraph( JohnsonGraph(7,3), JohnsonGraph(7,4) ); 
+\endtt 
 should return `true', and 
-\begintt
-Size( AutGroupGraph( JohnsonGraph(4,2) ) );
-\endtt
+\begintt 
+Size( AutGroupGraph( JohnsonGraph(4,2) ) ); 
+\endtt 
 should be `48'.
 
 Both dvi and pdf versions of the {\GRAPE} manual are available

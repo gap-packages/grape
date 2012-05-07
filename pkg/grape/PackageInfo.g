@@ -10,16 +10,16 @@ PackageName := "GRAPE",
 
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers.
-Version := "4.5",
+Version := "4.6",
 
 ##  Release date of the current version in dd/mm/yyyy format.
-Date := "23/11/2011",
+Date := "03/05/2012",
 
 ##  URL of the archive(s) of the current package release, but *without*
 ##  the format extension(s), like '.zoo', which are given next.
 ##  The archive file name *must be changed* with each version of the archive
 ##  (and probably somehow contain the package name and version).
-ArchiveURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r5/grape4r5",
+ArchiveURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r6/grape4r6",
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -58,7 +58,7 @@ ArchiveFormats := ".tar.gz", # the others are generated automatically
 ##  
 ##  These entries are *optional*.
 #TextFiles := ["init.g", ......],
-BinaryFiles := ["doc/manual.dvi","doc/manual.pdf","nauty22/nug.pdf"],
+BinaryFiles := ["doc/manual.dvi","doc/manual.pdf","nauty22/nug.pdf","bin/i686-pc-cygwin-gcc-default32/dreadnautB.exe"],
 
 
 ##  Information about authors and maintainers. Specify for each person a 
@@ -138,8 +138,8 @@ AcceptDate := "07/1993",
 ##  the updating of package information on the GAP Website, and inclusion
 ##  and updating of the package in the GAP distribution.
 ##  
-README_URL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r5/README",
-PackageInfoURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r5/PackageInfo.g",
+README_URL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r6/README",
+PackageInfoURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r6/PackageInfo.g",
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 
@@ -226,19 +226,13 @@ Dependencies := rec(
 # AvailabilityTest := ReturnTrue,
 AvailabilityTest := 
   function()
-#   if not ARCH_IS_WINDOWS() then
-      if Filename(DirectoriesPackagePrograms("grape"),"dreadnautB") = fail then 
-        Info(InfoWarning, 1, "Package `GRAPE': nauty/dreadnaut binaries not installed");
-        Info(InfoWarning, 1, "Package `GRAPE': functions depending on nauty will not work");
-      fi;
-#   elif ShortFileNameWindows(Filename(DirectoriesPackageLibrary(
-#          "grape","bin"),"dreadnautB.exe")) = fail then
-#     Info(InfoWarning, 1, "Package `GRAPE': nauty/dreadnaut binaries for Windows not installed");
-#     Info(InfoWarning, 1, "Package `GRAPE': functions depending on nauty will not work");
-#   fi;
+    SetInfoLevel(InfoPackageLoading,PACKAGE_WARNING);
+    if ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnautB") = fail
+      and ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnautB.exe") = fail then 
+      LogPackageLoadingMessage(PACKAGE_WARNING,["nauty/dreadnaut binary not installed,", "functions depending on nauty will not work"]);
+    fi;
     return true;
   end,
-
 
 ##  Suggest here if the package should be *automatically loaded* when GAP is 
 ##  started.  This should usually be 'false'. Say 'true' only if your package 
