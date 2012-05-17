@@ -1,36 +1,20 @@
 GRAPE Copyright Notice:
 
-The GRAPE system and the source included with this distribution
-are copyright (C) Leonard Soicher 1992-2012, with all rights reserved,
-except for the following:
+The GRAPE system and the source included with this distribution are
+copyright (C) Leonard Soicher 1992-2012, except for the following:
 
 - Brendan McKay's nauty 2.2 system; see the nauty copyright notice in
  `nauty22/nauty.h',
 - Steve Linton's `SmallestImageSet' function in `lib/smallestimage.g'
 
-You are permitted to copy and use GRAPE free of charge and to distribute
-GRAPE free of charge provided that you include a copy of this notice
-with any such distribution.  You are permitted to modify and redistribute
-GRAPE, but you are not allowed to restrict further redistribution. That
-is to say, proprietary modifications are not allowed.  You may not charge
-for GRAPE or any part of it.
-
-You may modify the programs in any way, provided that if you distribute
-a modified program, you make clear what parts of the program are your
-modifications and which are the original code. You must additionally
-supply the original unmodified code on request.
-
-GRAPE is provided "as is", with no warranty whatsoever.  The entire
-risk as to the quality and performance of the program is with you.
-Should GRAPE prove defective, you assume the cost of all necessary
-servicing, repair or correction.  In no case will we be liable to you
-for damages, including lost profits, lost monies or other special,
-incidental or consequential damages arising out of the use or inability
-to use GRAPE.
+Except for Brendan McKay's nauty 2.2 package, GRAPE is licensed under the
+terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any
+later version. For details, see \URL{http://www.gnu.org/licenses/gpl.html}
 
 Leonard H. Soicher
 School of Mathematical Sciences
 Queen Mary, University of London
 Mile End Road, London E1 4NS, UK
 
-April 2012.
+May 2012.

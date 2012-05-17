@@ -1,16 +1,16 @@
 
-                          GRAPE Version 4.6, 
+                          GRAPE Version 4.6.1, 
 
-a GAP package for computing with graphs and groups, 
-by Leonard H. Soicher, 
-with contributions from Steve Linton and Alexander Hulpke.
+a GAP package for computing with graphs and groups, by Leonard H. Soicher,
+with contributions from Steve Linton and Alexander Hulpke, and including
+Brendan McKay's nauty 2.2 package.
 
 This README document tells you how to install GRAPE and lists changes
-made to GRAPE since Version 2.2.
+made to GRAPE since Version 2.2. License and copyright information is 
+in the GRAPE file COPYING. 
 
 Installing GRAPE
------------------
-
+----------------
 The {\GAP}~4.5 distribution includes the {\GRAPE} package, which now
 includes a 32-bit nauty/dreadnaut binary for Windows (XP and later
 versions).  Thus, {\GRAPE} normally requires no further installation
@@ -33,21 +33,32 @@ programs included with {\GRAPE}, and in a Unix environment, you should
 proceed as follows.  After installing {\GAP}, go to the {\GRAPE}
 home directory (usually the directory `pkg/grape' of the {\GAP} home
 directory), and run `./configure <path>', where <path> is the path of the
-{\GAP} home directory.  So for example, if the {\GRAPE} home directory
-is the `pkg/grape' directory of the {\GAP} home directory, run
+{\GAP} home directory.  So for example, if you install {\GRAPE} in the
+`pkg' directory of the {\GAP} home directory, run
 
-./configure ../..  
+./configure ../..
 
-This will create a `Makefile'. Now run
+This will fetch the name of the architecture for which {\GAP} has been
+most recently configured, and create a `Makefile'. Now run
 
-make
+make 
 
-to create the nauty/dreadnaut binary and to put it in the appropriate place.
+to create the nauty/dreadnaut binary and to put it in the appropriate
+place.  This configuration/make process for {\GRAPE} only works for
+the *last* architecture for which {\GAP} was configured. Therefore, you
+should always follow the above procedure to install the nauty/dreadnaut
+binary immediately after compiling {\GAP} for a given configuration,
+say for a different architecture on a common file system. However, if
+you want to add {\GRAPE} later, you can just run `./configure' again in
+the {\GAP} home directory for the architecture, before performing the
+{\GRAPE} configure/make process to install the nauty/dreadnaut binary
+for that architecture.
 
-You should test {\GRAPE} and its interface to {\nauty}.  Start up
-{\GAP} and at the prompt type 
+You should now test {\GRAPE} and the interface to {\nauty} on each
+architecture on which you have installed {\GRAPE}. Start up {\GAP}
+and at the prompt type
 
-LoadPackage( "grape" ); 
+LoadPackage( "grape" );
 
 On-line documentation for {\GRAPE} should be available by typing 
 
@@ -71,9 +82,17 @@ of the home directory of {\GRAPE}.
 If you use GRAPE to solve a problem, then please email
 L.H.Soicher@qmul.ac.uk, and reference:
 
-L.H. Soicher, The GRAPE package for GAP, Version 4.6, 2012, 
+L.H. Soicher, The GRAPE package for GAP, Version 4.6.1, 2012, 
 http://www.maths.qmul.ac.uk/~leonard/grape/
 ------------------------------------------------------------------------
+
+Main changes from GRAPE 4.6 to GRAPE 4.6.1:
+-------------------------------------------
+
+(1) Except for nauty 2.2, GRAPE is now licensed under the GPL,
+version 2 or higher.
+
+(2) Installation instructions revised.
 
 Main changes from GRAPE 4.5 to GRAPE 4.6:
 ------------------------------------------
@@ -299,4 +318,4 @@ the effect that if the returned graph had loops, then it
 might have had its isSimple component erroneously set to true.
 
 Leonard H. Soicher
-April 2012 
+May 2012 
