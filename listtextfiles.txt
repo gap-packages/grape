@@ -1,3 +1,4 @@
+grape/gpl.txt
 grape/README
 grape/init.g
 grape/PackageInfo.g

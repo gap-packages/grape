@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdftex 2012.2.18)  7 MAY 2012 06:56
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdftex 2012.2.18)  20 MAY 2012 12:44
 entering extended mode
  %&-line parsing enabled.
 **manual
@@ -62,7 +62,7 @@ Chapter `Grape' .
 Label `Reference:Installing a GAP Package' undefined.
 Label `Reference:GAP Root Directories' undefined.
 [5.1]
-Overfull \hbox (5.4364pt too wide) in paragraph at lines 139--144
+Overfull \hbox (5.4364pt too wide) in paragraph at lines 155--160
 []\tenrm In \sf GRAPE\tenrm , a graph \tenit gamma \tenrm is stored as a record
 , with manda-tory com-po-nents \tentt is-Graph\tenrm , \tentt or-der\tenrm , \t
 entt group\tenrm , \tentt schreierVec-|
@@ -76,7 +76,7 @@ entt group\tenrm , \tentt schreierVec-|
 .etc.
 
 
-Overfull \hbox (16.77689pt too wide) in paragraph at lines 145--161
+Overfull \hbox (16.77689pt too wide) in paragraph at lines 161--177
 []\tenrm The \tentt or-der \tenrm com-po-nent con-tains the num-ber of ver-tice
 s of \tenit gamma\tenrm . The ver-tices of \tenit gamma \tenrm are al-ways 1,2,
 ...,\tenit gamma\tentt .order\tenrm ,|
@@ -92,19 +92,19 @@ s of \tenit gamma\tenrm . The ver-tices of \tenit gamma \tenrm are al-ways 1,2,
 [6.1]
 \openout6 = `manual.example-1.tst'.
 
-) (./consmod.tex [7.1]
+ [7.1]) (./consmod.tex [8.1]
 Chapter `Functions to construct and modify graphs' .
 \openout6 = `manual.example-2.tst'.
 
-[8.2] [9.2] [10.2] [11.2] [12.2]) (./inspect.tex [13.2]
+[9.2] [10.2] [11.2] [12.2] [13.2]) (./inspect.tex [14.2]
 Chapter `Functions to inspect graphs, vertices and edges' .
 \openout6 = `manual.example-3.tst'.
 
-[14.3] [15.3] [16.3] [17.3] [18.3]) (./determin.tex [19.3]
+[15.3] [16.3] [17.3] [18.3] [19.3]) (./determin.tex [20.3]
 Chapter `Functions to determine regularity properties of graphs' .
 \openout6 = `manual.example-4.tst'.
 
-[20.4]
+[21.4]
 Overfull \hbox (30.11299pt too wide) in paragraph at lines 84--88
 []\tenrm The func-tion \tentt Glob-al-Pa-ram-e-ters \tenrm re-turns a list of l
 ength \tentt Di-am-e-ter\tenrm (\tenit gamma\tenrm )+1, whose $\tenit i$\tenrm 
@@ -119,19 +119,19 @@ ength \tentt Di-am-e-ter\tenrm (\tenit gamma\tenrm )+1, whose $\tenit i$\tenrm
 .\glue 2.5 plus 1.49998 minus 0.59998
 .etc.
 
-[21.4] [22.4]) (./special.tex [23.4]
+[22.4] [23.4]) (./special.tex [24.4]
 Chapter `Some special vertex subsets of a graph' .
 \openout6 = `manual.example-5.tst'.
 
-[24.5]) (./constr.tex [25.5]
+[25.5]) (./constr.tex [26.5]
 Chapter `Functions to construct new graphs from old' .
 \openout6 = `manual.example-6.tst'.
 
-[26.6] [27.6] [28.6] [29.6] [30.6] [31.6] [32.6]) (./colour.tex [33.6]
+[27.6] [28.6] [29.6] [30.6] [31.6] [32.6] [33.6]) (./colour.tex [34.6]
 Chapter `Vertex-Colouring and Complete Subgraphs' .
 \openout6 = `manual.example-7.tst'.
 
-[34.7]
+[35.7]
 Overfull \hbox (2.7456pt too wide) in paragraph at lines 147--153
 \tenit gamma\tentt .group \tenrm orbit-representatives of the size \tenit k \te
 nrm com-plete sub-graphs of \tenit gamma\tenrm . If \tenit alls\tenrm =1 (the d
@@ -145,19 +145,19 @@ e-fault) and \tenit maxi\tenrm =\tentt true\tenrm ,|
 .\tenit a
 .etc.
 
-[35.7]) (./cnauty.tex [36.7]
+[36.7]) (./cnauty.tex [37.7]
 Chapter `Automorphism groups and isomorphism testing for graphs' .
 \openout6 = `manual.example-8.tst'.
 
-[37.8] [38.8] [39.8]) (./partlin.tex [40.8]
+[38.8] [39.8] [40.8]) (./partlin.tex [41.8]
 Chapter `Partial Linear Spaces' .
 \openout6 = `manual.example-9.tst'.
 
-[41.9] [42.9] [43.9]) [44.9]
+[42.9] [43.9] [44.9]) [45.9]
 Chapter `Bibliography' .
-(./manual.bbl) [45.10]
+(./manual.bbl) [46.10]
 Chapter `Index' .
-(./manual.ind [46.11]) [47.11]
+(./manual.ind [47.11]) [48.11]
 ##
 ## Citations for BibTeX written on manual.aux.
 ## Index entries for makeindex written on manual.idx.
@@ -177,9 +177,9 @@ helvetic/uhvr8a.pfb></usr/share/texmf/fonts/type1/urw/symbol/usyr.pfb></usr/sha
 re/texmf/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf/fonts/type1/urw/tim
 es/utmr8a.pfb></usr/share/texmf/fonts/type1/urw/times/utmr8a.pfb></usr/share/te
 xmf/fonts/type1/urw/times/utmri8a.pfb>
-Output written on manual.pdf (47 pages, 285794 bytes).
+Output written on manual.pdf (48 pages, 287336 bytes).
 PDF statistics:
- 786 PDF objects out of 1000 (max. 8388607)
+ 789 PDF objects out of 1000 (max. 8388607)
  111 named destinations out of 1000 (max. 131072)
  809 words of extra memory for PDF output out of 10000 (max. 10000000)
 

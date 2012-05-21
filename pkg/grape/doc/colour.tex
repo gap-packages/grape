@@ -165,11 +165,10 @@ returned. If <maxi>=`true' then only maximal complete subgraphs of size
 meant that it was assumed (but not checked) that all complete subgraphs
 of size <k> were maximal.)
 
-The optional boolean parameter <col> is used to determine whether or
-not partial proper vertex-colouring is used to cut down the search
-tree. The default is `true', which says to use this partial colouring
-(and which seems to be a good idea).  For backward compatibility, <col>
-a rational number means the same as <col>=`true'.
+The optional boolean parameter <col> is used to determine whether or not
+partial proper vertex-colouring is used to cut down the search tree. The
+default is `true', which says to use this partial colouring.  For backward
+compatibility, <col> a rational number means the same as <col>=`true'.
 
 The optional parameter <wts> should be a list of vertex-weights; the list
 should be of length `<gamma>.order', with the <i>-th element being the

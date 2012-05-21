@@ -10,16 +10,16 @@ PackageName := "GRAPE",
 
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers.
-Version := "4.6",
+Version := "4.6.1",
 
 ##  Release date of the current version in dd/mm/yyyy format.
-Date := "03/05/2012",
+Date := "17/05/2012",
 
 ##  URL of the archive(s) of the current package release, but *without*
 ##  the format extension(s), like '.zoo', which are given next.
 ##  The archive file name *must be changed* with each version of the archive
 ##  (and probably somehow contain the package name and version).
-ArchiveURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r6/grape4r6",
+ArchiveURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r6/grape4r6p1",
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -226,7 +226,6 @@ Dependencies := rec(
 # AvailabilityTest := ReturnTrue,
 AvailabilityTest := 
   function()
-    SetInfoLevel(InfoPackageLoading,PACKAGE_WARNING);
     if ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnautB") = fail
       and ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnautB.exe") = fail then 
       LogPackageLoadingMessage(PACKAGE_WARNING,["nauty/dreadnaut binary not installed,", "functions depending on nauty will not work"]);

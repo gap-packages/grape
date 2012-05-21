@@ -11,7 +11,7 @@
 <li> <A HREF="CHAP001.htm#SECT004">Examples of the use of GRAPE</a>
 </ol><p>
 <p>
-This manual describes the GRAPE (Version&nbsp;4.6) package for computing
+This manual describes the GRAPE (Version&nbsp;4.6.1) package for computing
 with graphs and groups.
 <p>
 GRAPE is primarily designed for the construction and analysis of
@@ -33,19 +33,24 @@ However, the GRAPE functions <code>AutomorphismGroup</code>, <code>AutGroupGraph
 of B.D.&nbsp;McKay's nauty (Version&nbsp;2.2 final) package <a href="biblio.htm#Nau90"><cite>Nau90</cite></a>,
 via a GRAPE interface.  These functions can only be used on a fully
 installed version of GRAPE. Installation of GRAPE is described
-in its <code>README</code> file and in its manual section <a href="CHAP001.htm#SECT001">Installing the GRAPE Package</a>.
+in its <code>README</code> file and in its manual section <a href="CHAP001.htm#SECT001">Installing the GRAPE Package</a>. 
 <p>
 Except for the nauty package included with GRAPE, the function
-<code>SmallestImageSet</code> by Steve Linton, and the new nauty interface
-by Alexander Hulpke, the GRAPE package was designed and written
-by Leonard H. Soicher, School of Mathematical Sciences, Queen Mary,
-University of London.
+<code>SmallestImageSet</code> by Steve Linton, and the new nauty interface by
+Alexander Hulpke, the GRAPE package was designed and written by Leonard
+H. Soicher, School of Mathematical Sciences, Queen Mary, University of
+London.  Except for the nauty package, GRAPE is licensed under the
+terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version. For details, see <a href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a>.
+Further licensing and copyright information for GRAPE is contained 
+in its <code>COPYING</code> file. 
 <p>
 If you use GRAPE to solve a problem then please send a short email
 about it to <a href="mailto:L.H.Soicher@qmul.ac.uk">L.H.Soicher@qmul.ac.uk</a>, and reference the GRAPE 
 package as follows:
 <p>
-L.H. Soicher, The GRAPE package for GAP, Version&nbsp;4.6, 2012,
+L.H. Soicher, The GRAPE package for GAP, Version&nbsp;4.6.1, 2012,
 <a href="http://www.maths.qmul.ac.uk/~leonard/grape/">http://www.maths.qmul.ac.uk/~leonard/grape/</a>.
 <p>
 If your work made use of a function depending on the nauty package
@@ -79,33 +84,44 @@ programs included with GRAPE, and in a Unix environment, you should
 proceed as follows.  After installing <font face="Gill Sans,Helvetica,Arial">GAP</font>, go to the GRAPE
 home directory (usually the directory <code>pkg/grape</code> of the <font face="Gill Sans,Helvetica,Arial">GAP</font> home
 directory), and run <code>./configure </code><var>path</var><code></code>, where <var>path</var> is the path of the
-<font face="Gill Sans,Helvetica,Arial">GAP</font> home directory.  So for example, if the GRAPE home directory
-is the <code>pkg/grape</code> directory of the <font face="Gill Sans,Helvetica,Arial">GAP</font> home directory, run
+<font face="Gill Sans,Helvetica,Arial">GAP</font> home directory.  So for example, if you install GRAPE in the
+<code>pkg</code> directory of the <font face="Gill Sans,Helvetica,Arial">GAP</font> home directory, run
 <pre>
-./configure ../..  
+./configure ../..
 </pre>
-This will create a <code>Makefile</code>. Now run
+This will fetch the name of the architecture for which <font face="Gill Sans,Helvetica,Arial">GAP</font> has been
+most recently configured, and create a <code>Makefile</code>. Now run
 <pre>
-make
+make 
 </pre>
-to create the nauty/dreadnaut binary and to put it in the appropriate place.
+to create the nauty/dreadnaut binary and to put it in the appropriate
+place.  This configuration/make process for GRAPE only works for
+the <strong>last</strong> architecture for which <font face="Gill Sans,Helvetica,Arial">GAP</font> was configured. Therefore, you
+should always follow the above procedure to install the nauty/dreadnaut
+binary immediately after compiling <font face="Gill Sans,Helvetica,Arial">GAP</font> for a given configuration,
+say for a different architecture on a common file system. However, if
+you want to add GRAPE later, you can just run <code>./configure</code> again in
+the <font face="Gill Sans,Helvetica,Arial">GAP</font> home directory for the architecture, before performing the
+GRAPE configure/make process to install the nauty/dreadnaut binary
+for that architecture.
 <p>
-You should test GRAPE and its interface to nauty.  Start up
-<font face="Gill Sans,Helvetica,Arial">GAP</font> and at the prompt type 
+You should now test GRAPE and the interface to nauty on each
+architecture on which you have installed GRAPE. Start up <font face="Gill Sans,Helvetica,Arial">GAP</font>
+and at the prompt type
 <pre>
-LoadPackage( "grape" ); 
+LoadPackage( "grape" );
 </pre>
 On-line documentation for GRAPE should be available by typing 
 <pre>
-?GRAPE 
+?GRAPE
 </pre>
-The command 
+The command
 <pre>
-IsIsomorphicGraph( JohnsonGraph(7,3), JohnsonGraph(7,4) ); 
+IsIsomorphicGraph( JohnsonGraph(7,3), JohnsonGraph(7,4) );
 </pre>
 should return <code>true</code>, and 
 <pre>
-Size( AutGroupGraph( JohnsonGraph(4,2) ) ); 
+Size( AutGroupGraph( JohnsonGraph(4,2) ) );
 </pre>
 should be <code>48</code>.
 <p>
