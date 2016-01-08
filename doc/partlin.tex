@@ -6,6 +6,7 @@
 %
 \def\GRAPE{\sf GRAPE}
 \def\nauty{\it nauty}
+\def\bliss{\it bliss}
 \def\G{\Gamma}
 \def\Aut{{\rm Aut}\,}
 \def\x{\times}
@@ -40,9 +41,8 @@ application of this function.
 \>PartialLinearSpaces( <ptgraph>, <s>, <t>, <nspaces>, <printlevel>, <cliques> )
 
 This function classifies the partial linear spaces with given point
-graph <ptgraph>, and parameters (<s>,<t>). It calls functions making
-use of the {\nauty} package within {\GRAPE}, and so can only be used on
-systems on which {\GRAPE} has been fully installed.
+graph <ptgraph> and parameters (<s>,<t>). It makes use (indirectly)
+of {\nauty} \cite{Nau90,MP14} or {\bliss} \cite{JK07}.
 
 The function `PartialLinearSpaces' returns a list of representatives
 of distinct isomorphism classes of partial linear spaces with (simple)

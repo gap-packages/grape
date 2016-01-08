@@ -6,16 +6,20 @@
 %
 \def\GRAPE{\sf GRAPE}
 \def\nauty{\it nauty}
+\def\bliss{\it bliss}
 \def\G{\Gamma}
 \def\Aut{{\rm Aut}\,}
 \def\x{\times}
 \Chapter{Automorphism groups and isomorphism testing for graphs}
 
-{\GRAPE} provides a basic interface to B.D.~McKay{\pif}s {\nauty}
-(Version~2.2 final) package for calculating automorphism groups of
-graphs and for testing graph isomorphism (see \cite{Nau90}). To use a
-function described in this chapter, which depends on {\nauty}, {\GRAPE}
-must be fully installed (see "Installing the GRAPE Package").
+{\GRAPE} includes B.D.~McKay{\pif}s {\nauty} (Version~2.2, final patched
+version) package for calculating automorphism groups of graphs and for
+testing graph isomorphism (see \cite{Nau90,MP14}).  As described in
+Section "Installing the GRAPE Package", a user may instead use their own
+copy of dreadnaut or dreadnautB from a later version of {\nauty}, or may
+use T.~Juntilla{\pif}s and P.~Kaski{\pif}s {\bliss} package \cite{JK07}
+instead of {\nauty}. Many functions described in this chapter make use
+of {\nauty} or {\bliss}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Graphs with colour-classes}
@@ -46,13 +50,14 @@ adjacent vertices be in different colour-classes.
 \>AutGroupGraph( <gamma>, <colourclasses> )
 
 The first version of this function returns the automorphism group of
-the graph (or graph with colour-classes) <gamma>, using {\nauty} (this
-can also be accomplished by typing `AutomorphismGroup(<gamma>)'). The
-*automorphism group* $\Aut(<gamma>)$ of a graph <gamma> is the
-group consisting of the permutations of the vertices of <gamma> which
-preserve the edge-set of <gamma>.  The *automorphism group* of a graph
-with colour-classes is the subgroup of the automorphism group of the
-graph which preserves the colour-classes (classwise).
+the graph (or graph with colour-classes) <gamma>, using {\nauty} 
+or {\bliss} (this can also be accomplished by typing
+`AutomorphismGroup(<gamma>)'). The *automorphism group* $\Aut(<gamma>)$
+of a graph <gamma> is the group consisting of the permutations
+of the vertices of <gamma> which preserve the edge-set of <gamma>.
+The *automorphism group* of a graph with colour-classes is the subgroup
+of the automorphism group of the graph which preserves the colour-classes
+(classwise).
 
 The second version of this function is maintained only for backward
 compatibility. For this version <gamma> must be a graph, <colourclasses>
@@ -86,12 +91,12 @@ gap> Size(AutomorphismGroup( rec(graph:=gamma,colourClasses:=[[1,6],[2,3,4,5]]) 
 \>GraphIsomorphism( <gamma1>, <gamma2>, <firstunbindcanon> )
 
 Let <gamma1> and <gamma2> both be graphs or both be graphs with
-colour-classes.  Then this function makes use of the {\nauty} package to
+colour-classes.  Then this function makes use of {\nauty} or {\bliss} to
 (try to) determine an isomorphism from <gamma1> to <gamma2>.  If <gamma1>
 and <gamma2> are isomorphic, then this function returns an isomorphism
-from <gamma1> to <gamma2>. This isomorphism will be a permutation of
-the vertices of <gamma1> which maps the edge-set of <gamma1> onto that
-of <gamma2>, and if <gamma1> and <gamma2> are graphs with colour-classes,
+from <gamma1> to <gamma2>. This isomorphism will be a permutation of the
+vertices of <gamma1> which maps the edge-set of <gamma1> onto that of
+<gamma2>, and if <gamma1> and <gamma2> are graphs with colour-classes,
 this isomorphism will also map the colour-class list of <gamma1> to that
 of <gamma2> (classwise). If <gamma1> and <gamma2> are not isomorphic
 then this function returns `fail'.
@@ -102,12 +107,19 @@ are first unbound before proceeding.  If <firstunbindcanon> is `true'
 (the default, safe and possibly slower option) then these components
 are first unbound.  If <firstunbindcanon> is `false', then any existing
 `canonicalLabelling' components are used.  However, since canonical
-labellings can depend on the version of {\nauty}, the version of
-{\GRAPE}, parameter settings of {\nauty}, and the compiler and computer
+labellings can depend on whether {\nauty} or {\bliss} is used, the version
+of {\nauty} or {\bliss} used, the version of {\GRAPE}, parameter settings
+of {\nauty} or {\bliss}, and possibly even the compiler and computer
 used, you must be sure that if <firstunbindcanon>=`false' then the
 `canonicalLabelling' component(s) which may already exist for <gamma1>
 or <gamma2> were created in exactly the same environment in which you
 are presently computing.
+
+Please also note that a canonical labelling for a {\GRAPE} graph is the
+inverse of what a canononical labelling for a graph is usually defined as
+(such as in {\bliss}), in that in {\GRAPE}, the image of a graph under
+the *inverse* of its canonical labelling is the calculated canonical
+version of that graph.
 
 See also "IsIsomorphicGraph".
 
@@ -147,27 +159,35 @@ fail
 \>IsIsomorphicGraph( <gamma1>, <gamma2>, <firstunbindcanon> )
 
 Let <gamma1> and <gamma2> both be graphs or both be graphs with
-colour-classes.  Then this boolean function makes use of the {\nauty}
-package to test whether <gamma1> and <gamma2> are isomorphic (as graphs or
-as graphs with colour-classes, respectively). The value `true' is returned
-if and only if the graphs (or graphs with colour-classes) are isomorphic.
+colour-classes.  Then this boolean function makes use of the {\nauty} or 
+{\bliss} package to test whether <gamma1> and <gamma2> are isomorphic 
+(as graphs or as graphs with colour-classes, respectively). The
+value `true' is returned if and only if the graphs (or graphs with
+colour-classes) are isomorphic.
 
 The optional boolean parameter <firstunbindcanon> determines whether or
 not the `canonicalLabelling' components of both <gamma1> and <gamma2>
-are first unbound before testing isomorphism.  If <firstunbindcanon>
-is `true' (the default, safe and possibly slower option) then these
-components are first unbound.  If <firstunbindcanon> is `false', then any
-existing `canonicalLabelling' components are used, which was the behaviour
-in versions of {\GRAPE} before 4.0.  However, since canonical labellings
-can depend on the version of {\nauty}, the version of {\GRAPE}, parameter
-settings of {\nauty}, and the compiler and computer used, you must be
-sure that if <firstunbindcanon>=`false' then the `canonicalLabelling'
-component(s) which may already exist for <gamma1> or <gamma2> were created
-in exactly the same environment in which you are presently computing.
+are first unbound before proceeding.  If <firstunbindcanon> is `true'
+(the default, safe and possibly slower option) then these components
+are first unbound.  If <firstunbindcanon> is `false', then any existing
+`canonicalLabelling' components are used.  However, since canonical
+labellings can depend on whether {\nauty} or {\bliss} is used, the version
+of {\nauty} or {\bliss} used, the version of {\GRAPE}, parameter settings
+of {\nauty} or {\bliss}, and possibly even the compiler and computer
+used, you must be sure that if <firstunbindcanon>=`false' then the
+`canonicalLabelling' component(s) which may already exist for <gamma1>
+or <gamma2> were created in exactly the same environment in which you
+are presently computing.
 
 See also "GraphIsomorphism".  For pairwise isomorphism testing
 of three or more graphs (or graphs with colour-classes), see
 "GraphIsomorphismClassRepresentatives".
+
+Please also note that a canonical labelling for a {\GRAPE} graph is the
+inverse of what a canononical labelling for a graph is usually defined as
+(such as in {\bliss}), in that in {\GRAPE}, the image of a graph under
+the *inverse* of its canonical labelling is the calculated canonical
+version of that graph.
 
 \beginexample
 gap> gamma := JohnsonGraph(5,3);
@@ -204,8 +224,8 @@ false
 \>GraphIsomorphismClassRepresentatives( <L> )
 \>GraphIsomorphismClassRepresentatives( <L>, <firstunbindcanon> )
 
-Given a list <L> of graphs, or of graphs with colour-classes,
-this function uses {\nauty} to return a list consisting of pairwise
+Given a list <L> of graphs, or of graphs with colour-classes, this
+function uses {\nauty} or {\bliss} to return a list consisting of pairwise
 non-isomorphic elements of <L>, representing all the isomorphism classes
 of elements of <L>.
 
@@ -215,15 +235,22 @@ are first unbound before proceeding.  If <firstunbindcanon> is `true'
 (the default, safe and possibly slower option) then these components
 are first unbound.  If <firstunbindcanon> is `false', then any existing
 `canonicalLabelling' components of elements of <L> are used.  However,
-since canonical labellings can depend on the version of {\nauty}, the
-version of {\GRAPE}, parameter settings of {\nauty}, and the compiler
+since canonical labellings can depend on whether {\nauty} or {\bliss} is
+used, the version of {\nauty} or {\bliss} used, the version of {\GRAPE},
+parameter settings of {\nauty} or {\bliss}, and possibly even the compiler
 and computer used, you must be sure that if <firstunbindcanon>=`false'
-then the `canonicalLabelling' component(s) which may already exist for
+then any `canonicalLabelling' component(s) which may already exist for
 elements of <L> were created in exactly the same environment in which
 you are presently computing.
 
 It is assumed that the computing environment is constant throughout the 
 execution of this function.
+
+Please also note that a canonical labelling for a {\GRAPE} graph is the
+inverse of what a canononical labelling for a graph is usually defined as
+(such as in {\bliss}), in that in {\GRAPE}, the image of a graph under
+the *inverse* of its canonical labelling is the calculated canonical
+version of that graph.
 
 \beginexample 
 gap> A:=JohnsonGraph(5,3);

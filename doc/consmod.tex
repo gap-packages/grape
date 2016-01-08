@@ -14,8 +14,8 @@ This chapter describes the functions used to construct and modify graphs.
 \>Graph( <G>, <L>, <act>, <rel> )
 \>Graph( <G>, <L>, <act>, <rel>, <invt> )
 
-This  is the most  general  and  useful  way  of constructing a graph  in
-{\GRAPE}.
+This  is the most  general  and  useful  way  of constructing a graph
+in {\GRAPE}.
 
 First suppose that the optional boolean parameter <invt> is unbound or
 has value `false'. Then <L> should be a list of elements of a set $S$ on
@@ -40,32 +40,7 @@ of <gamma> become (an immutable copy of) <L>.
 The group associated with the graph <gamma> returned is  the image of <G>
 acting via <act> on `<gamma>.names'.
 
-For example, suppose you have an $n$ by $n$ adjacency matrix $A$ for a
-graph $X$, so that the vertex-set of $X$ is $\{1,\ldots, n\}$, and
-$[i,j]$ is an edge of $X$ if and only if $A[i][j]=1$. Suppose also that
-$G\le \Aut (X)$ ($G$ may be trivial). Then you can make a {\GRAPE}
-graph isomorphic to $X$ via `Graph( G,  [1..n], OnPoints, function(x,y)
-return A[x][y]=1; end, true );'
-
-\beginexample
-gap> A := [[0,1,0],[1,0,0],[0,0,1]];
-[ [ 0, 1, 0 ], [ 1, 0, 0 ], [ 0, 0, 1 ] ]
-gap> G := Group( (1,2) );
-Group([ (1,2) ])
-gap> Graph( G, [1..3], OnPoints,
->        function(x,y) return A[x][y]=1; end,
->        true );
-rec(
-  isGraph := true,
-  order := 3,
-  group := Group( [ (1,2) ] ),
-  schreierVector := [ -1, 1, -2 ],
-  adjacencies := [ [ 2 ], [ 3 ] ],
-  representatives := [ 1, 3 ],
-  names := [ 1, 2, 3 ] )
-\endexample
-
-We now use `Graph' to construct the Petersen graph.
+For example, we may use `Graph' to construct the Petersen graph as follows:
 
 \beginexample
 gap> Petersen := Graph( SymmetricGroup(5), [[1,2]], OnSets,
@@ -80,6 +55,26 @@ rec(
   representatives := [ 1 ],
   names := [ [ 1, 2 ], [ 2, 3 ], [ 3, 4 ], [ 1, 3 ], [ 4, 5 ], [ 2, 4 ],
       [ 1, 5 ], [ 3, 5 ], [ 1, 4 ], [ 2, 5 ] ] )
+\endexample
+
+The function `Graph' may be used to construct a graph in {\GRAPE} format
+from an adjacency matrix\index{adjacency matrix} for that graph. For
+example, suppose you have an $n$ by $n$ adjacency matrix $A$ for a graph
+$gamma$, so that the vertex-set of $gamma$ is $\{1,\ldots,n\}$, and
+$[i,j]$ is an edge of $gamma$ if and only if $A[i][j]=1$.  Then the graph
+$gamma$ in {\GRAPE}-graph format, with associated group the trivial group,
+is returned by `Graph( Group(()), [1..n], OnPoints, function(x,y) return
+A[x][y]=1; end, true );'
+
+\beginexample
+gap> A := [[0,1,0],[1,0,0],[0,0,1]];
+[ [ 0, 1, 0 ], [ 1, 0, 0 ], [ 0, 0, 1 ] ]
+gap> gamma := Graph( Group(()), [1..3], OnPoints,
+>        function(x,y) return A[x][y]=1; end,
+>        true );
+rec( adjacencies := [ [ 2 ], [ 1 ], [ 3 ] ], group := Group(()), 
+  isGraph := true, names := [ 1, 2, 3 ], order := 3,
+  representatives := [ 1, 2, 3 ], schreierVector := [ -1, -2, -3 ] )
 \endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
