@@ -6,11 +6,12 @@
 %
 \def\GRAPE{\sf GRAPE}
 \def\nauty{\it nauty}
+\def\bliss{\it bliss}
 \def\Aut{{\rm Aut}\,} 
 
 \Chapter{Grape}
 
-This manual describes the {\GRAPE} (Version~4.6.1) package for computing
+This manual describes the {\GRAPE} (Version~4.7) package for computing
 with graphs and groups.
 
 {\GRAPE} is primarily designed for the construction and analysis of
@@ -28,103 +29,135 @@ hopefully never more than a fixed constant factor).
 Most {\GRAPE} functions are written entirely in the {\GAP} language.
 However, the {\GRAPE} functions `AutomorphismGroup', `AutGroupGraph',
 `IsIsomorphicGraph', `GraphIsomorphismClassRepresentatives',
-`GraphIsomorphism'  and `PartialLinearSpaces' make direct or indirect use
-of B.D.~McKay{\pif}s {\nauty} (Version~2.2 final) package \cite{Nau90},
+`GraphIsomorphism'  and `PartialLinearSpaces' make direct or indirect
+use the {\nauty} \cite{Nau90,MP14} or {\bliss} \cite{JK07} packages,
 via a {\GRAPE} interface.  These functions can only be used on a fully
-installed version of {\GRAPE}. Installation of {\GRAPE} is described
-in its `README' file and in its manual section "Installing the GRAPE
-Package". 
+installed version of {\GRAPE}. Installation of {\GRAPE} is described in
+this chapter of the manual.
 
-Except for the {\nauty} package included with {\GRAPE}, the function
-`SmallestImageSet' by Steve Linton, and the new {\nauty} interface by
-Alexander Hulpke, the {\GRAPE} package was designed and written by Leonard
-H. Soicher, School of Mathematical Sciences, Queen Mary, University of
-London.  Except for the {\nauty} package, {\GRAPE} is licensed under the
+Except for the {\nauty} package of B.D.~Mckay included with {\GRAPE},
+the function `SmallestImageSet' by Steve Linton, the {\nauty} interface
+by Alexander Hulpke, and the initial {\bliss} interface by Jerry James,
+the {\GRAPE} package was designed and written by Leonard H. Soicher,
+School of Mathematical Sciences, Queen Mary University of London.
+Except for the included {\nauty} package, {\GRAPE} is licensed under the
 terms of the GNU General Public License as published by the Free Software
 Foundation; either version 2 of the License, or (at your option) any later
 version. For details, see \URL{http://www.gnu.org/licenses/gpl.html}.
-Further licensing and copyright information for {\GRAPE} is contained 
-in its `COPYING' file. 
+Further licensing and copyright information for {\GRAPE} is contained
+in its `COPYING' file.
 
 If you use {\GRAPE} to solve a problem then please send a short email
 about it to \Mailto{L.H.Soicher@qmul.ac.uk}, and reference the {\GRAPE} 
 package as follows:
 
-L.H. Soicher, The {GRAPE} package for {GAP}, Version~4.6.1, 2012,
+L.H. Soicher, The {GRAPE} package for {GAP}, Version~4.7, 2016,
 \URL{http://www.maths.qmul.ac.uk/~leonard/grape/}.
 
-If your work made use of a function depending on the {\nauty} package
-then you should also reference {\nauty} \cite{Nau90}.
+If your work made use of a function depending on {\nauty} or {\bliss}
+then you should also reference {\nauty} \cite{Nau90,MP14} or {\bliss}
+\cite{JK07} as appropriate.
 
-The development of {\GRAPE} was partially supported by a European Union
-HCM grant in ``Computational Group Theory''.
+The development of {\GRAPE} was partially supported by a European
+Union HCM grant in ``Computational Group Theory''. It is currently
+partially supported by EPSRC grant EP/M022641/1 (CoDiMa: a Collaborative
+Computational Project in the area of Computational Discrete Mathematics).
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Installing the GRAPE Package}
 
-The {\GAP}~4.5 distribution includes the {\GRAPE} package, which now
-includes a 32-bit nauty/dreadnaut binary for Windows (XP and later
-versions).  Thus, {\GRAPE} normally requires no further installation
-for Windows users of {\GAP}~4.5.
+Since version 4.5, the official {\GAP} distribution includes the {\GRAPE}
+package, which includes a 32-bit nauty/dreadnaut binary for Windows
+(XP and later versions).  Thus, {\GRAPE} normally requires no further
+installation for Windows users of {\GAP}.
 
 You do not need to download and unpack an archive for {\GRAPE}
 unless you want to install the package separately from your main
 {\GAP} installation or are installing an upgrade of {\GRAPE} to an
 existing installation of {\GAP} (see the main {\GAP} reference section
 "Reference:Installing a GAP Package").  If you do need to download
-{\GRAPE}, you can find archive files for the package in various formats
-at \URL{http://www.gap-system.org/Packages/grape.html}, and then your
-archive file of choice should be downloaded and unpacked in the `pkg'
+{\GRAPE}, you can find the most recent `.tar.gz' archive file for
+the package at \URL{http://www.maths.qmul.ac.uk/~leonard/grape/}, and
+then this archive file should be downloaded and unpacked in the `pkg'
 subdirectory of an appropriate {\GAP} root directory (see the main {\GAP}
 reference section "Reference:GAP Root Directories").
 
-Unless you are running {\GRAPE} under Windows (XP or later), you will
-normally need to perform compilation of B.D.~McKay's nauty/dreadnaut
-programs included with {\GRAPE}, and in a Unix environment, you should
-proceed as follows.  After installing {\GAP}, go to the {\GRAPE}
-home directory (usually the directory `pkg/grape' of the {\GAP} home
-directory), and run `./configure <path>', where <path> is the path of the
-{\GAP} home directory.  So for example, if you install {\GRAPE} in the
-`pkg' directory of the {\GAP} home directory, run
-\begintt
+If your {\GRAPE} installation does not include a pre-compiled binary of 
+the nauty/dreadnaut programs included with {\GRAPE} and you do not want 
+to use an already installed version of {\nauty} or {\bliss}, you will 
+need to perform compilation of the nauty/dreadnaut programs included with
+{\GRAPE}, and to do this in a Unix environment, you should proceed as
+follows.  After installing {\GAP}, go to the {\GRAPE} home directory
+(usually the directory `pkg/grape' of the {\GAP} home directory),
+and run `./configure <path>', where <path> is the path of the {\GAP}
+home directory.  So for example, if you install {\GRAPE} in the `pkg'
+directory of the {\GAP} home directory, run 
+\begintt 
 ./configure ../..
-\endtt
-This will fetch the name of the architecture for which {\GAP} has been
-most recently configured, and create a `Makefile'. Now run
-\begintt
+\endtt 
+This will fetch the name of the architecture for which {\GAP}
+has been most recently configured, and create a `Makefile'. Now run
+\begintt 
 make 
-\endtt
-to create the nauty/dreadnaut binary and to put it in the appropriate
-place.  This configuration/make process for {\GRAPE} only works for
-the *last* architecture for which {\GAP} was configured. Therefore, you
-should always follow the above procedure to install the nauty/dreadnaut
-binary immediately after compiling {\GAP} for a given configuration,
-say for a different architecture on a common file system. However, if
-you want to add {\GRAPE} later, you can just run `./configure' again in
-the {\GAP} home directory for the architecture, before performing the
-{\GRAPE} configure/make process to install the nauty/dreadnaut binary
-for that architecture.
+\endtt 
+to create the nauty/dreadnaut binary and to put
+it in the appropriate place.  This configuration/make process for
+{\GRAPE} only works for the *last* architecture for which {\GAP} was
+configured. Therefore, you should always follow the above procedure to
+install the nauty/dreadnaut binary immediately after compiling {\GAP}
+for a given configuration, say for a different architecture on a common
+file system. However, if you want to add {\GRAPE} later, you can just run
+`./configure' again in the {\GAP} home directory for the architecture,
+before performing the {\GRAPE} configure/make process to install the
+nauty/dreadnaut binary for that architecture.
 
-You should now test {\GRAPE} and the interface to {\nauty} on each
-architecture on which you have installed {\GRAPE}. Start up {\GAP}
-and at the prompt type
+To use {\GRAPE} with a separately installed version of {\nauty} or
+{\bliss} you should proceed as follows. Please note that the {\nauty}
+interface for {\GRAPE} has only been extensively tested with the
+included Version~2.2 of {\nauty}, and the {\bliss} interface has only
+been tested with Version~0.73 of {\bliss}. To use a separately
+installed version of {\nauty}, type the following commands in {\GAP}, or 
+place these commands in your `gaprc' file (see "REF:The gaprc file"), where
+`dreadnaut_or_dreadnautB_executable' should be the name of your
+dreadnaut or dreadnautB executable file:
 \begintt
-LoadPackage( "grape" );
+LoadPackage("grape"); 
+GRAPE_NAUTY := true; 
+GRAPE_DREADNAUT_EXE := "dreadnaut_or_dreadnautB_executable"; 
+\endtt 
+To use a separately installed version of {\bliss} instead of {\nauty},
+type the following commands in {\GAP}, or place these commands in your
+`gaprc' file (see "REF:The gaprc file"), where `bliss_executable' should be
+the name of your bliss executable file:
+\begintt
+LoadPackage("grape"); 
+GRAPE_NAUTY := false; 
+GRAPE_BLISS_EXE := "bliss_executable"; 
+\endtt 
+For example, if the bliss executable is `/usr/local/bin/bliss', then type:
+\begintt
+LoadPackage("grape"); 
+GRAPE_NAUTY := false; 
+GRAPE_BLISS_EXE := "/usr/local/bin/bliss"; 
+\endtt 
+
+You should now test {\GRAPE} and the interface to {\nauty} or {\bliss}
+on each architecture on which you have installed {\GRAPE}. Start up
+{\GAP} and at the prompt type 
+\begintt 
+LoadPackage( "grape" ); 
 \endtt
 On-line documentation for {\GRAPE} should be available by typing 
 \begintt
-?GRAPE
-\endtt
-The command
+?GRAPE 
+\endtt 
+Then run some tests by typing:
 \begintt
-IsIsomorphicGraph( JohnsonGraph(7,3), JohnsonGraph(7,4) );
+Test(Filename(DirectoriesPackageLibrary("grape","tst"),"testall.tst"));
 \endtt
-should return `true', and 
-\begintt
-Size( AutGroupGraph( JohnsonGraph(4,2) ) );
-\endtt
-should be `48'.
-
+This should return the value `true'.
+	
 Both dvi and pdf versions of the {\GRAPE} manual are available
 (as `manual.dvi' and `manual.pdf' respectively) in the `doc' directory
 of the home directory of {\GRAPE}.
@@ -135,8 +168,7 @@ where you should also send any comments or bug reports.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Loading GRAPE}
 
-Before using {\GRAPE} you must load the package within {\GAP} by calling 
-the statement
+Before using {\GRAPE} you must load the package within {\GAP} via: 
 
 \begintt
 gap> LoadPackage("grape");

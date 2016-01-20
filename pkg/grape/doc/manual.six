@@ -7,6 +7,7 @@ C consmod.tex 2. Functions to construct and modify graphs
 S 2.1. Graph
 F 2.1. Graph
 F 2.1. Graph
+I 2.1. adjacency matrix
 S 2.2. EdgeOrbitsGraph
 F 2.2. EdgeOrbitsGraph
 F 2.2. EdgeOrbitsGraph

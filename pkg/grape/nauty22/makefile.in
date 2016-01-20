@@ -346,7 +346,7 @@ dreadtestB: dreadtest.c \
 	./dreadtestB < testL.dre
 	./dreadtestB < testM.dre
 	./dreadtestB < testa.dre
-	test ${BIGTEST} -eq 0 || dreadtestB < testB.dre
+	test ${BIGTEST} -eq 0 || ./dreadtestB < testB.dre
 	rm dreadtestB
 
 dreadtestL: dreadtest.c \

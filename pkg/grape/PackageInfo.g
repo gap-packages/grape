@@ -10,16 +10,16 @@ PackageName := "GRAPE",
 
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers.
-Version := "4.6.1",
+Version := "4.7",
 
 ##  Release date of the current version in dd/mm/yyyy format.
-Date := "17/05/2012",
+Date := "08/01/2016",
 
 ##  URL of the archive(s) of the current package release, but *without*
 ##  the format extension(s), like '.zoo', which are given next.
 ##  The archive file name *must be changed* with each version of the archive
 ##  (and probably somehow contain the package name and version).
-ArchiveURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r6/grape4r6p1",
+ArchiveURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r7/grape4r7",
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -102,7 +102,7 @@ Persons := [
     Place := "London",
     Institution := Concatenation( [
       "School of Mathematical Sciences, ",
-      "Queen Mary, University of London",
+      "Queen Mary University of London",
       ] )
     )
 # provide such a record for each author and/or maintainer ...
@@ -138,8 +138,8 @@ AcceptDate := "07/1993",
 ##  the updating of package information on the GAP Website, and inclusion
 ##  and updating of the package in the GAP distribution.
 ##  
-README_URL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r6/README",
-PackageInfoURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r6/PackageInfo.g",
+README_URL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r7/README",
+PackageInfoURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r7/PackageInfo.g",
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 
@@ -223,15 +223,15 @@ Dependencies := rec(
 ## (When this is used for package loading in the future the availability
 ## tests of other packages, as given above, will be done automatically and
 ## need not be included here.)
-# AvailabilityTest := ReturnTrue,
-AvailabilityTest := 
-  function()
-    if ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnautB") = fail
-      and ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnautB.exe") = fail then 
-      LogPackageLoadingMessage(PACKAGE_WARNING,["nauty/dreadnaut binary not installed,", "functions depending on nauty will not work"]);
-    fi;
-    return true;
-  end,
+AvailabilityTest := ReturnTrue,
+# AvailabilityTest := 
+# function()
+#   if ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnautB") = fail
+#     and ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnautB.exe") = fail then 
+#     LogPackageLoadingMessage(PACKAGE_WARNING,["nauty/dreadnaut binary not installed,", "functions depending on nauty will not work"]);
+#   fi;
+#   return true;
+# end,
 
 ##  Suggest here if the package should be *automatically loaded* when GAP is 
 ##  started.  This should usually be 'false'. Say 'true' only if your package 
@@ -250,7 +250,7 @@ Subtitle := "GRaph Algorithms using PErmutation groups",
 
 ##  *Optional*, but recommended: path relative to package root to a file which 
 ##  contains as many tests of the package functionality as sensible.
-#TestFile := "tst/testall.g",
+TestFile := "tst/testall.tst",
 
 ##  *Optional*: Here you can list some keyword related to the topic 
 ##  of the package.

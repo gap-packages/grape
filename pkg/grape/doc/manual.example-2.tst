@@ -1,21 +1,4 @@
 
-gap> A := [[0,1,0],[1,0,0],[0,0,1]];
-[ [ 0, 1, 0 ], [ 1, 0, 0 ], [ 0, 0, 1 ] ]
-gap> G := Group( (1,2) );
-Group([ (1,2) ])
-gap> Graph( G, [1..3], OnPoints,
->        function(x,y) return A[x][y]=1; end,
->        true );
-rec(
-  isGraph := true,
-  order := 3,
-  group := Group( [ (1,2) ] ),
-  schreierVector := [ -1, 1, -2 ],
-  adjacencies := [ [ 2 ], [ 3 ] ],
-  representatives := [ 1, 3 ],
-  names := [ 1, 2, 3 ] )
-
-
 gap> Petersen := Graph( SymmetricGroup(5), [[1,2]], OnSets,
 >                    function(x,y) return Intersection(x,y)=[]; end );
 rec(
@@ -28,6 +11,16 @@ rec(
   representatives := [ 1 ],
   names := [ [ 1, 2 ], [ 2, 3 ], [ 3, 4 ], [ 1, 3 ], [ 4, 5 ], [ 2, 4 ],
       [ 1, 5 ], [ 3, 5 ], [ 1, 4 ], [ 2, 5 ] ] )
+
+
+gap> A := [[0,1,0],[1,0,0],[0,0,1]];
+[ [ 0, 1, 0 ], [ 1, 0, 0 ], [ 0, 0, 1 ] ]
+gap> gamma := Graph( Group(()), [1..3], OnPoints,
+>        function(x,y) return A[x][y]=1; end,
+>        true );
+rec( adjacencies := [ [ 2 ], [ 1 ], [ 3 ] ], group := Group(()),
+  isGraph := true, names := [ 1, 2, 3 ], order := 3,
+  representatives := [ 1, 2, 3 ], schreierVector := [ -1, -2, -3 ] )
 
 
 gap> EdgeOrbitsGraph( Group((1,3),(1,2)(3,4)), [[1,2],[4,5]], 5 );

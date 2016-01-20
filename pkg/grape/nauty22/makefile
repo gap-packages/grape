@@ -3,8 +3,8 @@
 
 SHELL = /bin/sh
 CC=gcc
-CFLAGS= -O4 
-SAFECFLAGS= -O4
+CFLAGS= -O4 -march=i686 
+SAFECFLAGS= -O4 -march=i686
 LDFLAGS=
 LOK=1         # 0 if no 64-bit integers
 TESTPROGS=dreadtest dreadtestB dreadtestS dreadtestS1 dreadtest4K dreadtest1 dreadtestW1 dreadtestL1 dreadtestL
@@ -346,7 +346,7 @@ dreadtestB: dreadtest.c \
 	./dreadtestB < testL.dre
 	./dreadtestB < testM.dre
 	./dreadtestB < testa.dre
-	test ${BIGTEST} -eq 0 || dreadtestB < testB.dre
+	test ${BIGTEST} -eq 0 || ./dreadtestB < testB.dre
 	rm dreadtestB
 
 dreadtestL: dreadtest.c \

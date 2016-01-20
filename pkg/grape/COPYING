@@ -1,7 +1,7 @@
 GRAPE Copyright Notice:
 
 The GRAPE system and the source included with this distribution are
-copyright (C) Leonard Soicher 1992-2012, except for the following:
+copyright (C) Leonard Soicher 1992-2016, except for the following:
 
 - Brendan McKay's nauty 2.2 system; see the nauty copyright notice in
  `nauty22/nauty.h',
@@ -14,7 +14,7 @@ later version. For details, see \URL{http://www.gnu.org/licenses/gpl.html}
 
 Leonard H. Soicher
 School of Mathematical Sciences
-Queen Mary, University of London
+Queen Mary University of London
 Mile End Road, London E1 4NS, UK
 
-May 2012.
+January 2016.

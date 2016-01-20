@@ -3,7 +3,8 @@
   AddEdgeOrbit, \indexit{12}
   `Adjacency', 17
   Adjacency, \indexit{17}
-  A research application of PartialLinearSpaces, \indexit{43}
+  adjacency matrix, 9
+  A research application of PartialLinearSpaces, \indexit{44}
   `AssignVertexNames', 13
   AssignVertexNames, \indexit{13}
   `AutGroupGraph', 38
@@ -14,8 +15,8 @@
   `BipartiteDouble', 31
   BipartiteDouble, \indexit{31}
 \letter C
-  `CayleyGraph', 12
-  CayleyGraph, \indexit{12}
+  `CayleyGraph', 11
+  CayleyGraph, \indexit{11}
   cliques, 36
   cliquesofgivensize, 37
   `CollapsedAdjacencyMat', 22
@@ -105,7 +106,7 @@
 \letter L
   `Layers', 26
   Layers, \indexit{26}
-  Loading GRAPE, \indexit{6}
+  Loading GRAPE, \indexit{7}
   `LocalParameters', 21
   LocalParameters, \indexit{21}
 \letter N
@@ -119,8 +120,8 @@
   `OrderGraph', 15
   OrderGraph, \indexit{15}
 \letter P
-  `PartialLinearSpaces', 42
-  PartialLinearSpaces, \indexit{42}
+  `PartialLinearSpaces', 43
+  PartialLinearSpaces, \indexit{43}
   `PointGraph', 29
   PointGraph, \indexit{29}
 \letter Q

@@ -1,6 +1,7 @@
 /* TODO:  insert new timings,  LOOKAHEAD RIGIDITY TEST! */
 
 /* geng.c  version 1.9; B D McKay, May 7 2004. */
+/* n>28 bug patched, Sep 19, 2007. */
 
 #define USAGE \
 "geng [-cCmtfbd#D#] [-uygsnh] [-lvq] [-x#X#] n [mine[:maxe]] [res/mod] [file]"
@@ -2336,7 +2337,7 @@ PLUGIN_INIT
         }
         else
         {
-	    if (maxn+4 > 8*sizeof(xword)) savemem = TRUE;
+	    if (maxn+4 > 8*sizeof(xword)) savemem = sparse = TRUE;
             makeleveldata(sparse);
 
 	    if (maxn >= 14 && mod > 1)     splitlevel = maxn - 4;

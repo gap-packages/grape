@@ -1,10 +1,11 @@
 \indexentry {Installing the GRAPE Package@Installing the GRAPE Package|indexit}{5}
-\indexentry {Loading GRAPE@Loading GRAPE|indexit}{6}
+\indexentry {Loading GRAPE@Loading GRAPE|indexit}{7}
 \indexentry {The structure of a graph in GRAPE@The structure of a graph in GRAPE|indexit}{7}
 \indexentry {Examples of the use of GRAPE@Examples of the use of GRAPE|indexit}{7}
 \indexentry {Graph@Graph|indexit}{9}
 \indexentry {Graph@`Graph'}{9}
 \indexentry {Graph@`Graph'}{9}
+\indexentry {adjacency matrix}{9}
 \indexentry {EdgeOrbitsGraph@EdgeOrbitsGraph|indexit}{10}
 \indexentry {EdgeOrbitsGraph@`EdgeOrbitsGraph'}{10}
 \indexentry {EdgeOrbitsGraph@`EdgeOrbitsGraph'}{10}
@@ -17,10 +18,10 @@
 \indexentry {CompleteGraph@`CompleteGraph'}{11}
 \indexentry {JohnsonGraph@JohnsonGraph|indexit}{11}
 \indexentry {JohnsonGraph@`JohnsonGraph'}{11}
-\indexentry {CayleyGraph@CayleyGraph|indexit}{12}
-\indexentry {CayleyGraph@`CayleyGraph'}{12}
-\indexentry {CayleyGraph@`CayleyGraph'}{12}
-\indexentry {CayleyGraph@`CayleyGraph'}{12}
+\indexentry {CayleyGraph@CayleyGraph|indexit}{11}
+\indexentry {CayleyGraph@`CayleyGraph'}{11}
+\indexentry {CayleyGraph@`CayleyGraph'}{11}
+\indexentry {CayleyGraph@`CayleyGraph'}{11}
 \indexentry {AddEdgeOrbit@AddEdgeOrbit|indexit}{12}
 \indexentry {AddEdgeOrbit@`AddEdgeOrbit'}{12}
 \indexentry {AddEdgeOrbit@`AddEdgeOrbit'}{12}
@@ -170,9 +171,9 @@
 \indexentry {GraphIsomorphismClassRepresentatives@GraphIsomorphismClassRepresentatives|indexit}{41}
 \indexentry {GraphIsomorphismClassRepresentatives@`GraphIsomorphismClassRepresentatives'}{41}
 \indexentry {GraphIsomorphismClassRepresentatives@`GraphIsomorphismClassRepresentatives'}{41}
-\indexentry {PartialLinearSpaces@PartialLinearSpaces|indexit}{42}
-\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{42}
-\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{42}
-\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{42}
-\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{42}
-\indexentry {A research application of PartialLinearSpaces@A research application of PartialLinearSpaces|indexit}{43}
+\indexentry {PartialLinearSpaces@PartialLinearSpaces|indexit}{43}
+\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{43}
+\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{43}
+\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{43}
+\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{43}
+\indexentry {A research application of PartialLinearSpaces@A research application of PartialLinearSpaces|indexit}{44}

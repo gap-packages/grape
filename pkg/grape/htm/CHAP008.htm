@@ -12,11 +12,14 @@
 <li> <A HREF="CHAP008.htm#SECT005">GraphIsomorphismClassRepresentatives</a>
 </ol><p>
 <p>
-GRAPE provides a basic interface to B.D.&nbsp;McKay's nauty
-(Version&nbsp;2.2 final) package for calculating automorphism groups of
-graphs and for testing graph isomorphism (see <a href="biblio.htm#Nau90"><cite>Nau90</cite></a>). To use a
-function described in this chapter, which depends on nauty, GRAPE
-must be fully installed (see <a href="CHAP001.htm#SECT001">Installing the GRAPE Package</a>).
+GRAPE includes B.D.&nbsp;McKay's nauty (Version&nbsp;2.2, final patched
+version) package for calculating automorphism groups of graphs and for
+testing graph isomorphism (see <a href="biblio.htm#Nau90,MP14"><cite>Nau90,MP14</cite></a>).  As described in
+Section <a href="CHAP001.htm#SECT001">Installing the GRAPE Package</a>, a user may instead use their own
+copy of dreadnaut or dreadnautB from a later version of nauty, or may
+use T.&nbsp;Juntilla's and P.&nbsp;Kaski's bliss package <a href="biblio.htm#JK07"><cite>JK07</cite></a>
+instead of nauty. Many functions described in this chapter make use
+of nauty or bliss.
 <p>
 <p>
 <h2><a name="SECT001">8.1 Graphs with colour-classes</a></h2>
@@ -48,13 +51,14 @@ adjacent vertices be in different colour-classes.
 <li><code>AutGroupGraph( </code><var>gamma</var><code>, </code><var>colourclasses</var><code> )</code>
 <p>
 The first version of this function returns the automorphism group of
-the graph (or graph with colour-classes) <var>gamma</var>, using nauty (this
-can also be accomplished by typing <code>AutomorphismGroup(</code><var>gamma</var><code>)</code>). The
-<strong>automorphism group</strong> \Aut(<i>gamma</i> ) of a graph <var>gamma</var> is the
-group consisting of the permutations of the vertices of <var>gamma</var> which
-preserve the edge-set of <var>gamma</var>.  The <strong>automorphism group</strong> of a graph
-with colour-classes is the subgroup of the automorphism group of the
-graph which preserves the colour-classes (classwise).
+the graph (or graph with colour-classes) <var>gamma</var>, using nauty 
+or bliss (this can also be accomplished by typing
+<code>AutomorphismGroup(</code><var>gamma</var><code>)</code>). The <strong>automorphism group</strong> \Aut(<i>gamma</i> )
+of a graph <var>gamma</var> is the group consisting of the permutations
+of the vertices of <var>gamma</var> which preserve the edge-set of <var>gamma</var>.
+The <strong>automorphism group</strong> of a graph with colour-classes is the subgroup
+of the automorphism group of the graph which preserves the colour-classes
+(classwise).
 <p>
 The second version of this function is maintained only for backward
 compatibility. For this version <var>gamma</var> must be a graph, <var>colourclasses</var>
@@ -89,12 +93,12 @@ gap&gt; Size(AutomorphismGroup( rec(graph:=gamma,colourClasses:=[[1,6],[2,3,4,5]
 <li><code>GraphIsomorphism( </code><var>gamma1</var><code>, </code><var>gamma2</var><code>, </code><var>firstunbindcanon</var><code> )</code>
 <p>
 Let <var>gamma1</var> and <var>gamma2</var> both be graphs or both be graphs with
-colour-classes.  Then this function makes use of the nauty package to
+colour-classes.  Then this function makes use of nauty or bliss to
 (try to) determine an isomorphism from <var>gamma1</var> to <var>gamma2</var>.  If <var>gamma1</var>
 and <var>gamma2</var> are isomorphic, then this function returns an isomorphism
-from <var>gamma1</var> to <var>gamma2</var>. This isomorphism will be a permutation of
-the vertices of <var>gamma1</var> which maps the edge-set of <var>gamma1</var> onto that
-of <var>gamma2</var>, and if <var>gamma1</var> and <var>gamma2</var> are graphs with colour-classes,
+from <var>gamma1</var> to <var>gamma2</var>. This isomorphism will be a permutation of the
+vertices of <var>gamma1</var> which maps the edge-set of <var>gamma1</var> onto that of
+<var>gamma2</var>, and if <var>gamma1</var> and <var>gamma2</var> are graphs with colour-classes,
 this isomorphism will also map the colour-class list of <var>gamma1</var> to that
 of <var>gamma2</var> (classwise). If <var>gamma1</var> and <var>gamma2</var> are not isomorphic
 then this function returns <code>fail</code>.
@@ -105,12 +109,19 @@ are first unbound before proceeding.  If <var>firstunbindcanon</var> is <code>tr
 (the default, safe and possibly slower option) then these components
 are first unbound.  If <var>firstunbindcanon</var> is <code>false</code>, then any existing
 <code>canonicalLabelling</code> components are used.  However, since canonical
-labellings can depend on the version of nauty, the version of
-GRAPE, parameter settings of nauty, and the compiler and computer
+labellings can depend on whether nauty or bliss is used, the version
+of nauty or bliss used, the version of GRAPE, parameter settings
+of nauty or bliss, and possibly even the compiler and computer
 used, you must be sure that if <var>firstunbindcanon</var>=<code>false</code> then the
 <code>canonicalLabelling</code> component(s) which may already exist for <var>gamma1</var>
 or <var>gamma2</var> were created in exactly the same environment in which you
 are presently computing.
+<p>
+Please also note that a canonical labelling for a GRAPE graph is the
+inverse of what a canononical labelling for a graph is usually defined as
+(such as in bliss), in that in GRAPE, the image of a graph under
+the <strong>inverse</strong> of its canonical labelling is the calculated canonical
+version of that graph.
 <p>
 See also <a href="CHAP008.htm#SSEC004.1">IsIsomorphicGraph</a>.
 <p>
@@ -151,27 +162,35 @@ fail
 <li><code>IsIsomorphicGraph( </code><var>gamma1</var><code>, </code><var>gamma2</var><code>, </code><var>firstunbindcanon</var><code> )</code>
 <p>
 Let <var>gamma1</var> and <var>gamma2</var> both be graphs or both be graphs with
-colour-classes.  Then this boolean function makes use of the nauty
-package to test whether <var>gamma1</var> and <var>gamma2</var> are isomorphic (as graphs or
-as graphs with colour-classes, respectively). The value <code>true</code> is returned
-if and only if the graphs (or graphs with colour-classes) are isomorphic.
+colour-classes.  Then this boolean function makes use of the nauty or 
+bliss package to test whether <var>gamma1</var> and <var>gamma2</var> are isomorphic 
+(as graphs or as graphs with colour-classes, respectively). The
+value <code>true</code> is returned if and only if the graphs (or graphs with
+colour-classes) are isomorphic.
 <p>
 The optional boolean parameter <var>firstunbindcanon</var> determines whether or
 not the <code>canonicalLabelling</code> components of both <var>gamma1</var> and <var>gamma2</var>
-are first unbound before testing isomorphism.  If <var>firstunbindcanon</var>
-is <code>true</code> (the default, safe and possibly slower option) then these
-components are first unbound.  If <var>firstunbindcanon</var> is <code>false</code>, then any
-existing <code>canonicalLabelling</code> components are used, which was the behaviour
-in versions of GRAPE before 4.0.  However, since canonical labellings
-can depend on the version of nauty, the version of GRAPE, parameter
-settings of nauty, and the compiler and computer used, you must be
-sure that if <var>firstunbindcanon</var>=<code>false</code> then the <code>canonicalLabelling</code>
-component(s) which may already exist for <var>gamma1</var> or <var>gamma2</var> were created
-in exactly the same environment in which you are presently computing.
+are first unbound before proceeding.  If <var>firstunbindcanon</var> is <code>true</code>
+(the default, safe and possibly slower option) then these components
+are first unbound.  If <var>firstunbindcanon</var> is <code>false</code>, then any existing
+<code>canonicalLabelling</code> components are used.  However, since canonical
+labellings can depend on whether nauty or bliss is used, the version
+of nauty or bliss used, the version of GRAPE, parameter settings
+of nauty or bliss, and possibly even the compiler and computer
+used, you must be sure that if <var>firstunbindcanon</var>=<code>false</code> then the
+<code>canonicalLabelling</code> component(s) which may already exist for <var>gamma1</var>
+or <var>gamma2</var> were created in exactly the same environment in which you
+are presently computing.
 <p>
 See also <a href="CHAP008.htm#SSEC003.1">GraphIsomorphism</a>.  For pairwise isomorphism testing
 of three or more graphs (or graphs with colour-classes), see
 <a href="CHAP008.htm#SSEC005.1">GraphIsomorphismClassRepresentatives</a>.
+<p>
+Please also note that a canonical labelling for a GRAPE graph is the
+inverse of what a canononical labelling for a graph is usually defined as
+(such as in bliss), in that in GRAPE, the image of a graph under
+the <strong>inverse</strong> of its canonical labelling is the calculated canonical
+version of that graph.
 <p>
 <pre>
 gap&gt; gamma := JohnsonGraph(5,3);
@@ -209,8 +228,8 @@ false
 <li><code>GraphIsomorphismClassRepresentatives( </code><var>L</var><code> )</code>
 <li><code>GraphIsomorphismClassRepresentatives( </code><var>L</var><code>, </code><var>firstunbindcanon</var><code> )</code>
 <p>
-Given a list <var>L</var> of graphs, or of graphs with colour-classes,
-this function uses nauty to return a list consisting of pairwise
+Given a list <var>L</var> of graphs, or of graphs with colour-classes, this
+function uses nauty or bliss to return a list consisting of pairwise
 non-isomorphic elements of <var>L</var>, representing all the isomorphism classes
 of elements of <var>L</var>.
 <p>
@@ -220,15 +239,22 @@ are first unbound before proceeding.  If <var>firstunbindcanon</var> is <code>tr
 (the default, safe and possibly slower option) then these components
 are first unbound.  If <var>firstunbindcanon</var> is <code>false</code>, then any existing
 <code>canonicalLabelling</code> components of elements of <var>L</var> are used.  However,
-since canonical labellings can depend on the version of nauty, the
-version of GRAPE, parameter settings of nauty, and the compiler
+since canonical labellings can depend on whether nauty or bliss is
+used, the version of nauty or bliss used, the version of GRAPE,
+parameter settings of nauty or bliss, and possibly even the compiler
 and computer used, you must be sure that if <var>firstunbindcanon</var>=<code>false</code>
-then the <code>canonicalLabelling</code> component(s) which may already exist for
+then any <code>canonicalLabelling</code> component(s) which may already exist for
 elements of <var>L</var> were created in exactly the same environment in which
 you are presently computing.
 <p>
 It is assumed that the computing environment is constant throughout the 
 execution of this function.
+<p>
+Please also note that a canonical labelling for a GRAPE graph is the
+inverse of what a canononical labelling for a graph is usually defined as
+(such as in bliss), in that in GRAPE, the image of a graph under
+the <strong>inverse</strong> of its canonical labelling is the calculated canonical
+version of that graph.
 <p>
 <pre>
 gap&gt; A:=JohnsonGraph(5,3);
@@ -263,5 +289,5 @@ gap&gt; Length(R);
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP007.htm">Previous</a>] [<a href ="CHAP009.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>May 2012
+<address>grape manual<br>January 2016
 </address></body></html>

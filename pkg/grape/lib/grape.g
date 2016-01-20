@@ -1,10 +1,13 @@
 ##############################################################################
 ##
-##  grape.g  (Version 4.6.1)     GRAPE Library               Leonard Soicher
+##  grape.g (Version 4.7)    GRAPE Library     Leonard Soicher
 ##
-##  Copyright (C) 1992-2012 Leonard Soicher, School of Mathematical Sciences, 
-##                      Queen Mary, University of London, London E1 4NS, U.K.
+##  Copyright (C) 1992-2015 Leonard Soicher, School of Mathematical Sciences, 
+##                      Queen Mary University of London, London E1 4NS, U.K.
 ##
+# This version includes code by Jerry James (debugged by LS) 
+# which allows a user to use bliss instead of nauty for computing 
+# automorphism groups and canonical labellings of graphs.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,8 +20,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program; if not, see http://www.gnu.org/licenses/gpl.html
 #
 
 GRAPE_RANDOM := false; # Determines if certain random methods are to be used
@@ -36,6 +38,15 @@ GRAPE_RANDOM := false; # Determines if certain random methods are to be used
 
 GRAPE_NRANGENS := 18;  # The number of random generators taken for a subgroup
 		       # when  GRAPE_RANDOM=true.
+
+GRAPE_NAUTY := true;   # Use nauty when true, else use bliss.
+
+GRAPE_DREADNAUT_EXE := 
+   ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnautB"); 
+   # filename of dreadnaut or dreadnautB executable
+
+GRAPE_BLISS_EXE := "/home/leonard/bliss-0.73/bliss"; 
+   # filename of bliss executable
 
 BindGlobal("GRAPE_OrbitRepresentatives",function(arg)
 #
@@ -3782,7 +3793,7 @@ end);
 #######################################################################
 #
 # Next comes the part of  GRAPE  depending on B.D.McKay's  nauty 
-# system.
+# system or Tommi Junttila and Petteri Kaski's bliss 0.73 system.
 #
 # define some global variables so as not to get warning messages
 
@@ -3923,24 +3934,14 @@ BindGlobal("ReadCanonNauty",function(file)
   return PermList(can);
 end);
 
-BindGlobal("SetAutGroupCanonicalLabelling",function(arg) 
+BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon) 
 #
-# Let  gr:=arg[1]  and  setcanon:=arg[2]  (default: true).
 # Sets the  autGroup  component (if not already bound) and the
 # canonicalLabelling  component (if not already bound and setcanon=true) 
 # of the graph or graph with colour-classes  gr.
+# Uses the nauty system. 
 #
-  local gr,setcanon,gamma,col,ftmp1,ftmp2,fdre,fg,ftmp1_stream,ftmp2_stream,
-        fdre_stream,gp;
-  gr:=arg[1];
-  if IsBound(arg[2]) then
-    setcanon:=arg[2];
-  else
-    setcanon:=true;
-  fi;
-  if not (IsGraph(gr) or IsGraphWithColourClasses(gr)) or not IsBool(setcanon) then
-    Error("usage: SetAutGroupCanonicalLabelling( <Graph> or <GraphWithColourClasses> [, <Bool> ] )");
-  fi;
+  local gamma,col,ftmp1,ftmp2,fdre,fg,ftmp1_stream,ftmp2_stream,fdre_stream,gp;
   if IsBound(gr.canonicalLabelling) then
     setcanon:=false;
   fi;
@@ -4003,8 +4004,7 @@ BindGlobal("SetAutGroupCanonicalLabelling",function(arg)
   PrintTo(ftmp2_stream,gamma.order,"\n"); 
   CloseStream(ftmp2_stream);
 
-  Exec(ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnautB"), 
-    "<",fdre);
+  Exec(GRAPE_DREADNAUT_EXE,"<",fdre);
 
   if not IsBound(gr.autGroup) then 
     fg:=ReadOutputNauty(ftmp1);
@@ -4023,6 +4023,156 @@ BindGlobal("SetAutGroupCanonicalLabelling",function(arg)
    
   return;
 
+end);
+
+BindGlobal("PrintStreamBlissGraph",function(stream,gamma,col)
+# Original procedure by Jerry James. Updated by Leonard Soicher.
+  local adj, i, j, nedges;
+  if IsRegularGraph(gamma) and gamma.order > 0 then
+    nedges := gamma.order*Length(Adjacency(gamma,1)); 
+  else
+    nedges:=0;
+    for i in [1..gamma.order] do
+      nedges := nedges + Length(Adjacency(gamma,i));
+    od;
+  fi;
+  # nedges = no. of directed edges of gamma. 
+  PrintTo(stream,"p edge ",gamma.order," ",nedges,"\n");
+  if col<>MonochromaticColourClasses(gamma) then 
+    for i in [1..Length(col)] do
+      for j in [1..Length(col[i])] do
+        AppendTo(stream, "n ", col[i][j], " ", i, "\n");
+      od;
+    od;
+  fi;
+  for i in [1..gamma.order] do 
+    adj:=Adjacency(gamma,i);
+    if adj<>[] then 
+      for j in [1..Length(adj)] do
+        AppendTo(stream, "e ", i, " ", adj[j], "\n");
+      od;
+    fi;
+  od;
+end);
+
+BindGlobal("ReadOutputBliss",function(file,canon)
+# Original procedure by Jerry James. Updated by Leonard Soicher.
+  local f, gens, l, i, pi, can;
+
+  f:=InputTextFile(file);
+  if f=fail then
+    Error("cannot find output produced by `bliss'");
+  fi;
+  gens:=[];
+  can:=[];
+  while not IsEndOfStream(f) do
+    l:=ReadLine(f);
+    if l<>fail then
+      l:=Chomp(l);
+      if Length(l)>11 and l{[1..11]}="Generator: " then
+	pi:=EvalString(l{[12..Length(l)]});
+	Add(gens,pi);
+      elif canon and Length(l)>20 and l{[1..20]}="Canonical labeling: " then
+	can:=InverseSameMutability(EvalString(l{[21..Length(l)]}));
+      fi;
+    fi;
+  od;
+  CloseStream(f);
+  return [gens,can];
+end);
+
+BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr, setcanon) 
+#
+# Sets the  autGroup  component (if not already bound) and the
+# canonicalLabelling  component (if not already bound and setcanon=true) 
+# of the graph or graph with colour-classes  gr.
+# Uses the bliss system. 
+#
+  local gamma,col,ftmp,fdre,fg,fdre_stream,gp;
+  if IsBound(gr.canonicalLabelling) then
+    setcanon:=false;
+  fi;
+  if IsBound(gr.autGroup) and not setcanon then
+    return;
+  fi;
+  if IsGraph(gr) then
+    gamma:=gr;
+    col:=MonochromaticColourClasses(gamma);
+  else
+    gamma:=gr.graph;
+    col:=gr.colourClasses;
+    CheckColourClasses(gamma,col);
+  fi;
+  if gamma.order<=1 then 
+    if not IsBound(gr.autGroup) then
+      gr.autGroup:=Group([],());
+    fi;
+    if setcanon then
+      gr.canonicalLabelling:=();
+    fi;
+    return;
+  fi;
+
+  ftmp:=Filename(GRAPE_nautytmpdir,"ftmp");
+  fdre:=Filename(GRAPE_nautytmpdir,"fdre");
+  
+  # In principle redundant, but a failed call might have left files sitting
+  # -- just throw out what will be overwritten anyhow.
+  RemoveFile(ftmp);
+  RemoveFile(fdre);
+
+  fdre_stream:=OutputTextFile(fdre,false); 
+  
+  SetPrintFormattingStatus(fdre_stream,false);
+  PrintStreamBlissGraph(fdre_stream,gamma,col);
+  CloseStream(fdre_stream);
+
+  if setcanon then
+    Exec(GRAPE_BLISS_EXE, "-directed", "-can", fdre, ">", ftmp);
+  else
+    Exec(GRAPE_BLISS_EXE, "-directed", fdre, ">", ftmp);
+  fi;
+
+  fg:=ReadOutputBliss(ftmp,setcanon);
+  # fg[1]=gens for the aut group, 
+  # fg[2]=canonical labelling if setcanon=true, else the empty list
+  if not IsBound(gr.autGroup) then 
+    gp:=GroupWithGenerators(fg[1],());
+    gr.autGroup:=gp;
+  fi;
+  if setcanon then
+    gr.canonicalLabelling:=fg[2];
+  fi;
+
+  RemoveFile(ftmp);
+  RemoveFile(fdre);
+   
+  return;
+
+end);
+
+BindGlobal("SetAutGroupCanonicalLabelling",function(arg) 
+#
+# Let  gr:=arg[1]  and  setcanon:=arg[2]  (default: true).
+# Sets the  autGroup  component (if not already bound) and the
+# canonicalLabelling  component (if not already bound and setcanon=true) 
+# of the graph or graph with colour-classes  gr.
+#
+  local gr,setcanon;
+  gr:=arg[1];
+  if IsBound(arg[2]) then
+    setcanon:=arg[2];
+  else
+    setcanon:=true;
+  fi;
+  if not (IsGraph(gr) or IsGraphWithColourClasses(gr)) or not IsBool(setcanon) then
+    Error("usage: SetAutGroupCanonicalLabelling( <Graph> or <GraphWithColourClasses> [, <Bool> ] )");
+  fi;
+  if GRAPE_NAUTY then
+    SetAutGroupCanonicalLabellingNauty(gr, setcanon);
+  else
+    SetAutGroupCanonicalLabellingBliss(gr, setcanon);
+  fi;
 end);
 
 BindGlobal("AutGroupGraph",function(arg) 

@@ -1,9 +1,9 @@
 
-                          GRAPE Version 4.6.1, 
+                          GRAPE Version 4.7, 
 
 a GAP package for computing with graphs and groups, by Leonard H. Soicher,
-with contributions from Steve Linton and Alexander Hulpke, and including
-Brendan McKay's nauty 2.2 package.
+with contributions from Steve Linton, Alexander Hulpke and Jerry James,
+and including Brendan McKay's nauty 2.2 package.
 
 This README document tells you how to install GRAPE and lists changes
 made to GRAPE since Version 2.2. License and copyright information is 
@@ -11,80 +11,47 @@ in the GRAPE file COPYING.
 
 Installing GRAPE
 ----------------
-The {\GAP}~4.5 distribution includes the {\GRAPE} package, which now
+The current GAP distribution includes the GRAPE package, which now
 includes a 32-bit nauty/dreadnaut binary for Windows (XP and later
-versions).  Thus, {\GRAPE} normally requires no further installation
-for Windows users of {\GAP}~4.5.
+versions).  Thus, GRAPE normally requires no further installation
+for Windows users of GAP.
 
-You do not need to download and unpack an archive for {\GRAPE}
+You do not need to download and unpack an archive for GRAPE
 unless you want to install the package separately from your main
-{\GAP} installation or are installing an upgrade of {\GRAPE} to an
-existing installation of {\GAP} (see the main {\GAP} reference section
-"Reference:Installing a GAP Package").  If you do need to download
-{\GRAPE}, you can find archive files for the package in various formats
-at \URL{http://www.gap-system.org/Packages/grape.html}, and then your
-archive file of choice should be downloaded and unpacked in the `pkg'
-subdirectory of an appropriate {\GAP} root directory (see the main {\GAP}
-reference section "Reference:GAP Root Directories").
+GAP installation or are installing an upgrade of GRAPE to an
+existing installation of GAP.  If you do need to download
+GRAPE, you can find the latest archive .tar.gz file for the 
+package at  http://www.maths.qmul.ac.uk/~leonard/grape/ 
 
-Unless you are running {\GRAPE} under Windows (XP or later), you will
-normally need to perform compilation of B.D.~McKay's nauty/dreadnaut
-programs included with {\GRAPE}, and in a Unix environment, you should
-proceed as follows.  After installing {\GAP}, go to the {\GRAPE}
-home directory (usually the directory `pkg/grape' of the {\GAP} home
-directory), and run `./configure <path>', where <path> is the path of the
-{\GAP} home directory.  So for example, if you install {\GRAPE} in the
-`pkg' directory of the {\GAP} home directory, run
-
-./configure ../..
-
-This will fetch the name of the architecture for which {\GAP} has been
-most recently configured, and create a `Makefile'. Now run
-
-make 
-
-to create the nauty/dreadnaut binary and to put it in the appropriate
-place.  This configuration/make process for {\GRAPE} only works for
-the *last* architecture for which {\GAP} was configured. Therefore, you
-should always follow the above procedure to install the nauty/dreadnaut
-binary immediately after compiling {\GAP} for a given configuration,
-say for a different architecture on a common file system. However, if
-you want to add {\GRAPE} later, you can just run `./configure' again in
-the {\GAP} home directory for the architecture, before performing the
-{\GRAPE} configure/make process to install the nauty/dreadnaut binary
-for that architecture.
-
-You should now test {\GRAPE} and the interface to {\nauty} on each
-architecture on which you have installed {\GRAPE}. Start up {\GAP}
-and at the prompt type
-
-LoadPackage( "grape" );
-
-On-line documentation for {\GRAPE} should be available by typing 
-
-?GRAPE 
-
-The command 
-
-IsIsomorphicGraph( JohnsonGraph(7,3), JohnsonGraph(7,4) ); 
-
-should return `true', and 
-
-Size( AutGroupGraph( JohnsonGraph(4,2) ) ); 
-
-should be `48'.
-
-Both dvi and pdf versions of the {\GRAPE} manual are available
-(as `manual.dvi' and `manual.pdf' respectively) in the `doc' directory
-of the home directory of {\GRAPE}.
+Installation and testing instructions for the GRAPE package can be 
+found in Chapter 1 of the GRAPE manual: 
+http://www.maths.qmul.ac.uk/~leonard/grape/manual/chapters.htm 
 
 -------------------------------------------------------------------------
 If you use GRAPE to solve a problem, then please email
 L.H.Soicher@qmul.ac.uk, and reference:
 
-L.H. Soicher, The GRAPE package for GAP, Version 4.6.1, 2012, 
+L.H. Soicher, The GRAPE package for GAP, Version 4.7, 2016, 
 http://www.maths.qmul.ac.uk/~leonard/grape/
+
 ------------------------------------------------------------------------
+
+Main changes from GRAPE 4.6.1 to GRAPE 4.7:
+-------------------------------------------
+
+(1) The included version of nauty is now the final patched 
+version of nauty 2.2.
+
+(2) The user may run their own copy of dreadnaut or dreadnautB, 
+rather than the included version from nauty 2.2.
+
+(3) The user may run their own version of bliss as an alternative
+to nauty. 
+
+(4) A test file tst/testall.g is now included.
+
+(5) Documentation and installation instructions have been revised 
+accordingly.
 
 Main changes from GRAPE 4.6 to GRAPE 4.6.1:
 -------------------------------------------
@@ -318,4 +285,4 @@ the effect that if the returned graph had loops, then it
 might have had its isSimple component erroneously set to true.
 
 Leonard H. Soicher
-May 2012 
+January 2016 

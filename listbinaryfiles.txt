@@ -1,5 +1,6 @@
 grape/Makefile.in
 grape/configure
+grape/Makefile
 grape/doc/manual.log
 grape/doc/manual.bbl
 grape/doc/manual.dvi
@@ -7,6 +8,7 @@ grape/doc/manual.pdf
 grape/doc/manual.mst
 grape/doc/manual.blg
 grape/doc/manual.aux
+grape/doc/.Rhistory
 grape/doc/manual.toc
 grape/doc/manual.lab
 grape/doc/manual.six

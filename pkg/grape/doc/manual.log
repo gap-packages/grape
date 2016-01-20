@@ -1,6 +1,5 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdftex 2012.2.18)  20 MAY 2012 12:44
+This is pdfeTeX, Version 3.141592-1.21a-2.2 (Web2C 7.5.4) (format=pdftex 2012.8.24)  17 JAN 2016 17:28
 entering extended mode
- %&-line parsing enabled.
 **manual
 (./manual.tex (../../../doc/gapmacro.tex
 (/usr/share/texmf/tex/plain/amsfonts/amssym.tex
@@ -41,7 +40,7 @@ Running PDFTeX
 \chapnum=\count30
 \ortoks=\toks12
 \bibindent=\dimen23
-) [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+) [1{/usr/share/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 \makelabel{grape:Contents}{{\setbox 0=\hbox {1}\vrule width 0pt height\ht 0}}
 Chapter `Contents' .
 (./manual.toc [2.1
@@ -59,10 +58,28 @@ Chapter `Contents' .
 
  [4.1] (./grape.tex
 Chapter `Grape' .
+Reference `Nau90,MP14' undefined.
+Reference `Nau90,MP14' undefined.
+
+Overfull \hbox (0.69438pt too wide) in paragraph at lines 70--74
+[]\tenrm Since ver-sion 4.5, the of-fi-cial \sf GAP \tenrm dis-tri-bu-tion in-c
+ludes the \sf GRAPE \tenrm pack-age, which in-cludes a 32-bit nauty/dreadnaut|
+
+\hbox(7.37+2.16492)x468.0, glue set - 1.0
+.\hbox(0.0+0.0)x0.0
+.\tenrm S
+.\tenrm i
+.\tenrm n
+.\tenrm c
+.etc.
+
 Label `Reference:Installing a GAP Package' undefined.
 Label `Reference:GAP Root Directories' undefined.
 [5.1]
-Overfull \hbox (5.4364pt too wide) in paragraph at lines 155--160
+Label `REF:The gaprc file' undefined.
+Label `REF:The gaprc file' undefined.
+[6.1]
+Overfull \hbox (5.4364pt too wide) in paragraph at lines 187--192
 []\tenrm In \sf GRAPE\tenrm , a graph \tenit gamma \tenrm is stored as a record
 , with manda-tory com-po-nents \tentt is-Graph\tenrm , \tentt or-der\tenrm , \t
 entt group\tenrm , \tentt schreierVec-|
@@ -76,7 +93,7 @@ entt group\tenrm , \tentt schreierVec-|
 .etc.
 
 
-Overfull \hbox (16.77689pt too wide) in paragraph at lines 161--177
+Overfull \hbox (16.77689pt too wide) in paragraph at lines 193--209
 []\tenrm The \tentt or-der \tenrm com-po-nent con-tains the num-ber of ver-tice
 s of \tenit gamma\tenrm . The ver-tices of \tenit gamma \tenrm are al-ways 1,2,
 ...,\tenit gamma\tentt .order\tenrm ,|
@@ -89,10 +106,9 @@ s of \tenit gamma\tenrm . The ver-tices of \tenit gamma \tenrm are al-ways 1,2,
 .\glue 2.5 plus 1.49998 minus 0.59998
 .etc.
 
-[6.1]
 \openout6 = `manual.example-1.tst'.
 
- [7.1]) (./consmod.tex [8.1]
+[7.1]) (./consmod.tex [8.1]
 Chapter `Functions to construct and modify graphs' .
 \openout6 = `manual.example-2.tst'.
 
@@ -147,13 +163,15 @@ e-fault) and \tenit maxi\tenrm =\tentt true\tenrm ,|
 
 [36.7]) (./cnauty.tex [37.7]
 Chapter `Automorphism groups and isomorphism testing for graphs' .
+Reference `Nau90,MP14' undefined.
 \openout6 = `manual.example-8.tst'.
 
-[38.8] [39.8] [40.8]) (./partlin.tex [41.8]
+[38.8] [39.8] [40.8] [41.8]) (./partlin.tex [42.8]
 Chapter `Partial Linear Spaces' .
+Reference `Nau90,MP14' undefined.
 \openout6 = `manual.example-9.tst'.
 
-[42.9] [43.9] [44.9]) [45.9]
+[43.9] [44.9]) [45.9]
 Chapter `Bibliography' .
 (./manual.bbl) [46.10]
 Chapter `Index' .
@@ -168,18 +186,17 @@ Chapter `Index' .
 ## There were undefined labels or references.
 ## Labels have changed, run again. (Or they were multiply defined.)
 ##
- ){/usr/share/texmf/fonts/enc/dvips/base/8r.enc}</usr/share/texmf/fonts/type1/b
-luesky/cm/cmmi10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr10.pfb></usr/s
-hare/texmf/fonts/type1/bluesky/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/blue
-sky/cm/cmtt10.pfb></usr/share/texmf/fonts/type1/bluesky/ams/msam7.pfb></usr/sha
-re/texmf/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texmf/fonts/type1/urw/
-helvetic/uhvr8a.pfb></usr/share/texmf/fonts/type1/urw/symbol/usyr.pfb></usr/sha
-re/texmf/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf/fonts/type1/urw/tim
-es/utmr8a.pfb></usr/share/texmf/fonts/type1/urw/times/utmr8a.pfb></usr/share/te
-xmf/fonts/type1/urw/times/utmri8a.pfb>
-Output written on manual.pdf (48 pages, 287336 bytes).
-PDF statistics:
- 789 PDF objects out of 1000 (max. 8388607)
- 111 named destinations out of 1000 (max. 131072)
- 809 words of extra memory for PDF output out of 10000 (max. 10000000)
+ )
+! pdfTeX warning (dest): name{citation@Nau90,MP14} has been referenced but does
+ not exist, replaced by a fixed one
 
+{/usr/share/texmf/fonts/enc/dvips/psnfss/8r.enc}</usr/share/texmf/fonts/type1/u
+rw/times/utmr8a.pfb></usr/share/texmf/fonts/type1/urw/symbol/usyr.pfb></usr/sha
+re/texmf/fonts/type1/bluesky/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/bluesk
+y/symbols/msam7.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmmi10.pfb></usr/s
+hare/texmf/fonts/type1/bluesky/cm/cmr10.pfb></usr/share/texmf/fonts/type1/blues
+ky/cm/cmtt10.pfb></usr/share/texmf/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/sh
+are/texmf/fonts/type1/urw/times/utmri8a.pfb></usr/share/texmf/fonts/type1/urw/t
+imes/utmr8a.pfb></usr/share/texmf/fonts/type1/urw/times/utmb8a.pfb></usr/share/
+texmf/fonts/type1/urw/helvetic/uhvb8a.pfb>
+Output written on manual.pdf (48 pages, 295577 bytes).

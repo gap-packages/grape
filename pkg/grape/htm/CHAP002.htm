@@ -25,8 +25,8 @@ This chapter describes the functions used to construct and modify graphs.
 <li><code>Graph( </code><var>G</var><code>, </code><var>L</var><code>, </code><var>act</var><code>, </code><var>rel</var><code> )</code>
 <li><code>Graph( </code><var>G</var><code>, </code><var>L</var><code>, </code><var>act</var><code>, </code><var>rel</var><code>, </code><var>invt</var><code> )</code>
 <p>
-This  is the most  general  and  useful  way  of constructing a graph  in
-GRAPE.
+This  is the most  general  and  useful  way  of constructing a graph
+in GRAPE.
 <p>
 First suppose that the optional boolean parameter <var>invt</var> is unbound or
 has value <code>false</code>. Then <var>L</var> should be a list of elements of a set <i>S</i> on
@@ -51,32 +51,7 @@ of <var>gamma</var> become (an immutable copy of) <var>L</var>.
 The group associated with the graph <var>gamma</var> returned is  the image of <var>G</var>
 acting via <var>act</var> on <code></code><var>gamma</var><code>.names</code>.
 <p>
-For example, suppose you have an <i>n</i> by <i>n</i> adjacency matrix <i>A</i> for a
-graph <i>X</i>, so that the vertex-set of <i>X</i> is {1,<font face="symbol">¼</font>, <i>n</i>}, and
-[<i>i</i>,<i>j</i>] is an edge of <i>X</i> if and only if <i>A</i>[<i>i</i>][<i>j</i>]=1. Suppose also that
-<i>G</i> <font face="symbol">£</font> \Aut (<i>X</i>) (<i>G</i> may be trivial). Then you can make a GRAPE
-graph isomorphic to <i>X</i> via <code>Graph( G,  [1..n], OnPoints, function(x,y)
-return A[x][y]=1; end, true );</code>
-<p>
-<pre>
-gap&gt; A := [[0,1,0],[1,0,0],[0,0,1]];
-[ [ 0, 1, 0 ], [ 1, 0, 0 ], [ 0, 0, 1 ] ]
-gap&gt; G := Group( (1,2) );
-Group([ (1,2) ])
-gap&gt; Graph( G, [1..3], OnPoints,
-&gt;        function(x,y) return A[x][y]=1; end,
-&gt;        true );
-rec(
-  isGraph := true,
-  order := 3,
-  group := Group( [ (1,2) ] ),
-  schreierVector := [ -1, 1, -2 ],
-  adjacencies := [ [ 2 ], [ 3 ] ],
-  representatives := [ 1, 3 ],
-  names := [ 1, 2, 3 ] )
-</pre>
-<p>
-We now use <code>Graph</code> to construct the Petersen graph.
+For example, we may use <code>Graph</code> to construct the Petersen graph as follows:
 <p>
 <pre>
 gap&gt; Petersen := Graph( SymmetricGroup(5), [[1,2]], OnSets,
@@ -91,6 +66,26 @@ rec(
   representatives := [ 1 ],
   names := [ [ 1, 2 ], [ 2, 3 ], [ 3, 4 ], [ 1, 3 ], [ 4, 5 ], [ 2, 4 ],
       [ 1, 5 ], [ 3, 5 ], [ 1, 4 ], [ 2, 5 ] ] )
+</pre>
+<p>
+The function <code>Graph</code> may be used to construct a graph in GRAPE format
+from an adjacency matrixindexadjacency matrix for that graph. For
+example, suppose you have an <i>n</i> by <i>n</i> adjacency matrix <i>A</i> for a graph
+<i>gamma</i>, so that the vertex-set of <i>gamma</i> is {1,<font face="symbol">¼</font>,<i>n</i>}, and
+[<i>i</i>,<i>j</i>] is an edge of <i>gamma</i> if and only if <i>A</i>[<i>i</i>][<i>j</i>]=1.  Then the graph
+<i>gamma</i> in GRAPE-graph format, with associated group the trivial group,
+is returned by <code>Graph( Group(()), [1..n], OnPoints, function(x,y) return
+A[x][y]=1; end, true );</code>
+<p>
+<pre>
+gap&gt; A := [[0,1,0],[1,0,0],[0,0,1]];
+[ [ 0, 1, 0 ], [ 1, 0, 0 ], [ 0, 0, 1 ] ]
+gap&gt; gamma := Graph( Group(()), [1..3], OnPoints,
+&gt;        function(x,y) return A[x][y]=1; end,
+&gt;        true );
+rec( adjacencies := [ [ 2 ], [ 1 ], [ 3 ] ], group := Group(()), 
+  isGraph := true, names := [ 1, 2, 3 ], order := 3,
+  representatives := [ 1, 2, 3 ], schreierVector := [ -1, -2, -3 ] )
 </pre>
 <p>
 <p>
@@ -370,5 +365,5 @@ rec(
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href ="CHAP003.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>May 2012
+<address>grape manual<br>January 2016
 </address></body></html>

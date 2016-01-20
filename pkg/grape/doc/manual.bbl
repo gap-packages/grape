@@ -37,12 +37,26 @@ Alexander Hulpke and Steve Linton.
   Mathematical Society Lecture Note Series}, pages 394--409. Cambridge
   University Press, 1999.
 
+\bibitem[JK07]{JK07}
+Tommi Juntilla and Petteri Kaski.
+\newblock Engineering an efficient canonical labeling tool for large and sparse
+  graphs.
+\newblock In David~Applegate et~al., editor, {\em Proceedings of the Ninth
+  Workshop on Algorithm Engineering and Experiments and the Fourth Workshop on
+  Analytic Algorithmics and Combinatorics}, pages 135--149. SIAM, 2007.
+\newblock bliss homepage: \URL{http://www.tcs.hut.fi/Software/bliss/}.
+
 \bibitem[McK90]{Nau90}
 Brendan~D. McKay.
 \newblock {\em {nauty} user's guide (version 1.5), Technical report
   TR-CS-90-02}.
 \newblock Australian National University, Computer Science Department, 1990.
 \newblock nauty homepage: \URL{http://cs.anu.edu.au/people/bdm/nauty/}.
+
+\bibitem[MP14]{MP14}
+Brendan~D. McKay and Adolfo Piperno.
+\newblock Practical graph isomorphism, ii.
+\newblock {\em J. Symbolic Comput.}, 60:94--112, 2014.
 
 \bibitem[PS97]{PS97}
 Cheryl~E. Praeger and Leonard~H. Soicher.

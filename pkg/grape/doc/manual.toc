@@ -1,6 +1,6 @@
 \chapcontents {1}{Grape}{5}
 \seccontents {1.1}{Installing the GRAPE Package} {5}
-\seccontents {1.2}{Loading GRAPE} {6}
+\seccontents {1.2}{Loading GRAPE} {7}
 \seccontents {1.3}{The structure of a graph in GRAPE} {7}
 \seccontents {1.4}{Examples of the use of GRAPE} {7}
 \chapcontents {2}{Functions to construct and modify graphs}{9}
@@ -9,7 +9,7 @@
 \seccontents {2.3}{NullGraph} {10}
 \seccontents {2.4}{CompleteGraph} {11}
 \seccontents {2.5}{JohnsonGraph} {11}
-\seccontents {2.6}{CayleyGraph} {12}
+\seccontents {2.6}{CayleyGraph} {11}
 \seccontents {2.7}{AddEdgeOrbit} {12}
 \seccontents {2.8}{RemoveEdgeOrbit} {13}
 \seccontents {2.9}{AssignVertexNames} {13}
@@ -75,8 +75,8 @@
 \seccontents {8.3}{GraphIsomorphism} {39}
 \seccontents {8.4}{IsIsomorphicGraph} {40}
 \seccontents {8.5}{GraphIsomorphismClassRepresentatives} {41}
-\chapcontents {9}{Partial Linear Spaces}{42}
-\seccontents {9.1}{PartialLinearSpaces} {42}
-\seccontents {9.2}{A research application of PartialLinearSpaces} {43}
+\chapcontents {9}{Partial Linear Spaces}{43}
+\seccontents {9.1}{PartialLinearSpaces} {43}
+\seccontents {9.2}{A research application of PartialLinearSpaces} {44}
 \chapcontents {}{Bibliography}{46}
 \chapcontents {}{Index}{47}

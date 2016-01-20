@@ -11,7 +11,7 @@
 <li> <A HREF="CHAP001.htm#SECT004">Examples of the use of GRAPE</a>
 </ol><p>
 <p>
-This manual describes the GRAPE (Version&nbsp;4.6.1) package for computing
+This manual describes the GRAPE (Version&nbsp;4.7) package for computing
 with graphs and groups.
 <p>
 GRAPE is primarily designed for the construction and analysis of
@@ -29,101 +29,133 @@ hopefully never more than a fixed constant factor).
 Most GRAPE functions are written entirely in the <font face="Gill Sans,Helvetica,Arial">GAP</font> language.
 However, the GRAPE functions <code>AutomorphismGroup</code>, <code>AutGroupGraph</code>,
 <code>IsIsomorphicGraph</code>, <code>GraphIsomorphismClassRepresentatives</code>,
-<code>GraphIsomorphism</code>  and <code>PartialLinearSpaces</code> make direct or indirect use
-of B.D.&nbsp;McKay's nauty (Version&nbsp;2.2 final) package <a href="biblio.htm#Nau90"><cite>Nau90</cite></a>,
+<code>GraphIsomorphism</code>  and <code>PartialLinearSpaces</code> make direct or indirect
+use the nauty <a href="biblio.htm#Nau90,MP14"><cite>Nau90,MP14</cite></a> or bliss <a href="biblio.htm#JK07"><cite>JK07</cite></a> packages,
 via a GRAPE interface.  These functions can only be used on a fully
-installed version of GRAPE. Installation of GRAPE is described
-in its <code>README</code> file and in its manual section <a href="CHAP001.htm#SECT001">Installing the GRAPE Package</a>. 
+installed version of GRAPE. Installation of GRAPE is described in
+this chapter of the manual.
 <p>
-Except for the nauty package included with GRAPE, the function
-<code>SmallestImageSet</code> by Steve Linton, and the new nauty interface by
-Alexander Hulpke, the GRAPE package was designed and written by Leonard
-H. Soicher, School of Mathematical Sciences, Queen Mary, University of
-London.  Except for the nauty package, GRAPE is licensed under the
+Except for the nauty package of B.D.&nbsp;Mckay included with GRAPE,
+the function <code>SmallestImageSet</code> by Steve Linton, the nauty interface
+by Alexander Hulpke, and the initial bliss interface by Jerry James,
+the GRAPE package was designed and written by Leonard H. Soicher,
+School of Mathematical Sciences, Queen Mary University of London.
+Except for the included nauty package, GRAPE is licensed under the
 terms of the GNU General Public License as published by the Free Software
 Foundation; either version 2 of the License, or (at your option) any later
 version. For details, see <a href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a>.
-Further licensing and copyright information for GRAPE is contained 
-in its <code>COPYING</code> file. 
+Further licensing and copyright information for GRAPE is contained
+in its <code>COPYING</code> file.
 <p>
 If you use GRAPE to solve a problem then please send a short email
 about it to <a href="mailto:L.H.Soicher@qmul.ac.uk">L.H.Soicher@qmul.ac.uk</a>, and reference the GRAPE 
 package as follows:
 <p>
-L.H. Soicher, The GRAPE package for GAP, Version&nbsp;4.6.1, 2012,
+L.H. Soicher, The GRAPE package for GAP, Version&nbsp;4.7, 2016,
 <a href="http://www.maths.qmul.ac.uk/~leonard/grape/">http://www.maths.qmul.ac.uk/~leonard/grape/</a>.
 <p>
-If your work made use of a function depending on the nauty package
-then you should also reference nauty <a href="biblio.htm#Nau90"><cite>Nau90</cite></a>.
+If your work made use of a function depending on nauty or bliss
+then you should also reference nauty <a href="biblio.htm#Nau90,MP14"><cite>Nau90,MP14</cite></a> or bliss
+<a href="biblio.htm#JK07"><cite>JK07</cite></a> as appropriate.
 <p>
-The development of GRAPE was partially supported by a European Union
-HCM grant in ``Computational Group Theory''.
+The development of GRAPE was partially supported by a European
+Union HCM grant in ``Computational Group Theory''. It is currently
+partially supported by EPSRC grant EP/M022641/1 (CoDiMa: a Collaborative
+Computational Project in the area of Computational Discrete Mathematics).
 <p>
 <p>
 <h2><a name="SECT001">1.1 Installing the GRAPE Package</a></h2>
 <p><p>
-The <font face="Gill Sans,Helvetica,Arial">GAP</font>&nbsp;4.5 distribution includes the GRAPE package, which now
-includes a 32-bit nauty/dreadnaut binary for Windows (XP and later
-versions).  Thus, GRAPE normally requires no further installation
-for Windows users of <font face="Gill Sans,Helvetica,Arial">GAP</font>&nbsp;4.5.
+Since version 4.5, the official <font face="Gill Sans,Helvetica,Arial">GAP</font> distribution includes the GRAPE
+package, which includes a 32-bit nauty/dreadnaut binary for Windows
+(XP and later versions).  Thus, GRAPE normally requires no further
+installation for Windows users of <font face="Gill Sans,Helvetica,Arial">GAP</font>.
 <p>
 You do not need to download and unpack an archive for GRAPE
 unless you want to install the package separately from your main
 <font face="Gill Sans,Helvetica,Arial">GAP</font> installation or are installing an upgrade of GRAPE to an
 existing installation of <font face="Gill Sans,Helvetica,Arial">GAP</font> (see the main <font face="Gill Sans,Helvetica,Arial">GAP</font> reference section
 <a href="badlink:Reference:Installing a GAP Package">Reference:Installing a GAP Package</a>).  If you do need to download
-GRAPE, you can find archive files for the package in various formats
-at <a href="http://www.gap-system.org/Packages/grape.html">http://www.gap-system.org/Packages/grape.html</a>, and then your
-archive file of choice should be downloaded and unpacked in the <code>pkg</code>
+GRAPE, you can find the most recent <code>.tar.gz</code> archive file for
+the package at <a href="http://www.maths.qmul.ac.uk/~leonard/grape/">http://www.maths.qmul.ac.uk/~leonard/grape/</a>, and
+then this archive file should be downloaded and unpacked in the <code>pkg</code>
 subdirectory of an appropriate <font face="Gill Sans,Helvetica,Arial">GAP</font> root directory (see the main <font face="Gill Sans,Helvetica,Arial">GAP</font>
 reference section <a href="badlink:Reference:GAP Root Directories">Reference:GAP Root Directories</a>).
 <p>
-Unless you are running GRAPE under Windows (XP or later), you will
-normally need to perform compilation of B.D.&nbsp;McKay's nauty/dreadnaut
-programs included with GRAPE, and in a Unix environment, you should
-proceed as follows.  After installing <font face="Gill Sans,Helvetica,Arial">GAP</font>, go to the GRAPE
-home directory (usually the directory <code>pkg/grape</code> of the <font face="Gill Sans,Helvetica,Arial">GAP</font> home
-directory), and run <code>./configure </code><var>path</var><code></code>, where <var>path</var> is the path of the
-<font face="Gill Sans,Helvetica,Arial">GAP</font> home directory.  So for example, if you install GRAPE in the
-<code>pkg</code> directory of the <font face="Gill Sans,Helvetica,Arial">GAP</font> home directory, run
+If your GRAPE installation does not include a pre-compiled binary of 
+the nauty/dreadnaut programs included with GRAPE and you do not want 
+to use an already installed version of nauty or bliss, you will 
+need to perform compilation of the nauty/dreadnaut programs included with
+GRAPE, and to do this in a Unix environment, you should proceed as
+follows.  After installing <font face="Gill Sans,Helvetica,Arial">GAP</font>, go to the GRAPE home directory
+(usually the directory <code>pkg/grape</code> of the <font face="Gill Sans,Helvetica,Arial">GAP</font> home directory),
+and run <code>./configure </code><var>path</var><code></code>, where <var>path</var> is the path of the <font face="Gill Sans,Helvetica,Arial">GAP</font>
+home directory.  So for example, if you install GRAPE in the <code>pkg</code>
+directory of the <font face="Gill Sans,Helvetica,Arial">GAP</font> home directory, run 
 <pre>
 ./configure ../..
 </pre>
-This will fetch the name of the architecture for which <font face="Gill Sans,Helvetica,Arial">GAP</font> has been
-most recently configured, and create a <code>Makefile</code>. Now run
+This will fetch the name of the architecture for which <font face="Gill Sans,Helvetica,Arial">GAP</font>
+has been most recently configured, and create a <code>Makefile</code>. Now run
 <pre>
 make 
 </pre>
-to create the nauty/dreadnaut binary and to put it in the appropriate
-place.  This configuration/make process for GRAPE only works for
-the <strong>last</strong> architecture for which <font face="Gill Sans,Helvetica,Arial">GAP</font> was configured. Therefore, you
-should always follow the above procedure to install the nauty/dreadnaut
-binary immediately after compiling <font face="Gill Sans,Helvetica,Arial">GAP</font> for a given configuration,
-say for a different architecture on a common file system. However, if
-you want to add GRAPE later, you can just run <code>./configure</code> again in
-the <font face="Gill Sans,Helvetica,Arial">GAP</font> home directory for the architecture, before performing the
-GRAPE configure/make process to install the nauty/dreadnaut binary
-for that architecture.
+to create the nauty/dreadnaut binary and to put
+it in the appropriate place.  This configuration/make process for
+GRAPE only works for the <strong>last</strong> architecture for which <font face="Gill Sans,Helvetica,Arial">GAP</font> was
+configured. Therefore, you should always follow the above procedure to
+install the nauty/dreadnaut binary immediately after compiling <font face="Gill Sans,Helvetica,Arial">GAP</font>
+for a given configuration, say for a different architecture on a common
+file system. However, if you want to add GRAPE later, you can just run
+<code>./configure</code> again in the <font face="Gill Sans,Helvetica,Arial">GAP</font> home directory for the architecture,
+before performing the GRAPE configure/make process to install the
+nauty/dreadnaut binary for that architecture.
 <p>
-You should now test GRAPE and the interface to nauty on each
-architecture on which you have installed GRAPE. Start up <font face="Gill Sans,Helvetica,Arial">GAP</font>
-and at the prompt type
+To use GRAPE with a separately installed version of nauty or
+bliss you should proceed as follows. Please note that the nauty
+interface for GRAPE has only been extensively tested with the
+included Version&nbsp;2.2 of nauty, and the bliss interface has only
+been tested with Version&nbsp;0.73 of bliss. To use a separately
+installed version of nauty, type the following commands in <font face="Gill Sans,Helvetica,Arial">GAP</font>, or 
+place these commands in your <code>gaprc</code> file (see <a href="../../../doc/ref/chap3.html#X84D4CF587D437C00">REF:The gaprc file</a>), where
+<code>dreadnaut_or_dreadnautB_executable</code> should be the name of your
+dreadnaut or dreadnautB executable file:
 <pre>
-LoadPackage( "grape" );
+LoadPackage("grape"); 
+GRAPE_NAUTY := true; 
+GRAPE_DREADNAUT_EXE := "dreadnaut_or_dreadnautB_executable"; 
+</pre>
+To use a separately installed version of bliss instead of nauty,
+type the following commands in <font face="Gill Sans,Helvetica,Arial">GAP</font>, or place these commands in your
+<code>gaprc</code> file (see <a href="../../../doc/ref/chap3.html#X84D4CF587D437C00">REF:The gaprc file</a>), where <code>bliss_executable</code> should be
+the name of your bliss executable file:
+<pre>
+LoadPackage("grape"); 
+GRAPE_NAUTY := false; 
+GRAPE_BLISS_EXE := "bliss_executable"; 
+</pre>
+For example, if the bliss executable is <code>/usr/local/bin/bliss</code>, then type:
+<pre>
+LoadPackage("grape"); 
+GRAPE_NAUTY := false; 
+GRAPE_BLISS_EXE := "/usr/local/bin/bliss"; 
+</pre>
+<p>
+You should now test GRAPE and the interface to nauty or bliss
+on each architecture on which you have installed GRAPE. Start up
+<font face="Gill Sans,Helvetica,Arial">GAP</font> and at the prompt type 
+<pre>
+LoadPackage( "grape" ); 
 </pre>
 On-line documentation for GRAPE should be available by typing 
 <pre>
-?GRAPE
+?GRAPE 
 </pre>
-The command
+Then run some tests by typing:
 <pre>
-IsIsomorphicGraph( JohnsonGraph(7,3), JohnsonGraph(7,4) );
+Test(Filename(DirectoriesPackageLibrary("grape","tst"),"testall.tst"));
 </pre>
-should return <code>true</code>, and 
-<pre>
-Size( AutGroupGraph( JohnsonGraph(4,2) ) );
-</pre>
-should be <code>48</code>.
+This should return the value <code>true</code>.
 <p>
 Both dvi and pdf versions of the GRAPE manual are available
 (as <code>manual.dvi</code> and <code>manual.pdf</code> respectively) in the <code>doc</code> directory
@@ -135,8 +167,7 @@ where you should also send any comments or bug reports.
 <p>
 <h2><a name="SECT002">1.2 Loading GRAPE</a></h2>
 <p><p>
-Before using GRAPE you must load the package within <font face="Gill Sans,Helvetica,Arial">GAP</font> by calling 
-the statement
+Before using GRAPE you must load the package within <font face="Gill Sans,Helvetica,Arial">GAP</font> via: 
 <p>
 <pre>
 gap&gt; LoadPackage("grape");
@@ -228,5 +259,5 @@ gap&gt; GlobalParameters(EP);
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>May 2012
+<address>grape manual<br>January 2016
 </address></body></html>
