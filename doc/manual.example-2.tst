@@ -1,4 +1,3 @@
-
 gap> Petersen := Graph( SymmetricGroup(5), [[1,2]], OnSets,
 >                    function(x,y) return Intersection(x,y)=[]; end );
 rec(
@@ -11,8 +10,6 @@ rec(
   representatives := [ 1 ],
   names := [ [ 1, 2 ], [ 2, 3 ], [ 3, 4 ], [ 1, 3 ], [ 4, 5 ], [ 2, 4 ],
       [ 1, 5 ], [ 3, 5 ], [ 1, 4 ], [ 2, 5 ] ] )
-
-
 gap> A := [[0,1,0],[1,0,0],[0,0,1]];
 [ [ 0, 1, 0 ], [ 1, 0, 0 ], [ 0, 0, 1 ] ]
 gap> gamma := Graph( Group(()), [1..3], OnPoints,
@@ -21,8 +18,6 @@ gap> gamma := Graph( Group(()), [1..3], OnPoints,
 rec( adjacencies := [ [ 2 ], [ 1 ], [ 3 ] ], group := Group(()),
   isGraph := true, names := [ 1, 2, 3 ], order := 3,
   representatives := [ 1, 2, 3 ], schreierVector := [ -1, -2, -3 ] )
-
-
 gap> EdgeOrbitsGraph( Group((1,3),(1,2)(3,4)), [[1,2],[4,5]], 5 );
 rec(
   isGraph := true,
@@ -32,8 +27,6 @@ rec(
   adjacencies := [ [ 2, 4, 5 ], [  ] ],
   representatives := [ 1, 5 ],
   isSimple := false )
-
-
 gap> NullGraph( Group( (1,2,3) ), 4 );
 rec(
   isGraph := true,
@@ -43,8 +36,6 @@ rec(
   adjacencies := [ [  ], [  ] ],
   representatives := [ 1, 4 ],
   isSimple := true )
-
-
 gap> CompleteGraph( Group( (1,2,3), (1,2) ) );
 rec(
   isGraph := true,
@@ -54,8 +45,6 @@ rec(
   adjacencies := [ [ 2, 3 ] ],
   representatives := [ 1 ],
   isSimple := true )
-
-
 gap> JohnsonGraph(5,3);
 rec(
   isGraph := true,
@@ -68,8 +57,28 @@ rec(
   names := [ [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 2, 5 ], [ 1, 3, 4 ], [ 1, 3, 5 ],
       [ 1, 4, 5 ], [ 2, 3, 4 ], [ 2, 3, 5 ], [ 2, 4, 5 ], [ 3, 4, 5 ] ],
   isSimple := true )
-
-
+gap> H:=HammingGraph(3,4);
+rec( adjacencies := [ [ 2, 3, 4, 5, 9, 13, 17, 33, 49 ] ],
+  group := <permutation group with 8 generators>, isGraph := true,
+  names := [ [ 1, 1, 1 ], [ 1, 1, 2 ], [ 1, 1, 3 ], [ 1, 1, 4 ],
+      [ 1, 2, 1 ], [ 1, 2, 2 ], [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 3, 1 ],
+      [ 1, 3, 2 ], [ 1, 3, 3 ], [ 1, 3, 4 ], [ 1, 4, 1 ], [ 1, 4, 2 ],
+      [ 1, 4, 3 ], [ 1, 4, 4 ], [ 2, 1, 1 ], [ 2, 1, 2 ], [ 2, 1, 3 ],
+      [ 2, 1, 4 ], [ 2, 2, 1 ], [ 2, 2, 2 ], [ 2, 2, 3 ], [ 2, 2, 4 ],
+      [ 2, 3, 1 ], [ 2, 3, 2 ], [ 2, 3, 3 ], [ 2, 3, 4 ], [ 2, 4, 1 ],
+      [ 2, 4, 2 ], [ 2, 4, 3 ], [ 2, 4, 4 ], [ 3, 1, 1 ], [ 3, 1, 2 ],
+      [ 3, 1, 3 ], [ 3, 1, 4 ], [ 3, 2, 1 ], [ 3, 2, 2 ], [ 3, 2, 3 ],
+      [ 3, 2, 4 ], [ 3, 3, 1 ], [ 3, 3, 2 ], [ 3, 3, 3 ], [ 3, 3, 4 ],
+      [ 3, 4, 1 ], [ 3, 4, 2 ], [ 3, 4, 3 ], [ 3, 4, 4 ], [ 4, 1, 1 ],
+      [ 4, 1, 2 ], [ 4, 1, 3 ], [ 4, 1, 4 ], [ 4, 2, 1 ], [ 4, 2, 2 ],
+      [ 4, 2, 3 ], [ 4, 2, 4 ], [ 4, 3, 1 ], [ 4, 3, 2 ], [ 4, 3, 3 ],
+      [ 4, 3, 4 ], [ 4, 4, 1 ], [ 4, 4, 2 ], [ 4, 4, 3 ], [ 4, 4, 4 ] ],
+  order := 64, representatives := [ 1 ],
+  schreierVector := [ -1, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 1, 5,
+      5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 1, 5, 5, 5, 3, 5, 5, 5, 3,
+      5, 5, 5, 3, 5, 5, 5, 1, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5 ] )
+gap> GlobalParameters(H);
+[ [ 0, 0, 9 ], [ 1, 2, 6 ], [ 2, 4, 3 ], [ 3, 6, 0 ] ]
 gap> C:=CayleyGraph(SymmetricGroup(4),[(1,2),(2,3),(3,4)]);
 rec(
   isGraph := true,
@@ -91,8 +100,6 @@ gap> Girth(C);
 4
 gap> Diameter(C);
 6
-
-
 gap> gamma := NullGraph( Group( (1,3), (1,2)(3,4) ) );;
 gap> AddEdgeOrbit( gamma, [4,3] );
 gap> gamma;
@@ -106,8 +113,6 @@ rec(
   isSimple := true )
 gap> GlobalParameters(gamma);
 [ [ 0, 0, 2 ], [ 1, 0, 1 ], [ 2, 0, 0 ] ]
-
-
 gap> gamma := CompleteGraph( Group( (1,3), (1,2)(3,4) ) );;
 gap> RemoveEdgeOrbit( gamma, [1,3] );
 gap> gamma;
@@ -121,8 +126,6 @@ rec(
   isSimple := true )
 gap> GlobalParameters(gamma);
 [ [ 0, 0, 2 ], [ 1, 0, 1 ], [ 2, 0, 0 ] ]
-
-
 gap> gamma := NullGraph( Group(()), 3 );
 rec(
   isGraph := true,
@@ -143,4 +146,3 @@ rec(
   representatives := [ 1, 2, 3 ],
   isSimple := true,
   names := [ "a", "b", "c" ] )
-

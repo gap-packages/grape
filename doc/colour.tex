@@ -12,29 +12,108 @@
 \Chapter{Vertex-Colouring and Complete Subgraphs}
 
 The following sections describe functions for (proper) vertex-colouring
-or determining complete subgraphs of given graphs. The function
-`CompleteSubgraphsOfGivenSize' can also be used to determine the
-complete subgraphs with given vertex-weight sum in a vertex-weighted
-graph\index{vertex-weighted graph}, where the weights can be positive
+and determining complete subgraphs of a given simple graph. Included are
+functions for determining the chromatic number and the clique number of
+a simple graph.
+
+The function `CompleteSubgraphsOfGivenSize' can be used to determine
+the complete subgraphs with given vertex-weight sum in a vertex-weighted
+graph~\index{vertex-weighted graph}, where the weights can be positive
 integers or non-zero vectors of non-negative integers.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{VertexColouring}
 
 \>VertexColouring( <gamma> )
+\>VertexColouring( <gamma>, <k> )
+\>VertexColouring( <gamma>, <k>, <m> )
 
-This function returns a proper vertex-colouring <C> for the graph <gamma>,
-which must be simple.
+This function returns a proper vertex-colouring <C> for the graph
+<gamma>, which must be simple. A *proper vertex-colouring*~\index{proper
+vertex-colouring} of <gamma> is an assignment of colours to the vertices
+of <gamma>, such that, if $[i,j]$ is an edge, then vertices $i$ and $j$
+are assigned different colours.
 
-This *proper vertex-colouring* <C> is a list of positive integers (the
-*colours*), indexed by the vertices of <gamma>, with the property that
-$<C>[i]\not=<C>[j]$ whenever $[i,j]$ is an edge of <gamma>. At present a
-greedy algorithm is used, and the number of colours used is by no means
-guaranteed to be minimal.
+The returned proper vertex-colouring <C> is given as a list of positive
+integers (the *colours*), indexed by the vertices of <gamma>, with the
+property that $<C>[i]\not=<C>[j]$ whenever $[i,j]$ is an edge of <gamma>.
+
+If the optional parameter <k> is given, then <k> must be a non-negative
+integer. In this case, a proper vertex-colouring using at most <k>
+colours is returned, if such a colouring exists, and `fail' otherwise.
+
+If, in addition to <k>, the optional parameter <m> is given, then <m>
+must be a a non-negative integer, such that there is no monochromatic
+set of vertices of size greater than <m> in any proper vertex-colouring
+of <gamma> which uses at most <k> colours.  This information (which is
+not checked) may help to speed up the function.
 
 \beginexample
-gap> VertexColouring( JohnsonGraph(4,2) );
-[ 1, 3, 2, 2, 3, 1 ]
+gap> J:=JohnsonGraph(5,2);
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], group := Group([ (1,5,8,10,4)
+  (2,6,9,3,7), (2,5)(3,6)(4,7) ]), isGraph := true, isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
+gap> VertexColouring(J);
+[ 1, 3, 5, 4, 2, 3, 6, 1, 5, 2 ]
+gap> VertexColouring(J,5);
+[ 1, 2, 3, 4, 5, 4, 2, 1, 3, 5 ]
+gap> VertexColouring(J,4);
+fail
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{MinimumVertexColouring}
+
+\>MinimumVertexColouring( <gamma> )
+
+This function returns a minimum vertex-colouring <C> for the graph
+<gamma>, which must be simple. A *minimum vertex-colouring*~\index{minimum
+vertex-colouring} is a proper vertex-colouring using as few colours
+as possible.
+
+The returned minimum vertex-colouring <C> is given as a list of positive
+integers (the *colours*), indexed by the vertices of <gamma>, with the
+property that $<C>[i]\not=<C>[j]$ whenever $[i,j]$ is an edge of <gamma>,
+and subject to this property, the number of distinct elements of <C>
+is as small as possible.
+
+See also "VertexColouring".
+
+\beginexample
+gap> J:=JohnsonGraph(5,2);
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], group := Group([ (1,5,8,10,4)
+  (2,6,9,3,7), (2,5)(3,6)(4,7) ]), isGraph := true, isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
+gap> MinimumVertexColouring(J);
+[ 1, 2, 3, 4, 5, 4, 2, 1, 3, 5 ]
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{ChromaticNumber}
+
+\>ChromaticNumber( <gamma> )
+
+This function returns the chromatic number of the given graph <gamma>,
+which must be simple.  The *chromatic number*~\index{chromatic number} of
+<gamma> is the minimum number of colours needed to properly vertex-colour
+<gamma>, that is, the number of colours used in a minimum vertex-colouring
+of <gamma>.
+
+See also "MinimumVertexColouring".
+
+\beginexample
+gap> ChromaticNumber(JohnsonGraph(5,2));
+5
+gap> ChromaticNumber(JohnsonGraph(6,2));
+5
+gap> ChromaticNumber(JohnsonGraph(7,2));
+7
 \endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -222,4 +301,49 @@ gap> CompleteSubgraphsOfGivenSize(delta,5,1,false,true,
 >       [1,2,3,4,5,6,7,8,7,6,5,4,3,2,1]);
 [ [ 1, 4 ], [ 2, 3 ], [ 3, 14 ], [ 4, 15 ], [ 5 ], [ 11 ], [ 12, 15 ], 
   [ 13, 14 ] ]
+\endexample
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Section{MaximumClique}
+
+\>MaximumClique( <gamma> )
+
+This function returns a maximum clique of the graph <gamma>, which must
+be simple.  A *maximum clique*~\index{maximum clique} of <gamma> is a
+set of pairwise adjacent vertices of <gamma> of the largest possible size.
+
+An alternative name for this function is
+`MaximumCompleteSubgraph'~\index{MaximumCompleteSubgraph}. 
+
+See also "CompleteSubgraphsOfGivenSize".
+
+\beginexample
+gap> J:=JohnsonGraph(5,2);
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], group := Group([ (1,5,8,10,4)
+  (2,6,9,3,7), (2,5)(3,6)(4,7) ]), isGraph := true, isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
+gap> MaximumClique(J);
+[ 1, 2, 3, 4 ]
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{CliqueNumber}
+
+\>CliqueNumber( <gamma> )
+
+This function returns the clique number of the given graph <gamma>,
+which must be simple.  The *clique number*~\index{clique number} of
+<gamma> is the size of a largest clique in <gamma>, where a *clique*
+is a set of pairwise adjacent vertices.
+
+\beginexample
+gap> CliqueNumber(JohnsonGraph(5,2));
+4
+gap> CliqueNumber(JohnsonGraph(6,2));
+5
+gap> CliqueNumber(JohnsonGraph(7,2));
+6
 \endexample

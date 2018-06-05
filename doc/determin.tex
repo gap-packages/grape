@@ -193,40 +193,38 @@ gap> OrbitalGraphColadjMats( SymmetricGroup(7) );
 \>VertexTransitiveDRGs( <coladjmats> )
 \>VertexTransitiveDRGs( <G> )
 
-This function can determine (among other things) all the
-distance-regular graphs on which a given transitive permutation group
-<G> acts as a vertex-transitive group of automorphisms (as long as the
+This function can determine (among other things) all the distance-regular
+graphs on which a given non-trivial transitive permutation group <G>
+acts as a vertex-transitive group of automorphisms (as long as the
 permutation rank of <G> is not too large).
 
-In the first form of this function, the input parameter <coladjmats>
-must be a list of collapsed adjacency matrices for the orbital digraphs
-of some transitive permutation group <G>, collapsed with respect to a
+In the first form of this function, the input parameter <coladjmats> must
+be a list of collapsed adjacency matrices for the orbital digraphs of some
+non-trivial transitive permutation group <G>, collapsed with respect to a
 point stabilizer (such as the list of matrices produced by the function
 `OrbitalGraphColadjMats').  It is assumed that the orbital/suborbit
 indexing used is the same as that for the rows (and columns) of each of
 the matrices, as well as for the indexing of the matrices themselves,
-with the trivial orbital first, so that, in particular,
-`<coladjmats>[1]' must be an identity matrix.
+with the trivial orbital first, so that, in particular, `<coladjmats>[1]'
+must be an identity matrix.
 
 In the second form of this function, the input parameter <G> must be a
-transitive permutation group, and then the result returned will be
-the same as `VertexTransitiveDRGs( OrbitalGraphColadjMats( <G> ) )'.
+non-trivial transitive permutation group, and then the result returned
+will be the same as `VertexTransitiveDRGs( OrbitalGraphColadjMats( <G>
+) )'.
 
 In either case, this function returns a record <result>, which gives
-information on the transitive group <G> acting on its natural set $V$.
-The most important component of this record is the list
+information on the non-trivial transitive group <G> acting on its
+natural set $V$.  The most important component of this record is the list
 `orbitalCombinations', whose elements give the sets of (the indices of)
 the <G>-orbitals whose union gives the edge-set of a distance-regular
-graph with vertex-set $V$. The component `intersectionArrays' gives the
-corresponding intersection arrays. The component `degree' is the degree
-of the permutation group <G>, `rank' is its (permutation) rank, and
-`isPrimitive' is true if <G> is primitive, and `false' otherwise.
+graph with vertex-set $V$. The component `intersectionArrays' gives
+the corresponding intersection arrays. The component `degree' is the
+degree of the permutation group <G>, `rank' is its (permutation) rank,
+and `isPrimitive' is true if <G> is primitive, and `false' otherwise.
 
 The techniques used in this function and definitions of the terms used
 above can be found in \cite{PS97}.
-
-*Warning* This function checks all subsets of `[2..<result>.rank]', so
-the permutation rank of <G> must not be large!
 
 \beginexample
 gap> m22:=PrimitiveGroup(22,1);;

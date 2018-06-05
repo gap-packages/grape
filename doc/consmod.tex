@@ -58,7 +58,7 @@ rec(
 \endexample
 
 The function `Graph' may be used to construct a graph in {\GRAPE} format
-from an adjacency matrix\index{adjacency matrix} for that graph. For
+from an adjacency matrix~\index{adjacency matrix} for that graph. For
 example, suppose you have an $n$ by $n$ adjacency matrix $A$ for a graph
 $gamma$, so that the vertex-set of $gamma$ is $\{1,\ldots,n\}$, and
 $[i,j]$ is an edge of $gamma$ if and only if $A[i][j]=1$.  Then the graph
@@ -189,6 +189,44 @@ rec(
   isSimple := true )
 \endexample
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{HammingGraph}
+
+\>HammingGraph( <d>, <q> )
+
+Let <d> and <q> be positive integers.  Then this function returns a
+graph <gamma> isomorphic to the Hamming graph $H(<d>,<q>)$.  The vertices
+(actually the vertex-names) of <gamma> are the <d>-vectors with entries
+in $\{1,\ldots,<q>\}$, with $x$ joined to $y$ if and only if $x$ and $y$
+differ in exactly one co-ordinate (that is, $x$ and $y$ are at Hamming
+distance~1).  The group associated with <gamma> is the image of the wreath
+product of the symmetric group $S_<q>$ with the symmetric group $S_<d>$,
+in its product action on the vertices.
+
+\beginexample
+gap> H:=HammingGraph(3,4);
+rec( adjacencies := [ [ 2, 3, 4, 5, 9, 13, 17, 33, 49 ] ], 
+  group := <permutation group with 8 generators>, isGraph := true, 
+  names := [ [ 1, 1, 1 ], [ 1, 1, 2 ], [ 1, 1, 3 ], [ 1, 1, 4 ], 
+      [ 1, 2, 1 ], [ 1, 2, 2 ], [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 3, 1 ], 
+      [ 1, 3, 2 ], [ 1, 3, 3 ], [ 1, 3, 4 ], [ 1, 4, 1 ], [ 1, 4, 2 ], 
+      [ 1, 4, 3 ], [ 1, 4, 4 ], [ 2, 1, 1 ], [ 2, 1, 2 ], [ 2, 1, 3 ], 
+      [ 2, 1, 4 ], [ 2, 2, 1 ], [ 2, 2, 2 ], [ 2, 2, 3 ], [ 2, 2, 4 ], 
+      [ 2, 3, 1 ], [ 2, 3, 2 ], [ 2, 3, 3 ], [ 2, 3, 4 ], [ 2, 4, 1 ], 
+      [ 2, 4, 2 ], [ 2, 4, 3 ], [ 2, 4, 4 ], [ 3, 1, 1 ], [ 3, 1, 2 ], 
+      [ 3, 1, 3 ], [ 3, 1, 4 ], [ 3, 2, 1 ], [ 3, 2, 2 ], [ 3, 2, 3 ], 
+      [ 3, 2, 4 ], [ 3, 3, 1 ], [ 3, 3, 2 ], [ 3, 3, 3 ], [ 3, 3, 4 ], 
+      [ 3, 4, 1 ], [ 3, 4, 2 ], [ 3, 4, 3 ], [ 3, 4, 4 ], [ 4, 1, 1 ], 
+      [ 4, 1, 2 ], [ 4, 1, 3 ], [ 4, 1, 4 ], [ 4, 2, 1 ], [ 4, 2, 2 ], 
+      [ 4, 2, 3 ], [ 4, 2, 4 ], [ 4, 3, 1 ], [ 4, 3, 2 ], [ 4, 3, 3 ], 
+      [ 4, 3, 4 ], [ 4, 4, 1 ], [ 4, 4, 2 ], [ 4, 4, 3 ], [ 4, 4, 4 ] ], 
+  order := 64, representatives := [ 1 ], 
+  schreierVector := [ -1, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 1, 5, 
+      5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 1, 5, 5, 5, 3, 5, 5, 5, 3, 
+      5, 5, 5, 3, 5, 5, 5, 1, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5 ] )
+gap> GlobalParameters(H);
+[ [ 0, 0, 9 ], [ 1, 2, 6 ], [ 2, 4, 3 ], [ 3, 6, 0 ] ]
+\endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{CayleyGraph}

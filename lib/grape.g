@@ -1,8 +1,8 @@
 ##############################################################################
 ##
-##  grape.g (Version 4.7)    GRAPE Library     Leonard Soicher
+##  grape.g (Version 4.8)    GRAPE Library     Leonard Soicher
 ##
-##  Copyright (C) 1992-2015 Leonard Soicher, School of Mathematical Sciences, 
+##  Copyright (C) 1992-2018 Leonard Soicher, School of Mathematical Sciences, 
 ##                      Queen Mary University of London, London E1 4NS, U.K.
 ##
 # This version includes code by Jerry James (debugged by LS) 
@@ -45,7 +45,7 @@ GRAPE_DREADNAUT_EXE :=
    ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnautB"); 
    # filename of dreadnaut or dreadnautB executable
 
-GRAPE_BLISS_EXE := "/home/leonard/bliss-0.73/bliss"; 
+GRAPE_BLISS_EXE := ExternalFilename(DirectoriesSystemPrograms(),"bliss"); 
    # filename of bliss executable
 
 BindGlobal("GRAPE_OrbitRepresentatives",function(arg)
@@ -459,6 +459,59 @@ J.isSimple:=true;
 return J;
 end);
 
+BindGlobal("HammingGraph",function(d,q)
+#
+# Where d and q are positive integers, this function returns the
+# Hamming graph H(d,q), defined as follows. The set of vertices
+# (actually vertex-names) is the set of all d-tuples of elements
+# of [1..q], with vertices v and w joined by an edge iff their
+# Hamming distance is 1. The group associated with the returned
+# graph is  S_q wr S_d  in its product action on the vertices.
+#
+local W,projection,embedding,moved,act,rel;
+if not IsPosInt(d) or not IsPosInt(q) then 
+   Error("usage: HammingGraph( <PosInt>, <PosInt> )"); 
+fi;
+if q=1 then
+   # special trivial case
+   return Graph(Group(()),[ListWithIdenticalEntries(d,1)],
+      function(x,g) return x; end,function(x,y) return false; end,true);
+fi;
+W:=WreathProductImprimitiveAction(SymmetricGroup([1..q]),SymmetricGroup([1..d]));
+projection:=Projection(W);
+embedding:=Embedding(W,d+1);
+moved:=List([1..d],i->MovedPoints(Image(Embedding(W,i))));
+act := function(x,g)
+# Product action of  g  on d-tuple  x.
+local bb,b,a,y,i;
+bb:=g^projection;
+b:=bb^embedding;
+a:=g*b^(-1); # so g factorises as a*b in W
+y:=[];
+for i in [1..d] do
+   y[i^bb]:=PositionSorted(moved[i],moved[i][x[i]]^a);
+od;
+return y;
+end;
+rel := function(x,y)
+# boolean function returning true iff the d-tuples  x  and  y
+# are at Hamming distance 1. 
+local i,count;
+count:=0; 
+for i in [1..d] do
+   if x[i]<>y[i] then
+      count:=count+1;
+      if count>1 then 
+         return false;
+      fi;
+   fi;
+od; 
+return count=1;
+end;
+# Now contruct and return the Hamming graph.
+return Graph(W,Tuples([1..q],d),act,rel,true);
+end); 
+
 BindGlobal("IsGraph",function(obj)
 #
 # Returns  true  iff  obj  is a (GRAPE) graph.
@@ -867,80 +920,6 @@ for e in E do
    AddEdgeOrbit(gamma,e); 
 od;
 return gamma;
-end);
-
-BindGlobal("VertexColouring",function(gamma)
-#
-# Returns a proper vertex-colouring for the graph  gamma,  which must be
-# simple.
-#
-# Here a (proper) vertex-colouring is a list  C  of positive integers,
-# of length  gamma.order,  such that  C[i]<>C[j]  whenever 
-# [i,j]  is an edge of  gamma.
-#
-# At present a greedy algorithm and a fair amount of store is used.  
-#
-local i,j,g,c,C,orb,a,adj,adjs,adjcolours,maxcolour,im,gens;
-if not IsGraph(gamma) then 
-   Error("usage: VertexColouring( <Graph> )");
-fi;
-if gamma.order=0 then
-   return [];
-fi;
-if not IsSimpleGraph(gamma) then
-   Error("<gamma> not a simple graph");
-fi;
-C:=ListWithIdenticalEntries(gamma.order,0);
-maxcolour:=0;
-gens:=GeneratorsOfGroup(gamma.group);
-for i in [1..Length(gamma.representatives)] do
-   orb:=[gamma.representatives[i]];
-   adjs:=[];
-   adj:=gamma.adjacencies[i];
-   adjs[orb[1]]:=adj;
-   # colour vertex  orb[1]
-   adjcolours:=BlistList([1..maxcolour+1],[]);
-   for a in adj do
-      if C[a]>0 then
-	 adjcolours[C[a]]:=true;
-      fi;
-   od;
-   c:=1;
-   while adjcolours[c] do
-      c:=c+1;
-   od;
-   C[orb[1]]:=c;
-   if c>maxcolour then
-      maxcolour:=c;
-   fi;
-   for j in orb do 
-      for g in gens do
-	 im:=j^g;
-	 if C[im]=0 then 
-	    Add(orb,im);
-	    adj:=OnTuples(adjs[j],g);
-	    adjs[im]:=adj;
-	    # colour vertex  im
-	    adjcolours:=BlistList([1..maxcolour+1],[]);
-	    for a in adj do
-	       if C[a]>0 then
-		  adjcolours[C[a]]:=true;
-	       fi;
-	    od;
-	    c:=1;
-	    while adjcolours[c] do
-	       c:=c+1;
-	    od;
-	    C[im]:=c;
-	    if c>maxcolour then
-	       maxcolour:=c;
-	    fi;
-	 fi; 
-      od; 
-      Unbind(adjs[j]);   
-   od; 
-od;
-return C;
 end);
 
 BindGlobal("CollapsedAdjacencyMat",function(arg)
@@ -1616,17 +1595,23 @@ else
 fi;
 end);
 
-BindGlobal("ConnectedComponent",function(gamma,v)
+
+DeclareOperation("ConnectedComponent",[IsRecord,IsPosInt]);
+InstallMethod(ConnectedComponent,"for GRAPE graph",[IsRecord,IsPosInt],0, 
+function(gamma,v)
 #
 # Returns the set of all vertices in  gamma  which can be reached by 
 # a path starting at vertex  v.  The graph  gamma  must be simple.
 #
 local comp,laynum;
-if not IsGraph(gamma) or not IsInt(v) then 
-   Error("usage: ConnectedComponent( <Graph>, <Int> )");
+if not IsGraph(gamma) then
+   TryNextMethod();
 fi;
 if not IsSimpleGraph(gamma) then
    Error("<gamma> not a simple graph");
+fi;
+if not IsVertex(gamma,v) then
+   Error("<v> is not a vertex of <gamma>");
 fi;
 laynum:=LocalInfo(gamma,v).layerNumbers;
 comp:=Filtered([1..gamma.order],j->laynum[j]>0);
@@ -1634,14 +1619,16 @@ IsSSortedList(comp);
 return comp;
 end);
 
-BindGlobal("ConnectedComponents",function(gamma)
+DeclareOperation("ConnectedComponents",[IsRecord]);
+InstallMethod(ConnectedComponents,"for GRAPE graph",[IsRecord],0, 
+function(gamma)
 #
 # Returns the set of the vertex-sets of the connected components
 # of  gamma,  which must be a simple graph.
 #
 local comp,used,i,j,x,cmp,laynum;
-if not IsGraph(gamma) then 
-   Error("usage: ConnectedComponents( <Graph> )");
+if not IsGraph(gamma) then
+   TryNextMethod();
 fi;
 if not IsSimpleGraph(gamma) then
    Error("<gamma> not a simple graph");
@@ -3040,7 +3027,9 @@ if k>=0 and partialcolour then
       fi;
       if cwsum>=kvector[doposition] then
          # stop colouring      
-         endconsider:=i;
+         if endconsider>i then
+            endconsider:=i;
+         fi;
          break;
       fi;
    od;
@@ -3681,77 +3670,632 @@ end);
 
 BindGlobal("VertexTransitiveDRGs",function(gpin)
 #
-# If the input to this function is a permutation group  G=gpin, 
-# then it must be transitive, and we first set 
-# coladjmats:=OrbitalGraphColadjMats(G).  
-# 
-# Otherwise, we take  coladjmats:=gpin,  which must be a list of collapsed 
-# adjacency matrices for the orbital digraphs of a transitive permutation
-# group  G  (on a set V say), collapsed w.r.t. a point stabilizer
-# (such as the list of matrices produced by  OrbitalGraphColadjMats  
-# or  EnumColadj).  
+# If  gpin  is a permutation group G, then it must be transitive 
+# and non-trivial, and we set coladjmats:=OrbitalGraphColadjMats(gpin).
 #
-# In either case, this function returns a record (called  result), 
-# which gives information on  G. 
-# The most important component of this record is the list  
-# orbitalCombinations,  whose elements give the combinations of 
-# the (indices of) the G-orbitals whose union gives the edge-set 
-# of a distance-regular graph with vertex-set  V. 
-# The component  intersectionArrays  gives the corresponding 
+# Otherwise, we take  coladjmats:=gpin,  which must be a list of collapsed
+# adjacency matrices for the orbital digraphs of a non-trivial 
+# transitive permutation group  G  (on a set V say), collapsed 
+# w.r.t. a point stabilizer (such as the list of matrices produced by  
+# OrbitalGraphColadjMats ).
+#
+# In either case, this function returns a record (called  result),
+# which gives information on  G.
+# The most important component of this record is the list
+# orbitalCombinations,  whose elements give the combinations of
+# the (indices of) the G-orbitals whose union gives the edge-set
+# of a distance-regular graph with vertex-set  V.
+# The component  intersectionArrays  gives the corresponding
 # intersection arrays. The component  degree  is the degree of
-# the permutation group  G,  rank  is its (permutation) rank, and  
+# the permutation group  G,  rank  is its (permutation) rank, and
 # isPrimitive  is true if  G  is primitive, and false otherwise.
-# It is assumed that the orbital/suborbit indexing used is the same 
-# as that for the rows (and columns) of each of the matrices and 
-# also for the indexing of the matrices themselves, with the trivial 
-# suborbit first, so that, in particular,  coladjmat[1]  must be an 
-# identity matrix.  
+# It is assumed that the orbital/suborbit indexing used is the same
+# as that for the rows (and columns) of each of the matrices and
+# also for the indexing of the matrices themselves, with the trivial
+# suborbit first, so that, in particular,  coladjmats[1]  must be an
+# identity matrix.
 #
 # The techniques used in this function are described in:
-# Praeger and Soicher, "Low Rank Representations and Graphs for 
-# Sporadic Groups", CUP, Cambridge, 1997. 
+# Praeger and Soicher, "Low Rank Representations and Graphs for
+# Sporadic Groups", CUP, Cambridge, 1997.
 #
-# *Warning* This function checks all subsets of [2..result.rank], so 
-# the rank of  G  must not be large!
+# May 2018: The efficiency of this function has been improved for 
+# the case when not all G-orbitals are self-paired.
 #
-local coladjmats,i,rank,comb,loc,sum,degree,prim,result;
-if not IsList(gpin) and not IsPermGroup(gpin) then 
-   Error("usage: VertexTransitiveDRGs( <List> or <PermGroup> )"); 
+local coladjmats,include,i,j,M,C,rank,comb,loc,sum,degree,prim,result;
+if not IsList(gpin) and not IsPermGroup(gpin) then
+   Error("usage: VertexTransitiveDRGs( <List> or <PermGroup> )");
 fi;
-if IsPermGroup(gpin) then 
-   # remark: OrbitalGraphColadjMats will check if  gpin  transitive,
-   #         so we do not do this here.
+if IsPermGroup(gpin) then
+   # Remark: OrbitalGraphColadjMats will check if  gpin  is transitive,
+   # so we do not do this here.
+   if IsTrivial(gpin) then
+      Error("Input group must must be non-trivial,");
+   fi;
    coladjmats := OrbitalGraphColadjMats(gpin);
-else 
+else
    coladjmats := gpin;
-fi; 
-if coladjmats=[] or not IsMatrix(coladjmats[1]) 
-      or not IsInt(coladjmats[1][1][1]) then 
-   Error("<coladjmats> must be a non-empty list of integer matrices");
 fi;
-prim:=true;
+if Length(coladjmats)<2 or not IsMatrix(coladjmats[1])
+      or not IsInt(coladjmats[1][1][1]) then
+   Error("<coladjmats> must be a list of integer matrices of length > 1,");
+fi;
 rank:=Length(coladjmats);
-for i in [2..rank] do 
+prim:=true;
+for i in [2..rank] do
    if LocalInfoMat(coladjmats[i],1).localDiameter=(-1) then
+      # The i-th orbital graph is not (strongly) connected.
       prim:=false;
+      break;
    fi;
 od;
 degree:=Sum(Sum(List(coladjmats,a->a[1])));
-result:=rec(degree:=degree, rank:=rank, isPrimitive:=prim, 
-	    orbitalCombinations:=[], intersectionArrays:=[]);
-for comb in Combinations([2..rank]) do
+result:=rec(degree:=degree, rank:=rank, isPrimitive:=prim,
+            orbitalCombinations:=[], intersectionArrays:=[]);
+include:=ListWithIdenticalEntries(rank,true);
+include[1]:=false; # corresponding to the trivial orbital
+M:=[];
+for i in [1..rank] do
+   if coladjmats[i][1][i]=0 then
+      Error("Error in <coladjmats>[",i,"]");
+   fi;
+   if not include[i] then
+      continue;
+   fi;
+   if coladjmats[i][i][1]=1 then
+      # The orbital corresponding to coladjmats[i] is self-paired.
+      Add(M,[i]);
+   else
+      j:=First([i+1..rank],x->include[x] and coladjmats[x][i][1]=1);
+      # The orbital corresponding to coladjmats[i] is paired with
+      # the orbital corresponding to coladjmats[j].
+      Add(M,[i,j]);
+      include[j]:=false;
+   fi;
+od;
+for comb in Combinations(M) do
    if comb<>[] then
-      sum:=Sum(coladjmats{comb}); 
+      C:=Union(comb);
+      sum:=Sum(coladjmats{C});
       loc:=LocalInfoMat(sum,1);
-      if loc.localDiameter <> -1 and loc.localParameters[2][1]=1  
-	    and not (-1 in Flat(loc.localParameters)) then
-	 Add(result.orbitalCombinations,comb);
-	 Add(result.intersectionArrays,loc.localParameters);
-      fi;   
-   fi;   
+      if loc.localDiameter <> -1 and not (-1 in Flat(loc.localParameters)) then
+         # We've found a DRG.
+         Add(result.orbitalCombinations,C);
+         Add(result.intersectionArrays,loc.localParameters);
+      fi;
+   fi;
 od;
 return result;
 end);
+
+DeclareOperation("MaximumClique",[IsRecord]);
+InstallMethod(MaximumClique,"for GRAPE graph",[IsRecord],0, 
+function(gamma)
+#
+# Returns a clique of maximum size of the simple graph  gamma.
+#
+local G,delta,C,CC,lower,upper,mid; 
+if not IsGraph(gamma) then 
+   TryNextMethod();
+fi;
+if not IsSimpleGraph(gamma) then
+   Error("<gamma> must be a simple graph");
+fi;
+if gamma.order=0 then
+   return [];
+elif IsNullGraph(gamma) then
+   return [1];
+elif IsCompleteGraph(gamma) then
+   return [[1..gamma.order]];
+fi;
+G:=AutomorphismGroup(gamma); 
+if G=gamma.group then 
+   delta:=gamma;
+else
+  delta:=NewGroupGraph(G,gamma);
+fi;
+lower:=1;
+C:=[1]; 
+upper:=Maximum(VertexDegrees(delta))+2; 
+while upper-lower>1 do 
+   # Loop invariant: lower and upper are integers,
+   # max clique size is in [lower,upper),
+   # and C is a clique of size lower.
+   mid:=Int((lower+upper)/2); 
+   CC:=CompleteSubgraphsOfGivenSize(delta,mid,0); 
+   if CC=[] then
+      upper:=mid;
+   else
+      lower:=mid; 
+      C:=CC[1];
+   fi;
+od;
+return C;
+end); 
+
+DeclareOperation("MaximumCompleteSubgraph",[IsRecord]);
+InstallMethod(MaximumCompleteSubgraph,"for GRAPE graph",[IsRecord],0, 
+function(gamma)
+#
+# Implements alternative name for  MaximumClique.
+#
+if not IsGraph(gamma) then 
+   TryNextMethod();
+fi;
+return MaximumClique(gamma);
+end); 
+
+DeclareAttribute("CliqueNumber",IsRecord);
+InstallMethod(CliqueNumber,"for GRAPE graph",[IsRecord],0, 
+function(gamma)
+#
+# Returns the size of a largest clique of the simple graph  gamma.
+#
+if not IsGraph(gamma) then 
+   TryNextMethod();
+fi;
+if not IsSimpleGraph(gamma) then
+   Error("<gamma> must be a simple graph");
+fi;
+return Length(MaximumClique(gamma));
+end); 
+
+BindGlobal("GRAPE_CliqueCovering",function(arg)
+#
+# Let  gamma:=arg[1]  be a simple graph and let  k:=arg[2]  be 
+# a non-negative integer.
+#
+# This function returns a covering of  gamma  by at most  k  pairwise disjoint
+# non-empty cliques if such a covering exists, and otherwise returns  fail.  
+#
+# A returned covering is given as a set of sets, forming a partition 
+# of the vertex set of  gamma  into at most  k  non-empty cliques. 
+# 
+# If  arg[3]  is bound then it must be a non-negative integer, such that
+# no clique in any clique k-covering of  gamma  has size > arg[3]. 
+#
+local gamma,k,m,cliquecovering,delta,cov,C,c,exhaustive_search,smallorder;
+
+cliquecovering := function(delta,k,start,olddelta)
+#
+# Let  delta  be a simple graph, and let  k  be a non-negative integer.
+# 
+# Suppose that the boolean variable  exhaustive_search 
+# (global to this function) has value  true.  Then this function 
+# returns a covering of  delta  by at most  k  pairwise disjoint 
+# non-empty cliques, if such a covering exists; otherwise  fail  is returned.  
+#
+# Now suppose that  exhaustive_search = false.  Then  start  must 
+# be an integer, and this function tries to find a covering of
+# delta  by at most  k  pairwise disjoint non-empty cliques of size <= start, 
+# and returns such a covering if found.  If no such covering is found 
+# (although one may still exist), then  fail  is returned. 
+#
+# If  start  is an integer, then it must be non-negative, we let m=start,
+# ignore olddelta, and it is assumed that there is *no* partition of 
+# the vertices of delta into <=k cliques such that some part has size > m.  
+#
+# Now suppose  start  is not an integer. Then oldelta must be a simple graph, 
+# start  must be a clique of olddelta, delta is the subgraph induced on the 
+# set of vertices of olddelta not in start, and we let m=Length(start). 
+# Furthermore, it is assumed that there is *no* partition of the vertices 
+# of olddelta into  <=k+1  cliques such that some part has size > m  or 
+# some part P has size m and P<start (in the usual lex-order on GAP sets). 
+# 
+# For this function (regardless of the value of  exhaustive_search), 
+# a returned covering is given as a list of lists of vertex-names of  delta. 
+# (These lists are not necessarily sorted, but contain no repeated elements.) 
+# In addition, we assume that on the initial call to this recursive function 
+# that m is an integer and delta.names=[1..delta.order]. 
+#
+local m,C,CC,c,d,t,s,cov,newdelta,D,K,A,translation,wts,i,j; 
+if IsInt(start) then
+   m:=start;
+else
+   m:=Length(start); 
+fi; 
+if delta.order=0 then
+   return [];
+elif m*k<delta.order then
+   # in particular, if m=0 or k=0
+   return fail;
+elif k=1 then 
+   if IsCompleteGraph(delta) then
+      return [ShallowCopy(delta.names)];
+   else
+      return fail;
+   fi;
+fi;
+if not IsInt(start) then
+  translation:=Difference(Vertices(olddelta),start);
+  # translation[i] is the vertex in olddelta corresponding to 
+  # the i-th vertex in delta. 
+fi;
+s:=m;
+while s*k>=delta.order do 
+   if exhaustive_search then
+      if IsTrivial(delta.group) then 
+         C:=CompleteSubgraphsOfGivenSize(delta,s,1,true);
+      else 
+         C:=CompleteSubgraphsOfGivenSize(delta,s,2,true);
+      fi;
+      if not IsInt(start) then
+         CC:=[];
+         for c in C do 
+            t:=translation{c}; 
+            d:=Union(t,Filtered(start,x->IsSubset(Adjacency(olddelta,x),t)));
+            if Length(d)>m then
+               continue;
+            fi; 
+            if Length(d)=m and 
+               (d<start or SmallestImageSet(olddelta.group,d)<start) then 
+               continue;
+            fi;
+            Add(CC,c);
+         od;
+         C:=CC;
+      fi;
+      if s*k=delta.order and Size(delta.group)<=smallorder then
+         # Use exact cover.
+         D:=Graph(delta.group,C,OnSets,
+               function(x,y) return Intersection(x,y)=[]; end);
+         wts:=List([1..D.order],x->ListWithIdenticalEntries(delta.order,0));
+         for i in [1..D.order] do
+            for j in D.names[i] do 
+               wts[i][j]:=1;
+            od;
+         od;
+         K:=CompleteSubgraphsOfGivenSize(D,
+               ListWithIdenticalEntries(delta.order,1),0,true,true,wts);
+         if K=[] then 
+            return fail;
+         else
+            return List(K[1],x->delta.names{D.names[x]});
+         fi;
+      elif not IsTrivial(delta.group) then
+         C:=Set(List(C,x->SmallestImageSet(delta.group,x))); 
+      fi;
+   else
+      C:=CompleteSubgraphsOfGivenSize(delta,s,0,true);
+   fi;
+   for c in C do
+      A:=Difference(Vertices(delta),c);
+      newdelta:=InducedSubgraph(delta,A,Stabiliser(delta.group,c,OnSets));
+      if exhaustive_search then 
+         cov:=cliquecovering(newdelta,k-1,c,delta); 
+      else
+         cov:=cliquecovering(newdelta,k-1,s,0); 
+      fi; 
+      if cov<>fail then 
+         return Concatenation(cov,[delta.names{c}]);
+      elif not exhaustive_search then
+         # We give up.
+         return fail;
+      fi;
+   od;
+   s:=s-1;
+od;
+return fail;
+end;
+
+if not (Length(arg) in [2,3]) then
+   Error("must have 2 or 3 arguments");
+fi;
+gamma:=arg[1];
+k:=arg[2];
+if not IsGraph(gamma) or not IsInt(k) then 
+   Error("usage: GRAPE_CliqueCovering( <Graph>, <Int> [, <Int> ] )");
+elif not IsSimpleGraph(gamma) then
+   Error("<arg[1]> must be a simple graph");
+elif k<0 then
+   Error("<arg[2]> must be non-negative"); 
+fi;
+if IsBound(arg[3]) then
+   m:=arg[3];
+   if not IsInt(m) then 
+      Error("usage: GRAPE_CliqueCovering( <Graph>, <Int> [, <Int> ] )");
+   elif m<0 then
+      Error("<arg[3]> must be non-negative"); 
+   fi;
+   if k*m<gamma.order then
+      return fail;
+   fi;
+fi;
+if gamma.order=0 then
+   return [];
+elif k=0 then
+   return fail;
+fi;
+if IsCompleteGraph(gamma) then
+   return [[1..gamma.order]];
+elif k=1 then
+   return fail;
+fi;
+C:=Bicomponents(ComplementGraph(gamma));
+if C<>[] then
+   # The complement of the non-complete graph  gamma  is bipartite.
+   return Set(List(C,Set));
+elif k=2 then
+   return fail;
+fi;
+delta:=NewGroupGraph(AutomorphismGroup(gamma),gamma); 
+delta.names:=Immutable([1..delta.order]); 
+if not IsBound(m) then
+   m:=CliqueNumber(delta);
+fi;
+# 
+smallorder:=24; # To optimise when exact cover is used. 
+# smallorder can be given any positive integer value, but a value
+# in the range 8 to 120 seems to work well. 
+#
+exhaustive_search:=false;
+cov:=cliquecovering(delta,k,m,0); 
+if cov=fail then
+   exhaustive_search:=true;
+   cov:=cliquecovering(delta,k,m,0); 
+   if cov=fail then
+      return fail;
+   fi;
+fi;
+for c in cov do
+   Sort(c);
+od;
+Sort(cov);
+# 
+# Check.
+#
+if not IsSet(cov) 
+   or Length(cov)>k 
+   or not ForAll(cov,x->x<>[] and IsSet(x)) 
+   or Union(cov)<>Vertices(gamma) 
+   or Sum(List(cov,Length))<>gamma.order
+   or not ForAll(cov,x->IsCompleteGraph(InducedSubgraph(gamma,x))) then
+   # This should never happen.
+   Error("BUG: returned cov is not a clique k-covering given as a set of pairwise disjoint non-empty cliques"); 
+fi;
+#
+# End of check. 
+#
+return cov;
+end);
+
+BindGlobal("VertexColouring",function(arg)
+#
+# Let  gamma:=arg[1]  be a simple graph. Then this function returns 
+# a proper vertex-colouring of  gamma.  A proper vertex-colouring of  
+# gamma  is given as a dense list  C  of length  gamma.order,
+# such that  Set(C)=[1..Maximum(C)],  where  C[i]  is the   
+# "colour" of the i-th vertex, and  C[i]<>C[j]  if  [i,j]  is an
+# edge of  gamma.  
+# 
+# If  k:=arg[2]  is bound, then it must be a non-negative integer,
+# and a colouring using at most  k  colours is returned, or `fail'
+# iff no such colouring exists.
+#
+# If  arg[2]  is unbound then a greedy algorithm only is used. 
+#
+# If  arg[3]  is bound then it must be a non-negative integer, such that
+# there is no monochromatic set of vertices of size > arg[3]  in  
+# any vertex k-colouring of  gamma. 
+#
+local gamma,k,m,i,j,g,c,C,orb,a,adj,adjs,adjcolours,maxcolour,im,gens,cov;
+if not (Length(arg) in [1,2,3]) then
+   Error("must have 1, 2 or 3 arguments");
+fi;
+gamma:=arg[1];
+if not IsGraph(gamma) then 
+   Error("usage: VertexColouring( <Graph> [, <Int> [, <Int> ]] )");
+elif not IsSimpleGraph(gamma) then
+   Error("<arg[1]> not a simple graph");
+fi;
+if IsBound(arg[2]) then
+   k:=arg[2];
+   if not IsInt(k) then 
+      Error("usage: VertexColouring( <Graph> [, <Int> [, <Int> ]] )");
+   elif k<0 then
+      Error("<arg[2]> must be non-negative"); 
+   fi;
+else 
+   k:=gamma.order;
+fi;
+if IsBound(arg[3]) then
+   m:=arg[3];
+   if not IsInt(m) then 
+      Error("usage: VertexColouring( <Graph> [, <Int> [, <Int> ]] )");
+   elif m<0 then
+      Error("<arg[3]> must be non-negative"); 
+   fi;
+   if k*m<gamma.order then
+      return fail;
+   fi;
+fi;
+if gamma.order=0 then
+   return [];
+fi;
+#
+# First try a greedy algorithm.
+#
+C:=ListWithIdenticalEntries(gamma.order,0);
+maxcolour:=0;
+gens:=GeneratorsOfGroup(gamma.group);
+for i in [1..Length(gamma.representatives)] do
+   orb:=[gamma.representatives[i]];
+   adjs:=[];
+   adj:=gamma.adjacencies[i];
+   adjs[orb[1]]:=adj;
+   # colour vertex  orb[1]
+   adjcolours:=BlistList([1..maxcolour+1],[]);
+   for a in adj do
+      if C[a]>0 then
+	 adjcolours[C[a]]:=true;
+      fi;
+   od;
+   c:=1;
+   while adjcolours[c] do
+      c:=c+1;
+   od;
+   if c>maxcolour then
+      maxcolour:=c;
+      if maxcolour>k then
+         break;
+      fi;
+   fi;
+   C[orb[1]]:=c;
+   for j in orb do 
+      for g in gens do
+	 im:=j^g;
+	 if C[im]=0 then 
+	    Add(orb,im);
+	    adj:=OnTuples(adjs[j],g);
+	    adjs[im]:=adj;
+	    # colour vertex  im
+	    adjcolours:=BlistList([1..maxcolour+1],[]);
+	    for a in adj do
+	       if C[a]>0 then
+		  adjcolours[C[a]]:=true;
+	       fi;
+	    od;
+	    c:=1;
+	    while adjcolours[c] do
+	       c:=c+1;
+	    od;
+	    if c>maxcolour then
+	       maxcolour:=c;
+               if maxcolour>k then
+                  break;
+               fi;
+	    fi;
+	    C[im]:=c;
+	 fi; 
+      od; 
+      Unbind(adjs[j]);
+      if maxcolour>k then
+         break;
+      fi; 
+   od;
+   if maxcolour>k then
+      break;
+   fi; 
+od;
+if maxcolour<=k then 
+   #  C  is a k-colouring.
+   return C;
+fi;
+if IsBound(arg[3]) then 
+   cov:=GRAPE_CliqueCovering(ComplementGraph(gamma),k,arg[3]);
+else
+   cov:=GRAPE_CliqueCovering(ComplementGraph(gamma),k);
+fi;
+if cov=fail then
+   return fail;
+fi;
+# Otherwise, we make C into a k-colouring from cov. 
+C:=[];
+for i in [1..Length(cov)] do
+   for j in cov[i] do
+      C[j]:=i;
+   od;
+od;
+return C;   
+end);
+
+BindGlobal("GRAPE_MinimumCliqueCovering",function(gamma)
+#
+# Let  gamma  be a simple graph. Then this function returns a clique covering
+# of  gamma  of minimum size. The returned covering is given as a set of sets, 
+# forming a partition of the vertex set of  gamma  into non-empty cliques. 
+# 
+local C,CC,lwr,lower,upper,mid,i,delta; 
+if not IsGraph(gamma) then 
+   Error("usage: GRAPE_MinimumCliqueCovering( <Graph> )");
+elif not IsSimpleGraph(gamma) then
+   Error("<gamma> must be a simple graph");
+fi;
+if gamma.order=0 then
+   return [];
+elif IsCompleteGraph(gamma) then
+   return [[1..gamma.order]];
+fi;
+delta:=ComplementGraph(gamma); 
+C:=GRAPE_NumbersToSets(VertexColouring(delta)); 
+Sort(C); 
+# Now  C  is a partition of the vertex set of  gamma  into  
+# Length(C)  cliques. 
+if Length(C)=2 then 
+   return C;
+fi;
+upper:=Length(C);
+if Maximum(VertexDegrees(gamma))<(gamma.order-1)/2 then
+   lwr:=gamma.order/CliqueNumber(gamma);
+   if IsInt(lwr) then
+      lower:=lwr-1;
+   else
+      lower:=Int(lwr);
+   fi;
+else
+   lower:=CliqueNumber(delta)-1;
+fi;
+while upper-lower>1 do 
+   # Loop invariant: lower and upper are integers,
+   # The clique covering number of gamma is in (lower,upper]
+   # and C is a clique covering of size upper.
+   mid:=Int((lower+upper)/2); 
+   CC:=GRAPE_CliqueCovering(gamma,mid);
+   if CC=fail then
+      lower:=mid;
+   else
+      upper:=Length(CC); # which is <= mid and > lower. 
+      C:=CC;
+   fi;
+od;
+return C;
+end); 
+
+DeclareOperation("MinimumVertexColouring",[IsRecord]);
+InstallMethod(MinimumVertexColouring,"for GRAPE graph",[IsRecord],0, 
+function(gamma)
+#
+# Let  gamma  be a simple graph. Then this function returns a proper vertex-
+# colouring of  gamma,  using as few colours as possible.
+#
+# A proper vertex-colouring of  gamma  is given as a list  C  of 
+# length  gamma.order  of positive integers, such that  C[i]  is the 
+# "colour" of the i-th vertex, and  C[i]<>C[j]  if  [i,j]  is an edge 
+# of  gamma.  
+#
+local cov,C,i,j;  
+if not IsGraph(gamma) then 
+   TryNextMethod();
+fi;
+if not IsSimpleGraph(gamma) then
+   Error("<gamma> must be a simple graph");
+fi;
+cov:=GRAPE_MinimumCliqueCovering(ComplementGraph(gamma)); 
+C:=[];
+for i in [1..Length(cov)] do
+   for j in cov[i] do
+      C[j]:=i;
+   od;
+od;
+return C;
+end);
+
+DeclareAttribute("ChromaticNumber",IsRecord);
+InstallMethod(ChromaticNumber,"for GRAPE graph",[IsRecord],0, 
+function(gamma)
+#
+# Let  gamma  be a simple graph. Then this function returns the 
+# chromatic number of  gamma,  that is, the minimum number of 
+# colours needed to properly vertex-colour  gamma.
+# 
+if not IsGraph(gamma) then 
+   TryNextMethod();
+fi;
+if not IsSimpleGraph(gamma) then
+   Error("<gamma> must be a simple graph");
+fi;
+return Length(Set(MinimumVertexColouring(gamma)));
+end); 
 
 BindGlobal("IsGraphWithColourClasses",function(obj) 
 return IsRecord(obj) and IsBound(obj.graph) and IsGraph(obj.graph) and IsBound(obj.colourClasses);
@@ -4630,7 +5174,7 @@ search := function ( i, sofar, live, H )
 # It is also assumed that, on entry, the elements of  ans  are distinct
 # and are the least lexicographically in their respective  X.group-orbits. 
 # 
-local  L, K, ind, k, forbid, nlinesreq;
+local  L, K, ind, k, forbid, nlinesreq, F, pointstocover, wts, ii, jj;
 if printlevel > 1 then
    Print("\ni=",i," Size(H)=",Size(H));
 fi;
@@ -4649,7 +5193,8 @@ if Length(sofar)=nlines then
    fi;
    return;
 fi;
-nlinesreq:=(t+1)-Number(sofar,x->I[i] in cliques[x]);
+F:=Filtered(sofar,x->I[i] in cliques[x]);
+nlinesreq:=(t+1)-Length(F); 
 #
 #  nlinesreq  is the number of new lines through  I[i]  that 
 # must be found.
@@ -4667,7 +5212,18 @@ if Length(L) < nlinesreq then
 fi;
 H := Stabilizer( H, L, OnSets );
 ind := ComplementGraph(InducedSubgraph( X, L, H ));
-K := CompleteSubgraphsOfGivenSize( ind, nlinesreq, 2, true, true); 
+pointstocover :=
+   Difference(Adjacency(ptgraph,I[i]),Union(List(F,x->cliques[x])));
+wts := List(L,x->ListWithIdenticalEntries(Length(pointstocover),0));
+for ii in [1..Length(L)] do
+   for jj in cliques[L[ii]] do
+      if jj<>I[i] then
+         wts[ii][PositionSorted(pointstocover,jj)] := 1;
+      fi;
+   od;
+od;
+K := CompleteSubgraphsOfGivenSize( ind, 
+   ListWithIdenticalEntries(Length(pointstocover),1), 2, true, true, wts); 
 # 
 #  K  contains the sets of possible additional lines through  I[i].
 # 
@@ -4732,4 +5288,3 @@ for i in [1..Length(ans)] do
 od;
 return ans;
 end);
-
