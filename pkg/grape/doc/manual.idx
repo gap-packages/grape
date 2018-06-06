@@ -18,18 +18,20 @@
 \indexentry {CompleteGraph@`CompleteGraph'}{11}
 \indexentry {JohnsonGraph@JohnsonGraph|indexit}{11}
 \indexentry {JohnsonGraph@`JohnsonGraph'}{11}
-\indexentry {CayleyGraph@CayleyGraph|indexit}{11}
-\indexentry {CayleyGraph@`CayleyGraph'}{11}
-\indexentry {CayleyGraph@`CayleyGraph'}{11}
-\indexentry {CayleyGraph@`CayleyGraph'}{11}
-\indexentry {AddEdgeOrbit@AddEdgeOrbit|indexit}{12}
-\indexentry {AddEdgeOrbit@`AddEdgeOrbit'}{12}
-\indexentry {AddEdgeOrbit@`AddEdgeOrbit'}{12}
+\indexentry {HammingGraph@HammingGraph|indexit}{11}
+\indexentry {HammingGraph@`HammingGraph'}{11}
+\indexentry {CayleyGraph@CayleyGraph|indexit}{12}
+\indexentry {CayleyGraph@`CayleyGraph'}{12}
+\indexentry {CayleyGraph@`CayleyGraph'}{12}
+\indexentry {CayleyGraph@`CayleyGraph'}{12}
+\indexentry {AddEdgeOrbit@AddEdgeOrbit|indexit}{13}
+\indexentry {AddEdgeOrbit@`AddEdgeOrbit'}{13}
+\indexentry {AddEdgeOrbit@`AddEdgeOrbit'}{13}
 \indexentry {RemoveEdgeOrbit@RemoveEdgeOrbit|indexit}{13}
 \indexentry {RemoveEdgeOrbit@`RemoveEdgeOrbit'}{13}
 \indexentry {RemoveEdgeOrbit@`RemoveEdgeOrbit'}{13}
-\indexentry {AssignVertexNames@AssignVertexNames|indexit}{13}
-\indexentry {AssignVertexNames@`AssignVertexNames'}{13}
+\indexentry {AssignVertexNames@AssignVertexNames|indexit}{14}
+\indexentry {AssignVertexNames@`AssignVertexNames'}{14}
 \indexentry {IsGraph@IsGraph|indexit}{15}
 \indexentry {IsGraph@`IsGraph'}{15}
 \indexentry {OrderGraph@OrderGraph|indexit}{15}
@@ -146,34 +148,50 @@
 \indexentry {vertex-weighted graph}{35}
 \indexentry {VertexColouring@VertexColouring|indexit}{35}
 \indexentry {VertexColouring@`VertexColouring'}{35}
-\indexentry {CompleteSubgraphs@CompleteSubgraphs|indexit}{35}
-\indexentry {CompleteSubgraphs@`CompleteSubgraphs'}{35}
-\indexentry {CompleteSubgraphs@`CompleteSubgraphs'}{35}
-\indexentry {CompleteSubgraphs@`CompleteSubgraphs'}{35}
-\indexentry {Cliques}{36}
-\indexentry {CompleteSubgraphsOfGivenSize@CompleteSubgraphsOfGivenSize|indexit}{36}
-\indexentry {CompleteSubgraphsOfGivenSize@`CompleteSubgraphsOfGivenSize'}{36}
-\indexentry {CompleteSubgraphsOfGivenSize@`CompleteSubgraphsOfGivenSize'}{36}
-\indexentry {CompleteSubgraphsOfGivenSize@`CompleteSubgraphsOfGivenSize'}{36}
-\indexentry {CompleteSubgraphsOfGivenSize@`CompleteSubgraphsOfGivenSize'}{36}
-\indexentry {CompleteSubgraphsOfGivenSize@`CompleteSubgraphsOfGivenSize'}{36}
-\indexentry {CliquesOfGivenSize}{37}
-\indexentry {Graphs with colour-classes@Graphs with colour-classes|indexit}{38}
-\indexentry {AutGroupGraph@AutGroupGraph|indexit}{38}
-\indexentry {AutGroupGraph@`AutGroupGraph'}{38}
-\indexentry {AutGroupGraph@`AutGroupGraph'}{38}
-\indexentry {GraphIsomorphism@GraphIsomorphism|indexit}{39}
-\indexentry {GraphIsomorphism@`GraphIsomorphism'}{39}
-\indexentry {GraphIsomorphism@`GraphIsomorphism'}{39}
-\indexentry {IsIsomorphicGraph@IsIsomorphicGraph|indexit}{40}
-\indexentry {IsIsomorphicGraph@`IsIsomorphicGraph'}{40}
-\indexentry {IsIsomorphicGraph@`IsIsomorphicGraph'}{40}
-\indexentry {GraphIsomorphismClassRepresentatives@GraphIsomorphismClassRepresentatives|indexit}{41}
-\indexentry {GraphIsomorphismClassRepresentatives@`GraphIsomorphismClassRepresentatives'}{41}
-\indexentry {GraphIsomorphismClassRepresentatives@`GraphIsomorphismClassRepresentatives'}{41}
-\indexentry {PartialLinearSpaces@PartialLinearSpaces|indexit}{43}
-\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{43}
-\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{43}
-\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{43}
-\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{43}
-\indexentry {A research application of PartialLinearSpaces@A research application of PartialLinearSpaces|indexit}{44}
+\indexentry {VertexColouring@`VertexColouring'}{35}
+\indexentry {VertexColouring@`VertexColouring'}{35}
+\indexentry {proper vertex-colouring}{35}
+\indexentry {MinimumVertexColouring@MinimumVertexColouring|indexit}{36}
+\indexentry {MinimumVertexColouring@`MinimumVertexColouring'}{36}
+\indexentry {minimum vertex-colouring}{36}
+\indexentry {ChromaticNumber@ChromaticNumber|indexit}{36}
+\indexentry {ChromaticNumber@`ChromaticNumber'}{36}
+\indexentry {chromatic number}{36}
+\indexentry {CompleteSubgraphs@CompleteSubgraphs|indexit}{36}
+\indexentry {CompleteSubgraphs@`CompleteSubgraphs'}{36}
+\indexentry {CompleteSubgraphs@`CompleteSubgraphs'}{36}
+\indexentry {CompleteSubgraphs@`CompleteSubgraphs'}{36}
+\indexentry {Cliques}{37}
+\indexentry {CompleteSubgraphsOfGivenSize@CompleteSubgraphsOfGivenSize|indexit}{37}
+\indexentry {CompleteSubgraphsOfGivenSize@`CompleteSubgraphsOfGivenSize'}{37}
+\indexentry {CompleteSubgraphsOfGivenSize@`CompleteSubgraphsOfGivenSize'}{37}
+\indexentry {CompleteSubgraphsOfGivenSize@`CompleteSubgraphsOfGivenSize'}{37}
+\indexentry {CompleteSubgraphsOfGivenSize@`CompleteSubgraphsOfGivenSize'}{37}
+\indexentry {CompleteSubgraphsOfGivenSize@`CompleteSubgraphsOfGivenSize'}{37}
+\indexentry {CliquesOfGivenSize}{38}
+\indexentry {MaximumClique@MaximumClique|indexit}{39}
+\indexentry {MaximumClique@`MaximumClique'}{39}
+\indexentry {maximum clique}{39}
+\indexentry {MaximumCompleteSubgraph}{39}
+\indexentry {CliqueNumber@CliqueNumber|indexit}{39}
+\indexentry {CliqueNumber@`CliqueNumber'}{39}
+\indexentry {clique number}{39}
+\indexentry {Graphs with colour-classes@Graphs with colour-classes|indexit}{40}
+\indexentry {AutGroupGraph@AutGroupGraph|indexit}{40}
+\indexentry {AutGroupGraph@`AutGroupGraph'}{40}
+\indexentry {AutGroupGraph@`AutGroupGraph'}{40}
+\indexentry {GraphIsomorphism@GraphIsomorphism|indexit}{41}
+\indexentry {GraphIsomorphism@`GraphIsomorphism'}{41}
+\indexentry {GraphIsomorphism@`GraphIsomorphism'}{41}
+\indexentry {IsIsomorphicGraph@IsIsomorphicGraph|indexit}{42}
+\indexentry {IsIsomorphicGraph@`IsIsomorphicGraph'}{42}
+\indexentry {IsIsomorphicGraph@`IsIsomorphicGraph'}{42}
+\indexentry {GraphIsomorphismClassRepresentatives@GraphIsomorphismClassRepresentatives|indexit}{43}
+\indexentry {GraphIsomorphismClassRepresentatives@`GraphIsomorphismClassRepresentatives'}{43}
+\indexentry {GraphIsomorphismClassRepresentatives@`GraphIsomorphismClassRepresentatives'}{43}
+\indexentry {PartialLinearSpaces@PartialLinearSpaces|indexit}{45}
+\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{45}
+\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{45}
+\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{45}
+\indexentry {PartialLinearSpaces@`PartialLinearSpaces'}{45}
+\indexentry {A research application of PartialLinearSpaces@A research application of PartialLinearSpaces|indexit}{46}

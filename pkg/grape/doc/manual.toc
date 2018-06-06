@@ -9,10 +9,11 @@
 \seccontents {2.3}{NullGraph} {10}
 \seccontents {2.4}{CompleteGraph} {11}
 \seccontents {2.5}{JohnsonGraph} {11}
-\seccontents {2.6}{CayleyGraph} {11}
-\seccontents {2.7}{AddEdgeOrbit} {12}
-\seccontents {2.8}{RemoveEdgeOrbit} {13}
-\seccontents {2.9}{AssignVertexNames} {13}
+\seccontents {2.6}{HammingGraph} {11}
+\seccontents {2.7}{CayleyGraph} {12}
+\seccontents {2.8}{AddEdgeOrbit} {13}
+\seccontents {2.9}{RemoveEdgeOrbit} {13}
+\seccontents {2.10}{AssignVertexNames} {14}
 \chapcontents {3}{Functions to inspect graphs, vertices and edges}{15}
 \seccontents {3.1}{IsGraph} {15}
 \seccontents {3.2}{OrderGraph} {15}
@@ -67,16 +68,20 @@
 \seccontents {6.14}{NewGroupGraph} {34}
 \chapcontents {7}{Vertex-Colouring and Complete Subgraphs}{35}
 \seccontents {7.1}{VertexColouring} {35}
-\seccontents {7.2}{CompleteSubgraphs} {35}
-\seccontents {7.3}{CompleteSubgraphsOfGivenSize} {36}
-\chapcontents {8}{Automorphism groups and isomorphism testing for graphs}{38}
-\seccontents {8.1}{Graphs with colour-classes} {38}
-\seccontents {8.2}{AutGroupGraph} {38}
-\seccontents {8.3}{GraphIsomorphism} {39}
-\seccontents {8.4}{IsIsomorphicGraph} {40}
-\seccontents {8.5}{GraphIsomorphismClassRepresentatives} {41}
-\chapcontents {9}{Partial Linear Spaces}{43}
-\seccontents {9.1}{PartialLinearSpaces} {43}
-\seccontents {9.2}{A research application of PartialLinearSpaces} {44}
-\chapcontents {}{Bibliography}{46}
-\chapcontents {}{Index}{47}
+\seccontents {7.2}{MinimumVertexColouring} {36}
+\seccontents {7.3}{ChromaticNumber} {36}
+\seccontents {7.4}{CompleteSubgraphs} {36}
+\seccontents {7.5}{CompleteSubgraphsOfGivenSize} {37}
+\seccontents {7.6}{MaximumClique} {39}
+\seccontents {7.7}{CliqueNumber} {39}
+\chapcontents {8}{Automorphism groups and isomorphism testing for graphs}{40}
+\seccontents {8.1}{Graphs with colour-classes} {40}
+\seccontents {8.2}{AutGroupGraph} {40}
+\seccontents {8.3}{GraphIsomorphism} {41}
+\seccontents {8.4}{IsIsomorphicGraph} {42}
+\seccontents {8.5}{GraphIsomorphismClassRepresentatives} {43}
+\chapcontents {9}{Partial Linear Spaces}{45}
+\seccontents {9.1}{PartialLinearSpaces} {45}
+\seccontents {9.2}{A research application of PartialLinearSpaces} {46}
+\chapcontents {}{Bibliography}{48}
+\chapcontents {}{Index}{49}

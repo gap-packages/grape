@@ -273,6 +273,32 @@ gap> T:=ComplementGraph(JohnsonGraph(10,2));;
 gap> P:=PartialLinearSpaces(T,4,6);;
 gap> Set(List(P,x->Size(x.group)));
 [ 216, 1512 ]
+gap> ChromaticNumber(JohnsonGraph(5,2));
+5
+gap> ChromaticNumber(JohnsonGraph(6,2));
+5
+gap> ChromaticNumber(JohnsonGraph(7,2));
+7
+gap> CliqueNumber(JohnsonGraph(5,2));
+4
+gap> CliqueNumber(JohnsonGraph(6,2));
+5
+gap> CliqueNumber(JohnsonGraph(7,2));
+6
+gap> gamma:=EdgeOrbitsGraph(Group((1,2,3,4,5,6,7)),[3,4]);;
+gap> Size(AutomorphismGroup(gamma));
+7
+gap> gamma:=NewGroupGraph(Group(()),gamma);;
+gap> AddEdgeOrbit(gamma,[5,5]);
+gap> Size(AutomorphismGroup(gamma));
+1
+gap> gamma:=UnderlyingGraph(EdgeOrbitsGraph(Group((1,2,3,4,5,6,7)),[3,4]));;
+gap> Size(AutomorphismGroup(gamma));
+14
+gap> gamma:=NewGroupGraph(Group(()),gamma);;
+gap> AddEdgeOrbit(gamma,[5,5]);
+gap> Size(AutomorphismGroup(gamma));
+2
 gap> STOP_TEST( "testall.tst", 10000 );
 ## The first argument of STOP_TEST should be the name of the test file.
 ## The number is a proportionality factor that is used to output a 

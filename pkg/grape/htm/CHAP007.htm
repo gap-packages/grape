@@ -6,15 +6,22 @@
 <H3>Sections</H3>
 <oL>
 <li> <A HREF="CHAP007.htm#SECT001">VertexColouring</a>
-<li> <A HREF="CHAP007.htm#SECT002">CompleteSubgraphs</a>
-<li> <A HREF="CHAP007.htm#SECT003">CompleteSubgraphsOfGivenSize</a>
+<li> <A HREF="CHAP007.htm#SECT002">MinimumVertexColouring</a>
+<li> <A HREF="CHAP007.htm#SECT003">ChromaticNumber</a>
+<li> <A HREF="CHAP007.htm#SECT004">CompleteSubgraphs</a>
+<li> <A HREF="CHAP007.htm#SECT005">CompleteSubgraphsOfGivenSize</a>
+<li> <A HREF="CHAP007.htm#SECT006">MaximumClique</a>
+<li> <A HREF="CHAP007.htm#SECT007">CliqueNumber</a>
 </ol><p>
 <p>
 The following sections describe functions for (proper) vertex-colouring
-or determining complete subgraphs of given graphs. The function
-<code>CompleteSubgraphsOfGivenSize</code> can also be used to determine the
-complete subgraphs with given vertex-weight sum in a vertex-weighted
-graphindexvertex-weighted graph, where the weights can be positive
+and determining complete subgraphs of a given simple graph. Included are
+functions for determining the chromatic number and the clique number of
+a simple graph.
+<p>
+The function <code>CompleteSubgraphsOfGivenSize</code> can be used to determine
+the complete subgraphs with given vertex-weight sum in a vertex-weighted
+graph&nbsp;indexvertex-weighted graph, where the weights can be positive
 integers or non-zero vectors of non-negative integers.
 <p>
 <p>
@@ -22,25 +29,103 @@ integers or non-zero vectors of non-negative integers.
 <p><p>
 <a name = "SSEC001.1"></a>
 <li><code>VertexColouring( </code><var>gamma</var><code> )</code>
+<li><code>VertexColouring( </code><var>gamma</var><code>, </code><var>k</var><code> )</code>
+<li><code>VertexColouring( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>m</var><code> )</code>
 <p>
-This function returns a proper vertex-colouring <var>C</var> for the graph <var>gamma</var>,
-which must be simple.
+This function returns a proper vertex-colouring <var>C</var> for the graph
+<var>gamma</var>, which must be simple. A <strong>proper vertex-colouring</strong>&nbsp;indexproper
+vertex-colouring of <var>gamma</var> is an assignment of colours to the vertices
+of <var>gamma</var>, such that, if [<i>i</i>,<i>j</i>] is an edge, then vertices <i>i</i> and <i>j</i>
+are assigned different colours.
 <p>
-This <strong>proper vertex-colouring</strong> <var>C</var> is a list of positive integers (the
-<strong>colours</strong>), indexed by the vertices of <var>gamma</var>, with the property that
-<i>C</i> [<i>i</i>] <font face="symbol">¹</font> <i>C</i> [<i>j</i>] whenever [<i>i</i>,<i>j</i>] is an edge of <var>gamma</var>. At present a
-greedy algorithm is used, and the number of colours used is by no means
-guaranteed to be minimal.
+The returned proper vertex-colouring <var>C</var> is given as a list of positive
+integers (the <strong>colours</strong>), indexed by the vertices of <var>gamma</var>, with the
+property that <i>C</i> [<i>i</i>] &#8800; <i>C</i> [<i>j</i>] whenever [<i>i</i>,<i>j</i>] is an edge of <var>gamma</var>.
+<p>
+If the optional parameter <var>k</var> is given, then <var>k</var> must be a non-negative
+integer. In this case, a proper vertex-colouring using at most <var>k</var>
+colours is returned, if such a colouring exists, and <code>fail</code> otherwise.
+<p>
+If, in addition to <var>k</var>, the optional parameter <var>m</var> is given, then <var>m</var>
+must be a a non-negative integer, such that there is no monochromatic
+set of vertices of size greater than <var>m</var> in any proper vertex-colouring
+of <var>gamma</var> which uses at most <var>k</var> colours.  This information (which is
+not checked) may help to speed up the function.
 <p>
 <pre>
-gap&gt; VertexColouring( JohnsonGraph(4,2) );
-[ 1, 3, 2, 2, 3, 1 ]
+gap&gt; J:=JohnsonGraph(5,2);
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], group := Group([ (1,5,8,10,4)
+  (2,6,9,3,7), (2,5)(3,6)(4,7) ]), isGraph := true, isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
+gap&gt; VertexColouring(J);
+[ 1, 3, 5, 4, 2, 3, 6, 1, 5, 2 ]
+gap&gt; VertexColouring(J,5);
+[ 1, 2, 3, 4, 5, 4, 2, 1, 3, 5 ]
+gap&gt; VertexColouring(J,4);
+fail
 </pre>
 <p>
 <p>
-<h2><a name="SECT002">7.2 CompleteSubgraphs</a></h2>
+<h2><a name="SECT002">7.2 MinimumVertexColouring</a></h2>
 <p><p>
 <a name = "SSEC002.1"></a>
+<li><code>MinimumVertexColouring( </code><var>gamma</var><code> )</code>
+<p>
+This function returns a minimum vertex-colouring <var>C</var> for the graph
+<var>gamma</var>, which must be simple. A <strong>minimum vertex-colouring</strong>&nbsp;indexminimum
+vertex-colouring is a proper vertex-colouring using as few colours
+as possible.
+<p>
+The returned minimum vertex-colouring <var>C</var> is given as a list of positive
+integers (the <strong>colours</strong>), indexed by the vertices of <var>gamma</var>, with the
+property that <i>C</i> [<i>i</i>] &#8800; <i>C</i> [<i>j</i>] whenever [<i>i</i>,<i>j</i>] is an edge of <var>gamma</var>,
+and subject to this property, the number of distinct elements of <var>C</var>
+is as small as possible.
+<p>
+See also <a href="CHAP007.htm#SSEC001.1">VertexColouring</a>.
+<p>
+<pre>
+gap&gt; J:=JohnsonGraph(5,2);
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], group := Group([ (1,5,8,10,4)
+  (2,6,9,3,7), (2,5)(3,6)(4,7) ]), isGraph := true, isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
+gap&gt; MinimumVertexColouring(J);
+[ 1, 2, 3, 4, 5, 4, 2, 1, 3, 5 ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT003">7.3 ChromaticNumber</a></h2>
+<p><p>
+<a name = "SSEC003.1"></a>
+<li><code>ChromaticNumber( </code><var>gamma</var><code> )</code>
+<p>
+This function returns the chromatic number of the given graph <var>gamma</var>,
+which must be simple.  The <strong>chromatic number</strong>&nbsp;indexchromatic number of
+<var>gamma</var> is the minimum number of colours needed to properly vertex-colour
+<var>gamma</var>, that is, the number of colours used in a minimum vertex-colouring
+of <var>gamma</var>.
+<p>
+See also <a href="CHAP007.htm#SSEC002.1">MinimumVertexColouring</a>.
+<p>
+<pre>
+gap&gt; ChromaticNumber(JohnsonGraph(5,2));
+5
+gap&gt; ChromaticNumber(JohnsonGraph(6,2));
+5
+gap&gt; ChromaticNumber(JohnsonGraph(7,2));
+7
+</pre>
+<p>
+<p>
+<h2><a name="SECT004">7.4 CompleteSubgraphs</a></h2>
+<p><p>
+<a name = "SSEC004.1"></a>
 <li><code>CompleteSubgraphs( </code><var>gamma</var><code> )</code>
 <li><code>CompleteSubgraphs( </code><var>gamma</var><code>, </code><var>k</var><code> )</code>
 <li><code>CompleteSubgraphs( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code> )</code>
@@ -51,7 +136,7 @@ represented by its vertex-set.  If <var>k</var> is non-negative then the element
 of <var>K</var> each have size <var>k</var>, otherwise the elements of <var>K</var> represent maximal
 complete subgraphs of <var>gamma</var>. (A <strong>maximal complete subgraph</strong> of <var>gamma</var>
 is a complete subgraph of <var>gamma</var> which is not properly contained in
-another complete subgraph of <var>gamma</var>.) The default for <var>k</var> is <font face="symbol">-</font>1,
+another complete subgraph of <var>gamma</var>.) The default for <var>k</var> is &#8722;1,
 i.e. maximal complete subgraphs.  See also <code>CompleteSubgraphsOfGivenSize</code>,
 which can be used to compute the maximal complete subgraphs of given
 size, and can also be used to determine the (maximal or otherwise)
@@ -89,7 +174,7 @@ NewGroupGraph( AutGroupGraph(</code><var>gamma</var><code>), </code><var>gamma</
 <p>
 An alternative name for this function is <code>Cliques</code>&nbsp;indexCliques.
 <p>
-See also <a href="CHAP007.htm#SSEC003.1">CompleteSubgraphsOfGivenSize</a>.
+See also <a href="CHAP007.htm#SSEC005.1">CompleteSubgraphsOfGivenSize</a>.
 <p>
 <pre>
 gap&gt; gamma := JohnsonGraph(5,2);
@@ -108,9 +193,9 @@ gap&gt; CompleteSubgraphs(gamma,-1,0);
 </pre>
 <p>
 <p>
-<h2><a name="SECT003">7.3 CompleteSubgraphsOfGivenSize</a></h2>
+<h2><a name="SECT005">7.5 CompleteSubgraphsOfGivenSize</a></h2>
 <p><p>
-<a name = "SSEC003.1"></a>
+<a name = "SSEC005.1"></a>
 <li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code> )</code>
 <li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code> )</code>
 <li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code>, </code><var>maxi</var><code> )</code>
@@ -196,7 +281,7 @@ users of GRAPE.
 An alternative name for this function is 
 <code>CliquesOfGivenSize</code>&nbsp;indexCliquesOfGivenSize.
 <p>
-See also <a href="CHAP007.htm#SSEC002.1">CompleteSubgraphs</a>.
+See also <a href="CHAP007.htm#SSEC004.1">CompleteSubgraphs</a>.
 <p>
 <pre>
 gap&gt; gamma:=JohnsonGraph(6,2);                         
@@ -226,7 +311,53 @@ gap&gt; CompleteSubgraphsOfGivenSize(delta,5,1,false,true,
   [ 13, 14 ] ]
 </pre>
 <p>
+<h2><a name="SECT006">7.6 MaximumClique</a></h2>
+<p><p>
+<a name = "SSEC006.1"></a>
+<li><code>MaximumClique( </code><var>gamma</var><code> )</code>
+<p>
+This function returns a maximum clique of the graph <var>gamma</var>, which must
+be simple.  A <strong>maximum clique</strong>&nbsp;indexmaximum clique of <var>gamma</var> is a
+set of pairwise adjacent vertices of <var>gamma</var> of the largest possible size.
+<p>
+An alternative name for this function is
+<code>MaximumCompleteSubgraph</code>&nbsp;indexMaximumCompleteSubgraph. 
+<p>
+See also <a href="CHAP007.htm#SSEC005.1">CompleteSubgraphsOfGivenSize</a>.
+<p>
+<pre>
+gap&gt; J:=JohnsonGraph(5,2);
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], group := Group([ (1,5,8,10,4)
+  (2,6,9,3,7), (2,5)(3,6)(4,7) ]), isGraph := true, isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
+gap&gt; MaximumClique(J);
+[ 1, 2, 3, 4 ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT007">7.7 CliqueNumber</a></h2>
+<p><p>
+<a name = "SSEC007.1"></a>
+<li><code>CliqueNumber( </code><var>gamma</var><code> )</code>
+<p>
+This function returns the clique number of the given graph <var>gamma</var>,
+which must be simple.  The <strong>clique number</strong>&nbsp;indexclique number of
+<var>gamma</var> is the size of a largest clique in <var>gamma</var>, where a <strong>clique</strong>
+is a set of pairwise adjacent vertices.
+<p>
+<pre>
+gap&gt; CliqueNumber(JohnsonGraph(5,2));
+4
+gap&gt; CliqueNumber(JohnsonGraph(6,2));
+5
+gap&gt; CliqueNumber(JohnsonGraph(7,2));
+6
+</pre>
+<p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP006.htm">Previous</a>] [<a href ="CHAP008.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>January 2016
+<address>grape manual<br>June 2018
 </address></body></html>

@@ -1,24 +1,30 @@
 \letter A
-  `AddEdgeOrbit', 12
-  AddEdgeOrbit, \indexit{12}
+  `AddEdgeOrbit', 13
+  AddEdgeOrbit, \indexit{13}
   `Adjacency', 17
   Adjacency, \indexit{17}
   adjacency matrix, 9
-  A research application of PartialLinearSpaces, \indexit{44}
-  `AssignVertexNames', 13
-  AssignVertexNames, \indexit{13}
-  `AutGroupGraph', 38
-  AutGroupGraph, \indexit{38}
+  A research application of PartialLinearSpaces, \indexit{46}
+  `AssignVertexNames', 14
+  AssignVertexNames, \indexit{14}
+  `AutGroupGraph', 40
+  AutGroupGraph, \indexit{40}
 \letter B
   `Bicomponents', 25
   Bicomponents, \indexit{25}
   `BipartiteDouble', 31
   BipartiteDouble, \indexit{31}
 \letter C
-  `CayleyGraph', 11
-  CayleyGraph, \indexit{11}
-  cliques, 36
-  cliquesofgivensize, 37
+  `CayleyGraph', 12
+  CayleyGraph, \indexit{12}
+  `ChromaticNumber', 36
+  ChromaticNumber, \indexit{36}
+  chromatic number, 36
+  `CliqueNumber', 39
+  CliqueNumber, \indexit{39}
+  clique number, 39
+  cliques, 37
+  cliquesofgivensize, 38
   `CollapsedAdjacencyMat', 22
   CollapsedAdjacencyMat, \indexit{22}
   `CollapsedCompleteOrbitsGraph', 33
@@ -29,10 +35,10 @@
   ComplementGraph, \indexit{28}
   `CompleteGraph', 11
   CompleteGraph, \indexit{11}
-  `CompleteSubgraphs', 35
-  CompleteSubgraphs, \indexit{35}
-  `CompleteSubgraphsOfGivenSize', 36
-  CompleteSubgraphsOfGivenSize, \indexit{36}
+  `CompleteSubgraphs', 36
+  CompleteSubgraphs, \indexit{36}
+  `CompleteSubgraphsOfGivenSize', 37
+  CompleteSubgraphsOfGivenSize, \indexit{37}
   `ConnectedComponent', 25
   ConnectedComponent, \indexit{25}
   `ConnectedComponents', 25
@@ -65,11 +71,14 @@
   GlobalParameters, \indexit{22}
   `Graph', 9
   Graph, \indexit{9}
-  `GraphIsomorphism', 39
-  GraphIsomorphism, \indexit{39}
-  `GraphIsomorphismClassRepresentatives', 41
-  GraphIsomorphismClassRepresentatives, \indexit{41}
-  Graphs with colour-classes, \indexit{38}
+  `GraphIsomorphism', 41
+  GraphIsomorphism, \indexit{41}
+  `GraphIsomorphismClassRepresentatives', 43
+  GraphIsomorphismClassRepresentatives, \indexit{43}
+  Graphs with colour-classes, \indexit{40}
+\letter H
+  `HammingGraph', 11
+  HammingGraph, \indexit{11}
 \letter I
   `IndependentSet', 26
   IndependentSet, \indexit{26}
@@ -88,8 +97,8 @@
   IsEdge, \indexit{17}
   `IsGraph', 15
   IsGraph, \indexit{15}
-  `IsIsomorphicGraph', 40
-  IsIsomorphicGraph, \indexit{40}
+  `IsIsomorphicGraph', 42
+  IsIsomorphicGraph, \indexit{42}
   `IsLoopy', 16
   IsLoopy, \indexit{16}
   `IsNullGraph', 20
@@ -109,6 +118,14 @@
   Loading GRAPE, \indexit{7}
   `LocalParameters', 21
   LocalParameters, \indexit{21}
+\letter M
+  `MaximumClique', 39
+  MaximumClique, \indexit{39}
+  maximum clique, 39
+  maximumcompletesubgraph, 39
+  minimum vertex-colouring, 36
+  `MinimumVertexColouring', 36
+  MinimumVertexColouring, \indexit{36}
 \letter N
   `NewGroupGraph', 34
   NewGroupGraph, \indexit{34}
@@ -120,10 +137,11 @@
   `OrderGraph', 15
   OrderGraph, \indexit{15}
 \letter P
-  `PartialLinearSpaces', 43
-  PartialLinearSpaces, \indexit{43}
+  `PartialLinearSpaces', 45
+  PartialLinearSpaces, \indexit{45}
   `PointGraph', 29
   PointGraph, \indexit{29}
+  proper vertex-colouring, 35
 \letter Q
   `QuotientGraph', 31
   QuotientGraph, \indexit{31}

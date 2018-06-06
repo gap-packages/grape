@@ -1,4 +1,3 @@
-
 gap> K7:=CompleteGraph(SymmetricGroup(7));;
 gap> P:=PartialLinearSpaces(K7,2,2);
 [ rec( isGraph := true, order := 14,
@@ -18,8 +17,6 @@ gap> T:=ComplementGraph(JohnsonGraph(10,2));;
 gap> P:=PartialLinearSpaces(T,4,6);;
 gap> List(P,x->Size(x.group));
 [ 216, 1512 ]
-
-
 gap> LoadPackage("grape");
 true
 gap>
@@ -84,4 +81,3 @@ gap> DisplayCompositionSeries(dualhaemers.group);
 G (4 gens, size 2520)
  \ A(7)
 1 (0 gens, size 1)
-

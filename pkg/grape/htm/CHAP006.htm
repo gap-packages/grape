@@ -185,7 +185,7 @@ called the line graph) of the simple graph <var>gamma</var>.
 <p>
 This <strong>edge graph</strong> <var>delta</var> has the unordered edges of <var>gamma</var>
 as vertices, and <i>e</i> is joined to <i>f</i> in <var>delta</var> precisely when
-<font face="symbol">|</font><i>e</i><font face="symbol">Ç</font><i>f</i><font face="symbol">|</font>=1.  The name of the vertex of the returned graph
+&#124;<i>e</i>&#8745;<i>f</i>&#124;=1.  The name of the vertex of the returned graph
 corresponding to the unordered edge [<i>v</i>,<i>w</i>] of <var>gamma</var> (with <i>v</i> &lt;  <i>w</i>)
 is <code>[VertexName(</code><var>gamma</var><code>,</code><var>v</var><code>),VertexName(</code><var>gamma</var><code>,</code><var>w</var><code>)]</code>.
 <p>
@@ -293,8 +293,8 @@ on the vertices of <var>gamma</var>, such that <i>S</i> contains the relation <v
 of <var>gamma</var>). Then this function returns a graph isomorphic to the
 quotient <var>delta</var> of the graph <var>gamma</var>, defined as follows. The vertices
 of <var>delta</var> are the equivalence classes of <i>S</i>, and [<i>X</i>,<i>Y</i>] is an edge of
-<var>delta</var> if and only if [<i>x</i>,<i>y</i>] is an edge of <var>gamma</var> for some <i>x</i> <font face="symbol">Î</font> <i>X</i>,
-<i>y</i> <font face="symbol">Î</font> <i>Y</i>.  The name of a vertex <i>v</i> in the returned graph is a list (not
+<var>delta</var> if and only if [<i>x</i>,<i>y</i>] is an edge of <var>gamma</var> for some <i>x</i> &#8712; <i>X</i>,
+<i>y</i> &#8712; <i>Y</i>.  The name of a vertex <i>v</i> in the returned graph is a list (not
 necessarily ordered) of the vertex-names of <var>gamma</var> for the vertices in
 the equivalence class corresponding to <i>v</i>.
 <p>
@@ -383,7 +383,7 @@ Given a subgroup <var>G</var> of the automorphism group of the simple graph
 <var>gamma</var>, this function returns a graph isomorphic to <var>delta</var>, defined as
 follows. The vertices of <var>delta</var> are those <var>G</var>-orbits of the vertices of
 <var>gamma</var> that are independent sets in <var>gamma</var>, and <i>x</i> is joined to <i>y</i> in
-<var>delta</var> if and only if <i>x</i><font face="symbol">È</font><i>y</i> is <strong>not</strong> an independent set in <var>gamma</var>.
+<var>delta</var> if and only if <i>x</i>&#8746;<i>y</i> is <strong>not</strong> an independent set in <var>gamma</var>.
 The name of a vertex <i>v</i> in the returned graph is a list (not necessarily
 ordered) of the vertex-names of <var>gamma</var> for the vertices in the <var>G</var>-orbit
 corresponding to <i>v</i>.
@@ -430,8 +430,8 @@ Given a subgroup <var>G</var> of the automorphism group of the simple graph
 <var>gamma</var>, this function returns a graph isomorphic to <var>delta</var>, defined as
 follows. The vertices of <var>delta</var> are those <var>G</var>-orbits of the vertices
 of <var>gamma</var> on which complete subgraphs are induced in <var>gamma</var>, and <i>x</i>
-is joined to <i>y</i> in <var>delta</var> if and only if <i>x</i> <font face="symbol">¹</font> <i>y</i> and the subgraph of
-<var>gamma</var> induced on <i>x</i><font face="symbol">È</font><i>y</i> is a complete graph.  The name of a vertex
+is joined to <i>y</i> in <var>delta</var> if and only if <i>x</i> &#8800; <i>y</i> and the subgraph of
+<var>gamma</var> induced on <i>x</i>&#8746;<i>y</i> is a complete graph.  The name of a vertex
 <i>v</i> in the returned graph is a list (not necessarily ordered) of the
 vertex-names of <var>gamma</var> for the vertices in the <var>G</var>-orbit corresponding
 to <i>v</i>.
@@ -498,5 +498,5 @@ true
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP005.htm">Previous</a>] [<a href ="CHAP007.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>January 2016
+<address>grape manual<br>June 2018
 </address></body></html>

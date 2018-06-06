@@ -10,10 +10,11 @@
 <li> <A HREF="CHAP002.htm#SECT003">NullGraph</a>
 <li> <A HREF="CHAP002.htm#SECT004">CompleteGraph</a>
 <li> <A HREF="CHAP002.htm#SECT005">JohnsonGraph</a>
-<li> <A HREF="CHAP002.htm#SECT006">CayleyGraph</a>
-<li> <A HREF="CHAP002.htm#SECT007">AddEdgeOrbit</a>
-<li> <A HREF="CHAP002.htm#SECT008">RemoveEdgeOrbit</a>
-<li> <A HREF="CHAP002.htm#SECT009">AssignVertexNames</a>
+<li> <A HREF="CHAP002.htm#SECT006">HammingGraph</a>
+<li> <A HREF="CHAP002.htm#SECT007">CayleyGraph</a>
+<li> <A HREF="CHAP002.htm#SECT008">AddEdgeOrbit</a>
+<li> <A HREF="CHAP002.htm#SECT009">RemoveEdgeOrbit</a>
+<li> <A HREF="CHAP002.htm#SECT010">AssignVertexNames</a>
 </ol><p>
 <p>
 This chapter describes the functions used to construct and modify graphs.
@@ -69,9 +70,9 @@ rec(
 </pre>
 <p>
 The function <code>Graph</code> may be used to construct a graph in GRAPE format
-from an adjacency matrixindexadjacency matrix for that graph. For
+from an adjacency matrix&nbsp;indexadjacency matrix for that graph. For
 example, suppose you have an <i>n</i> by <i>n</i> adjacency matrix <i>A</i> for a graph
-<i>gamma</i>, so that the vertex-set of <i>gamma</i> is {1,<font face="symbol">¼</font>,<i>n</i>}, and
+<i>gamma</i>, so that the vertex-set of <i>gamma</i> is {1,&#8230;,<i>n</i>}, and
 [<i>i</i>,<i>j</i>] is an edge of <i>gamma</i> if and only if <i>A</i>[<i>i</i>][<i>j</i>]=1.  Then the graph
 <i>gamma</i> in GRAPE-graph format, with associated group the trivial group,
 is returned by <code>Graph( Group(()), [1..n], OnPoints, function(x,y) return
@@ -97,8 +98,8 @@ rec( adjacencies := [ [ 2 ], [ 1 ], [ 3 ] ], group := Group(()),
 <p>
 This is a common way of constructing a graph in GRAPE.
 <p>
-This function returns the (directed) graph with vertex-set {1,<font face="symbol">¼</font>, <i>n</i> }, edge-set <font face="symbol">È</font><sub><i>e</i> <font face="symbol">Î</font> <i>edges</i> </sub>&nbsp;<i>e</i><sup><i>G</i> </sup>, and associated
-(permutation) group <var>G</var>, which must act naturally on {1,<font face="symbol">¼</font>,<i>n</i> }.
+This function returns the (directed) graph with vertex-set {1,&#8230;, <i>n</i> }, edge-set &#8746;<sub><i>e</i> &#8712; <i>edges</i> </sub>&nbsp;<i>e</i><sup><i>G</i> </sup>, and associated
+(permutation) group <var>G</var>, which must act naturally on {1,&#8230;,<i>n</i> }.
 The parameter <var>edges</var> should be a list of edges (lists of length 2 of
 vertices), although a singleton edge will be understood as an edge-list
 of length 1. The parameter <var>n</var> may be omitted, in which case <var>n</var> is
@@ -128,7 +129,7 @@ rec(
 <li><code>NullGraph( </code><var>G</var><code>, </code><var>n</var><code> )</code>
 <p>
 This function returns the null graph (graph with no edges) with vertex-set
-{1,<font face="symbol">¼</font>,<i>n</i> }, and associated (permutation) group <var>G</var>. The parameter
+{1,&#8230;,<i>n</i> }, and associated (permutation) group <var>G</var>. The parameter
 <var>n</var> may be omitted, in which case <var>n</var> is taken to be the largest point
 moved by <var>G</var>.
 <p>
@@ -155,7 +156,7 @@ rec(
 <li><code>CompleteGraph( </code><var>G</var><code>, </code><var>n</var><code>, </code><var>mustloops</var><code> )</code>
 <p>
 This function returns the complete graph with vertex-set
-{1,<font face="symbol">¼</font>,<i>n</i> } and associated (permutation) group <var>G</var>. The parameter
+{1,&#8230;,<i>n</i> } and associated (permutation) group <var>G</var>. The parameter
 <var>n</var> may be  omitted, in which case <var>n</var> is taken to be the largest point
 moved by <var>G</var>.  The optional boolean parameter <var>mustloops</var> determines
 whether the complete graph has all loops present or no loops (default:
@@ -181,11 +182,11 @@ rec(
 <a name = "SSEC005.1"></a>
 <li><code>JohnsonGraph( </code><var>n</var><code>, </code><var>e</var><code> )</code>
 <p>
-Let <var>n</var> and <var>e</var> be integers, with <i>n</i>  <font face="symbol">³</font> <i>e</i>  <font face="symbol">³</font> 0.  Then this function
+Let <var>n</var> and <var>e</var> be integers, with <i>n</i>  &#8805; <i>e</i>  &#8805; 0.  Then this function
 returns a graph <var>gamma</var> isomorphic to the Johnson graph <i>J</i>(<i>n</i> ,<i>e</i> ).
 The vertices (actually the vertex-names) of <var>gamma</var> are the <var>e</var>-subsets
-of {1,<font face="symbol">¼</font>, <i>n</i> }, with <i>x</i> joined to <i>y</i> if and only if <font face="symbol">|</font><i>x</i> <font face="symbol">Ç</font><i>y</i><font face="symbol">|</font> = <i>e</i> <font face="symbol">-</font>1.  The group associated with <var>gamma</var> is the image of the symmetric
-group <i>S</i><sub><i>n</i> </sub> acting on the <var>e</var>-subsets of {1,<font face="symbol">¼</font>,<i>n</i> }.
+of {1,&#8230;, <i>n</i> }, with <i>x</i> joined to <i>y</i> if and only if &#124;<i>x</i> &#8745;<i>y</i>&#124; = <i>e</i> &#8722;1.  The group associated with <var>gamma</var> is the image of the symmetric
+group <i>S</i><sub><i>n</i> </sub> acting on the <var>e</var>-subsets of {1,&#8230;,<i>n</i> }.
 <p>
 <pre>
 gap&gt; JohnsonGraph(5,3);
@@ -203,9 +204,49 @@ rec(
 </pre>
 <p>
 <p>
-<h2><a name="SECT006">2.6 CayleyGraph</a></h2>
+<h2><a name="SECT006">2.6 HammingGraph</a></h2>
 <p><p>
 <a name = "SSEC006.1"></a>
+<li><code>HammingGraph( </code><var>d</var><code>, </code><var>q</var><code> )</code>
+<p>
+Let <var>d</var> and <var>q</var> be positive integers.  Then this function returns a
+graph <var>gamma</var> isomorphic to the Hamming graph <i>H</i>(<i>d</i> ,<i>q</i> ).  The vertices
+(actually the vertex-names) of <var>gamma</var> are the <var>d</var>-vectors with entries
+in {1,&#8230;,<i>q</i> }, with <i>x</i> joined to <i>y</i> if and only if <i>x</i> and <i>y</i>
+differ in exactly one co-ordinate (that is, <i>x</i> and <i>y</i> are at Hamming
+distance&nbsp;1).  The group associated with <var>gamma</var> is the image of the wreath
+product of the symmetric group <i>S</i><sub><i>q</i> </sub> with the symmetric group <i>S</i><sub><i>d</i> </sub>,
+in its product action on the vertices.
+<p>
+<pre>
+gap&gt; H:=HammingGraph(3,4);
+rec( adjacencies := [ [ 2, 3, 4, 5, 9, 13, 17, 33, 49 ] ], 
+  group := &lt;permutation group with 8 generators&gt;, isGraph := true, 
+  names := [ [ 1, 1, 1 ], [ 1, 1, 2 ], [ 1, 1, 3 ], [ 1, 1, 4 ], 
+      [ 1, 2, 1 ], [ 1, 2, 2 ], [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 3, 1 ], 
+      [ 1, 3, 2 ], [ 1, 3, 3 ], [ 1, 3, 4 ], [ 1, 4, 1 ], [ 1, 4, 2 ], 
+      [ 1, 4, 3 ], [ 1, 4, 4 ], [ 2, 1, 1 ], [ 2, 1, 2 ], [ 2, 1, 3 ], 
+      [ 2, 1, 4 ], [ 2, 2, 1 ], [ 2, 2, 2 ], [ 2, 2, 3 ], [ 2, 2, 4 ], 
+      [ 2, 3, 1 ], [ 2, 3, 2 ], [ 2, 3, 3 ], [ 2, 3, 4 ], [ 2, 4, 1 ], 
+      [ 2, 4, 2 ], [ 2, 4, 3 ], [ 2, 4, 4 ], [ 3, 1, 1 ], [ 3, 1, 2 ], 
+      [ 3, 1, 3 ], [ 3, 1, 4 ], [ 3, 2, 1 ], [ 3, 2, 2 ], [ 3, 2, 3 ], 
+      [ 3, 2, 4 ], [ 3, 3, 1 ], [ 3, 3, 2 ], [ 3, 3, 3 ], [ 3, 3, 4 ], 
+      [ 3, 4, 1 ], [ 3, 4, 2 ], [ 3, 4, 3 ], [ 3, 4, 4 ], [ 4, 1, 1 ], 
+      [ 4, 1, 2 ], [ 4, 1, 3 ], [ 4, 1, 4 ], [ 4, 2, 1 ], [ 4, 2, 2 ], 
+      [ 4, 2, 3 ], [ 4, 2, 4 ], [ 4, 3, 1 ], [ 4, 3, 2 ], [ 4, 3, 3 ], 
+      [ 4, 3, 4 ], [ 4, 4, 1 ], [ 4, 4, 2 ], [ 4, 4, 3 ], [ 4, 4, 4 ] ], 
+  order := 64, representatives := [ 1 ], 
+  schreierVector := [ -1, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 1, 5, 
+      5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 1, 5, 5, 5, 3, 5, 5, 5, 3, 
+      5, 5, 5, 3, 5, 5, 5, 1, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5 ] )
+gap&gt; GlobalParameters(H);
+[ [ 0, 0, 9 ], [ 1, 2, 6 ], [ 2, 4, 3 ], [ 3, 6, 0 ] ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT007">2.7 CayleyGraph</a></h2>
+<p><p>
+<a name = "SSEC007.1"></a>
 <li><code>CayleyGraph( </code><var>G</var><code> )</code>
 <li><code>CayleyGraph( </code><var>G</var><code>, </code><var>gens</var><code> )</code>
 <li><code>CayleyGraph( </code><var>G</var><code>, </code><var>gens</var><code>, </code><var>undirected</var><code> )</code>
@@ -222,7 +263,7 @@ The Cayley graph  <var>caygraph</var>  which is returned is defined as follows:
 the vertices (actually the vertex-names) of <var>caygraph</var>  are the elements
 of <var>G</var>;  if <var>undirected</var>=<code>true</code> (the default) then vertices <i>x</i>,<i>y</i> are
 joined by an edge if and only if there is a <i>g</i> in the list <var>gens</var> with
-<i>y</i>=<i>gx</i> or <i>y</i>=<i>g</i><sup><font face="symbol">-</font>1</sup><i>x</i>; if <var>undirected</var>=<code>false</code> then [<i>x</i>,<i>y</i>] is an edge
+<i>y</i>=<i>gx</i> or <i>y</i>=<i>g</i><sup>&#8722;1</sup><i>x</i>; if <var>undirected</var>=<code>false</code> then [<i>x</i>,<i>y</i>] is an edge
 if and only if there is a <i>g</i> in <var>gens</var> with <i>y</i>=<i>gx</i>.
 <p>
 The permutation group <code></code><var>caygraph</var><code>.group</code> associated with <var>caygraph</var> is
@@ -258,9 +299,9 @@ gap&gt; Diameter(C);
 </pre>
 <p>
 <p>
-<h2><a name="SECT007">2.7 AddEdgeOrbit</a></h2>
+<h2><a name="SECT008">2.8 AddEdgeOrbit</a></h2>
 <p><p>
-<a name = "SSEC007.1"></a>
+<a name = "SSEC008.1"></a>
 <li><code>AddEdgeOrbit( </code><var>gamma</var><code>, </code><var>e</var><code> )</code>
 <li><code>AddEdgeOrbit( </code><var>gamma</var><code>, </code><var>e</var><code>, </code><var>H</var><code> )</code>
 <p>
@@ -274,7 +315,7 @@ knowledge can speed up the procedure.
 Note that if <code></code><var>gamma</var><code>.group</code> is trivial then this procedure simply adds the
 single (directed) edge <var>e</var> to <var>gamma</var>.
 <p>
-See also <a href="CHAP002.htm#SSEC008.1">RemoveEdgeOrbit</a>.
+See also <a href="CHAP002.htm#SSEC009.1">RemoveEdgeOrbit</a>.
 <p>
 <pre>
 gap&gt; gamma := NullGraph( Group( (1,3), (1,2)(3,4) ) );;
@@ -293,9 +334,9 @@ gap&gt; GlobalParameters(gamma);
 </pre>
 <p>
 <p>
-<h2><a name="SECT008">2.8 RemoveEdgeOrbit</a></h2>
+<h2><a name="SECT009">2.9 RemoveEdgeOrbit</a></h2>
 <p><p>
-<a name = "SSEC008.1"></a>
+<a name = "SSEC009.1"></a>
 <li><code>RemoveEdgeOrbit( </code><var>gamma</var><code>, </code><var>e</var><code> )</code>
 <li><code>RemoveEdgeOrbit( </code><var>gamma</var><code>, </code><var>e</var><code>, </code><var>H</var><code> )</code>
 <p>
@@ -307,7 +348,7 @@ is given then it is assumed that <code></code><var>e</var><code>[2]</code> has t
 as it does under the stabilizer in <code></code><var>gamma</var><code>.group</code> of <code></code><var>e</var><code>[1]</code>, and
 this knowledge can speed up the procedure.
 <p>
-See also <a href="CHAP002.htm#SSEC007.1">AddEdgeOrbit</a>.
+See also <a href="CHAP002.htm#SSEC008.1">AddEdgeOrbit</a>.
 <p>
 <pre>
 gap&gt; gamma := CompleteGraph( Group( (1,3), (1,2)(3,4) ) );;
@@ -326,9 +367,9 @@ gap&gt; GlobalParameters(gamma);
 </pre>
 <p>
 <p>
-<h2><a name="SECT009">2.9 AssignVertexNames</a></h2>
+<h2><a name="SECT010">2.10 AssignVertexNames</a></h2>
 <p><p>
-<a name = "SSEC009.1"></a>
+<a name = "SSEC010.1"></a>
 <li><code>AssignVertexNames( </code><var>gamma</var><code>, </code><var>names</var><code> )</code>
 <p>
 This procedure allows the user to give new names for the vertices of
@@ -365,5 +406,5 @@ rec(
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href ="CHAP003.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>January 2016
+<address>grape manual<br>June 2018
 </address></body></html>

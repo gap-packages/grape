@@ -86,7 +86,7 @@ false
 This function returns (an immutable copy of) the name of vertex <var>v</var> in
 the graph <var>gamma</var>. 
 <p>
-See also <a href="CHAP003.htm#SSEC005.1">VertexNames</a> and <a href="CHAP002.htm#SSEC009.1">AssignVertexNames</a>.
+See also <a href="CHAP003.htm#SSEC005.1">VertexNames</a> and <a href="CHAP002.htm#SSEC010.1">AssignVertexNames</a>.
 <p>
 <pre>
 gap&gt; VertexName( JohnsonGraph(4,2), 6 );
@@ -103,7 +103,7 @@ This function returns (an immutable copy of) the list of vertex-names
 for the graph <var>gamma</var>.  The <var>i</var>-th element of this list is the name of
 vertex <var>i</var>.
 <p>
-See also <a href="CHAP003.htm#SSEC004.1">VertexName</a> and <a href="CHAP002.htm#SSEC009.1">AssignVertexNames</a>.
+See also <a href="CHAP003.htm#SSEC004.1">VertexName</a> and <a href="CHAP002.htm#SSEC010.1">AssignVertexNames</a>.
 <p>
 <pre>
 gap&gt; VertexNames( JohnsonGraph(4,2) );
@@ -116,7 +116,7 @@ gap&gt; VertexNames( JohnsonGraph(4,2) );
 <a name = "SSEC006.1"></a>
 <li><code>Vertices( </code><var>gamma</var><code> )</code>
 <p>
-This function returns the vertex-set {1,<font face="symbol">¼</font>, <i>gamma</i> <tt>.</tt><tt>order</tt>}
+This function returns the vertex-set {1,&#8230;, <i>gamma</i> <tt>.</tt><tt>order</tt>}
 of the graph <var>gamma</var>.
 <p>
 <pre>
@@ -281,7 +281,7 @@ This function returns the distance from <var>X</var> to <var>Y</var> in <var>gam
 parameters <var>X</var> and <var>Y</var> may be vertices or nonempty lists of vertices.
 We define the <strong>distance</strong> <i>d</i>(<i>X</i> ,<i>Y</i> ) from <var>X</var> to <var>Y</var> to be the minimum
 length of a (directed) path joining a vertex of <var>X</var> to a vertex of <var>Y</var>
-if such a path exists, and <font face="symbol">-</font>1 otherwise.
+if such a path exists, and &#8722;1 otherwise.
 <p>
 The  optional parameter <var>G</var>,  if present, is assumed to  be a subgroup of
 \Aut(<i>gamma</i> ) fixing  <var>X</var>  setwise.  Including  such a <var>G</var> can speed up
@@ -304,7 +304,7 @@ gap&gt; Distance( JohnsonGraph(4,2), [1], [5,6] );
 <a name = "SSEC016.1"></a>
 <li><code>Diameter( </code><var>gamma</var><code> )</code>
 <p>
-This  function  returns the  diameter of <var>gamma</var>.  A diameter of <font face="symbol">-</font>1
+This  function  returns the  diameter of <var>gamma</var>.  A diameter of &#8722;1
 is returned if <var>gamma</var> is not (strongly) connected.  Otherwise, the
 <strong>diameter</strong> of <var>gamma</var> is equal to the maximum (directed) distance
 <i>d</i>(<i>x</i>,<i>y</i>) in <var>gamma</var> (as <i>x</i> and <i>y</i> range over all the vertices of 
@@ -326,7 +326,7 @@ gap&gt; Diameter( JohnsonGraph( 5, 4 ) );
 <li><code>Girth( </code><var>gamma</var><code> )</code>
 <p>
 This function returns the girth of <var>gamma</var>, which must be a simple graph.
-A girth of <font face="symbol">-</font>1 is returned if <var>gamma</var> is a forest.  Otherwise the <strong>girth</strong>
+A girth of &#8722;1 is returned if <var>gamma</var> is a forest.  Otherwise the <strong>girth</strong>
 is the length of a shortest cycle in <var>gamma</var>.
 <p>
 <pre>
@@ -440,5 +440,5 @@ false
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Previous</a>] [<a href ="CHAP004.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>January 2016
+<address>grape manual<br>June 2018
 </address></body></html>

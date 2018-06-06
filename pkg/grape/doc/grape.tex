@@ -11,7 +11,7 @@
 
 \Chapter{Grape}
 
-This manual describes the {\GRAPE} (Version~4.7) package for computing
+This manual describes the {\GRAPE} (Version~4.8) package for computing
 with graphs and groups.
 
 {\GRAPE} is primarily designed for the construction and analysis of
@@ -30,12 +30,12 @@ Most {\GRAPE} functions are written entirely in the {\GAP} language.
 However, the {\GRAPE} functions `AutomorphismGroup', `AutGroupGraph',
 `IsIsomorphicGraph', `GraphIsomorphismClassRepresentatives',
 `GraphIsomorphism'  and `PartialLinearSpaces' make direct or indirect
-use the {\nauty} \cite{Nau90,MP14} or {\bliss} \cite{JK07} packages,
+use the {\nauty} \cite{Nau90}, \cite{MP14} or {\bliss} \cite{JK07} packages,
 via a {\GRAPE} interface.  These functions can only be used on a fully
 installed version of {\GRAPE}. Installation of {\GRAPE} is described in
 this chapter of the manual.
 
-Except for the {\nauty} package of B.D.~Mckay included with {\GRAPE},
+Except for the {\nauty} package of B.~D.~McKay included with {\GRAPE},
 the function `SmallestImageSet' by Steve Linton, the {\nauty} interface
 by Alexander Hulpke, and the initial {\bliss} interface by Jerry James,
 the {\GRAPE} package was designed and written by Leonard H. Soicher,
@@ -51,8 +51,8 @@ If you use {\GRAPE} to solve a problem then please send a short email
 about it to \Mailto{L.H.Soicher@qmul.ac.uk}, and reference the {\GRAPE} 
 package as follows:
 
-L.H. Soicher, The {GRAPE} package for {GAP}, Version~4.7, 2016,
-\URL{http://www.maths.qmul.ac.uk/~leonard/grape/}.
+L.H. Soicher, The {GRAPE} package for {GAP}, Version~4.8, 2018,
+\URL{http://www.maths.qmul.ac.uk/~lsoicher/grape/}.
 
 If your work made use of a function depending on {\nauty} or {\bliss}
 then you should also reference {\nauty} \cite{Nau90,MP14} or {\bliss}
@@ -76,12 +76,12 @@ You do not need to download and unpack an archive for {\GRAPE}
 unless you want to install the package separately from your main
 {\GAP} installation or are installing an upgrade of {\GRAPE} to an
 existing installation of {\GAP} (see the main {\GAP} reference section
-"Reference:Installing a GAP Package").  If you do need to download
+"REF:Installing a GAP Package").  If you do need to download
 {\GRAPE}, you can find the most recent `.tar.gz' archive file for
-the package at \URL{http://www.maths.qmul.ac.uk/~leonard/grape/}, and
+the package at \URL{http://www.maths.qmul.ac.uk/~lsoicher/grape/}, and
 then this archive file should be downloaded and unpacked in the `pkg'
 subdirectory of an appropriate {\GAP} root directory (see the main {\GAP}
-reference section "Reference:GAP Root Directories").
+reference section "REF:GAP Root Directories").
 
 If your {\GRAPE} installation does not include a pre-compiled binary of 
 the nauty/dreadnaut programs included with {\GRAPE} and you do not want 

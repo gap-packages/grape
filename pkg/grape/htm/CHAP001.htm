@@ -11,7 +11,7 @@
 <li> <A HREF="CHAP001.htm#SECT004">Examples of the use of GRAPE</a>
 </ol><p>
 <p>
-This manual describes the GRAPE (Version&nbsp;4.7) package for computing
+This manual describes the GRAPE (Version&nbsp;4.8) package for computing
 with graphs and groups.
 <p>
 GRAPE is primarily designed for the construction and analysis of
@@ -30,12 +30,12 @@ Most GRAPE functions are written entirely in the <font face="Gill Sans,Helvetica
 However, the GRAPE functions <code>AutomorphismGroup</code>, <code>AutGroupGraph</code>,
 <code>IsIsomorphicGraph</code>, <code>GraphIsomorphismClassRepresentatives</code>,
 <code>GraphIsomorphism</code>  and <code>PartialLinearSpaces</code> make direct or indirect
-use the nauty <a href="biblio.htm#Nau90,MP14"><cite>Nau90,MP14</cite></a> or bliss <a href="biblio.htm#JK07"><cite>JK07</cite></a> packages,
+use the nauty <a href="biblio.htm#Nau90"><cite>Nau90</cite></a>, <a href="biblio.htm#MP14"><cite>MP14</cite></a> or bliss <a href="biblio.htm#JK07"><cite>JK07</cite></a> packages,
 via a GRAPE interface.  These functions can only be used on a fully
 installed version of GRAPE. Installation of GRAPE is described in
 this chapter of the manual.
 <p>
-Except for the nauty package of B.D.&nbsp;Mckay included with GRAPE,
+Except for the nauty package of B.&nbsp;D.&nbsp;McKay included with GRAPE,
 the function <code>SmallestImageSet</code> by Steve Linton, the nauty interface
 by Alexander Hulpke, and the initial bliss interface by Jerry James,
 the GRAPE package was designed and written by Leonard H. Soicher,
@@ -51,8 +51,8 @@ If you use GRAPE to solve a problem then please send a short email
 about it to <a href="mailto:L.H.Soicher@qmul.ac.uk">L.H.Soicher@qmul.ac.uk</a>, and reference the GRAPE 
 package as follows:
 <p>
-L.H. Soicher, The GRAPE package for GAP, Version&nbsp;4.7, 2016,
-<a href="http://www.maths.qmul.ac.uk/~leonard/grape/">http://www.maths.qmul.ac.uk/~leonard/grape/</a>.
+L.H. Soicher, The GRAPE package for GAP, Version&nbsp;4.8, 2018,
+<a href="http://www.maths.qmul.ac.uk/~lsoicher/grape/">http://www.maths.qmul.ac.uk/~lsoicher/grape/</a>.
 <p>
 If your work made use of a function depending on nauty or bliss
 then you should also reference nauty <a href="biblio.htm#Nau90,MP14"><cite>Nau90,MP14</cite></a> or bliss
@@ -75,12 +75,12 @@ You do not need to download and unpack an archive for GRAPE
 unless you want to install the package separately from your main
 <font face="Gill Sans,Helvetica,Arial">GAP</font> installation or are installing an upgrade of GRAPE to an
 existing installation of <font face="Gill Sans,Helvetica,Arial">GAP</font> (see the main <font face="Gill Sans,Helvetica,Arial">GAP</font> reference section
-<a href="badlink:Reference:Installing a GAP Package">Reference:Installing a GAP Package</a>).  If you do need to download
+<a href="../../../doc/ref/chap76.html#X82473E4B8756C6CD">REF:Installing a GAP Package</a>).  If you do need to download
 GRAPE, you can find the most recent <code>.tar.gz</code> archive file for
-the package at <a href="http://www.maths.qmul.ac.uk/~leonard/grape/">http://www.maths.qmul.ac.uk/~leonard/grape/</a>, and
+the package at <a href="http://www.maths.qmul.ac.uk/~lsoicher/grape/">http://www.maths.qmul.ac.uk/~lsoicher/grape/</a>, and
 then this archive file should be downloaded and unpacked in the <code>pkg</code>
 subdirectory of an appropriate <font face="Gill Sans,Helvetica,Arial">GAP</font> root directory (see the main <font face="Gill Sans,Helvetica,Arial">GAP</font>
-reference section <a href="badlink:Reference:GAP Root Directories">Reference:GAP Root Directories</a>).
+reference section <a href="../../../doc/ref/chap9.html#X7A4973627A5DB27D">REF:GAP Root Directories</a>).
 <p>
 If your GRAPE installation does not include a pre-compiled binary of 
 the nauty/dreadnaut programs included with GRAPE and you do not want 
@@ -259,5 +259,5 @@ gap&gt; GlobalParameters(EP);
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>January 2016
+<address>grape manual<br>June 2018
 </address></body></html>

@@ -1,9 +1,9 @@
 
-                          GRAPE Version 4.7, 
+                          GRAPE Version 4.8, 
 
 a GAP package for computing with graphs and groups, by Leonard H. Soicher,
 with contributions from Steve Linton, Alexander Hulpke and Jerry James,
-and including Brendan McKay's nauty 2.2 package.
+and including Brendan McKay's nauty 2.2 (final patched version) package.
 
 This README document tells you how to install GRAPE and lists changes
 made to GRAPE since Version 2.2. License and copyright information is 
@@ -11,7 +11,7 @@ in the GRAPE file COPYING.
 
 Installing GRAPE
 ----------------
-The current GAP distribution includes the GRAPE package, which now
+The current GAP distribution includes the GRAPE package, which 
 includes a 32-bit nauty/dreadnaut binary for Windows (XP and later
 versions).  Thus, GRAPE normally requires no further installation
 for Windows users of GAP.
@@ -21,23 +21,65 @@ unless you want to install the package separately from your main
 GAP installation or are installing an upgrade of GRAPE to an
 existing installation of GAP.  If you do need to download
 GRAPE, you can find the latest archive .tar.gz file for the 
-package at  http://www.maths.qmul.ac.uk/~leonard/grape/ 
+package at  http://www.maths.qmul.ac.uk/~lsoicher/grape/ 
 
 Installation and testing instructions for the GRAPE package can be 
 found in Chapter 1 of the GRAPE manual: 
-http://www.maths.qmul.ac.uk/~leonard/grape/manual/chapters.htm 
+http://www.maths.qmul.ac.uk/~lsoicher/grape/grape4r8/manual/chapters.htm 
 
 -------------------------------------------------------------------------
 If you use GRAPE to solve a problem, then please email
 L.H.Soicher@qmul.ac.uk, and reference:
 
-L.H. Soicher, The GRAPE package for GAP, Version 4.7, 2016, 
-http://www.maths.qmul.ac.uk/~leonard/grape/
+L.H. Soicher, The GRAPE package for GAP, Version 4.8, 2018, 
+http://www.maths.qmul.ac.uk/~lsoicher/grape/
 
 ------------------------------------------------------------------------
 
-Main changes from GRAPE 4.6.1 to GRAPE 4.7:
--------------------------------------------
+Main changes from GRAPE 4.7 to GRAPE 4.8 (June 2018):
+-----------------------------------------------------
+
+(1) New function: HammingGraph
+
+(2) New operations: MaximumClique, MinimumVertexColouring 
+
+(3) New attributes (which cannot be stored in a GRAPE graph record, but 
+are declared as attributes rather than operations so as not to
+conflict with the Digraphs package): CliqueNumber, ChromaticNumber 
+
+(4) ConnectedComponent and ConnectedComponents are now operations 
+rather than functions, to avoid conflicts with other developers.
+
+(5) Enhanced functionality for function VertexColouring, which can 
+now be used to determine whether a graph has a proper vertex k-colouring,
+and if so, to return such a colouring.  
+
+(6) Efficiency of the function VertexTransitiveDRGs improved for
+transitive permutation groups having some orbitals which are not
+self-paired.
+
+(7) GRAPE HTML documentation now made with version 4.12 of tth, and
+displays correctly on all browsers tested (thanks to Andries Brouwer
+for pointing out the problem and to GAP Support for providing a solution). 
+
+(8) The GRAPE HTML documentation links to the GAP reference manual now
+work (thanks to Jerome Benoit for providing a solution).
+
+(9) The default location for a user-installed bliss executable (if used) is 
+now  ExternalFilename(DirectoriesSystemPrograms(),"bliss") 
+(thank you to Jerome Benoit for suggesting this). 
+However, the default location of the dreadnaut executable remains
+ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnautB")
+to run the included version in GRAPE of nauty/dreadnaut.
+
+(10) Efficiency change to PartialLinearSpaces, to use exact cover
+instead of clique search to classify "bundles".
+
+(11) Fixed small efficiency bug in CompleteSubgraphsMain. 
+
+
+Main changes from GRAPE 4.6.1 to GRAPE 4.7 (January 2016):
+---------------------------------------------------------
 
 (1) The included version of nauty is now the final patched 
 version of nauty 2.2.
@@ -285,4 +327,4 @@ the effect that if the returned graph had loops, then it
 might have had its isSimple component erroneously set to true.
 
 Leonard H. Soicher
-January 2016 
+June 2018 

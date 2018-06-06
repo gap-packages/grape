@@ -20,18 +20,20 @@ F 2.4. CompleteGraph
 F 2.4. CompleteGraph
 S 2.5. JohnsonGraph
 F 2.5. JohnsonGraph
-S 2.6. CayleyGraph
-F 2.6. CayleyGraph
-F 2.6. CayleyGraph
-F 2.6. CayleyGraph
-S 2.7. AddEdgeOrbit
-F 2.7. AddEdgeOrbit
-F 2.7. AddEdgeOrbit
-S 2.8. RemoveEdgeOrbit
-F 2.8. RemoveEdgeOrbit
-F 2.8. RemoveEdgeOrbit
-S 2.9. AssignVertexNames
-F 2.9. AssignVertexNames
+S 2.6. HammingGraph
+F 2.6. HammingGraph
+S 2.7. CayleyGraph
+F 2.7. CayleyGraph
+F 2.7. CayleyGraph
+F 2.7. CayleyGraph
+S 2.8. AddEdgeOrbit
+F 2.8. AddEdgeOrbit
+F 2.8. AddEdgeOrbit
+S 2.9. RemoveEdgeOrbit
+F 2.9. RemoveEdgeOrbit
+F 2.9. RemoveEdgeOrbit
+S 2.10. AssignVertexNames
+F 2.10. AssignVertexNames
 C inspect.tex 3. Functions to inspect graphs, vertices and edges
 S 3.1. IsGraph
 F 3.1. IsGraph
@@ -153,18 +155,34 @@ C colour.tex 7. Vertex-Colouring and Complete Subgraphs
 I 7.0. vertex-weighted graph
 S 7.1. VertexColouring
 F 7.1. VertexColouring
-S 7.2. CompleteSubgraphs
-F 7.2. CompleteSubgraphs
-F 7.2. CompleteSubgraphs
-F 7.2. CompleteSubgraphs
-I 7.2. Cliques
-S 7.3. CompleteSubgraphsOfGivenSize
-F 7.3. CompleteSubgraphsOfGivenSize
-F 7.3. CompleteSubgraphsOfGivenSize
-F 7.3. CompleteSubgraphsOfGivenSize
-F 7.3. CompleteSubgraphsOfGivenSize
-F 7.3. CompleteSubgraphsOfGivenSize
-I 7.3. CliquesOfGivenSize
+F 7.1. VertexColouring
+F 7.1. VertexColouring
+I 7.1. proper vertex-colouring
+S 7.2. MinimumVertexColouring
+F 7.2. MinimumVertexColouring
+I 7.2. minimum vertex-colouring
+S 7.3. ChromaticNumber
+F 7.3. ChromaticNumber
+I 7.3. chromatic number
+S 7.4. CompleteSubgraphs
+F 7.4. CompleteSubgraphs
+F 7.4. CompleteSubgraphs
+F 7.4. CompleteSubgraphs
+I 7.4. Cliques
+S 7.5. CompleteSubgraphsOfGivenSize
+F 7.5. CompleteSubgraphsOfGivenSize
+F 7.5. CompleteSubgraphsOfGivenSize
+F 7.5. CompleteSubgraphsOfGivenSize
+F 7.5. CompleteSubgraphsOfGivenSize
+F 7.5. CompleteSubgraphsOfGivenSize
+I 7.5. CliquesOfGivenSize
+S 7.6. MaximumClique
+F 7.6. MaximumClique
+I 7.6. maximum clique
+I 7.6. MaximumCompleteSubgraph
+S 7.7. CliqueNumber
+F 7.7. CliqueNumber
+I 7.7. clique number
 C cnauty.tex 8. Automorphism groups and isomorphism testing for graphs
 S 8.1. Graphs with colour-classes
 S 8.2. AutGroupGraph

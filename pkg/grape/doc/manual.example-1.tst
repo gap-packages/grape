@@ -1,4 +1,3 @@
-
 gap> LoadPackage("grape");
 true
 gap> P := Graph( SymmetricGroup(5), [[1,2]], OnSets,
@@ -28,4 +27,3 @@ rec( isGraph := true, order := 15,
       [ [ 1, 4 ], [ 2, 5 ] ] ] )
 gap> GlobalParameters(EP);
 [ [ 0, 0, 4 ], [ 1, 1, 2 ], [ 1, 2, 1 ], [ 4, 0, 0 ] ]
-

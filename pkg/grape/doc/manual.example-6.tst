@@ -1,4 +1,3 @@
-
 gap> gamma := JohnsonGraph(4,2);;
 gap> S := [2,3,4,5];;
 gap> square := InducedSubgraph( gamma, S, Stabilizer(gamma.group,S,OnSets) );
@@ -13,8 +12,6 @@ rec(
   names := [ [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ] ] )
 gap> GlobalParameters(square);
 [ [ 0, 0, 2 ], [ 1, 0, 1 ], [ 2, 0, 0 ] ]
-
-
 gap> DistanceSetInduced( JohnsonGraph(4,2), [0,1], [1] );
 rec(
   isGraph := true,
@@ -25,8 +22,6 @@ rec(
   representatives := [ 1, 2 ],
   isSimple := true,
   names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ] ] )
-
-
 gap> DistanceGraph( JohnsonGraph(4,2), [2] );
 rec(
   isGraph := true,
@@ -39,8 +34,6 @@ rec(
   isSimple := true )
 gap> ConnectedComponents(last);
 [ [ 1, 6 ], [ 2, 5 ], [ 3, 4 ] ]
-
-
 gap> ComplementGraph( NullGraph(SymmetricGroup(3)) );
 rec(
   isGraph := true,
@@ -54,8 +47,6 @@ gap> IsLoopy(last);
 false
 gap> IsLoopy(ComplementGraph(NullGraph(SymmetricGroup(3)),true));
 true
-
-
 gap> BipartiteDouble( CompleteGraph(SymmetricGroup(4)) );;
 gap> PointGraph(last);
 rec(
@@ -69,8 +60,6 @@ rec(
   names := [ [ 1, "+" ], [ 2, "+" ], [ 3, "+" ], [ 4, "+" ] ] )
 gap> IsCompleteGraph(last);
 true
-
-
 gap> EdgeGraph( CompleteGraph(SymmetricGroup(5)) );
 rec(
   isGraph := true,
@@ -85,8 +74,6 @@ rec(
       [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ] )
 gap> GlobalParameters(last);
 [ [ 0, 0, 6 ], [ 1, 3, 2 ], [ 4, 2, 0 ] ]
-
-
 gap> J:=JohnsonGraph(4,2);
 rec(
   isGraph := true,
@@ -109,8 +96,6 @@ rec(
   names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ], [ 3, 4 ] ] )
 gap> ConnectedComponents(S);
 [ [ 1 ], [ 2, 3, 4, 5 ], [ 6 ] ]
-
-
 gap> gamma := EdgeOrbitsGraph( Group((1,2,3,4)), [1,2] );
 rec(
   isGraph := true,
@@ -129,8 +114,6 @@ rec(
   adjacencies := [ [ 2, 4 ] ],
   representatives := [ 1 ],
   isSimple := true )
-
-
 gap> gamma := JohnsonGraph(4,2);;
 gap> QuotientGraph( gamma, [[1,6]] );
 rec(
@@ -145,8 +128,6 @@ rec(
       [ [ 1, 4 ], [ 2, 3 ] ] ] )
 gap> IsCompleteGraph(last);
 true
-
-
 gap> gamma := JohnsonGraph(4,2);;
 gap> IsBipartite(gamma);
 false
@@ -167,8 +148,6 @@ rec(
       [ [ 2, 3 ], "-" ], [ [ 2, 4 ], "-" ], [ [ 3, 4 ], "-" ] ] )
 gap> IsBipartite(delta);
 true
-
-
 gap> GeodesicsGraph( JohnsonGraph(4,2), 1, 6 );
 rec(
   isGraph := true,
@@ -181,8 +160,6 @@ rec(
   names := [ [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ] ] )
 gap> GlobalParameters(last);
 [ [ 0, 0, 2 ], [ 1, 0, 1 ], [ 2, 0, 0 ] ]
-
-
 gap> G := Group( (1,2) );;
 gap> gamma := NullGraph( SymmetricGroup(3) );;
 gap> CollapsedIndependentOrbitsGraph( G, gamma );
@@ -206,8 +183,6 @@ rec(
   representatives := [ 1 ],
   isSimple := true,
   names := [ [ 3 ] ] )
-
-
 gap> G := Group( (1,2) );;
 gap> gamma := NullGraph( SymmetricGroup(3) );;
 gap> CollapsedCompleteOrbitsGraph( G, gamma );
@@ -231,8 +206,6 @@ rec(
   representatives := [ 1, 2 ],
   names := [ [ 1, 2 ], [ 3 ] ],
   isSimple := true )
-
-
 gap> gamma := JohnsonGraph(4,2);;
 gap> aut := AutGroupGraph(gamma);
 Group([ (3,4), (2,3)(4,5), (1,2)(5,6) ])
@@ -245,4 +218,3 @@ gap> Size(delta.group);
 48
 gap> IsIsomorphicGraph( gamma, delta );
 true
-

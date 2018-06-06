@@ -47,14 +47,14 @@ all local parameters <i>c</i><sub><i>i</i></sub>(<i>V</i> ), <i>a</i><sub><i>i</
 may have, with respect to the singleton vertex or nonempty list of
 vertices <var>V</var>.  We say that <var>gamma</var> has the <strong>local parameter</strong> <i>c</i><sub><i>i</i></sub>(<i>V</i>)
 (respectively <i>a</i><sub><i>i</i></sub>(<i>V</i>), <i>b</i><sub><i>i</i></sub>(<i>V</i>)), with respect to <i>V</i>, if the number
-of vertices at distance <i>i</i><font face="symbol">-</font>1 (respectively <i>i</i>, <i>i</i>+1) from <i>V</i> that
+of vertices at distance <i>i</i>&#8722;1 (respectively <i>i</i>, <i>i</i>+1) from <i>V</i> that
 are adjacent to a vertex <i>w</i> at distance <i>i</i> from <i>V</i> (see <a href="CHAP003.htm#SSEC015.1">Distance</a>)
 is the constant <i>c</i><sub><i>i</i></sub>(<i>V</i>) (respectively <i>a</i><sub><i>i</i></sub>(<i>V</i>), <i>b</i><sub><i>i</i></sub>(<i>V</i>)) depending
 only on <i>i</i> and <i>V</i> (and not <i>w</i>).
 <p>
 The function <code>LocalParameters</code> returns a list whose <i>i</i>-th element is
-the list [<i>c</i><sub><i>i</i><font face="symbol">-</font>1</sub>(<i>V</i> ), <i>a</i><sub><i>i</i><font face="symbol">-</font>1</sub>(<i>V</i> ), <i>b</i><sub><i>i</i><font face="symbol">-</font>1</sub>(<i>V</i> )], except that if
-some local parameter does not exist then <font face="symbol">-</font>1 is put in its place.
+the list [<i>c</i><sub><i>i</i>&#8722;1</sub>(<i>V</i> ), <i>a</i><sub><i>i</i>&#8722;1</sub>(<i>V</i> ), <i>b</i><sub><i>i</i>&#8722;1</sub>(<i>V</i> )], except that if
+some local parameter does not exist then &#8722;1 is put in its place.
 <p>
 This function can be used to determine whether a given subset of the
 vertices of a graph is a distance-regular code in that graph.
@@ -79,20 +79,20 @@ gap&gt; LocalParameters( gamma, [1,2] );
 <a name = "SSEC003.1"></a>
 <li><code>GlobalParameters( </code><var>gamma</var><code> )</code>
 <p>
-Let <var>gamma</var> be a simple connected graph, and 0  <font face="symbol">£</font> <i>i</i>  <font face="symbol">£</font> <tt>Diameter</tt><tt>(</tt><i>gamma</i> <tt>)</tt>.  This function determines all global parameters
+Let <var>gamma</var> be a simple connected graph, and 0  &#8804; <i>i</i>  &#8804; <tt>Diameter</tt><tt>(</tt><i>gamma</i> <tt>)</tt>.  This function determines all global parameters
 <i>c</i><sub><i>i</i></sub>, <i>a</i><sub><i>i</i></sub>, and <i>b</i><sub><i>i</i></sub> that <var>gamma</var> may have. We say that <var>gamma</var> has
 the <strong>global parameter</strong> <i>c</i><sub><i>i</i></sub> (respectively <i>a</i><sub><i>i</i></sub>, <i>b</i><sub><i>i</i></sub>) if the number
-of vertices at distance <i>i</i><font face="symbol">-</font>1 (respectively <i>i</i>, <i>i</i>+1) from a vertex
+of vertices at distance <i>i</i>&#8722;1 (respectively <i>i</i>, <i>i</i>+1) from a vertex
 <i>v</i> that are adjacent to a vertex <i>w</i> at distance <i>i</i> from <i>v</i> is the
 constant <i>c</i><sub><i>i</i></sub> (respectively <i>a</i><sub><i>i</i></sub>, <i>b</i><sub><i>i</i></sub>) depending only on <i>i</i> (and
 not <i>v</i> and <i>w</i>).
 <p>
 The function <code>GlobalParameters</code> returns a list of length
-<code>Diameter</code>(<var>gamma</var>)+1, whose <i>i</i>-th element is the list [<i>c</i><sub><i>i</i><font face="symbol">-</font>1</sub>, <i>a</i><sub><i>i</i><font face="symbol">-</font>1</sub>, <i>b</i><sub><i>i</i><font face="symbol">-</font>1</sub>], except that if some global parameter does not exist
-then <font face="symbol">-</font>1 is put in its place.
+<code>Diameter</code>(<var>gamma</var>)+1, whose <i>i</i>-th element is the list [<i>c</i><sub><i>i</i>&#8722;1</sub>, <i>a</i><sub><i>i</i>&#8722;1</sub>, <i>b</i><sub><i>i</i>&#8722;1</sub>], except that if some global parameter does not exist
+then &#8722;1 is put in its place.
 <p>
 Note that <var>gamma</var> is <strong>distance-regular</strong> if and only if this function
-returns no <font face="symbol">-</font>1 in place of a global parameter (see <a href="biblio.htm#BCN89"><cite>BCN89</cite></a>).
+returns no &#8722;1 in place of a global parameter (see <a href="biblio.htm#BCN89"><cite>BCN89</cite></a>).
 <p>
 See also <a href="CHAP004.htm#SSEC002.1">LocalParameters</a> and <a href="CHAP004.htm#SSEC004.1">IsDistanceRegular</a>.
 <p>
@@ -112,7 +112,7 @@ gap&gt; GlobalParameters( BipartiteDouble(gamma) );
 <p>
 This boolean function returns <code>true</code> if and only if <var>gamma</var> is
 <strong>distance-regular</strong>, i.e. <var>gamma</var> is simple, connected, and all global
-parameters <i>c</i><sub><i>i</i></sub>,<i>a</i><sub><i>i</i></sub>,<i>b</i><sub><i>i</i></sub> exist for 0  <font face="symbol">£</font> <i>i</i>  <font face="symbol">£</font> <tt>Diameter</tt><tt>(</tt><i>gamma</i> <tt>)</tt>
+parameters <i>c</i><sub><i>i</i></sub>,<i>a</i><sub><i>i</i></sub>,<i>b</i><sub><i>i</i></sub> exist for 0  &#8804; <i>i</i>  &#8804; <tt>Diameter</tt><tt>(</tt><i>gamma</i> <tt>)</tt>
 (see <a href="biblio.htm#BCN89"><cite>BCN89</cite></a>).
 <p>
 See also <a href="CHAP004.htm#SSEC003.1">GlobalParameters</a>.
@@ -137,7 +137,7 @@ matrix for <var>gamma</var>, where the  collapsing group  is <var>G</var>.  It i
 assumed that <var>G</var> is a subgroup of \Aut(<i>gamma</i> ).
 <p>
 The (<i>i</i>,<i>j</i>)-entry of the collapsed adjacency matrix  equals the number of
-edges in   { [<i>x</i>,<i>y</i>] | <i>y</i>  <font face="symbol">Î</font> <i>j</i>-th <var>G</var>-orbit}, where  <i>x</i> is  a fixed
+edges in   { [<i>x</i>,<i>y</i>] | <i>y</i>  &#8712; <i>j</i>-th <var>G</var>-orbit}, where  <i>x</i> is  a fixed
 vertex in the <i>i</i>-th <var>G</var>-orbit.
 <p>
 In the case where this function is given just one argument, then it must
@@ -202,40 +202,38 @@ gap&gt; OrbitalGraphColadjMats( SymmetricGroup(7) );
 <li><code>VertexTransitiveDRGs( </code><var>coladjmats</var><code> )</code>
 <li><code>VertexTransitiveDRGs( </code><var>G</var><code> )</code>
 <p>
-This function can determine (among other things) all the
-distance-regular graphs on which a given transitive permutation group
-<var>G</var> acts as a vertex-transitive group of automorphisms (as long as the
+This function can determine (among other things) all the distance-regular
+graphs on which a given non-trivial transitive permutation group <var>G</var>
+acts as a vertex-transitive group of automorphisms (as long as the
 permutation rank of <var>G</var> is not too large).
 <p>
-In the first form of this function, the input parameter <var>coladjmats</var>
-must be a list of collapsed adjacency matrices for the orbital digraphs
-of some transitive permutation group <var>G</var>, collapsed with respect to a
+In the first form of this function, the input parameter <var>coladjmats</var> must
+be a list of collapsed adjacency matrices for the orbital digraphs of some
+non-trivial transitive permutation group <var>G</var>, collapsed with respect to a
 point stabilizer (such as the list of matrices produced by the function
 <code>OrbitalGraphColadjMats</code>).  It is assumed that the orbital/suborbit
 indexing used is the same as that for the rows (and columns) of each of
 the matrices, as well as for the indexing of the matrices themselves,
-with the trivial orbital first, so that, in particular,
-<code></code><var>coladjmats</var><code>[1]</code> must be an identity matrix.
+with the trivial orbital first, so that, in particular, <code></code><var>coladjmats</var><code>[1]</code>
+must be an identity matrix.
 <p>
 In the second form of this function, the input parameter <var>G</var> must be a
-transitive permutation group, and then the result returned will be
-the same as <code>VertexTransitiveDRGs( OrbitalGraphColadjMats( </code><var>G</var><code> ) )</code>.
+non-trivial transitive permutation group, and then the result returned
+will be the same as <code>VertexTransitiveDRGs( OrbitalGraphColadjMats( </code><var>G</var><code>
+) )</code>.
 <p>
 In either case, this function returns a record <var>result</var>, which gives
-information on the transitive group <var>G</var> acting on its natural set <i>V</i>.
-The most important component of this record is the list
+information on the non-trivial transitive group <var>G</var> acting on its
+natural set <i>V</i>.  The most important component of this record is the list
 <code>orbitalCombinations</code>, whose elements give the sets of (the indices of)
 the <var>G</var>-orbitals whose union gives the edge-set of a distance-regular
-graph with vertex-set <i>V</i>. The component <code>intersectionArrays</code> gives the
-corresponding intersection arrays. The component <code>degree</code> is the degree
-of the permutation group <var>G</var>, <code>rank</code> is its (permutation) rank, and
-<code>isPrimitive</code> is true if <var>G</var> is primitive, and <code>false</code> otherwise.
+graph with vertex-set <i>V</i>. The component <code>intersectionArrays</code> gives
+the corresponding intersection arrays. The component <code>degree</code> is the
+degree of the permutation group <var>G</var>, <code>rank</code> is its (permutation) rank,
+and <code>isPrimitive</code> is true if <var>G</var> is primitive, and <code>false</code> otherwise.
 <p>
 The techniques used in this function and definitions of the terms used
 above can be found in <a href="biblio.htm#PS97"><cite>PS97</cite></a>.
-<p>
-<strong>Warning</strong> This function checks all subsets of <code>[2..</code><var>result</var><code>.rank]</code>, so
-the permutation rank of <var>G</var> must not be large!
 <p>
 <pre>
 gap&gt; m22:=PrimitiveGroup(22,1);;
@@ -256,5 +254,5 @@ rec( degree := 672, rank := 6, isPrimitive := true,
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP003.htm">Previous</a>] [<a href ="CHAP005.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>January 2016
+<address>grape manual<br>June 2018
 </address></body></html>

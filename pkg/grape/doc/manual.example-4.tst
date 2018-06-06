@@ -1,10 +1,7 @@
-
 gap> IsRegularGraph( JohnsonGraph(4,2) );
 true
 gap> IsRegularGraph( EdgeOrbitsGraph(Group(()),[[1,2]],2) );
 false
-
-
 gap> gamma := JohnsonGraph(4,2);;
 gap> LocalParameters( gamma, 1 );
 [ [ 0, 0, 4 ], [ 1, 2, 1 ], [ 4, 0, 0 ] ]
@@ -12,22 +9,16 @@ gap> LocalParameters( gamma, [1,6] );
 [ [ 0, 0, 4 ], [ 2, 2, 0 ] ]
 gap> LocalParameters( gamma, [1,2] );
 [ [ 0, 1, 3 ], [ -1, -1, 0 ] ]
-
-
 gap> gamma := JohnsonGraph(4,2);;
 gap> GlobalParameters( gamma );
 [ [ 0, 0, 4 ], [ 1, 2, 1 ], [ 4, 0, 0 ] ]
 gap> GlobalParameters( BipartiteDouble(gamma) );
 [ [ 0, 0, 4 ], [ 1, 0, 3 ], [ -1, 0, -1 ], [ 4, 0, 0 ] ]
-
-
 gap> gamma := JohnsonGraph(4,2);;
 gap> IsDistanceRegular( gamma );
 true
 gap> IsDistanceRegular( BipartiteDouble(gamma) );
 false
-
-
 gap> gamma := JohnsonGraph(4,2);
 rec( isGraph := true, order := 6,
   group := Group([ (1,4,6,3)(2,5), (2,4)(3,5) ]),
@@ -40,12 +31,8 @@ gap> CollapsedAdjacencyMat( G, gamma );
 [ [ 0, 4 ], [ 2, 2 ] ]
 gap> CollapsedAdjacencyMat( gamma );
 [ [ 0, 4, 0 ], [ 1, 2, 1 ], [ 0, 4, 0 ] ]
-
-
 gap> OrbitalGraphColadjMats( SymmetricGroup(7) );
 [ [ [ 1, 0 ], [ 0, 1 ] ], [ [ 0, 6 ], [ 1, 5 ] ] ]
-
-
 gap> m22:=PrimitiveGroup(22,1);;
 gap> syl:=SylowSubgroup(m22,11);;
 gap> part:=Set(Orbit(syl,1));;
@@ -60,4 +47,3 @@ rec( degree := 672, rank := 6, isPrimitive := true,
           [ 1, 366, 128 ], [ 360, 135, 0 ] ],
       [ [ 0, 0, 176 ], [ 1, 40, 135 ], [ 48, 128, 0 ] ],
       [ [ 0, 0, 110 ], [ 1, 28, 81 ], [ 18, 80, 12 ], [ 90, 20, 0 ] ] ] )
-

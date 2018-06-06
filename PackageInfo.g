@@ -10,16 +10,16 @@ PackageName := "GRAPE",
 
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers.
-Version := "4.7",
+Version := "4.8",
 
 ##  Release date of the current version in dd/mm/yyyy format.
-Date := "08/01/2016",
+Date := "05/06/2018",
 
 ##  URL of the archive(s) of the current package release, but *without*
 ##  the format extension(s), like '.zoo', which are given next.
 ##  The archive file name *must be changed* with each version of the archive
 ##  (and probably somehow contain the package name and version).
-ArchiveURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r7/grape4r7",
+ArchiveURL := "http://www.maths.qmul.ac.uk/~lsoicher/grape/grape4r8/grape4r8",
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -98,7 +98,7 @@ Persons := [
     IsAuthor := true,
     IsMaintainer := true,
     Email := "L.H.Soicher@qmul.ac.uk",
-    WWWHome := "http://www.maths.qmul.ac.uk/~leonard/",
+    WWWHome := "http://www.maths.qmul.ac.uk/~lsoicher/",
     Place := "London",
     Institution := Concatenation( [
       "School of Mathematical Sciences, ",
@@ -138,8 +138,8 @@ AcceptDate := "07/1993",
 ##  the updating of package information on the GAP Website, and inclusion
 ##  and updating of the package in the GAP distribution.
 ##  
-README_URL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r7/README",
-PackageInfoURL := "http://www.maths.qmul.ac.uk/~leonard/grape/grape4r7/PackageInfo.g",
+README_URL := "http://www.maths.qmul.ac.uk/~lsoicher/grape/grape4r8/README",
+PackageInfoURL := "http://www.maths.qmul.ac.uk/~lsoicher/grape/grape4r8/PackageInfo.g",
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 
@@ -153,7 +153,7 @@ computing with graphs and groups, \
 and is primarily designed for constructing and analysing graphs \
 related to groups, finite geometries, and designs.",
 
-PackageWWWHome := "http://www.maths.qmul.ac.uk/~leonard/grape/",
+PackageWWWHome := "http://www.maths.qmul.ac.uk/~lsoicher/grape/",
                   
 ##  On the GAP Website there is an online version of all manuals in the
 ##  GAP distribution. To handle the documentation of a package it is
@@ -195,7 +195,7 @@ PackageDoc := rec(
 Dependencies := rec(
   # GAP version, use version strings for specifying exact versions,
   # prepend a '>=' for specifying a least version.
-  GAP := ">=4.5",
+  GAP := ">=4.9",
   # list of pairs [package name, (least) version],  package name is case
   # insensitive, least version denoted with '>=' prepended to version string.
   # without these, the package will not load

@@ -1,4 +1,3 @@
-
 gap> gamma := JohnsonGraph(4,2);
 rec( adjacencies := [ [ 2, 3, 4, 5 ] ],
   group := Group([ (1,4,6,3)(2,5), (2,4)(3,5) ]), isGraph := true,
@@ -12,8 +11,6 @@ gap> AutGroupGraph( rec(graph:=gamma,colourClasses:=[[1,2,3],[4,5,6]]) );
 Group([ (2,3)(4,5), (1,2)(5,6) ])
 gap> Size(AutomorphismGroup( rec(graph:=gamma,colourClasses:=[[1,6],[2,3,4,5]]) ));
 16
-
-
 gap> gamma := JohnsonGraph(5,3);
 rec( adjacencies := [ [ 2, 3, 4, 5, 7, 8 ] ],
   group := Group([ (1,7,10,6,3)(2,8,4,9,5), (4,7)(5,8)(6,9) ]),
@@ -40,8 +37,6 @@ gap> GraphIsomorphism(
 >       rec(graph:=gamma, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]),
 >       rec(graph:=delta, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) );
 fail
-
-
 gap> gamma := JohnsonGraph(5,3);
 rec( adjacencies := [ [ 2, 3, 4, 5, 7, 8 ] ],
   group := Group([ (1,7,10,6,3)(2,8,4,9,5), (4,7)(5,8)(6,9) ]),
@@ -68,8 +63,6 @@ gap> IsIsomorphicGraph(
 >       rec(graph:=gamma, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]),
 >       rec(graph:=delta, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) );
 false
-
-
 gap> A:=JohnsonGraph(5,3);
 rec( adjacencies := [ [ 2, 3, 4, 5, 7, 8 ] ],
   group := Group([ (1,7,10,6,3)(2,8,4,9,5), (4,7)(5,8)(6,9) ]),
@@ -97,4 +90,3 @@ gap> R:=GraphIsomorphismClassRepresentatives(
 >      rec(graph:=ComplementGraph(gamma), colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) ] );;
 gap> Length(R);
 3
-
