@@ -4343,7 +4343,7 @@ end);
 
 BindGlobal("GRAPE_nautytmpdir",DirectoryTemporary());
 
-Add(POST_RESTORE_FUNCS,function()
+Add(GAPInfo.PostRestoreFuncs,function()
   MakeReadWriteGlobal("GRAPE_nautytmpdir");
   Unbind(GRAPE_nautytmpdir);
   BindGlobal("GRAPE_nautytmpdir",DirectoryTemporary());
