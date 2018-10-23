@@ -262,9 +262,9 @@ if <k> is a $d$-vector. The default is that all weights are equal to~1.
 (Recall that a complete subgraph of *size* <k> means a complete subgraph
 whose vertex-weights sum to <k>.)
 
-If <wts> is a list of (positive) integers, then it is required that for
-all $v$ in `Vertices(<gamma>)' and all $g$ in `<gamma>.group', we have
-$<wts>[v^g]=<wts>[v]$.
+If <wts> is a list of (positive) integers, then it is required that
+for all $g$ in `<gamma>.group' and all $v$ in `Vertices(<gamma>)',
+we have $<wts>[v^g]=<wts>[v]$.
 
 If <wts> is a list of $d$-vectors then we assume that there is some
 underlying action $\mu$ of `<gamma>.group' on `[1..$d$]'. This results
