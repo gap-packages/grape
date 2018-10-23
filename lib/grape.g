@@ -1,6 +1,6 @@
 ##############################################################################
 ##
-##  grape.g (Version 4.8)    GRAPE Library     Leonard Soicher
+##  grape.g (Version 4.8.1)    GRAPE Library     Leonard Soicher
 ##
 ##  Copyright (C) 1992-2018 Leonard Soicher, School of Mathematical Sciences, 
 ##                      Queen Mary University of London, London E1 4NS, U.K.
