@@ -1,5 +1,5 @@
 
-                          GRAPE Version 4.8, 
+                          GRAPE Version 4.8.1, 
 
 a GAP package for computing with graphs and groups, by Leonard H. Soicher,
 with contributions from Steve Linton, Alexander Hulpke and Jerry James,
@@ -21,20 +21,32 @@ unless you want to install the package separately from your main
 GAP installation or are installing an upgrade of GRAPE to an
 existing installation of GAP.  If you do need to download
 GRAPE, you can find the latest archive .tar.gz file for the 
-package at  http://www.maths.qmul.ac.uk/~lsoicher/grape/ 
+package at  https://gap-packages.github.io/grape 
 
-Installation and testing instructions for the GRAPE package can be 
-found in Chapter 1 of the GRAPE manual: 
-http://www.maths.qmul.ac.uk/~lsoicher/grape/grape4r8/manual/chapters.htm 
+Installation and testing instructions for the GRAPE package
+can be found in Chapter 1 of the GRAPE manual, available from
+https://gap-packages.github.io/grape
 
 -------------------------------------------------------------------------
 If you use GRAPE to solve a problem, then please email
 L.H.Soicher@qmul.ac.uk, and reference:
 
-L.H. Soicher, The GRAPE package for GAP, Version 4.8, 2018, 
-http://www.maths.qmul.ac.uk/~lsoicher/grape/
+L.H. Soicher, The GRAPE package for GAP, Version 4.8.1, 2018, 
+https://gap-packages.github.io/grape
 
 ------------------------------------------------------------------------
+
+Main changes from GRAPE 4.8 to GRAPE 4.8.1 (October 2018):
+----------------------------------------------------------
+
+(1) GRAPE package moved on to github.
+
+(2) Indexing in GRAPE documentation made to work better.
+
+(3) Documentation for CompleteSubgraphsOfGivenSize improved. 
+
+(4) Obsolete POST_RESTORE_FUNCS no longer used.
+ 
 
 Main changes from GRAPE 4.7 to GRAPE 4.8 (June 2018):
 -----------------------------------------------------
@@ -326,5 +338,3 @@ zero-vertex graph to be bipartite, with bicomponents = [[],[]]).
 the effect that if the returned graph had loops, then it 
 might have had its isSimple component erroneously set to true.
 
-Leonard H. Soicher
-June 2018 

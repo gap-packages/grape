@@ -20,13 +20,12 @@ SourceRepository := rec(
     URL :=  "https://github.com/gap-packages/grape",
 ),
 IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
-PackageWWWHome  := Concatenation( "https://gap-packages.github.io/grape" ),
+PackageWWWHome  := "https://gap-packages.github.io/grape",
 README_URL      := Concatenation( ~.PackageWWWHome, "/README" ),
 PackageInfoURL  := Concatenation( ~.PackageWWWHome, "/PackageInfo.g" ),
 ArchiveURL      := Concatenation( ~.SourceRepository.URL,
                                  "/releases/download/v", ~.Version,
                                  "/grape-", ~.Version ),
-
 
 ArchiveFormats := ".tar.gz", 
 
@@ -46,19 +45,11 @@ Persons := [
       "Queen Mary University of London",
       ] )
     )
-# provide such a record for each author and/or maintainer ...
-  
 ],
 
 Status := "accepted",
 
-##  You must provide the next two entries if and only if the status is 
-##  "accepted":
-# format: 'name (place)'
-# CommunicatedBy := "Mike Atkinson (St. Andrews)",
 CommunicatedBy := "Leonard Soicher (QMUL)",
-# format: mm/yyyy
-# AcceptDate := "08/1999",
 AcceptDate := "07/1993", 
 
 ##  Here you  must provide a short abstract explaining the package content 
@@ -73,24 +64,6 @@ computing with graphs and groups, \
 and is primarily designed for constructing and analysing graphs \
 related to groups, finite geometries, and designs.",
 
-##  On the GAP Website there is an online version of all manuals in the
-##  GAP distribution. To handle the documentation of a package it is
-##  necessary to have:
-##     - an archive containing the package documentation (in at least one 
-##       of HTML or PDF-format, preferably both formats)
-##     - the start file of the HTML documentation (if provided), *relative to
-##       package root*
-##     - the PDF-file (if provided) *relative to the package root*
-##  For links to other package manuals or the GAP manuals one can assume 
-##  relative paths as in a standard GAP installation. 
-##  Also, provide the information which is currently given in your packages 
-##  init.g file in the command DeclarePackage(Auto)Documentation
-##  (for future simplification of the package loading mechanism).
-##  
-##  Please, don't include unnecessary files (.log, .aux, .dvi, .ps, ...) in
-##  the provided documentation archive.
-##  
-# in case of several help books give a list of such records here:
 PackageDoc := rec(
   # use same as in GAP            
   BookName := "GRAPE",
@@ -159,7 +132,6 @@ TestFile := "tst/testall.tst",
 
 ##  *Optional*: Here you can list some keyword related to the topic 
 ##  of the package.
-# Keywords := ["Smith normal form", "p-adic", "rational matrix inversion"]
 Keywords := ["graph","geometry","design"]
 
 ));
