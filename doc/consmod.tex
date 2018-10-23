@@ -24,13 +24,14 @@ parameter <rel> should be a boolean function defining a <G>-invariant
 relation on $S$ (so that for $g$ in <G>, $x,y$ in $S$, $<rel>(x,y)$
 if and only if $<rel>(<act>(x,g),<act>(y,g))$). Then the function `Graph'
 returns a graph <gamma> which has as vertex-names (an immutable copy of)
-
-\centerline{`Concatenation( Orbits( <G>, <L>, <act> ) )'} 
-
+\begintt
+  Concatenation( Orbits( <G>, <L>, <act> ) ) 
+\endtt
 (the concatenation of the distinct orbits of the elements in <L> under
 <G>), and for vertices $v,w$ of <gamma>, $[v,w]$ is an edge if and only if
-
-\centerline{`<rel>( VertexName( <gamma>, <v> ), VertexName( <gamma>, <w> ) )'.}
+\begintt
+  <rel>( VertexName( <gamma>, <v> ), VertexName( <gamma>, <w> ) ).
+\endtt
 
 Now if the  parameter <invt> exists  and  has value `true',  then  it  is
 assumed  that <L> is invariant  under <G> with respect  to  action <act>.
@@ -58,7 +59,9 @@ rec(
 \endexample
 
 The function `Graph' may be used to construct a graph in {\GRAPE} format
-from an adjacency matrix~\index{adjacency matrix} for that graph. For
+from an adjacency matrix
+\index{adjacency matrix} 
+for that graph. For
 example, suppose you have an $n$ by $n$ adjacency matrix $A$ for a graph
 $gamma$, so that the vertex-set of $gamma$ is $\{1,\ldots,n\}$, and
 $[i,j]$ is an edge of $gamma$ if and only if $A[i][j]=1$.  Then the graph

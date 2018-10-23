@@ -12,13 +12,14 @@
 ##  etc/convert.pl) documentation for the Example Package.
 ##
 
+set -e
 echo "TeXing documentation"
 # TeX the manual
 tex manual
 # ... and build its bibliography (uncomment if there is a `manual.bib')
 bibtex manual
 # TeX the manual again to incorporate the ToC ... and build the index
-tex manual; ../../../doc/manualindex manual
+tex manual; $HOME/gap-4.9.3/doc/manualindex manual
 # Finally TeX the manual again to get cross-references right
 tex manual
 # Create the PostScript version (uncomment next line, if needed)
@@ -29,7 +30,7 @@ pdftex manual; pdftex manual
 # The HTML version of the manual
 mkdir -p ../htm
 echo "Creating HTML documentation"
-../../../etc/convert.pl -t -c -n grape . ../htm
+$HOME/gap-4.9.3/etc/convert.pl -t -c -n grape . ../htm
 
 #############################################################################
 ##

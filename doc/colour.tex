@@ -18,7 +18,9 @@ a simple graph.
 
 The function `CompleteSubgraphsOfGivenSize' can be used to determine
 the complete subgraphs with given vertex-weight sum in a vertex-weighted
-graph~\index{vertex-weighted graph}, where the weights can be positive
+graph,
+\index{vertex-weighted graph}
+where the weights can be positive
 integers or non-zero vectors of non-negative integers.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -29,8 +31,9 @@ integers or non-zero vectors of non-negative integers.
 \>VertexColouring( <gamma>, <k>, <m> )
 
 This function returns a proper vertex-colouring <C> for the graph
-<gamma>, which must be simple. A *proper vertex-colouring*~\index{proper
-vertex-colouring} of <gamma> is an assignment of colours to the vertices
+<gamma>, which must be simple. A *proper vertex-colouring*
+\index{proper vertex-colouring} 
+of <gamma> is an assignment of colours to the vertices
 of <gamma>, such that, if $[i,j]$ is an edge, then vertices $i$ and $j$
 are assigned different colours.
 
@@ -70,9 +73,9 @@ fail
 \>MinimumVertexColouring( <gamma> )
 
 This function returns a minimum vertex-colouring <C> for the graph
-<gamma>, which must be simple. A *minimum vertex-colouring*~\index{minimum
-vertex-colouring} is a proper vertex-colouring using as few colours
-as possible.
+<gamma>, which must be simple. A *minimum vertex-colouring*
+\index{minimum vertex-colouring} 
+is a proper vertex-colouring using as few colours as possible.
 
 The returned minimum vertex-colouring <C> is given as a list of positive
 integers (the *colours*), indexed by the vertices of <gamma>, with the
@@ -100,8 +103,9 @@ gap> MinimumVertexColouring(J);
 \>ChromaticNumber( <gamma> )
 
 This function returns the chromatic number of the given graph <gamma>,
-which must be simple.  The *chromatic number*~\index{chromatic number} of
-<gamma> is the minimum number of colours needed to properly vertex-colour
+which must be simple.  The *chromatic number*
+\index{chromatic number} 
+of <gamma> is the minimum number of colours needed to properly vertex-colour
 <gamma>, that is, the number of colours used in a minimum vertex-colouring
 of <gamma>.
 
@@ -165,7 +169,8 @@ Before applying `CompleteSubgraphs', one may want to associate the full
 automorphism group of <gamma> with <gamma>, via `<gamma> :=
 NewGroupGraph( AutGroupGraph(<gamma>), <gamma> );'.
 
-An alternative name for this function is `Cliques'~\index{Cliques}.
+An alternative name for this function is `Cliques'.
+\index{Cliques}
 
 See also "CompleteSubgraphsOfGivenSize".
 
@@ -257,21 +262,23 @@ if <k> is a $d$-vector. The default is that all weights are equal to~1.
 (Recall that a complete subgraph of *size* <k> means a complete subgraph
 whose vertex-weights sum to <k>.)
 
-If <wts> is a list of integers, then this list must be `<gamma>.group'
-invariant, where the action permutes the list positions in the natural
-way.
+If <wts> is a list of (positive) integers, then it is required that for
+all $v$ in `Vertices(<gamma>)' and all $g$ in `<gamma>.group', we have
+$<wts>[v^g]=<wts>[v]$.
 
-If <wts> is a list of $d$-vectors then we assume that `<gamma>.group' acts
-on the set of all integer $d$-vectors by permuting vector positions, such
-that, for all $v$ in `[1..<gamma>.order]' and all $g$ in `<gamma>.group',
-we have $<wts>[v^g] = <wts>[v]^g$ (where the first action is `OnPoints'
-and for the second action, if $i^g=j$ then $(<wts>[v]^g)[j]=<wts>[v][i]$),
-and that we also have $<k>^g=<k>$.  These assumptions are *not* checked
-by the function, and the use of vector-weights is primarily for advanced
-users of {\GRAPE}.
+If <wts> is a list of $d$-vectors then we assume that there is some
+underlying action $\mu$ of `<gamma>.group' on `[1..$d$]'. This results
+in an action of `<gamma>.group' on the set of integer $d$-vectors, where
+if $w$ is an integer $d$-vector and $g$ in `<gamma>.group' then $w^g$
+is defined by $w^g[\mu(i,g)]=w[i]$ for all $i$ in `[1..$d$]'. It is
+then required that for all $g$ in `<gamma>.group', we have $<k>^g=<k>$
+and for all $v$ in `Vertices(<gamma>)' $<wts>[v^g] = <wts>[v]^g$.
+These requirements are *not* checked by the function, and the use of
+vector-weights is primarily for advanced users of {\GRAPE}.
 
 An alternative name for this function is 
-`CliquesOfGivenSize'~\index{CliquesOfGivenSize}.
+`CliquesOfGivenSize'.
+\index{CliquesOfGivenSize}
 
 See also "CompleteSubgraphs".
 
@@ -309,11 +316,14 @@ gap> CompleteSubgraphsOfGivenSize(delta,5,1,false,true,
 \>MaximumClique( <gamma> )
 
 This function returns a maximum clique of the graph <gamma>, which must
-be simple.  A *maximum clique*~\index{maximum clique} of <gamma> is a
+be simple.  A *maximum clique*
+\index{maximum clique} 
+of <gamma> is a
 set of pairwise adjacent vertices of <gamma> of the largest possible size.
 
 An alternative name for this function is
-`MaximumCompleteSubgraph'~\index{MaximumCompleteSubgraph}. 
+`MaximumCompleteSubgraph'.
+\index{MaximumCompleteSubgraph} 
 
 See also "CompleteSubgraphsOfGivenSize".
 
@@ -335,8 +345,9 @@ gap> MaximumClique(J);
 \>CliqueNumber( <gamma> )
 
 This function returns the clique number of the given graph <gamma>,
-which must be simple.  The *clique number*~\index{clique number} of
-<gamma> is the size of a largest clique in <gamma>, where a *clique*
+which must be simple.  The *clique number*
+\index{clique number} 
+of <gamma> is the size of a largest clique in <gamma>, where a *clique*
 is a set of pairwise adjacent vertices.
 
 \beginexample
