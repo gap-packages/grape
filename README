@@ -11,10 +11,9 @@ in the GRAPE file COPYING.
 
 Installing GRAPE
 ----------------
-The current GAP distribution includes the GRAPE package, which 
-includes a 32-bit nauty/dreadnaut binary for Windows (XP and later
-versions).  Thus, GRAPE normally requires no further installation
-for Windows users of GAP.
+The official GAP Windows distribution includes the GRAPE package
+fully installed.  Thus, GRAPE normally requires no further installation
+for Windows users of GAP. What follows is for Unix users of GRAPE.
 
 You do not need to download and unpack an archive for GRAPE
 unless you want to install the package separately from your main
@@ -27,7 +26,8 @@ Installation and testing instructions for the GRAPE package
 can be found in Chapter 1 of the GRAPE manual, available from
 https://gap-packages.github.io/grape
 
--------------------------------------------------------------------------
+Referencing GRAPE
+-----------------
 If you use GRAPE to solve a problem, then please email
 L.H.Soicher@qmul.ac.uk, and reference:
 
