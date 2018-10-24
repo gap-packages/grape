@@ -1,0 +1,10 @@
+/Makefile
+/bin/
+
+/nauty22/config.cache
+/nauty22/config.log
+/nauty22/config.status
+/nauty22/gtools.h
+/nauty22/makefile
+/nauty22/naututil.h
+/nauty22/nauty.h
