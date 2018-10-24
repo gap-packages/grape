@@ -1,0 +1,204 @@
+<html><head><title>[grape] 9 Partial Linear Spaces</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP008.htm">Previous</a>] [<a href = "theindex.htm">Index</a>]
+<h1>9 Partial Linear Spaces</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP009.htm#SECT001">PartialLinearSpaces</a>
+<li> <A HREF="CHAP009.htm#SECT002">A research application of PartialLinearSpaces</a>
+</ol><p>
+<p>
+Let <i>s</i> and  <i>t</i>  be positive integers. A <strong>partial linear space</strong>
+(<i>P</i>,<i>L</i>), with <strong>parameters</strong> (<i>s</i>,<i>t</i>) consists of a set <i>P</i> of <strong>points</strong>,
+together with a set <i>L</i> of (<i>s</i>+1)-subsets of <i>P</i> called <strong>lines</strong>,
+such that every point is in exactly <i>t</i>+1 lines, and every pair of
+distinct points is contained in at most one line.  The <strong>point graph</strong>
+of a partial linear space <i>S</i> having point-set <i>P</i> is the graph with
+vertex-set <i>P</i> and having [<i>p</i>,<i>q</i>] an edge if and only if <i>p</i> &#8800; <i>q</i> and
+<i>p</i>,<i>q</i> are in a common line of <i>S</i>. Two partial linear spaces (<i>P</i>,<i>L</i>)
+and (<i>P</i>&#8242;,<i>L</i>&#8242;) (with parameters (<i>s</i>,<i>t</i>)) are said to be <strong>isomorphic</strong>
+if there is a bijection <i>P</i>&#8594; <i>P</i>&#8242; which induces a bijection <i>L</i>&#8594; <i>L</i>&#8242;.
+An <strong>automorphism</strong> of a partial linear space is an isomorphism onto itself.
+The set of all automorphisms of a partial linear space <i>S</i> forms a group,
+called the <strong>automorphism group</strong> of <i>S</i>.
+<p>
+GRAPE contains a function <code>PartialLinearSpaces</code> to determine and
+classify partial linear spaces with given point graph and parameters.
+In this chapter we describe this function, and also give a research
+application of this function.
+<p>
+<p>
+<h2><a name="SECT001">9.1 PartialLinearSpaces</a></h2>
+<p><p>
+<a name = "SSEC001.1"></a>
+<li><code>PartialLinearSpaces( </code><var>ptgraph</var><code>, </code><var>s</var><code>, </code><var>t</var><code> )</code>
+<li><code>PartialLinearSpaces( </code><var>ptgraph</var><code>, </code><var>s</var><code>, </code><var>t</var><code>, </code><var>nspaces</var><code> )</code>
+<li><code>PartialLinearSpaces( </code><var>ptgraph</var><code>, </code><var>s</var><code>, </code><var>t</var><code>, </code><var>nspaces</var><code>, </code><var>printlevel</var><code> )</code>
+<li><code>PartialLinearSpaces( </code><var>ptgraph</var><code>, </code><var>s</var><code>, </code><var>t</var><code>, </code><var>nspaces</var><code>, </code><var>printlevel</var><code>, </code><var>cliques</var><code> )</code>
+<p>
+This function classifies the partial linear spaces with given point
+graph <var>ptgraph</var> and parameters (<var>s</var>,<var>t</var>). It makes use (indirectly)
+of nauty <a href="biblio.htm#Nau90,MP14"><cite>Nau90,MP14</cite></a> or bliss <a href="biblio.htm#JK07"><cite>JK07</cite></a>.
+<p>
+The function <code>PartialLinearSpaces</code> returns a list of representatives
+of distinct isomorphism classes of partial linear spaces with (simple)
+point graph <var>ptgraph</var>, and parameters (<var>s</var>,<var>t</var>). The default is that
+representatives for all isomorphism classes are returned.
+<p>
+The integer argument <var>nspaces</var> is optional, and has default value -1,
+which means that representatives for all isomorphism classes are
+returned. If <var>nspaces</var> is non-negative then exactly <var>nspaces</var>
+representatives are returned if there are at least <var>nspaces</var>
+isomorphism classes, otherwise representatives for all isomorphism
+classes are returned.
+<p>
+In the output of this function, a partial linear space <var>S</var> is given
+by its incidence graph <var>delta</var>. The point-vertices of <var>delta</var> are
+1,...,<code></code><var>ptgraph</var><code>.order</code>, with the name of point-vertex <var>i</var> being the
+name of vertex <var>i</var> of <var>ptgraph</var>. A line-vertex of <var>delta</var> is named by a
+list (not necessarily ordered) of the point-vertex names for the points
+on that line.  We warn that this is a <strong>different</strong> naming convention to
+versions of GRAPE before 4.1.  The group <code></code><var>delta</var><code>.group</code> associated
+with the incidence graph <var>delta</var> is the automorphism group of <var>S</var> acting
+on point-vertices and line-vertices, and preserving both sets.
+<p>
+If <var>printlevel</var> is bound then it controls the print-level (default 0).
+Permitted values for <var>printlevel</var> are 0,1,2.
+<p>
+If <var>cliques</var> is bound then it is assumed to be a list (without repeats)
+of the (<i>s</i> +1)-cliques of <var>ptgraph</var>. If known, this can help the
+function to run faster.
+<p>
+<pre>
+gap&gt; K7:=CompleteGraph(SymmetricGroup(7));;
+gap&gt; P:=PartialLinearSpaces(K7,2,2);
+[ rec( isGraph := true, order := 14, 
+      group := Group([ ( 1, 2)( 5, 6)( 9,11)(10,12), 
+          ( 1, 2, 3)( 5, 6, 7)( 9,11,13)(10,12,14), 
+          ( 1, 2, 3)( 4, 7, 6)( 9,12,14)(10,11,13), 
+          ( 1, 4, 7, 6, 2, 5, 3)( 8, 9,13,10,11,12,14) ]), 
+      schreierVector := [ -1, 1, 2, 4, 4, 1, 3, -2, 4, 1, 1, 3, 4, 2 ], 
+      adjacencies := [ [ 8, 9, 10 ], [ 1, 2, 3 ] ], 
+      representatives := [ 1, 8 ], 
+      names := [ 1, 2, 3, 4, 5, 6, 7, [ 1, 2, 3 ], [ 1, 4, 5 ], [ 1, 6, 7 ], 
+          [ 2, 4, 6 ], [ 2, 5, 7 ], [ 3, 4, 7 ], [ 3, 5, 6 ] ], 
+      isSimple := true ) ]
+gap&gt; Size(P[1].group);
+168
+gap&gt; T:=ComplementGraph(JohnsonGraph(10,2));;
+gap&gt; P:=PartialLinearSpaces(T,4,6);;
+gap&gt; List(P,x-&gt;Size(x.group));
+[ 216, 1512 ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT002">9.2 A research application of PartialLinearSpaces</a></h2>
+<p><p>
+We now provide an extended example of the use of GRAPE which
+illustrates a research application of the <code>PartialLinearSpaces</code> function.
+<p>
+First we give a definition. Let <i>s</i> and <i>t</i> be positive integers. A
+<strong>partial geometry</strong> is a partial linear space with parameters (<i>s</i>,<i>t</i>) for
+which there is an additional constant constant &#945; &gt; 0, such that,
+for every line <i>l</i> and every point <i>p</i> not on <i>l</i>, there are exactly
+&#945; lines through <i>p</i> meeting <i>l</i> in some point. 
+<p>
+Our example shows that the Haemers partial geometry <a href="biblio.htm#Hae81"><cite>Hae81</cite></a>
+is uniquely determined (up to isomorphism) by its point graph, as is
+the dual of the Haemers geometry (where the role of points and lines
+are interchanged), and that each of these geoemetries has automorphism
+group isomorphic to <i>A</i><sub>7</sub>.
+<p>
+We first construct and study the Hoffman-Singleton graph, using the
+construction of Peter Cameron contained in <a href="biblio.htm#Cam99"><cite>Cam99</cite></a>.  We then
+construct the point graph of the Haemers partial geometry <a href="biblio.htm#Hae81"><cite>Hae81</cite></a>
+(this partial geometry has (<i>s</i>,<i>t</i>)=(4,17) and &#945; = 2). The vertices
+of this point graph are the edges of the Hoffman-Singleton graph, and
+two such vertices are adjacent in the point graph precisely when they
+are at distance 2 in the edge-graph of the Hoffman-Singleton graph (see
+<a href="biblio.htm#Hae81"><cite>Hae81</cite></a>).  We then construct and classify (up to isomorphism)
+all partial linear spaces with parameters (4,17) having point graph
+isomorphic to that of the Haemers partial geometry. We find that
+the Haemers partial geometry is the only possibility. It follows from
+basic theory of partial geometries that the Haemers partial geometry is
+uniquely determined up to isomorphism (as a partial geometry) by its point
+graph. We also show that the dual of the Haemers partial geometry is also
+uniquely determined by its point graph. Thus far, the only proof of these
+results is by GRAPE. Our example also shows that the Haemers partial
+geometry and its dual each has automorphism group isomorphic to <i>A</i><sub>7</sub>.
+<p>
+The total runtime (not including calls of nauty) was about 300
+CPU-seconds on a Pentium II running at 350 MHz.
+<p>
+<pre>
+gap&gt; LoadPackage("grape");
+true
+gap&gt; 
+gap&gt; OnSetsRecursive:=function(x,g)
+&gt; if not IsList(x) then
+&gt;   return x^g;     
+&gt; else
+&gt;   return Set(List(x, y-&gt;OnSetsRecursive(y,g)));
+&gt; fi;
+&gt; end;;
+gap&gt; 
+gap&gt; HofSingAdjacency := function(x,y)
+&gt; #
+&gt; # This boolean function returns  true  iff  x  and  y  are 
+&gt; # adjacent in the Hoffman-Singleton graph, in Peter Cameron's
+&gt; # construction.
+&gt; #
+&gt; if Size(x)=3 then                  # x is a 3-set
+&gt;    if Size(y)=3 then               # y is a 3-set
+&gt;       return Intersection(x,y)=[]; # join iff disjoint
+&gt;    else                            # y is a projective plane
+&gt;       return x in y;               # join iff x is a line of y
+&gt;    fi;
+&gt; else                               # x is a projective plane
+&gt;    if Size(y)=3 then               # y is a 3-set
+&gt;       return y in x;               # join iff y is a line of x
+&gt;    else                            # y is a projective plane
+&gt;       return false;                # don't join
+&gt;    fi;
+&gt; fi;
+&gt; end;;
+gap&gt; 
+gap&gt; projectiveplane:=
+&gt;    Set([[1,2,4],[2,3,5],[3,4,6],[4,5,7],[1,5,6],[2,6,7],[1,3,7]]);;
+gap&gt; 
+gap&gt; HofSingGraph:=Graph(AlternatingGroup(7), 
+&gt;                     [[1,2,3], projectiveplane], OnSetsRecursive,
+&gt;                     HofSingAdjacency);;
+gap&gt; GlobalParameters(HofSingGraph);
+[ [ 0, 0, 7 ], [ 1, 0, 6 ], [ 1, 6, 0 ] ]
+gap&gt; autgrp := AutGroupGraph(HofSingGraph);;
+gap&gt; Size(autgrp);
+252000
+gap&gt; HofSingGraph := NewGroupGraph(autgrp,HofSingGraph);;
+gap&gt; pointgraph:=DistanceGraph( EdgeGraph(HofSingGraph), 2);;
+gap&gt; GlobalParameters(pointgraph);
+[ [ 0, 0, 72 ], [ 1, 20, 51 ], [ 36, 36, 0 ] ]
+gap&gt; spaces:=PartialLinearSpaces(pointgraph,4,17);;
+gap&gt; Length(spaces);
+1
+gap&gt; haemers:=spaces[1];;
+gap&gt; DisplayCompositionSeries(haemers.group);
+G (3 gens, size 2520)
+ | A(7)
+1 (0 gens, size 1)
+gap&gt; linegraph:=PointGraph(haemers, Adjacency(haemers,1)[1]);;
+gap&gt; spaces:=PartialLinearSpaces(linegraph,17,4);;
+gap&gt; Length(spaces);
+1
+gap&gt; dualhaemers:=spaces[1];;
+gap&gt; DisplayCompositionSeries(dualhaemers.group);
+G (4 gens, size 2520)
+ | A(7)
+1 (0 gens, size 1)
+</pre>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP008.htm">Previous</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>grape manual<br>October 2018
+</address></body></html>

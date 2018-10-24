@@ -1,0 +1,259 @@
+<html><head><title>[grape] 1 Grape</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>1 Grape</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP001.htm#SECT001">Installing the GRAPE Package</a>
+<li> <A HREF="CHAP001.htm#SECT002">Loading GRAPE</a>
+<li> <A HREF="CHAP001.htm#SECT003">The structure of a graph in GRAPE</a>
+<li> <A HREF="CHAP001.htm#SECT004">Examples of the use of GRAPE</a>
+</ol><p>
+<p>
+This manual describes the GRAPE (Version&nbsp;4.8.1) package for computing
+with graphs and groups.
+<p>
+GRAPE is primarily designed for the construction and analysis of
+finite graphs related to groups, designs, and geometries. Special
+emphasis is placed on the determination of regularity properties and
+subgraph structure. The GRAPE philosophy is that a graph <var>gamma</var>
+always comes together with a known subgroup <var>G</var> of the automorphism
+group of <var>gamma</var>, and that <var>G</var> is used to reduce the storage and
+CPU-time requirements for calculations with <var>gamma</var> (see
+<a href="biblio.htm#Soi93"><cite>Soi93</cite></a> and <a href="biblio.htm#Soi04"><cite>Soi04</cite></a>).  Of course <var>G</var> may be the trivial group,
+and in this case GRAPE algorithms may perform more slowly than strictly
+combinatorial algorithms (although this degradation in performance is
+hopefully never more than a fixed constant factor).
+<p>
+Most GRAPE functions are written entirely in the <font face="Gill Sans,Helvetica,Arial">GAP</font> language.
+However, the GRAPE functions <code>AutomorphismGroup</code>, <code>AutGroupGraph</code>,
+<code>IsIsomorphicGraph</code>, <code>GraphIsomorphismClassRepresentatives</code>,
+<code>GraphIsomorphism</code>  and <code>PartialLinearSpaces</code> make direct or indirect
+use the nauty <a href="biblio.htm#Nau90"><cite>Nau90</cite></a>, <a href="biblio.htm#MP14"><cite>MP14</cite></a> or bliss <a href="biblio.htm#JK07"><cite>JK07</cite></a> packages,
+via a GRAPE interface.  These functions can only be used on a fully
+installed version of GRAPE. Installation of GRAPE is described in
+this chapter of the manual.
+<p>
+Except for the nauty package of B.&nbsp;D.&nbsp;McKay included with GRAPE,
+the function <code>SmallestImageSet</code> by Steve Linton, the nauty interface
+by Alexander Hulpke, and the initial bliss interface by Jerry James,
+the GRAPE package was designed and written by Leonard H. Soicher,
+School of Mathematical Sciences, Queen Mary University of London.
+Except for the included nauty package, GRAPE is licensed under the
+terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version. For details, see <a href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a>.
+Further licensing and copyright information for GRAPE is contained
+in its <code>COPYING</code> file.
+<p>
+If you use GRAPE to solve a problem then please send a short email
+about it to <a href="mailto:L.H.Soicher@qmul.ac.uk">L.H.Soicher@qmul.ac.uk</a>, and reference the GRAPE 
+package as follows:
+<p>
+L.H. Soicher, The GRAPE package for GAP, Version&nbsp;4.8.1, 2018,
+<a href="https://gap-packages.github.io/grape">https://gap-packages.github.io/grape</a>.
+<p>
+If your work made use of a function depending on nauty or bliss
+then you should also reference nauty <a href="biblio.htm#Nau90,MP14"><cite>Nau90,MP14</cite></a> or bliss
+<a href="biblio.htm#JK07"><cite>JK07</cite></a> as appropriate.
+<p>
+The development of GRAPE was partially supported by a European
+Union HCM grant in ``Computational Group Theory''. It is currently
+partially supported by EPSRC grant EP/M022641/1 (CoDiMa: a Collaborative
+Computational Project in the area of Computational Discrete Mathematics).
+<p>
+<p>
+<h2><a name="SECT001">1.1 Installing the GRAPE Package</a></h2>
+<p><p>
+The official <font face="Gill Sans,Helvetica,Arial">GAP</font> Windows distribution includes the GRAPE package
+fully installed.  Thus, GRAPE normally requires no further installation
+for Windows users of <font face="Gill Sans,Helvetica,Arial">GAP</font>. What follows is for Unix users of GRAPE.
+<p>
+You do not need to download and unpack an archive for GRAPE unless you
+want to install the package separately from your main <font face="Gill Sans,Helvetica,Arial">GAP</font> installation
+or are installing an upgrade of GRAPE to an existing installation
+of <font face="Gill Sans,Helvetica,Arial">GAP</font> (see the main <font face="Gill Sans,Helvetica,Arial">GAP</font> reference section <a href="../../../doc/ref/chap76.html#X82473E4B8756C6CD">REF:Installing a GAP Package</a>).  If you do need to download GRAPE, you can find the most
+recent <code>.tar.gz</code> archive at <a href="https://gap-packages.github.io/grape">https://gap-packages.github.io/grape</a>.
+The archive file should be downloaded and unpacked in the <code>pkg</code>
+subdirectory of an appropriate <font face="Gill Sans,Helvetica,Arial">GAP</font> root directory (see the main <font face="Gill Sans,Helvetica,Arial">GAP</font>
+reference section <a href="../../../doc/ref/chap9.html#X7A4973627A5DB27D">REF:GAP Root Directories</a>).
+<p>
+If your GRAPE installation does not include a pre-compiled binary of 
+the nauty/dreadnaut programs included with GRAPE and you do not want 
+to use an already installed version of nauty or bliss, you will 
+need to perform compilation of the nauty/dreadnaut programs included with
+GRAPE, and to do this in a Unix environment, you should proceed as
+follows.  After installing <font face="Gill Sans,Helvetica,Arial">GAP</font>, go to the GRAPE home directory
+(usually the directory <code>pkg/grape</code> of the <font face="Gill Sans,Helvetica,Arial">GAP</font> home directory),
+and run <code>./configure </code><var>path</var><code></code>, where <var>path</var> is the path of the <font face="Gill Sans,Helvetica,Arial">GAP</font>
+home directory.  So for example, if you install GRAPE in the <code>pkg</code>
+directory of the <font face="Gill Sans,Helvetica,Arial">GAP</font> home directory, run 
+<pre>
+./configure ../..
+</pre>
+This will fetch the name of the architecture for which <font face="Gill Sans,Helvetica,Arial">GAP</font>
+has been most recently configured, and create a <code>Makefile</code>. Now run
+<pre>
+make 
+</pre>
+to create the nauty/dreadnaut binary and to put
+it in the appropriate place.  This configuration/make process for
+GRAPE only works for the <strong>last</strong> architecture for which <font face="Gill Sans,Helvetica,Arial">GAP</font> was
+configured. Therefore, you should always follow the above procedure to
+install the nauty/dreadnaut binary immediately after compiling <font face="Gill Sans,Helvetica,Arial">GAP</font>
+for a given configuration, say for a different architecture on a common
+file system. However, if you want to add GRAPE later, you can just run
+<code>./configure</code> again in the <font face="Gill Sans,Helvetica,Arial">GAP</font> home directory for the architecture,
+before performing the GRAPE configure/make process to install the
+nauty/dreadnaut binary for that architecture.
+<p>
+To use GRAPE with a separately installed version of nauty or
+bliss you should proceed as follows. Please note that the nauty
+interface for GRAPE has only been extensively tested with the
+included Version&nbsp;2.2 of nauty, and the bliss interface has only
+been tested with Version&nbsp;0.73 of bliss. To use a separately
+installed version of nauty, type the following commands in <font face="Gill Sans,Helvetica,Arial">GAP</font>, or 
+place these commands in your <code>gaprc</code> file (see <a href="../../../doc/ref/chap3.html#X84D4CF587D437C00">REF:The gaprc file</a>), where
+<code>dreadnaut_or_dreadnautB_executable</code> should be the name of your
+dreadnaut or dreadnautB executable file:
+<pre>
+LoadPackage("grape"); 
+GRAPE_NAUTY := true; 
+GRAPE_DREADNAUT_EXE := "dreadnaut_or_dreadnautB_executable"; 
+</pre>
+To use a separately installed version of bliss instead of nauty,
+type the following commands in <font face="Gill Sans,Helvetica,Arial">GAP</font>, or place these commands in your
+<code>gaprc</code> file (see <a href="../../../doc/ref/chap3.html#X84D4CF587D437C00">REF:The gaprc file</a>), where <code>bliss_executable</code> should be
+the name of your bliss executable file:
+<pre>
+LoadPackage("grape"); 
+GRAPE_NAUTY := false; 
+GRAPE_BLISS_EXE := "bliss_executable"; 
+</pre>
+For example, if the bliss executable is <code>/usr/local/bin/bliss</code>, then type:
+<pre>
+LoadPackage("grape"); 
+GRAPE_NAUTY := false; 
+GRAPE_BLISS_EXE := "/usr/local/bin/bliss"; 
+</pre>
+<p>
+You should now test GRAPE and the interface to nauty or bliss
+on each architecture on which you have installed GRAPE. Start up
+<font face="Gill Sans,Helvetica,Arial">GAP</font> and at the prompt type 
+<pre>
+LoadPackage( "grape" ); 
+</pre>
+On-line documentation for GRAPE should be available by typing 
+<pre>
+?GRAPE 
+</pre>
+Then run some tests by typing:
+<pre>
+Test(Filename(DirectoriesPackageLibrary("grape","tst"),"testall.tst"));
+</pre>
+This should return the value <code>true</code>.
+<p>
+A pdf version of the GRAPE manual is available as <code>manual.pdf</code> in the
+<code>doc</code> directory of the home directory of GRAPE.
+<p>
+If you install GRAPE, then please tell <a href="mailto:L.H.Soicher@qmul.ac.uk">L.H.Soicher@qmul.ac.uk</a>,
+where you should also send any comments or bug reports.
+<p>
+<p>
+<h2><a name="SECT002">1.2 Loading GRAPE</a></h2>
+<p><p>
+Before using GRAPE you must load the package within <font face="Gill Sans,Helvetica,Arial">GAP</font> via: 
+<p>
+<pre>
+gap&gt; LoadPackage("grape");
+true
+</pre>
+<p>
+<p>
+<h2><a name="SECT003">1.3 The structure of a graph in GRAPE</a></h2>
+<p><p>
+In general GRAPE deals with finite directed graphs which may have
+loops but have no multiple edges. However, many GRAPE functions only
+work for <strong>simple</strong> graphs (i.e. no loops, and whenever [<i>x</i>,<i>y</i>] is an
+edge then so is [<i>y</i>,<i>x</i>]), but these functions will check if an input
+graph is simple.
+<p>
+In GRAPE, a graph <var>gamma</var> is stored as a record, with mandatory
+components <code>isGraph</code>, <code>order</code>, <code>group</code>, <code>schreierVector</code>,
+<code>representatives</code>, and <code>adjacencies</code>. Usually, the user need not be
+aware of this record structure, and is strongly advised only to use
+GRAPE functions to construct and modify graphs.
+<p>
+The <code>order</code> component contains the number of vertices of <var>gamma</var>. The
+vertices of <var>gamma</var> are always 1,2,...,<code></code><var>gamma</var><code>.order</code>, but they may also
+be given <strong>names</strong>, either by a user (using <code>AssignVertexNames</code>) or by a
+function constructing a graph (e.g. <code>InducedSubgraph</code>, <code>BipartiteDouble</code>,
+<code>QuotientGraph</code>). The <code>names</code> component, if present, records these
+names, with <code></code><var>gamma</var><code>.names[</code><var>i</var><code>]</code> the name of vertex <var>i</var>.  If the <code>names</code>
+component is not present (the user may, for example, choose to unbind
+it), then the names are taken to be 1,2,...,<code></code><var>gamma</var><code>.order</code>. The <code>group</code>
+component records the <font face="Gill Sans,Helvetica,Arial">GAP</font> permutation group associated with <var>gamma</var>
+(this group must be a subgroup of the automorphism group of <var>gamma</var>). The
+<code>representatives</code> component records a set of orbit representatives
+for the action of <code></code><var>gamma</var><code>.group</code> on the vertices of <var>gamma</var>, with
+<code></code><var>gamma</var><code>.adjacencies[</code><var>i</var><code>]</code> being the set of vertices adjacent to
+<code></code><var>gamma</var><code>.representatives[</code><var>i</var><code>]</code>. The <code>group</code> and <code>schreierVector</code>
+components are used to compute the adjacency-set of an arbitrary vertex
+of <var>gamma</var> (this is done by the function <code>Adjacency</code>).
+<p>
+The only mandatory component which may change once a graph is initially
+constructed is <code>adjacencies</code> (when an edge-orbit of <code></code><var>gamma</var><code>.group</code> is
+added to, or removed from, <var>gamma</var>). A graph record may also have some
+of the optional components <code>isSimple</code>, <code>autGroup</code>, and
+<code>canonicalLabelling</code>, which record information about that graph.
+<p>
+<p>
+<h2><a name="SECT004">1.4 Examples of the use of GRAPE</a></h2>
+<p><p>
+We give here a simple example to illustrate the use of GRAPE. All
+functions used are described in detail in this manual. More
+sophisticated examples of the use of GRAPE can be found in
+chapter <a href="CHAP009.htm#SSEC001.1">Partial Linear Spaces</a>, and also in the references <a href="biblio.htm#Cam99"><cite>Cam99</cite></a>,
+<a href="biblio.htm#CSS99"><cite>CSS99</cite></a>, <a href="biblio.htm#HL99"><cite>HL99</cite></a> and <a href="biblio.htm#Soi06"><cite>Soi06</cite></a>.
+<p>
+In the example here, we construct the Petersen graph <i>P</i>, and its edge
+graph (also called line graph) <i>EP</i>. We compute the global parameters
+of <i>EP</i>, and so verify that <i>EP</i> is distance-regular (see <a href="biblio.htm#BCN89"><cite>BCN89</cite></a>).
+<p>
+<pre>
+gap&gt; LoadPackage("grape");
+true
+gap&gt; P := Graph( SymmetricGroup(5), [[1,2]], OnSets,
+&gt;             function(x,y) return Intersection(x,y)=[]; end );
+rec( isGraph := true, order := 10, 
+  group := Group([ ( 1, 2, 3, 5, 7)( 4, 6, 8, 9,10), ( 2, 4)( 6, 9)( 7,10) ]),
+  schreierVector := [ -1, 1, 1, 2, 1, 1, 1, 1, 2, 2 ], 
+  adjacencies := [ [ 3, 5, 8 ] ], representatives := [ 1 ], 
+  names := [ [ 1, 2 ], [ 2, 3 ], [ 3, 4 ], [ 1, 3 ], [ 4, 5 ], [ 2, 4 ], 
+      [ 1, 5 ], [ 3, 5 ], [ 1, 4 ], [ 2, 5 ] ] )
+gap&gt; Diameter(P);
+2
+gap&gt; Girth(P);
+5
+gap&gt; EP := EdgeGraph(P);
+rec( isGraph := true, order := 15, 
+  group := Group([ ( 1, 4, 7, 2, 5)( 3, 6, 8, 9,12)(10,13,14,15,11), 
+      ( 4, 9)( 5,11)( 6,10)( 7, 8)(12,15)(13,14) ]), 
+  schreierVector := [ -1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 2 ], 
+  adjacencies := [ [ 2, 3, 7, 8 ] ], representatives := [ 1 ], 
+  isSimple := true, 
+  names := [ [ [ 1, 2 ], [ 3, 4 ] ], [ [ 1, 2 ], [ 4, 5 ] ], 
+      [ [ 1, 2 ], [ 3, 5 ] ], [ [ 2, 3 ], [ 4, 5 ] ], [ [ 2, 3 ], [ 1, 5 ] ], 
+      [ [ 2, 3 ], [ 1, 4 ] ], [ [ 3, 4 ], [ 1, 5 ] ], [ [ 3, 4 ], [ 2, 5 ] ], 
+      [ [ 1, 3 ], [ 4, 5 ] ], [ [ 1, 3 ], [ 2, 4 ] ], [ [ 1, 3 ], [ 2, 5 ] ], 
+      [ [ 2, 4 ], [ 1, 5 ] ], [ [ 2, 4 ], [ 3, 5 ] ], [ [ 3, 5 ], [ 1, 4 ] ], 
+      [ [ 1, 4 ], [ 2, 5 ] ] ] )
+gap&gt; GlobalParameters(EP);
+[ [ 0, 0, 4 ], [ 1, 1, 2 ], [ 1, 2, 1 ], [ 4, 0, 0 ] ]
+</pre>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>grape manual<br>October 2018
+</address></body></html>

@@ -1,0 +1,444 @@
+<html><head><title>[grape] 3 Functions to inspect graphs, vertices and edges</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Previous</a>] [<a href ="CHAP004.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>3 Functions to inspect graphs, vertices and edges</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP003.htm#SECT001">IsGraph</a>
+<li> <A HREF="CHAP003.htm#SECT002">OrderGraph</a>
+<li> <A HREF="CHAP003.htm#SECT003">IsVertex</a>
+<li> <A HREF="CHAP003.htm#SECT004">VertexName</a>
+<li> <A HREF="CHAP003.htm#SECT005">VertexNames</a>
+<li> <A HREF="CHAP003.htm#SECT006">Vertices</a>
+<li> <A HREF="CHAP003.htm#SECT007">VertexDegree</a>
+<li> <A HREF="CHAP003.htm#SECT008">VertexDegrees</a>
+<li> <A HREF="CHAP003.htm#SECT009">IsLoopy</a>
+<li> <A HREF="CHAP003.htm#SECT010">IsSimpleGraph</a>
+<li> <A HREF="CHAP003.htm#SECT011">Adjacency</a>
+<li> <A HREF="CHAP003.htm#SECT012">IsEdge</a>
+<li> <A HREF="CHAP003.htm#SECT013">DirectedEdges</a>
+<li> <A HREF="CHAP003.htm#SECT014">UndirectedEdges</a>
+<li> <A HREF="CHAP003.htm#SECT015">Distance</a>
+<li> <A HREF="CHAP003.htm#SECT016">Diameter</a>
+<li> <A HREF="CHAP003.htm#SECT017">Girth</a>
+<li> <A HREF="CHAP003.htm#SECT018">IsConnectedGraph</a>
+<li> <A HREF="CHAP003.htm#SECT019">IsBipartite</a>
+<li> <A HREF="CHAP003.htm#SECT020">IsNullGraph</a>
+<li> <A HREF="CHAP003.htm#SECT021">IsCompleteGraph</a>
+</ol><p>
+<p>
+This chapter describes functions to inspect graphs, vertices and edges.
+<p>
+<p>
+<h2><a name="SECT001">3.1 IsGraph</a></h2>
+<p><p>
+<a name = "SSEC001.1"></a>
+<li><code>IsGraph( </code><var>obj</var><code> )</code>
+<p>
+This boolean function  returns <code>true</code> if  and only if <var>obj</var>, which can be
+an object of arbitrary type, is a graph.
+<p>
+<pre>
+gap&gt; IsGraph( 1 );
+false
+gap&gt; IsGraph( JohnsonGraph( 3, 2 ) );
+true 
+</pre>
+<p>
+<p>
+<h2><a name="SECT002">3.2 OrderGraph</a></h2>
+<p><p>
+<a name = "SSEC002.1"></a>
+<li><code>OrderGraph( </code><var>gamma</var><code> )</code>
+<p>
+This function returns the number of vertices (the <strong>order</strong>) of the graph
+<var>gamma</var>.
+<p>
+<pre>
+gap&gt; OrderGraph( JohnsonGraph( 4, 2 ) );
+6 
+</pre>
+<p>
+<p>
+<h2><a name="SECT003">3.3 IsVertex</a></h2>
+<p><p>
+<a name = "SSEC003.1"></a>
+<li><code>IsVertex( </code><var>gamma</var><code>, </code><var>v</var><code> )</code>
+<p>
+This  boolean  function returns <code>true</code> if  and  only if  <var>v</var> is vertex of
+the graph <var>gamma</var>.
+<p>
+<pre>
+gap&gt; gamma := JohnsonGraph( 3, 2 );;
+gap&gt; IsVertex( gamma, 1 );
+true
+gap&gt; IsVertex( gamma, 4 );
+false 
+</pre>
+<p>
+<p>
+<h2><a name="SECT004">3.4 VertexName</a></h2>
+<p><p>
+<a name = "SSEC004.1"></a>
+<li><code>VertexName( </code><var>gamma</var><code>, </code><var>v</var><code> )</code>
+<p>
+This function returns (an immutable copy of) the name of vertex <var>v</var> in
+the graph <var>gamma</var>. 
+<p>
+See also <a href="CHAP003.htm#SSEC005.1">VertexNames</a> and <a href="CHAP002.htm#SSEC010.1">AssignVertexNames</a>.
+<p>
+<pre>
+gap&gt; VertexName( JohnsonGraph(4,2), 6 );
+[ 3, 4 ] 
+</pre>
+<p>
+<p>
+<h2><a name="SECT005">3.5 VertexNames</a></h2>
+<p><p>
+<a name = "SSEC005.1"></a>
+<li><code>VertexNames( </code><var>gamma</var><code> )</code>
+<p>
+This function returns (an immutable copy of) the list of vertex-names
+for the graph <var>gamma</var>.  The <var>i</var>-th element of this list is the name of
+vertex <var>i</var>.
+<p>
+See also <a href="CHAP003.htm#SSEC004.1">VertexName</a> and <a href="CHAP002.htm#SSEC010.1">AssignVertexNames</a>.
+<p>
+<pre>
+gap&gt; VertexNames( JohnsonGraph(4,2) );
+[ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ], [ 3, 4 ] ]                 
+</pre>
+<p>
+<p>
+<h2><a name="SECT006">3.6 Vertices</a></h2>
+<p><p>
+<a name = "SSEC006.1"></a>
+<li><code>Vertices( </code><var>gamma</var><code> )</code>
+<p>
+This function returns the vertex-set {1,&#8230;, <i>gamma</i> <tt>.</tt><tt>order</tt>}
+of the graph <var>gamma</var>.
+<p>
+<pre>
+gap&gt; Vertices( JohnsonGraph( 4, 2 ) );
+[ 1 .. 6 ] 
+</pre>
+<p>
+<p>
+<h2><a name="SECT007">3.7 VertexDegree</a></h2>
+<p><p>
+<a name = "SSEC007.1"></a>
+<li><code>VertexDegree( </code><var>gamma</var><code>, </code><var>v</var><code> )</code>
+<p>
+This  function  returns the  (out)degree  of the vertex <var>v</var> of  the graph
+<var>gamma</var>.
+<p>
+<pre>
+gap&gt; VertexDegree( JohnsonGraph( 3, 2 ), 1 );
+2 
+</pre>
+<p>
+<p>
+<h2><a name="SECT008">3.8 VertexDegrees</a></h2>
+<p><p>
+<a name = "SSEC008.1"></a>
+<li><code>VertexDegrees( </code><var>gamma</var><code> )</code>
+<p>
+This function returns the set of vertex (out)degrees for the graph
+<var>gamma</var>.
+<p>
+<pre>
+gap&gt; VertexDegrees( JohnsonGraph( 4, 2 ) );
+[ 4 ] 
+</pre>
+<p>
+<p>
+<h2><a name="SECT009">3.9 IsLoopy</a></h2>
+<p><p>
+<a name = "SSEC009.1"></a>
+<li><code>IsLoopy( </code><var>gamma</var><code> )</code>
+<p>
+This boolean function returns <code>true</code> if and only if the graph <var>gamma</var> has
+a <strong>loop</strong>, i.e. an edge of the form [<i>x</i>,<i>x</i>].
+<p>
+<pre>
+gap&gt; IsLoopy( JohnsonGraph( 4, 2 ) );
+false
+gap&gt; IsLoopy( CompleteGraph( Group( (1,2,3), (1,2) ), 3 ) );
+false
+gap&gt; IsLoopy( CompleteGraph( Group( (1,2,3), (1,2) ), 3, true ) );
+true 
+</pre>
+<p>
+<p>
+<h2><a name="SECT010">3.10 IsSimpleGraph</a></h2>
+<p><p>
+<a name = "SSEC010.1"></a>
+<li><code>IsSimpleGraph( </code><var>gamma</var><code> )</code>
+<p>
+This boolean function returns <code>true</code> if and only if the graph <var>gamma</var>
+is <strong>simple</strong>, i.e. has no loops and whenever [<i>x</i>,<i>y</i>] is an edge then so
+is [<i>y</i>,<i>x</i>].
+<p>
+<pre>
+gap&gt; IsSimpleGraph( CompleteGraph( Group( (1,2,3) ), 3 ) );
+true
+gap&gt; IsSimpleGraph( CompleteGraph( Group( (1,2,3) ), 3, true ) );
+false 
+</pre>
+<p>
+<p>
+<h2><a name="SECT011">3.11 Adjacency</a></h2>
+<p><p>
+<a name = "SSEC011.1"></a>
+<li><code>Adjacency( </code><var>gamma</var><code>, </code><var>v</var><code> )</code>
+<p>
+This function returns (a copy of) the set of vertices of the graph
+<var>gamma</var> adjacent to the vertex <var>v</var> of <var>gamma</var>.  A vertex <i>w</i> is
+<strong>adjacent</strong> to <var>v</var> if and only if [<i>v</i>,<i>w</i>] is an edge.
+<p>
+<pre>
+gap&gt; Adjacency( JohnsonGraph( 4, 2 ), 1 );
+[ 2, 3, 4, 5 ]
+gap&gt; Adjacency( JohnsonGraph( 4, 2 ), 6 );
+[ 2, 3, 4, 5 ] 
+</pre>
+<p>
+<p>
+<h2><a name="SECT012">3.12 IsEdge</a></h2>
+<p><p>
+<a name = "SSEC012.1"></a>
+<li><code>IsEdge( </code><var>gamma</var><code>, </code><var>e</var><code> )</code>
+<p>
+This  boolean function returns <code>true</code> if and  only  if <var>e</var> is an  edge of
+the graph <var>gamma</var>.
+<p>
+<pre>
+gap&gt; IsEdge( JohnsonGraph( 4, 2 ), [ 1, 2 ] );
+true
+gap&gt; IsEdge( JohnsonGraph( 4, 2 ), [ 1, 6 ] );
+false 
+</pre>
+<p>
+<p>
+<h2><a name="SECT013">3.13 DirectedEdges</a></h2>
+<p><p>
+<a name = "SSEC013.1"></a>
+<li><code>DirectedEdges( </code><var>gamma</var><code> )</code>
+<p>
+This function  returns the  set of directed  (ordered) edges of the graph
+<var>gamma</var>.
+<p>
+See also <a href="CHAP003.htm#SSEC014.1">UndirectedEdges</a>.
+<p>
+<pre>
+gap&gt; gamma := JohnsonGraph( 4, 3 );
+rec( isGraph := true, order := 4, group := Group([ (1,4,3,2), (3,4) ]), 
+  schreierVector := [ -1, 1, 1, 1 ], adjacencies := [ [ 2, 3, 4 ] ], 
+  representatives := [ 1 ], 
+  names := [ [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 3, 4 ], [ 2, 3, 4 ] ], 
+  isSimple := true )
+gap&gt; DirectedEdges( gamma );
+[ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 1 ], [ 2, 3 ], [ 2, 4 ], [ 3, 1 ], 
+  [ 3, 2 ], [ 3, 4 ], [ 4, 1 ], [ 4, 2 ], [ 4, 3 ] ]
+gap&gt; UndirectedEdges( gamma );
+[ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ], [ 3, 4 ] ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT014">3.14 UndirectedEdges</a></h2>
+<p><p>
+<a name = "SSEC014.1"></a>
+<li><code>UndirectedEdges( </code><var>gamma</var><code> )</code>
+<p>
+This function returns the set of undirected (unordered) edges of <var>gamma</var>,
+which must be a simple graph.
+<p>
+See also <a href="CHAP003.htm#SSEC013.1">DirectedEdges</a>.
+<p>
+<pre>
+gap&gt; gamma := JohnsonGraph( 4, 3 );
+rec( isGraph := true, order := 4, group := Group([ (1,4,3,2), (3,4) ]), 
+  schreierVector := [ -1, 1, 1, 1 ], adjacencies := [ [ 2, 3, 4 ] ], 
+  representatives := [ 1 ], 
+  names := [ [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 3, 4 ], [ 2, 3, 4 ] ], 
+  isSimple := true )
+gap&gt; DirectedEdges( gamma );
+[ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 1 ], [ 2, 3 ], [ 2, 4 ], [ 3, 1 ], 
+  [ 3, 2 ], [ 3, 4 ], [ 4, 1 ], [ 4, 2 ], [ 4, 3 ] ]
+gap&gt; UndirectedEdges( gamma );
+[ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ], [ 3, 4 ] ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT015">3.15 Distance</a></h2>
+<p><p>
+<a name = "SSEC015.1"></a>
+<li><code>Distance( </code><var>gamma</var><code>, </code><var>X</var><code>, </code><var>Y</var><code> )</code>
+<li><code>Distance( </code><var>gamma</var><code>, </code><var>X</var><code>, </code><var>Y</var><code>, </code><var>G</var><code> )</code>
+<p>
+This function returns the distance from <var>X</var> to <var>Y</var> in <var>gamma</var>. The
+parameters <var>X</var> and <var>Y</var> may be vertices or nonempty lists of vertices.
+We define the <strong>distance</strong> <i>d</i>(<i>X</i> ,<i>Y</i> ) from <var>X</var> to <var>Y</var> to be the minimum
+length of a (directed) path joining a vertex of <var>X</var> to a vertex of <var>Y</var>
+if such a path exists, and &#8722;1 otherwise.
+<p>
+The  optional parameter <var>G</var>,  if present, is assumed to  be a subgroup of
+\Aut(<i>gamma</i> ) fixing  <var>X</var>  setwise.  Including  such a <var>G</var> can speed up
+the function.
+<p>
+See also <a href="CHAP003.htm#SSEC016.1">Diameter</a>.
+<p>
+<pre>
+gap&gt; Distance( JohnsonGraph(4,2), 1, 6 );
+2
+gap&gt; Distance( JohnsonGraph(4,2), 1, 5 );
+1 
+gap&gt; Distance( JohnsonGraph(4,2), [1], [5,6] );
+1
+</pre>
+<p>
+<p>
+<h2><a name="SECT016">3.16 Diameter</a></h2>
+<p><p>
+<a name = "SSEC016.1"></a>
+<li><code>Diameter( </code><var>gamma</var><code> )</code>
+<p>
+This  function  returns the  diameter of <var>gamma</var>.  A diameter of &#8722;1
+is returned if <var>gamma</var> is not (strongly) connected.  Otherwise, the
+<strong>diameter</strong> of <var>gamma</var> is equal to the maximum (directed) distance
+<i>d</i>(<i>x</i>,<i>y</i>) in <var>gamma</var> (as <i>x</i> and <i>y</i> range over all the vertices of 
+<var>gamma</var>).
+<p>
+See also <a href="CHAP003.htm#SSEC015.1">Distance</a>.
+<p>
+<pre>
+gap&gt; Diameter( JohnsonGraph( 5, 3 ) );
+2
+gap&gt; Diameter( JohnsonGraph( 5, 4 ) );
+1 
+</pre>
+<p>
+<p>
+<h2><a name="SECT017">3.17 Girth</a></h2>
+<p><p>
+<a name = "SSEC017.1"></a>
+<li><code>Girth( </code><var>gamma</var><code> )</code>
+<p>
+This function returns the girth of <var>gamma</var>, which must be a simple graph.
+A girth of &#8722;1 is returned if <var>gamma</var> is a forest.  Otherwise the <strong>girth</strong>
+is the length of a shortest cycle in <var>gamma</var>.
+<p>
+<pre>
+gap&gt; Girth( JohnsonGraph( 4, 2 ) );
+3 
+</pre>
+<p>
+<p>
+<h2><a name="SECT018">3.18 IsConnectedGraph</a></h2>
+<p><p>
+<a name = "SSEC018.1"></a>
+<li><code>IsConnectedGraph( </code><var>gamma</var><code> )</code>
+<p>
+This boolean function returns <code>true</code> if and only if the graph <var>gamma</var>
+is (strongly) <strong>connected</strong>, i.e. there is a (directed) path from <i>x</i> to
+<i>y</i> for every pair of vertices <i>x</i>,<i>y</i> of <var>gamma</var>.
+<p>
+<pre>
+gap&gt; IsConnectedGraph( JohnsonGraph(4,2) );
+true
+gap&gt; IsConnectedGraph( NullGraph(SymmetricGroup(4)) );
+false 
+</pre>
+<p>
+<p>
+<h2><a name="SECT019">3.19 IsBipartite</a></h2>
+<p><p>
+<a name = "SSEC019.1"></a>
+<li><code>IsBipartite( </code><var>gamma</var><code> )</code>
+<p>
+This boolean function returns <code>true</code> if and only if the graph <var>gamma</var>,
+which must be simple, is <strong>bipartite</strong>, i.e. if the vertex-set can be
+expressed as the disjoint union of two sets, on each of which <var>gamma</var>
+induces a null graph (these two sets are called the <strong>bicomponents</strong> or
+<strong>parts</strong> of <var>gamma</var>).
+<p>
+See also <a href="CHAP005.htm#SSEC003.1">Bicomponents</a> and <a href="CHAP006.htm#SSEC010.1">BipartiteDouble</a>.
+<p>
+<pre>
+gap&gt; gamma := JohnsonGraph(4,2);
+rec(
+  isGraph := true,
+  order := 6,
+  group := Group( [ (1,4,6,3)(2,5), (2,4)(3,5) ] ),
+  schreierVector := [ -1, 2, 1, 1, 1, 1 ],
+  adjacencies := [ [ 2, 3, 4, 5 ] ],
+  representatives := [ 1 ],
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ], [ 3, 4 ] ],
+  isSimple := true )
+gap&gt; IsBipartite(gamma);
+false
+gap&gt; delta := BipartiteDouble(gamma);
+rec(
+  isGraph := true,
+  order := 12,
+  group := Group( [ ( 1, 4, 6, 3)( 2, 5)( 7,10,12, 9)( 8,11), 
+      ( 2, 4)( 3, 5)( 8,10)( 9,11), ( 1, 7)( 2, 8)( 3, 9)( 4,10)( 5,11)
+        ( 6,12) ] ),
+  schreierVector := [ -1, 2, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3 ],
+  adjacencies := [ [ 8, 9, 10, 11 ] ],
+  representatives := [ 1 ],
+  isSimple := true,
+  names := [ [ [ 1, 2 ], "+" ], [ [ 1, 3 ], "+" ], [ [ 1, 4 ], "+" ], 
+      [ [ 2, 3 ], "+" ], [ [ 2, 4 ], "+" ], [ [ 3, 4 ], "+" ], 
+      [ [ 1, 2 ], "-" ], [ [ 1, 3 ], "-" ], [ [ 1, 4 ], "-" ], 
+      [ [ 2, 3 ], "-" ], [ [ 2, 4 ], "-" ], [ [ 3, 4 ], "-" ] ] )
+gap&gt; IsBipartite(delta);
+true
+</pre>
+<p>
+<p>
+<h2><a name="SECT020">3.20 IsNullGraph</a></h2>
+<p><p>
+<a name = "SSEC020.1"></a>
+<li><code>IsNullGraph( </code><var>gamma</var><code> )</code>
+<p>
+This boolean function returns <code>true</code> if and only if the graph <var>gamma</var> has
+no edges.
+<p>
+See also <a href="CHAP002.htm#SSEC003.1">NullGraph</a>.
+<p>
+<pre>
+gap&gt; IsNullGraph( CompleteGraph( Group(()), 3 ) );
+false
+gap&gt; IsNullGraph( CompleteGraph( Group(()), 1 ) );
+true 
+</pre>
+<p>
+<p>
+<h2><a name="SECT021">3.21 IsCompleteGraph</a></h2>
+<p><p>
+<a name = "SSEC021.1"></a>
+<li><code>IsCompleteGraph( </code><var>gamma</var><code> )</code>
+<li><code>IsCompleteGraph( </code><var>gamma</var><code>, </code><var>mustloops</var><code> )</code>
+<p>
+This boolean function returns  <code>true</code> if and only if the graph <var>gamma</var> is
+a complete graph.  The optional boolean  parameter <var>mustloops</var> determines
+whether all loops must be present for <var>gamma</var> to be considered a complete
+graph (default: <code>false</code> (loops are ignored)).
+<p>
+See also <a href="CHAP002.htm#SSEC004.1">CompleteGraph</a>.
+<p>
+<pre>
+gap&gt; IsCompleteGraph( NullGraph( Group(()), 3 ) );
+false
+gap&gt; IsCompleteGraph( NullGraph( Group(()), 1 ) );
+true
+gap&gt; IsCompleteGraph( CompleteGraph(SymmetricGroup(3)), true );
+false 
+</pre>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Previous</a>] [<a href ="CHAP004.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>grape manual<br>October 2018
+</address></body></html>

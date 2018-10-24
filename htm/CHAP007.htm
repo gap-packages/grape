@@ -1,0 +1,383 @@
+<html><head><title>[grape] 7 Vertex-Colouring and Complete Subgraphs</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP006.htm">Previous</a>] [<a href ="CHAP008.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>7 Vertex-Colouring and Complete Subgraphs</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP007.htm#SECT001">VertexColouring</a>
+<li> <A HREF="CHAP007.htm#SECT002">MinimumVertexColouring</a>
+<li> <A HREF="CHAP007.htm#SECT003">ChromaticNumber</a>
+<li> <A HREF="CHAP007.htm#SECT004">CompleteSubgraphs</a>
+<li> <A HREF="CHAP007.htm#SECT005">CompleteSubgraphsOfGivenSize</a>
+<li> <A HREF="CHAP007.htm#SECT006">MaximumClique</a>
+<li> <A HREF="CHAP007.htm#SECT007">CliqueNumber</a>
+</ol><p>
+<p>
+The following sections describe functions for (proper) vertex-colouring
+and determining complete subgraphs of a given simple graph. Included are
+functions for determining the chromatic number and the clique number of
+a simple graph.
+<p>
+The function <code>CompleteSubgraphsOfGivenSize</code> can be used to determine
+the complete subgraphs with given vertex-weight sum in a vertex-weighted
+graph,
+<a name = "I0"></a>
+
+where the weights can be positive
+integers or non-zero vectors of non-negative integers.
+<p>
+<p>
+<h2><a name="SECT001">7.1 VertexColouring</a></h2>
+<p><p>
+<a name = "SSEC001.1"></a>
+<li><code>VertexColouring( </code><var>gamma</var><code> )</code>
+<li><code>VertexColouring( </code><var>gamma</var><code>, </code><var>k</var><code> )</code>
+<li><code>VertexColouring( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>m</var><code> )</code>
+<p>
+This function returns a proper vertex-colouring <var>C</var> for the graph
+<var>gamma</var>, which must be simple. A <strong>proper vertex-colouring</strong>
+<a name = "I1"></a>
+
+of <var>gamma</var> is an assignment of colours to the vertices
+of <var>gamma</var>, such that, if [<i>i</i>,<i>j</i>] is an edge, then vertices <i>i</i> and <i>j</i>
+are assigned different colours.
+<p>
+The returned proper vertex-colouring <var>C</var> is given as a list of positive
+integers (the <strong>colours</strong>), indexed by the vertices of <var>gamma</var>, with the
+property that <i>C</i> [<i>i</i>] &#8800; <i>C</i> [<i>j</i>] whenever [<i>i</i>,<i>j</i>] is an edge of <var>gamma</var>.
+<p>
+If the optional parameter <var>k</var> is given, then <var>k</var> must be a non-negative
+integer. In this case, a proper vertex-colouring using at most <var>k</var>
+colours is returned, if such a colouring exists, and <code>fail</code> otherwise.
+<p>
+If, in addition to <var>k</var>, the optional parameter <var>m</var> is given, then <var>m</var>
+must be a a non-negative integer, such that there is no monochromatic
+set of vertices of size greater than <var>m</var> in any proper vertex-colouring
+of <var>gamma</var> which uses at most <var>k</var> colours.  This information (which is
+not checked) may help to speed up the function.
+<p>
+<pre>
+gap&gt; J:=JohnsonGraph(5,2);
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], group := Group([ (1,5,8,10,4)
+  (2,6,9,3,7), (2,5)(3,6)(4,7) ]), isGraph := true, isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
+gap&gt; VertexColouring(J);
+[ 1, 3, 5, 4, 2, 3, 6, 1, 5, 2 ]
+gap&gt; VertexColouring(J,5);
+[ 1, 2, 3, 4, 5, 4, 2, 1, 3, 5 ]
+gap&gt; VertexColouring(J,4);
+fail
+</pre>
+<p>
+<p>
+<h2><a name="SECT002">7.2 MinimumVertexColouring</a></h2>
+<p><p>
+<a name = "SSEC002.1"></a>
+<li><code>MinimumVertexColouring( </code><var>gamma</var><code> )</code>
+<p>
+This function returns a minimum vertex-colouring <var>C</var> for the graph
+<var>gamma</var>, which must be simple. A <strong>minimum vertex-colouring</strong>
+<a name = "I2"></a>
+
+is a proper vertex-colouring using as few colours as possible.
+<p>
+The returned minimum vertex-colouring <var>C</var> is given as a list of positive
+integers (the <strong>colours</strong>), indexed by the vertices of <var>gamma</var>, with the
+property that <i>C</i> [<i>i</i>] &#8800; <i>C</i> [<i>j</i>] whenever [<i>i</i>,<i>j</i>] is an edge of <var>gamma</var>,
+and subject to this property, the number of distinct elements of <var>C</var>
+is as small as possible.
+<p>
+See also <a href="CHAP007.htm#SSEC001.1">VertexColouring</a>.
+<p>
+<pre>
+gap&gt; J:=JohnsonGraph(5,2);
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], group := Group([ (1,5,8,10,4)
+  (2,6,9,3,7), (2,5)(3,6)(4,7) ]), isGraph := true, isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
+gap&gt; MinimumVertexColouring(J);
+[ 1, 2, 3, 4, 5, 4, 2, 1, 3, 5 ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT003">7.3 ChromaticNumber</a></h2>
+<p><p>
+<a name = "SSEC003.1"></a>
+<li><code>ChromaticNumber( </code><var>gamma</var><code> )</code>
+<p>
+This function returns the chromatic number of the given graph <var>gamma</var>,
+which must be simple.  The <strong>chromatic number</strong>
+<a name = "I3"></a>
+
+of <var>gamma</var> is the minimum number of colours needed to properly vertex-colour
+<var>gamma</var>, that is, the number of colours used in a minimum vertex-colouring
+of <var>gamma</var>.
+<p>
+See also <a href="CHAP007.htm#SSEC002.1">MinimumVertexColouring</a>.
+<p>
+<pre>
+gap&gt; ChromaticNumber(JohnsonGraph(5,2));
+5
+gap&gt; ChromaticNumber(JohnsonGraph(6,2));
+5
+gap&gt; ChromaticNumber(JohnsonGraph(7,2));
+7
+</pre>
+<p>
+<p>
+<h2><a name="SECT004">7.4 CompleteSubgraphs</a></h2>
+<p><p>
+<a name = "SSEC004.1"></a>
+<li><code>CompleteSubgraphs( </code><var>gamma</var><code> )</code>
+<li><code>CompleteSubgraphs( </code><var>gamma</var><code>, </code><var>k</var><code> )</code>
+<li><code>CompleteSubgraphs( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code> )</code>
+<p>
+Let <var>gamma</var> be a simple graph and <var>k</var> an integer. This function returns
+a set <var>K</var> of complete subgraphs of <var>gamma</var>, where a complete subgraph is
+represented by its vertex-set.  If <var>k</var> is non-negative then the elements
+of <var>K</var> each have size <var>k</var>, otherwise the elements of <var>K</var> represent maximal
+complete subgraphs of <var>gamma</var>. (A <strong>maximal complete subgraph</strong> of <var>gamma</var>
+is a complete subgraph of <var>gamma</var> which is not properly contained in
+another complete subgraph of <var>gamma</var>.) The default for <var>k</var> is &#8722;1,
+i.e. maximal complete subgraphs.  See also <code>CompleteSubgraphsOfGivenSize</code>,
+which can be used to compute the maximal complete subgraphs of given
+size, and can also be used to determine the (maximal or otherwise)
+complete subgraphs with given vertex-weight sum in a vertex-weighted
+graph.
+<p>
+The optional parameter <var>alls</var> controls how many complete subgraphs are
+returned. The valid values for <var>alls</var> are 0, 1 (the default), and 2.
+<p>
+<strong>Warning:</strong> Using the default value of 1 for <var>alls</var> (see below) means that
+more than one element may be returned for some <code></code><var>gamma</var><code>.group</code> orbit(s)
+of the required complete subgraphs.  To obtain just one element from each
+<code></code><var>gamma</var><code>.group</code> orbit of the required complete subgraphs, you must give
+the value 2 to the parameter <var>alls</var>.
+<p>
+If <var>alls</var>=0 (or <code>false</code> for backward compatibility) then <var>K</var> will contain
+at most one element. In this case, if <var>k</var> is negative then <var>K</var> will
+contain just one maximal complete subgraph, and if <var>k</var> is non-negative
+then <var>K</var> will contain a complete subgraph of size <var>k</var> if and only if
+such a subgraph is contained in <var>gamma</var>.
+<p>
+If <var>alls</var>=1 (or <code>true</code> for backward compatibility) then <var>K</var> will contain
+(perhaps properly) a set of <code></code><var>gamma</var><code>.group</code> orbit-representatives of
+the maximal (if <var>k</var> is negative) or size <var>k</var> (if <var>k</var> is non-negative)
+complete subgraphs of <var>gamma</var>.
+<p>
+If <var>alls</var>=2 then <var>K</var> will be a set of <code></code><var>gamma</var><code>.group</code>
+orbit-representatives of the maximal (if <var>k</var> is negative) or size <var>k</var>
+(if <var>k</var> is non-negative) complete subgraphs of <var>gamma</var>.  This option
+can be more costly than when <var>alls</var>=1.
+<p>
+Before applying <code>CompleteSubgraphs</code>, one may want to associate the full
+automorphism group of <var>gamma</var> with <var>gamma</var>, via <code></code><var>gamma</var><code> :=
+NewGroupGraph( AutGroupGraph(</code><var>gamma</var><code>), </code><var>gamma</var><code> );</code>.
+<p>
+An alternative name for this function is <code>Cliques</code>.
+<a name = "I4"></a>
+
+<p>
+See also <a href="CHAP007.htm#SSEC005.1">CompleteSubgraphsOfGivenSize</a>.
+<p>
+<pre>
+gap&gt; gamma := JohnsonGraph(5,2);
+rec( isGraph := true, order := 10, 
+  group := Group([ ( 1, 5, 8,10, 4)( 2, 6, 9, 3, 7), ( 2, 5)( 3, 6)( 4, 7) ]),
+  schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 ], 
+  adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], representatives := [ 1 ], 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], isSimple := true )
+gap&gt; CompleteSubgraphs(gamma);
+[ [ 1, 2, 3, 4 ], [ 1, 2, 5 ] ]
+gap&gt;  CompleteSubgraphs(gamma,3,2);
+[ [ 1, 2, 3 ], [ 1, 2, 5 ] ]
+gap&gt; CompleteSubgraphs(gamma,-1,0);
+[ [ 1, 2, 5 ] ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT005">7.5 CompleteSubgraphsOfGivenSize</a></h2>
+<p><p>
+<a name = "SSEC005.1"></a>
+<li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code> )</code>
+<li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code> )</code>
+<li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code>, </code><var>maxi</var><code> )</code>
+<li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code>, </code><var>maxi</var><code>, </code><var>col</var><code> )</code>
+<li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code>, </code><var>maxi</var><code>, </code><var>col</var><code>, </code><var>wts</var><code> )</code>
+<p>
+Let <var>gamma</var> be a simple graph, and <var>k</var> a non-negative integer or vector
+of non-negative integers.  This function returns a set <var>K</var> (possibly
+empty) of complete subgraphs of size <var>k</var> of <var>gamma</var>.  The vertices may
+have weights, which should be non-zero integers if <var>k</var> is an integer and
+non-zero <i>d</i>-vectors of non-negative integers if <var>k</var> is a <i>d</i>-vector,
+and in these cases, a complete subgraph of <strong>size</strong> <var>k</var> means a complete
+subgraph whose vertex-weights sum to <var>k</var>.  The exact nature of the set
+<var>K</var> depends on the values of the parameters supplied to this function. A
+complete subgraph is represented by its vertex-set.
+<p>
+The optional parameter <var>alls</var> controls how many complete subgraphs are
+returned. The valid values for <var>alls</var> are 0, 1 (the default), and 2.
+<p>
+<strong>Warning:</strong> Using the default value of 1 for <var>alls</var> (see below) means that
+more than one element may be returned for some <code></code><var>gamma</var><code>.group</code> orbit(s)
+of the required complete subgraphs.  To obtain just one element from each
+<code></code><var>gamma</var><code>.group</code> orbit of the required complete subgraphs, you must give
+the value 2 to the parameter <var>alls</var>.
+<p>
+If <var>alls</var>=0 (or <code>false</code> for backward compatibility) then <var>K</var> will
+contain at most one element.  If <var>maxi</var>=<code>false</code> then <var>K</var> will contain one
+element if and only if <var>gamma</var> contains a complete subgraph of size <var>k</var>.
+If <var>maxi</var>=<code>true</code> then <var>K</var> will contain one element if and only if <var>gamma</var>
+contains a maximal complete subgraph of size <var>k</var>, in which case <var>K</var>
+will contain (the vertex-set of) such a maximal complete subgraph.
+(A <strong>maximal complete subgraph</strong> of <var>gamma</var> is a complete subgraph of
+<var>gamma</var> which is not properly contained in another complete subgraph
+of <var>gamma</var>.)
+<p>
+If <var>alls</var>=1 (or <code>true</code> for backward compatibility) and <var>maxi</var>=<code>false</code>,
+then <var>K</var> will contain (perhaps properly) a set of <code></code><var>gamma</var><code>.group</code>
+orbit-representatives of the size <var>k</var> complete subgraphs of <var>gamma</var>.
+If <var>alls</var>=1 (the default) and <var>maxi</var>=<code>true</code>, then <var>K</var> will contain
+(perhaps properly) a set of <code></code><var>gamma</var><code>.group</code> orbit-representatives of
+the size <var>k</var> <strong>maximal</strong> complete subgraphs of <var>gamma</var>.
+<p>
+If <var>alls</var>=2 and <var>maxi</var>=<code>false</code>, then <var>K</var> will be a set of <code></code><var>gamma</var><code>.group</code>
+orbit-representatives of the size <var>k</var> complete subgraphs of <var>gamma</var>.
+If <var>alls</var>=2 and <var>maxi</var>=<code>true</code> then <var>K</var> will be a set of <code></code><var>gamma</var><code>.group</code>
+orbit-representatives of the size <var>k</var> <strong>maximal</strong> complete subgraphs
+of <var>gamma</var>.  This option can be more costly than when <var>alls</var>=1.
+<p>
+The optional parameter <var>maxi</var> controls whether only maximal complete
+subgraphs of size <var>k</var> are returned.  The default is <code>false</code>, which means
+that non-maximal as well as maximal complete subgraphs of size <var>k</var> are
+returned. If <var>maxi</var>=<code>true</code> then only maximal complete subgraphs of size
+<var>k</var> are returned. (Previous to version 4.1 of GRAPE, <var>maxi</var>=<code>true</code>
+meant that it was assumed (but not checked) that all complete subgraphs
+of size <var>k</var> were maximal.)
+<p>
+The optional boolean parameter <var>col</var> is used to determine whether or not
+partial proper vertex-colouring is used to cut down the search tree. The
+default is <code>true</code>, which says to use this partial colouring.  For backward
+compatibility, <var>col</var> a rational number means the same as <var>col</var>=<code>true</code>.
+<p>
+The optional parameter <var>wts</var> should be a list of vertex-weights; the list
+should be of length <code></code><var>gamma</var><code>.order</code>, with the <var>i</var>-th element being the
+weight of vertex <var>i</var>. The weights must be all positive integers if <var>k</var>
+is an integer, and all non-zero <i>d</i>-vectors of non-negative integers
+if <var>k</var> is a <i>d</i>-vector. The default is that all weights are equal to&nbsp;1.
+(Recall that a complete subgraph of <strong>size</strong> <var>k</var> means a complete subgraph
+whose vertex-weights sum to <var>k</var>.)
+<p>
+If <var>wts</var> is a list of (positive) integers, then it is required that
+for all <i>g</i> in <code></code><var>gamma</var><code>.group</code> and all <i>v</i> in <code>Vertices(</code><var>gamma</var><code>)</code>,
+we have <i>wts</i> [<i>v</i><sup><i>g</i></sup>]=<i>wts</i> [<i>v</i>].
+<p>
+If <var>wts</var> is a list of <i>d</i>-vectors then we assume that there is some
+underlying action &#956; of <code></code><var>gamma</var><code>.group</code> on <code>[1..<i>d</i>]</code>. This results
+in an action of <code></code><var>gamma</var><code>.group</code> on the set of integer <i>d</i>-vectors, where
+if <i>w</i> is an integer <i>d</i>-vector and <i>g</i> in <code></code><var>gamma</var><code>.group</code> then <i>w</i><sup><i>g</i></sup>
+is defined by <i>w</i><sup><i>g</i></sup>[&#956;(<i>i</i>,<i>g</i>)]=<i>w</i>[<i>i</i>] for all <i>i</i> in <code>[1..<i>d</i>]</code>. It is
+then required that for all <i>g</i> in <code></code><var>gamma</var><code>.group</code>, we have <i>k</i> <sup><i>g</i></sup>=<i>k</i> 
+and for all <i>v</i> in <code>Vertices(</code><var>gamma</var><code>)</code> <i>wts</i> [<i>v</i><sup><i>g</i></sup>] = <i>wts</i> [<i>v</i>]<sup><i>g</i></sup>.
+These requirements are <strong>not</strong> checked by the function, and the use of
+vector-weights is primarily for advanced users of GRAPE.
+<p>
+An alternative name for this function is 
+<code>CliquesOfGivenSize</code>.
+<a name = "I5"></a>
+
+<p>
+See also <a href="CHAP007.htm#SSEC004.1">CompleteSubgraphs</a>.
+<p>
+<pre>
+gap&gt; gamma:=JohnsonGraph(6,2);                         
+rec( isGraph := true, order := 15, 
+  group := Group([ ( 1, 6,10,13,15, 5)( 2, 7,11,14, 4, 9)( 3, 8,12), 
+      ( 2, 6)( 3, 7)( 4, 8)( 5, 9) ]), 
+  schreierVector := [ -1, 2, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1 ], 
+  adjacencies := [ [ 2, 3, 4, 5, 6, 7, 8, 9 ] ], representatives := [ 1 ], 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 1, 6 ], [ 2, 3 ], 
+      [ 2, 4 ], [ 2, 5 ], [ 2, 6 ], [ 3, 4 ], [ 3, 5 ], [ 3, 6 ], [ 4, 5 ], 
+      [ 4, 6 ], [ 5, 6 ] ], isSimple := true )
+gap&gt; CompleteSubgraphsOfGivenSize(gamma,4);
+[ [ 1, 2, 3, 4 ] ]
+gap&gt; CompleteSubgraphsOfGivenSize(gamma,4,1,true);
+[  ]
+gap&gt; CompleteSubgraphsOfGivenSize(gamma,5,2,true);
+[ [ 1, 2, 3, 4, 5 ] ]
+gap&gt; delta:=NewGroupGraph(Group(()),gamma);;
+gap&gt; CompleteSubgraphsOfGivenSize(delta,5,2,true);
+[ [ 1, 2, 3, 4, 5 ], [ 1, 6, 7, 8, 9 ], [ 2, 6, 10, 11, 12 ], 
+  [ 3, 7, 10, 13, 14 ], [ 4, 8, 11, 13, 15 ], [ 5, 9, 12, 14, 15 ] ]
+gap&gt; CompleteSubgraphsOfGivenSize(delta,5,0);
+[ [ 1, 2, 3, 4, 5 ] ]
+gap&gt; CompleteSubgraphsOfGivenSize(delta,5,1,false,true,
+&gt;       [1,2,3,4,5,6,7,8,7,6,5,4,3,2,1]);
+[ [ 1, 4 ], [ 2, 3 ], [ 3, 14 ], [ 4, 15 ], [ 5 ], [ 11 ], [ 12, 15 ], 
+  [ 13, 14 ] ]
+</pre>
+<p>
+<h2><a name="SECT006">7.6 MaximumClique</a></h2>
+<p><p>
+<a name = "SSEC006.1"></a>
+<li><code>MaximumClique( </code><var>gamma</var><code> )</code>
+<p>
+This function returns a maximum clique of the graph <var>gamma</var>, which must
+be simple.  A <strong>maximum clique</strong>
+<a name = "I6"></a>
+
+of <var>gamma</var> is a
+set of pairwise adjacent vertices of <var>gamma</var> of the largest possible size.
+<p>
+An alternative name for this function is
+<code>MaximumCompleteSubgraph</code>.
+<a name = "I7"></a>
+
+<p>
+See also <a href="CHAP007.htm#SSEC005.1">CompleteSubgraphsOfGivenSize</a>.
+<p>
+<pre>
+gap&gt; J:=JohnsonGraph(5,2);
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], group := Group([ (1,5,8,10,4)
+  (2,6,9,3,7), (2,5)(3,6)(4,7) ]), isGraph := true, isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
+gap&gt; MaximumClique(J);
+[ 1, 2, 3, 4 ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT007">7.7 CliqueNumber</a></h2>
+<p><p>
+<a name = "SSEC007.1"></a>
+<li><code>CliqueNumber( </code><var>gamma</var><code> )</code>
+<p>
+This function returns the clique number of the given graph <var>gamma</var>,
+which must be simple.  The <strong>clique number</strong>
+<a name = "I8"></a>
+
+of <var>gamma</var> is the size of a largest clique in <var>gamma</var>, where a <strong>clique</strong>
+is a set of pairwise adjacent vertices.
+<p>
+<pre>
+gap&gt; CliqueNumber(JohnsonGraph(5,2));
+4
+gap&gt; CliqueNumber(JohnsonGraph(6,2));
+5
+gap&gt; CliqueNumber(JohnsonGraph(7,2));
+6
+</pre>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP006.htm">Previous</a>] [<a href ="CHAP008.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>grape manual<br>October 2018
+</address></body></html>

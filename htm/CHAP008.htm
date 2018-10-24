@@ -1,0 +1,293 @@
+<html><head><title>[grape] 8 Automorphism groups and isomorphism testing for graphs</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP007.htm">Previous</a>] [<a href ="CHAP009.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>8 Automorphism groups and isomorphism testing for graphs</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP008.htm#SECT001">Graphs with colour-classes</a>
+<li> <A HREF="CHAP008.htm#SECT002">AutGroupGraph</a>
+<li> <A HREF="CHAP008.htm#SECT003">GraphIsomorphism</a>
+<li> <A HREF="CHAP008.htm#SECT004">IsIsomorphicGraph</a>
+<li> <A HREF="CHAP008.htm#SECT005">GraphIsomorphismClassRepresentatives</a>
+</ol><p>
+<p>
+GRAPE includes B.&nbsp;D.&nbsp;McKay's nauty (Version&nbsp;2.2, final patched
+version) package for calculating automorphism groups of graphs and for
+testing graph isomorphism (see <a href="biblio.htm#Nau90,MP14"><cite>Nau90,MP14</cite></a>).  As described in
+Section <a href="CHAP001.htm#SECT001">Installing the GRAPE Package</a>, a user may instead use their own
+copy of dreadnaut or dreadnautB from a later version of nauty, or may
+use T.&nbsp;Juntilla's and P.&nbsp;Kaski's bliss package <a href="biblio.htm#JK07"><cite>JK07</cite></a>
+instead of nauty. Many functions described in this chapter make use
+of nauty or bliss.
+<p>
+<p>
+<h2><a name="SECT001">8.1 Graphs with colour-classes</a></h2>
+<p><p>
+For each of the functions described in this chapter, each graph parameter
+may be replaced by a graph with colour-classes, which is a record having
+(at least) the components <code>graph</code> (which should be a graph in GRAPE
+format), and <code>colourClasses</code>, which should be an ordered partition of the
+vertices of the graph, and so define <strong>colour-classes</strong> for the vertices.
+This ordered partition should be given as a list of (pairwise-disjoint
+non-empty) sets partitioning the vertex-set.  When these functions are
+called with graphs with colour-classes, then it is understood that an
+<strong>automorphism</strong> of a graph with colour-classes is an automorphism of the
+graph which additionally preserves the list of colour-classes (classwise),
+and an <strong>isomorphism</strong> from one graph with colour-classes to a second is a
+graph isomorphism from the first graph to the second which additionally
+maps the first list of colour-classes to the second (classwise). The
+record for a graph with colour-classes may also optionally contain the
+additional components <code>autGroup</code> and/or <code>canonicalLabelling</code>, and these
+are handled in an analogous way to those for a graph (such as when using
+the parameter <var>firstunbindcanon</var>).  Note that we do not require that
+adjacent vertices be in different colour-classes.
+<p>
+<p>
+<h2><a name="SECT002">8.2 AutGroupGraph</a></h2>
+<p><p>
+<a name = "SSEC002.1"></a>
+<li><code>AutGroupGraph( </code><var>gamma</var><code> )</code>
+<li><code>AutGroupGraph( </code><var>gamma</var><code>, </code><var>colourclasses</var><code> )</code>
+<p>
+The first version of this function returns the automorphism group of
+the graph (or graph with colour-classes) <var>gamma</var>, using nauty 
+or bliss (this can also be accomplished by typing
+<code>AutomorphismGroup(</code><var>gamma</var><code>)</code>). The <strong>automorphism group</strong> \Aut(<i>gamma</i> )
+of a graph <var>gamma</var> is the group consisting of the permutations
+of the vertices of <var>gamma</var> which preserve the edge-set of <var>gamma</var>.
+The <strong>automorphism group</strong> of a graph with colour-classes is the subgroup
+of the automorphism group of the graph which preserves the colour-classes
+(classwise).
+<p>
+The second version of this function is maintained only for backward
+compatibility. For this version <var>gamma</var> must be a graph, <var>colourclasses</var>
+is an ordered partition of the vertices of <var>gamma</var>, and the subgroup of
+\Aut(<i>gamma</i> ) preserving this ordered partition is returned. The ordered
+partition should be given as a list of (pairwise-disjoint non-empty) sets
+partitioning the vertices of <var>gamma</var>, although for backward compatibility
+and only in this situation, the last set in the ordered partition need
+not be included explicitly.
+<p>
+<pre>
+gap&gt; gamma := JohnsonGraph(4,2);                   
+rec( adjacencies := [ [ 2, 3, 4, 5 ] ], 
+  group := Group([ (1,4,6,3)(2,5), (2,4)(3,5) ]), isGraph := true, 
+  isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ], [ 3, 4 ] ], 
+  order := 6, representatives := [ 1 ], 
+  schreierVector := [ -1, 2, 1, 1, 1, 1 ] )
+gap&gt; Size(AutGroupGraph(gamma)); 
+48
+gap&gt; AutGroupGraph( rec(graph:=gamma,colourClasses:=[[1,2,3],[4,5,6]]) ); 
+Group([ (2,3)(4,5), (1,2)(5,6) ])
+gap&gt; Size(AutomorphismGroup( rec(graph:=gamma,colourClasses:=[[1,6],[2,3,4,5]]) )); 
+16
+</pre>
+<p>
+<p>
+<h2><a name="SECT003">8.3 GraphIsomorphism</a></h2>
+<p><p>
+<a name = "SSEC003.1"></a>
+<li><code>GraphIsomorphism( </code><var>gamma1</var><code>, </code><var>gamma2</var><code> )</code>
+<li><code>GraphIsomorphism( </code><var>gamma1</var><code>, </code><var>gamma2</var><code>, </code><var>firstunbindcanon</var><code> )</code>
+<p>
+Let <var>gamma1</var> and <var>gamma2</var> both be graphs or both be graphs with
+colour-classes.  Then this function makes use of nauty or bliss to
+(try to) determine an isomorphism from <var>gamma1</var> to <var>gamma2</var>.  If <var>gamma1</var>
+and <var>gamma2</var> are isomorphic, then this function returns an isomorphism
+from <var>gamma1</var> to <var>gamma2</var>. This isomorphism will be a permutation of the
+vertices of <var>gamma1</var> which maps the edge-set of <var>gamma1</var> onto that of
+<var>gamma2</var>, and if <var>gamma1</var> and <var>gamma2</var> are graphs with colour-classes,
+this isomorphism will also map the colour-class list of <var>gamma1</var> to that
+of <var>gamma2</var> (classwise). If <var>gamma1</var> and <var>gamma2</var> are not isomorphic
+then this function returns <code>fail</code>.
+<p>
+The optional boolean parameter <var>firstunbindcanon</var> determines whether or
+not the <code>canonicalLabelling</code> components of both <var>gamma1</var> and <var>gamma2</var>
+are first unbound before proceeding.  If <var>firstunbindcanon</var> is <code>true</code>
+(the default, safe and possibly slower option) then these components
+are first unbound.  If <var>firstunbindcanon</var> is <code>false</code>, then any existing
+<code>canonicalLabelling</code> components are used.  However, since canonical
+labellings can depend on whether nauty or bliss is used, the version
+of nauty or bliss used, the version of GRAPE, parameter settings
+of nauty or bliss, and possibly even the compiler and computer
+used, you must be sure that if <var>firstunbindcanon</var>=<code>false</code> then the
+<code>canonicalLabelling</code> component(s) which may already exist for <var>gamma1</var>
+or <var>gamma2</var> were created in exactly the same environment in which you
+are presently computing.
+<p>
+Please also note that a canonical labelling for a GRAPE graph is the
+inverse of what a canononical labelling for a graph is usually defined as
+(such as in bliss), in that in GRAPE, the image of a graph under
+the <strong>inverse</strong> of its canonical labelling is the calculated canonical
+version of that graph.
+<p>
+See also <a href="CHAP008.htm#SSEC004.1">IsIsomorphicGraph</a>.
+<p>
+<pre>
+gap&gt; gamma := JohnsonGraph(5,3);
+rec( adjacencies := [ [ 2, 3, 4, 5, 7, 8 ] ], 
+  group := Group([ (1,7,10,6,3)(2,8,4,9,5), (4,7)(5,8)(6,9) ]), 
+  isGraph := true, isSimple := true, 
+  names := [ [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 2, 5 ], [ 1, 3, 4 ], [ 1, 3, 5 ], 
+      [ 1, 4, 5 ], [ 2, 3, 4 ], [ 2, 3, 5 ], [ 2, 4, 5 ], [ 3, 4, 5 ] ], 
+  order := 10, representatives := [ 1 ], 
+  schreierVector := [ -1, 1, 1, 2, 1, 1, 1, 2, 1, 1 ] )
+gap&gt; delta := JohnsonGraph(5,2);
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], 
+  group := Group([ (1,5,8,10,4)(2,6,9,3,7), (2,5)(3,6)(4,7) ]), 
+  isGraph := true, isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
+gap&gt; GraphIsomorphism( gamma, delta );
+(3,5,6,8,7,4)
+gap&gt; GraphIsomorphism( 
+&gt;       rec(graph:=gamma, colourClasses:=[[7],[1,2,3,4,5,6,8,9,10]]), 
+&gt;       rec(graph:=delta, colourClasses:=[[10],[1..9]]) ); 
+(1,3)(2,6,5)(4,8)(7,10,9)
+gap&gt; GraphIsomorphism( 
+&gt;       rec(graph:=gamma, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]), 
+&gt;       rec(graph:=delta, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) ); 
+fail
+</pre>
+<p>
+<p>
+<h2><a name="SECT004">8.4 IsIsomorphicGraph</a></h2>
+<p><p>
+<a name = "SSEC004.1"></a>
+<li><code>IsIsomorphicGraph( </code><var>gamma1</var><code>, </code><var>gamma2</var><code> )</code>
+<li><code>IsIsomorphicGraph( </code><var>gamma1</var><code>, </code><var>gamma2</var><code>, </code><var>firstunbindcanon</var><code> )</code>
+<p>
+Let <var>gamma1</var> and <var>gamma2</var> both be graphs or both be graphs with
+colour-classes.  Then this boolean function makes use of the nauty or 
+bliss package to test whether <var>gamma1</var> and <var>gamma2</var> are isomorphic 
+(as graphs or as graphs with colour-classes, respectively). The
+value <code>true</code> is returned if and only if the graphs (or graphs with
+colour-classes) are isomorphic.
+<p>
+The optional boolean parameter <var>firstunbindcanon</var> determines whether or
+not the <code>canonicalLabelling</code> components of both <var>gamma1</var> and <var>gamma2</var>
+are first unbound before proceeding.  If <var>firstunbindcanon</var> is <code>true</code>
+(the default, safe and possibly slower option) then these components
+are first unbound.  If <var>firstunbindcanon</var> is <code>false</code>, then any existing
+<code>canonicalLabelling</code> components are used.  However, since canonical
+labellings can depend on whether nauty or bliss is used, the version
+of nauty or bliss used, the version of GRAPE, parameter settings
+of nauty or bliss, and possibly even the compiler and computer
+used, you must be sure that if <var>firstunbindcanon</var>=<code>false</code> then the
+<code>canonicalLabelling</code> component(s) which may already exist for <var>gamma1</var>
+or <var>gamma2</var> were created in exactly the same environment in which you
+are presently computing.
+<p>
+See also <a href="CHAP008.htm#SSEC003.1">GraphIsomorphism</a>.  For pairwise isomorphism testing
+of three or more graphs (or graphs with colour-classes), see
+<a href="CHAP008.htm#SSEC005.1">GraphIsomorphismClassRepresentatives</a>.
+<p>
+Please also note that a canonical labelling for a GRAPE graph is the
+inverse of what a canononical labelling for a graph is usually defined as
+(such as in bliss), in that in GRAPE, the image of a graph under
+the <strong>inverse</strong> of its canonical labelling is the calculated canonical
+version of that graph.
+<p>
+<pre>
+gap&gt; gamma := JohnsonGraph(5,3);
+rec( adjacencies := [ [ 2, 3, 4, 5, 7, 8 ] ], 
+  group := Group([ (1,7,10,6,3)(2,8,4,9,5), (4,7)(5,8)(6,9) ]), 
+  isGraph := true, isSimple := true, 
+  names := [ [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 2, 5 ], [ 1, 3, 4 ], [ 1, 3, 5 ], 
+      [ 1, 4, 5 ], [ 2, 3, 4 ], [ 2, 3, 5 ], [ 2, 4, 5 ], [ 3, 4, 5 ] ], 
+  order := 10, representatives := [ 1 ], 
+  schreierVector := [ -1, 1, 1, 2, 1, 1, 1, 2, 1, 1 ] )
+gap&gt; delta := JohnsonGraph(5,2);
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], 
+  group := Group([ (1,5,8,10,4)(2,6,9,3,7), (2,5)(3,6)(4,7) ]), 
+  isGraph := true, isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
+gap&gt; IsIsomorphicGraph( gamma, delta );
+true
+gap&gt; IsIsomorphicGraph( 
+&gt;       rec(graph:=gamma, colourClasses:=[[7],[1,2,3,4,5,6,8,9,10]]), 
+&gt;       rec(graph:=delta, colourClasses:=[[10],[1..9]]) ); 
+true
+gap&gt; IsIsomorphicGraph( 
+&gt;       rec(graph:=gamma, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]), 
+&gt;       rec(graph:=delta, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) ); 
+false
+</pre>
+<p>
+<p>
+<h2><a name="SECT005">8.5 GraphIsomorphismClassRepresentatives</a></h2>
+<p><p>
+<a name = "SSEC005.1"></a>
+<li><code>GraphIsomorphismClassRepresentatives( </code><var>L</var><code> )</code>
+<li><code>GraphIsomorphismClassRepresentatives( </code><var>L</var><code>, </code><var>firstunbindcanon</var><code> )</code>
+<p>
+Given a list <var>L</var> of graphs, or of graphs with colour-classes, this
+function uses nauty or bliss to return a list consisting of pairwise
+non-isomorphic elements of <var>L</var>, representing all the isomorphism classes
+of elements of <var>L</var>.
+<p>
+The optional boolean parameter <var>firstunbindcanon</var> determines whether
+or not the <code>canonicalLabelling</code> components of all elements of <var>L</var>
+are first unbound before proceeding.  If <var>firstunbindcanon</var> is <code>true</code>
+(the default, safe and possibly slower option) then these components
+are first unbound.  If <var>firstunbindcanon</var> is <code>false</code>, then any existing
+<code>canonicalLabelling</code> components of elements of <var>L</var> are used.  However,
+since canonical labellings can depend on whether nauty or bliss is
+used, the version of nauty or bliss used, the version of GRAPE,
+parameter settings of nauty or bliss, and possibly even the compiler
+and computer used, you must be sure that if <var>firstunbindcanon</var>=<code>false</code>
+then any <code>canonicalLabelling</code> component(s) which may already exist for
+elements of <var>L</var> were created in exactly the same environment in which
+you are presently computing.
+<p>
+It is assumed that the computing environment is constant throughout the 
+execution of this function.
+<p>
+Please also note that a canonical labelling for a GRAPE graph is the
+inverse of what a canononical labelling for a graph is usually defined as
+(such as in bliss), in that in GRAPE, the image of a graph under
+the <strong>inverse</strong> of its canonical labelling is the calculated canonical
+version of that graph.
+<p>
+<pre>
+gap&gt; A:=JohnsonGraph(5,3);
+rec( adjacencies := [ [ 2, 3, 4, 5, 7, 8 ] ], 
+  group := Group([ (1,7,10,6,3)(2,8,4,9,5), (4,7)(5,8)(6,9) ]), 
+  isGraph := true, isSimple := true, 
+  names := [ [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 2, 5 ], [ 1, 3, 4 ], [ 1, 3, 5 ], 
+      [ 1, 4, 5 ], [ 2, 3, 4 ], [ 2, 3, 5 ], [ 2, 4, 5 ], [ 3, 4, 5 ] ], 
+  order := 10, representatives := [ 1 ], 
+  schreierVector := [ -1, 1, 1, 2, 1, 1, 1, 2, 1, 1 ] )
+gap&gt; B:=JohnsonGraph(5,2);
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], 
+  group := Group([ (1,5,8,10,4)(2,6,9,3,7), (2,5)(3,6)(4,7) ]), 
+  isGraph := true, isSimple := true, 
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
+gap&gt; R:=GraphIsomorphismClassRepresentatives([A,B,ComplementGraph(A)]);;
+gap&gt; Length(R);
+2
+gap&gt; List(R,VertexDegrees);
+[ [ 6 ], [ 3 ] ]
+gap&gt; R:=GraphIsomorphismClassRepresentatives( 
+&gt;    [ rec(graph:=gamma, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]), 
+&gt;      rec(graph:=delta, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]), 
+&gt;      rec(graph:=ComplementGraph(gamma), colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) ] );; 
+gap&gt; Length(R);
+3
+</pre>
+<p>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP007.htm">Previous</a>] [<a href ="CHAP009.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>grape manual<br>October 2018
+</address></body></html>

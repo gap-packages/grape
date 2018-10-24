@@ -1,0 +1,155 @@
+<html><head><title>[grape] 5 Some special vertex subsets of a graph</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP004.htm">Previous</a>] [<a href ="CHAP006.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>5 Some special vertex subsets of a graph</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP005.htm#SECT001">ConnectedComponent</a>
+<li> <A HREF="CHAP005.htm#SECT002">ConnectedComponents</a>
+<li> <A HREF="CHAP005.htm#SECT003">Bicomponents</a>
+<li> <A HREF="CHAP005.htm#SECT004">DistanceSet</a>
+<li> <A HREF="CHAP005.htm#SECT005">Layers</a>
+<li> <A HREF="CHAP005.htm#SECT006">IndependentSet</a>
+</ol><p>
+<p>
+This chapter describes functions to determine certain special vertex
+subsets of a graph.
+<p>
+<p>
+<h2><a name="SECT001">5.1 ConnectedComponent</a></h2>
+<p><p>
+<a name = "SSEC001.1"></a>
+<li><code>ConnectedComponent( </code><var>gamma</var><code>, </code><var>v</var><code> )</code>
+<p>
+This function  returns the set  of all vertices  in <var>gamma</var> which  can be
+reached by a path starting at the vertex  <var>v</var>.  The graph <var>gamma</var> must be
+simple.
+<p>
+See also <a href="CHAP005.htm#SSEC002.1">ConnectedComponents</a>.
+<p>
+<pre>
+gap&gt; ConnectedComponent( NullGraph( Group((1,2)) ), 2 );
+[ 2 ]
+gap&gt; ConnectedComponent( JohnsonGraph(4,2), 2 );
+[ 1, 2, 3, 4, 5, 6 ] 
+</pre>
+<p>
+<p>
+<h2><a name="SECT002">5.2 ConnectedComponents</a></h2>
+<p><p>
+<a name = "SSEC002.1"></a>
+<li><code>ConnectedComponents( </code><var>gamma</var><code> )</code>
+<p>
+This  function returns  a  list  of  the  vertex  sets  of  the connected
+components of <var>gamma</var>, which must be a simple graph.
+<p>
+See also <a href="CHAP005.htm#SSEC001.1">ConnectedComponent</a>.
+<p>
+<pre>
+gap&gt; ConnectedComponents( NullGraph( Group((1,2,3,4)) ) );
+[ [ 1 ], [ 2 ], [ 3 ], [ 4 ] ]
+gap&gt; ConnectedComponents( JohnsonGraph(4,2) );
+[ [ 1, 2, 3, 4, 5, 6 ] ] 
+</pre>
+<p>
+<p>
+<h2><a name="SECT003">5.3 Bicomponents</a></h2>
+<p><p>
+<a name = "SSEC003.1"></a>
+<li><code>Bicomponents( </code><var>gamma</var><code> )</code>
+<p>
+If the graph  <var>gamma</var>, which must be simple,  is bipartite, this function
+returns  a length 2 list  of  bicomponents or parts of <var>gamma</var>, otherwise
+the empty list is returned.
+<p>
+<strong>Note</strong> If <var>gamma</var> is bipartite but not connected, then its set of
+bicomponents is not uniquely determined.  
+<p>
+See also <a href="CHAP003.htm#SSEC019.1">IsBipartite</a>.
+<p>
+<pre>
+gap&gt; Bicomponents( NullGraph(SymmetricGroup(4)) );
+[ [ 1 .. 3 ], [ 4 ] ]
+gap&gt; Bicomponents( JohnsonGraph(4,2) );
+[  ]
+gap&gt; Bicomponents( BipartiteDouble( JohnsonGraph(4,2) ) );
+[ [ 1, 2, 3, 4, 5, 6 ], [ 7, 8, 9, 10, 11, 12 ] ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT004">5.4 DistanceSet</a></h2>
+<p><p>
+<a name = "SSEC004.1"></a>
+<li><code>DistanceSet( </code><var>gamma</var><code>, </code><var>distances</var><code>, </code><var>V</var><code> )</code>
+<li><code>DistanceSet( </code><var>gamma</var><code>, </code><var>distances</var><code>, </code><var>V</var><code>, </code><var>G</var><code> )</code>
+<p>
+Let <var>V</var> be a vertex or a nonempty list of vertices of <var>gamma</var>.
+This function returns the set of vertices <i>w</i> of <var>gamma</var>, such that
+<i>d</i>(<i>V</i> ,<i>w</i>) is in <var>distances</var> (a list or singleton distance).
+<p>
+The optional  parameter <var>G</var>, if  present, is assumed to be  a subgroup of
+\Aut(<i>gamma</i> )  fixing <var>V</var> setwise.  Including  such a <var>G</var> can speed  up
+the function.
+<p>
+See also <a href="CHAP003.htm#SSEC015.1">Distance</a> and <a href="CHAP006.htm#SSEC002.1">DistanceSetInduced</a>.
+<p>
+<pre>
+gap&gt; DistanceSet( JohnsonGraph(4,2), 1, [1,6] );
+[ 2, 3, 4, 5 ] 
+</pre>
+<p>
+<p>
+<h2><a name="SECT005">5.5 Layers</a></h2>
+<p><p>
+<a name = "SSEC005.1"></a>
+<li><code>Layers( </code><var>gamma</var><code>, </code><var>V</var><code> )</code>
+<li><code>Layers( </code><var>gamma</var><code>, </code><var>V</var><code>, </code><var>G</var><code> )</code>
+<p>
+Let <var>V</var> be a vertex or a nonempty list of vertices of <var>gamma</var>.  This
+function returns a list whose <i>i</i>-th element is the set of vertices of
+<var>gamma</var> at distance <i>i</i>&#8722;1 from <var>V</var>.
+<p>
+The optional  parameter  <var>G</var>, if present, is assumed to  be a subgroup of
+\Aut(<i>gamma</i> ) which fixes <var>V</var>  setwise.  Including such a <var>G</var> can speed
+up the function.
+<p>
+See also <a href="CHAP003.htm#SSEC015.1">Distance</a>.
+<p>
+<pre>
+gap&gt; Layers( JohnsonGraph(4,2), 6 );
+[ [ 6 ], [ 2, 3, 4, 5 ], [ 1 ] ] 
+</pre>
+<p>
+<p>
+<h2><a name="SECT006">5.6 IndependentSet</a></h2>
+<p><p>
+<a name = "SSEC006.1"></a>
+<li><code>IndependentSet( </code><var>gamma</var><code> )</code>
+<li><code>IndependentSet( </code><var>gamma</var><code>, </code><var>indset</var><code> )</code>
+<li><code>IndependentSet( </code><var>gamma</var><code>, </code><var>indset</var><code>, </code><var>forbidden</var><code> )</code>
+<p>
+Returns a (hopefully large) independent set of the graph <var>gamma</var>, which
+must be simple.  An <strong>independent set</strong> of <var>gamma</var> is a set of vertices
+of <var>gamma</var>, no two of which are joined by an edge.  At present, a
+greedy algorithm is used.  The returned independent set will contain
+the (assumed) independent set <var>indset</var> (default: <code>[]</code>), and not contain
+any element of <var>forbidden</var> (default: <code>[]</code>, in which case the returned
+independent set is maximal).
+<p>
+An error is signalled if <var>indset</var> and <var>forbidden</var> have non-trivial
+intersection.
+<p>
+See also <a href="CHAP007.htm#SSEC004.1">CompleteSubgraphs</a> and <a href="CHAP007.htm#SSEC005.1">CompleteSubgraphsOfGivenSize</a>, which
+can be used on the complement graph of <var>gamma</var> to look seriously for
+independent sets.
+<p>
+<pre>
+gap&gt; IndependentSet( JohnsonGraph(4,2), [3] );
+[ 3, 4 ] 
+</pre>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP004.htm">Previous</a>] [<a href ="CHAP006.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>grape manual<br>October 2018
+</address></body></html>

@@ -1,0 +1,414 @@
+<html><head><title>[grape] 2 Functions to construct and modify graphs</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href ="CHAP003.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<h1>2 Functions to construct and modify graphs</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP002.htm#SECT001">Graph</a>
+<li> <A HREF="CHAP002.htm#SECT002">EdgeOrbitsGraph</a>
+<li> <A HREF="CHAP002.htm#SECT003">NullGraph</a>
+<li> <A HREF="CHAP002.htm#SECT004">CompleteGraph</a>
+<li> <A HREF="CHAP002.htm#SECT005">JohnsonGraph</a>
+<li> <A HREF="CHAP002.htm#SECT006">HammingGraph</a>
+<li> <A HREF="CHAP002.htm#SECT007">CayleyGraph</a>
+<li> <A HREF="CHAP002.htm#SECT008">AddEdgeOrbit</a>
+<li> <A HREF="CHAP002.htm#SECT009">RemoveEdgeOrbit</a>
+<li> <A HREF="CHAP002.htm#SECT010">AssignVertexNames</a>
+</ol><p>
+<p>
+This chapter describes the functions used to construct and modify graphs.
+<p>
+<p>
+<h2><a name="SECT001">2.1 Graph</a></h2>
+<p><p>
+<a name = "SSEC001.1"></a>
+<li><code>Graph( </code><var>G</var><code>, </code><var>L</var><code>, </code><var>act</var><code>, </code><var>rel</var><code> )</code>
+<li><code>Graph( </code><var>G</var><code>, </code><var>L</var><code>, </code><var>act</var><code>, </code><var>rel</var><code>, </code><var>invt</var><code> )</code>
+<p>
+This  is the most  general  and  useful  way  of constructing a graph
+in GRAPE.
+<p>
+First suppose that the optional boolean parameter <var>invt</var> is unbound or
+has value <code>false</code>. Then <var>L</var> should be a list of elements of a set <i>S</i> on
+which the group <var>G</var> acts, with the action given by the function <var>act</var>. The
+parameter <var>rel</var> should be a boolean function defining a <var>G</var>-invariant
+relation on <i>S</i> (so that for <i>g</i> in <var>G</var>, <i>x</i>,<i>y</i> in <i>S</i>, <i>rel</i> (<i>x</i>,<i>y</i>)
+if and only if <i>rel</i> (<i>act</i> (<i>x</i>,<i>g</i>),<i>act</i> (<i>y</i>,<i>g</i>))). Then the function <code>Graph</code>
+returns a graph <var>gamma</var> which has as vertex-names (an immutable copy of)
+<pre>
+  Concatenation( Orbits( &lt;G&gt;, &lt;L&gt;, &lt;act&gt; ) ) 
+</pre>
+(the concatenation of the distinct orbits of the elements in <var>L</var> under
+<var>G</var>), and for vertices <i>v</i>,<i>w</i> of <var>gamma</var>, [<i>v</i>,<i>w</i>] is an edge if and only if
+<pre>
+  &lt;rel&gt;( VertexName( &lt;gamma&gt;, &lt;v&gt; ), VertexName( &lt;gamma&gt;, &lt;w&gt; ) ).
+</pre>
+<p>
+Now if the  parameter <var>invt</var> exists  and  has value <code>true</code>,  then  it  is
+assumed  that <var>L</var> is invariant  under <var>G</var> with respect  to  action <var>act</var>.
+Then the function <code>Graph</code> behaves as above,  except that the vertex-names
+of <var>gamma</var> become (an immutable copy of) <var>L</var>.
+<p>
+The group associated with the graph <var>gamma</var> returned is  the image of <var>G</var>
+acting via <var>act</var> on <code></code><var>gamma</var><code>.names</code>.
+<p>
+For example, we may use <code>Graph</code> to construct the Petersen graph as follows:
+<p>
+<pre>
+gap&gt; Petersen := Graph( SymmetricGroup(5), [[1,2]], OnSets,
+&gt;                    function(x,y) return Intersection(x,y)=[]; end );
+rec(
+  isGraph := true,
+  order := 10,
+  group := Group( [ ( 1, 2, 3, 5, 7)( 4, 6, 8, 9,10), ( 2, 4)( 6, 9)( 7,10)
+     ] ),
+  schreierVector := [ -1, 1, 1, 2, 1, 1, 1, 1, 2, 2 ],
+  adjacencies := [ [ 3, 5, 8 ] ],
+  representatives := [ 1 ],
+  names := [ [ 1, 2 ], [ 2, 3 ], [ 3, 4 ], [ 1, 3 ], [ 4, 5 ], [ 2, 4 ],
+      [ 1, 5 ], [ 3, 5 ], [ 1, 4 ], [ 2, 5 ] ] )
+</pre>
+<p>
+The function <code>Graph</code> may be used to construct a graph in GRAPE format
+from an adjacency matrix
+<a name = "I0"></a>
+
+for that graph. For
+example, suppose you have an <i>n</i> by <i>n</i> adjacency matrix <i>A</i> for a graph
+<i>gamma</i>, so that the vertex-set of <i>gamma</i> is {1,&#8230;,<i>n</i>}, and
+[<i>i</i>,<i>j</i>] is an edge of <i>gamma</i> if and only if <i>A</i>[<i>i</i>][<i>j</i>]=1.  Then the graph
+<i>gamma</i> in GRAPE-graph format, with associated group the trivial group,
+is returned by <code>Graph( Group(()), [1..n], OnPoints, function(x,y) return
+A[x][y]=1; end, true );</code>
+<p>
+<pre>
+gap&gt; A := [[0,1,0],[1,0,0],[0,0,1]];
+[ [ 0, 1, 0 ], [ 1, 0, 0 ], [ 0, 0, 1 ] ]
+gap&gt; gamma := Graph( Group(()), [1..3], OnPoints,
+&gt;        function(x,y) return A[x][y]=1; end,
+&gt;        true );
+rec( adjacencies := [ [ 2 ], [ 1 ], [ 3 ] ], group := Group(()), 
+  isGraph := true, names := [ 1, 2, 3 ], order := 3,
+  representatives := [ 1, 2, 3 ], schreierVector := [ -1, -2, -3 ] )
+</pre>
+<p>
+<p>
+<h2><a name="SECT002">2.2 EdgeOrbitsGraph</a></h2>
+<p><p>
+<a name = "SSEC002.1"></a>
+<li><code>EdgeOrbitsGraph( </code><var>G</var><code>, </code><var>edges</var><code> )</code>
+<li><code>EdgeOrbitsGraph( </code><var>G</var><code>, </code><var>edges</var><code>, </code><var>n</var><code> )</code>
+<p>
+This is a common way of constructing a graph in GRAPE.
+<p>
+This function returns the (directed) graph with vertex-set {1,&#8230;, <i>n</i> }, edge-set &#8746;<sub><i>e</i> &#8712; <i>edges</i> </sub>&nbsp;<i>e</i><sup><i>G</i> </sup>, and associated
+(permutation) group <var>G</var>, which must act naturally on {1,&#8230;,<i>n</i> }.
+The parameter <var>edges</var> should be a list of edges (lists of length 2 of
+vertices), although a singleton edge will be understood as an edge-list
+of length 1. The parameter <var>n</var> may be omitted, in which case <var>n</var> is
+taken to be the largest point moved by <var>G</var>.
+<p>
+Note that <var>G</var> may be the trivial permutation group (<code>Group( () )</code> in
+<font face="Gill Sans,Helvetica,Arial">GAP</font> notation), in which case the (directed) edges of <var>gamma</var> are
+simply those in the list <var>edges</var>.
+<p>
+<pre>
+gap&gt; EdgeOrbitsGraph( Group((1,3),(1,2)(3,4)), [[1,2],[4,5]], 5 );
+rec(
+  isGraph := true,
+  order := 5,
+  group := Group( [ (1,3), (1,2)(3,4) ] ),
+  schreierVector := [ -1, 2, 1, 2, -2 ],
+  adjacencies := [ [ 2, 4, 5 ], [  ] ],
+  representatives := [ 1, 5 ],
+  isSimple := false )
+</pre>
+<p>
+<p>
+<h2><a name="SECT003">2.3 NullGraph</a></h2>
+<p><p>
+<a name = "SSEC003.1"></a>
+<li><code>NullGraph( </code><var>G</var><code> )</code>
+<li><code>NullGraph( </code><var>G</var><code>, </code><var>n</var><code> )</code>
+<p>
+This function returns the null graph (graph with no edges) with vertex-set
+{1,&#8230;,<i>n</i> }, and associated (permutation) group <var>G</var>. The parameter
+<var>n</var> may be omitted, in which case <var>n</var> is taken to be the largest point
+moved by <var>G</var>.
+<p>
+See also <a href="CHAP003.htm#SSEC020.1">IsNullGraph</a>.
+<p>
+<pre>
+gap&gt; NullGraph( Group( (1,2,3) ), 4 );
+rec(
+  isGraph := true,
+  order := 4,
+  group := Group( [ (1,2,3) ] ),
+  schreierVector := [ -1, 1, 1, -2 ],
+  adjacencies := [ [  ], [  ] ],
+  representatives := [ 1, 4 ],
+  isSimple := true )
+</pre>
+<p>
+<p>
+<h2><a name="SECT004">2.4 CompleteGraph</a></h2>
+<p><p>
+<a name = "SSEC004.1"></a>
+<li><code>CompleteGraph( </code><var>G</var><code> )</code>
+<li><code>CompleteGraph( </code><var>G</var><code>, </code><var>n</var><code> )</code>
+<li><code>CompleteGraph( </code><var>G</var><code>, </code><var>n</var><code>, </code><var>mustloops</var><code> )</code>
+<p>
+This function returns the complete graph with vertex-set
+{1,&#8230;,<i>n</i> } and associated (permutation) group <var>G</var>. The parameter
+<var>n</var> may be  omitted, in which case <var>n</var> is taken to be the largest point
+moved by <var>G</var>.  The optional boolean parameter <var>mustloops</var> determines
+whether the complete graph has all loops present or no loops (default:
+<code>false</code> (no loops)).
+<p>
+See also <a href="CHAP003.htm#SSEC021.1">IsCompleteGraph</a>.
+<p>
+<pre>
+gap&gt; CompleteGraph( Group( (1,2,3), (1,2) ) );
+rec(
+  isGraph := true,
+  order := 3,
+  group := Group( [ (1,2,3), (1,2) ] ),
+  schreierVector := [ -1, 1, 1 ],
+  adjacencies := [ [ 2, 3 ] ],
+  representatives := [ 1 ],
+  isSimple := true )
+</pre>
+<p>
+<p>
+<h2><a name="SECT005">2.5 JohnsonGraph</a></h2>
+<p><p>
+<a name = "SSEC005.1"></a>
+<li><code>JohnsonGraph( </code><var>n</var><code>, </code><var>e</var><code> )</code>
+<p>
+Let <var>n</var> and <var>e</var> be integers, with <i>n</i>  &#8805; <i>e</i>  &#8805; 0.  Then this function
+returns a graph <var>gamma</var> isomorphic to the Johnson graph <i>J</i>(<i>n</i> ,<i>e</i> ).
+The vertices (actually the vertex-names) of <var>gamma</var> are the <var>e</var>-subsets
+of {1,&#8230;, <i>n</i> }, with <i>x</i> joined to <i>y</i> if and only if &#124;<i>x</i> &#8745;<i>y</i>&#124; = <i>e</i> &#8722;1.  The group associated with <var>gamma</var> is the image of the symmetric
+group <i>S</i><sub><i>n</i> </sub> acting on the <var>e</var>-subsets of {1,&#8230;,<i>n</i> }.
+<p>
+<pre>
+gap&gt; JohnsonGraph(5,3);
+rec(
+  isGraph := true,
+  order := 10,
+  group := Group( [ ( 1, 7,10, 6, 3)( 2, 8, 4, 9, 5), ( 4, 7)( 5, 8)( 6, 9)
+     ] ),
+  schreierVector := [ -1, 1, 1, 2, 1, 1, 1, 2, 1, 1 ],
+  adjacencies := [ [ 2, 3, 4, 5, 7, 8 ] ],
+  representatives := [ 1 ],
+  names := [ [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 2, 5 ], [ 1, 3, 4 ], [ 1, 3, 5 ],
+      [ 1, 4, 5 ], [ 2, 3, 4 ], [ 2, 3, 5 ], [ 2, 4, 5 ], [ 3, 4, 5 ] ],
+  isSimple := true )
+</pre>
+<p>
+<p>
+<h2><a name="SECT006">2.6 HammingGraph</a></h2>
+<p><p>
+<a name = "SSEC006.1"></a>
+<li><code>HammingGraph( </code><var>d</var><code>, </code><var>q</var><code> )</code>
+<p>
+Let <var>d</var> and <var>q</var> be positive integers.  Then this function returns a
+graph <var>gamma</var> isomorphic to the Hamming graph <i>H</i>(<i>d</i> ,<i>q</i> ).  The vertices
+(actually the vertex-names) of <var>gamma</var> are the <var>d</var>-vectors with entries
+in {1,&#8230;,<i>q</i> }, with <i>x</i> joined to <i>y</i> if and only if <i>x</i> and <i>y</i>
+differ in exactly one co-ordinate (that is, <i>x</i> and <i>y</i> are at Hamming
+distance&nbsp;1).  The group associated with <var>gamma</var> is the image of the wreath
+product of the symmetric group <i>S</i><sub><i>q</i> </sub> with the symmetric group <i>S</i><sub><i>d</i> </sub>,
+in its product action on the vertices.
+<p>
+<pre>
+gap&gt; H:=HammingGraph(3,4);
+rec( adjacencies := [ [ 2, 3, 4, 5, 9, 13, 17, 33, 49 ] ], 
+  group := &lt;permutation group with 8 generators&gt;, isGraph := true, 
+  names := [ [ 1, 1, 1 ], [ 1, 1, 2 ], [ 1, 1, 3 ], [ 1, 1, 4 ], 
+      [ 1, 2, 1 ], [ 1, 2, 2 ], [ 1, 2, 3 ], [ 1, 2, 4 ], [ 1, 3, 1 ], 
+      [ 1, 3, 2 ], [ 1, 3, 3 ], [ 1, 3, 4 ], [ 1, 4, 1 ], [ 1, 4, 2 ], 
+      [ 1, 4, 3 ], [ 1, 4, 4 ], [ 2, 1, 1 ], [ 2, 1, 2 ], [ 2, 1, 3 ], 
+      [ 2, 1, 4 ], [ 2, 2, 1 ], [ 2, 2, 2 ], [ 2, 2, 3 ], [ 2, 2, 4 ], 
+      [ 2, 3, 1 ], [ 2, 3, 2 ], [ 2, 3, 3 ], [ 2, 3, 4 ], [ 2, 4, 1 ], 
+      [ 2, 4, 2 ], [ 2, 4, 3 ], [ 2, 4, 4 ], [ 3, 1, 1 ], [ 3, 1, 2 ], 
+      [ 3, 1, 3 ], [ 3, 1, 4 ], [ 3, 2, 1 ], [ 3, 2, 2 ], [ 3, 2, 3 ], 
+      [ 3, 2, 4 ], [ 3, 3, 1 ], [ 3, 3, 2 ], [ 3, 3, 3 ], [ 3, 3, 4 ], 
+      [ 3, 4, 1 ], [ 3, 4, 2 ], [ 3, 4, 3 ], [ 3, 4, 4 ], [ 4, 1, 1 ], 
+      [ 4, 1, 2 ], [ 4, 1, 3 ], [ 4, 1, 4 ], [ 4, 2, 1 ], [ 4, 2, 2 ], 
+      [ 4, 2, 3 ], [ 4, 2, 4 ], [ 4, 3, 1 ], [ 4, 3, 2 ], [ 4, 3, 3 ], 
+      [ 4, 3, 4 ], [ 4, 4, 1 ], [ 4, 4, 2 ], [ 4, 4, 3 ], [ 4, 4, 4 ] ], 
+  order := 64, representatives := [ 1 ], 
+  schreierVector := [ -1, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 1, 5, 
+      5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 1, 5, 5, 5, 3, 5, 5, 5, 3, 
+      5, 5, 5, 3, 5, 5, 5, 1, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5, 3, 5, 5, 5 ] )
+gap&gt; GlobalParameters(H);
+[ [ 0, 0, 9 ], [ 1, 2, 6 ], [ 2, 4, 3 ], [ 3, 6, 0 ] ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT007">2.7 CayleyGraph</a></h2>
+<p><p>
+<a name = "SSEC007.1"></a>
+<li><code>CayleyGraph( </code><var>G</var><code> )</code>
+<li><code>CayleyGraph( </code><var>G</var><code>, </code><var>gens</var><code> )</code>
+<li><code>CayleyGraph( </code><var>G</var><code>, </code><var>gens</var><code>, </code><var>undirected</var><code> )</code>
+<p>
+Given a group <var>G</var> and a generating list <var>gens</var> for  <var>G</var>, <code>CayleyGraph(
+</code><var>G</var><code>, </code><var>gens</var><code> )</code> returns a Cayley graph for  <var>G</var>  with respect to <var>gens</var>.
+The generating list <var>gens</var> is optional, and if omitted, then <var>gens</var> is
+taken to be <code>GeneratorsOfGroup( </code><var>G</var><code> )</code>. The boolean argument <var>undirected</var>
+is also optional, and if <var>undirected</var>=<code>true</code> (the default), then the
+returned graph is undirected (as if <var>gens</var> was closed under inversion,
+whether or not it is).
+<p>
+The Cayley graph  <var>caygraph</var>  which is returned is defined as follows:
+the vertices (actually the vertex-names) of <var>caygraph</var>  are the elements
+of <var>G</var>;  if <var>undirected</var>=<code>true</code> (the default) then vertices <i>x</i>,<i>y</i> are
+joined by an edge if and only if there is a <i>g</i> in the list <var>gens</var> with
+<i>y</i>=<i>gx</i> or <i>y</i>=<i>g</i><sup>&#8722;1</sup><i>x</i>; if <var>undirected</var>=<code>false</code> then [<i>x</i>,<i>y</i>] is an edge
+if and only if there is a <i>g</i> in <var>gens</var> with <i>y</i>=<i>gx</i>.
+<p>
+The permutation group <code></code><var>caygraph</var><code>.group</code> associated with <var>caygraph</var> is
+the image of <var>G</var> acting in its right regular representation.
+<p>
+<strong>Note</strong> It is not checked whether <var>G</var> is actually generated by <var>gens</var>.
+However, even if <var>G</var> is not generated by <var>gens</var>, the function still
+works as described above (as long as <var>gens</var> is contained in <var>G</var>), but
+returns a ``Cayley graph'' which is not connected.
+<p>
+<pre>
+gap&gt; C:=CayleyGraph(SymmetricGroup(4),[(1,2),(2,3),(3,4)]);
+rec(
+  isGraph := true,
+  order := 24,
+  group :=
+   Group( [ ( 1,10,17,19)( 2, 9,18,20)( 3,12,14,21)( 4,11,13,22)( 5, 7,16,23)
+        ( 6, 8,15,24), ( 1, 7)( 2, 8)( 3, 9)( 4,10)( 5,11)( 6,12)(13,15)
+        (14,16)(17,18)(19,21)(20,22)(23,24) ] ),
+  schreierVector := [ -1, 1, 1, 2, 2, 1, 2, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 2,
+      1, 1, 2, 2, 1, 2 ],
+  adjacencies := [ [ 2, 3, 7 ] ],
+  representatives := [ 1 ],
+  names := [ (), (3,4), (2,3), (2,3,4), (2,4,3), (2,4), (1,2), (1,2)(3,4),
+      (1,2,3), (1,2,3,4), (1,2,4,3), (1,2,4), (1,3,2), (1,3,4,2), (1,3),
+      (1,3,4), (1,3)(2,4), (1,3,2,4), (1,4,3,2), (1,4,2), (1,4,3), (1,4),
+      (1,4,2,3), (1,4)(2,3) ],
+  isSimple := true )
+gap&gt; Girth(C);
+4
+gap&gt; Diameter(C);
+6
+</pre>
+<p>
+<p>
+<h2><a name="SECT008">2.8 AddEdgeOrbit</a></h2>
+<p><p>
+<a name = "SSEC008.1"></a>
+<li><code>AddEdgeOrbit( </code><var>gamma</var><code>, </code><var>e</var><code> )</code>
+<li><code>AddEdgeOrbit( </code><var>gamma</var><code>, </code><var>e</var><code>, </code><var>H</var><code> )</code>
+<p>
+This procedure adds the orbit of <var>e</var> under <code></code><var>gamma</var><code>.group</code> to the
+edge-set of the graph <var>gamma</var>. The parameter <var>e</var> must be a sequence of
+length 2 of vertices of <var>gamma</var>. If the optional third parameter <var>H</var> is
+given then it is assumed that <code></code><var>e</var><code>[2]</code> has the same orbit under <var>H</var> as
+it does under the stabilizer in <code></code><var>gamma</var><code>.group</code> of <code></code><var>e</var><code>[1]</code>, and this
+knowledge can speed up the procedure.
+<p>
+Note that if <code></code><var>gamma</var><code>.group</code> is trivial then this procedure simply adds the
+single (directed) edge <var>e</var> to <var>gamma</var>.
+<p>
+See also <a href="CHAP002.htm#SSEC009.1">RemoveEdgeOrbit</a>.
+<p>
+<pre>
+gap&gt; gamma := NullGraph( Group( (1,3), (1,2)(3,4) ) );;
+gap&gt; AddEdgeOrbit( gamma, [4,3] );
+gap&gt; gamma;
+rec(
+  isGraph := true,
+  order := 4,
+  group := Group( [ (1,3), (1,2)(3,4) ] ),
+  schreierVector := [ -1, 2, 1, 2 ],
+  adjacencies := [ [ 2, 4 ] ],
+  representatives := [ 1 ],
+  isSimple := true )
+gap&gt; GlobalParameters(gamma);
+[ [ 0, 0, 2 ], [ 1, 0, 1 ], [ 2, 0, 0 ] ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT009">2.9 RemoveEdgeOrbit</a></h2>
+<p><p>
+<a name = "SSEC009.1"></a>
+<li><code>RemoveEdgeOrbit( </code><var>gamma</var><code>, </code><var>e</var><code> )</code>
+<li><code>RemoveEdgeOrbit( </code><var>gamma</var><code>, </code><var>e</var><code>, </code><var>H</var><code> )</code>
+<p>
+This procedure removes the orbit of <var>e</var> under <code></code><var>gamma</var><code>.group</code> from the
+edge-set of the graph <var>gamma</var>. The parameter <var>e</var> must be a sequence of
+length 2 of vertices of <var>gamma</var>, but if <var>e</var> is not an edge of <var>gamma</var>
+then this procedure has no effect. If the optional third parameter <var>H</var>
+is given then it is assumed that <code></code><var>e</var><code>[2]</code> has the same orbit under <var>H</var>
+as it does under the stabilizer in <code></code><var>gamma</var><code>.group</code> of <code></code><var>e</var><code>[1]</code>, and
+this knowledge can speed up the procedure.
+<p>
+See also <a href="CHAP002.htm#SSEC008.1">AddEdgeOrbit</a>.
+<p>
+<pre>
+gap&gt; gamma := CompleteGraph( Group( (1,3), (1,2)(3,4) ) );;
+gap&gt; RemoveEdgeOrbit( gamma, [1,3] );
+gap&gt; gamma;
+rec(
+  isGraph := true,
+  order := 4,
+  group := Group( [ (1,3), (1,2)(3,4) ] ),
+  schreierVector := [ -1, 2, 1, 2 ],
+  adjacencies := [ [ 2, 4 ] ],
+  representatives := [ 1 ],
+  isSimple := true )
+gap&gt; GlobalParameters(gamma);
+[ [ 0, 0, 2 ], [ 1, 0, 1 ], [ 2, 0, 0 ] ]
+</pre>
+<p>
+<p>
+<h2><a name="SECT010">2.10 AssignVertexNames</a></h2>
+<p><p>
+<a name = "SSEC010.1"></a>
+<li><code>AssignVertexNames( </code><var>gamma</var><code>, </code><var>names</var><code> )</code>
+<p>
+This procedure allows the user to give new names for the vertices of
+<var>gamma</var>, by specifying a list <var>names</var> (of length <code></code><var>gamma</var><code>.order</code>) of
+vertex-names for the vertices of <var>gamma</var>, such that <code></code><var>names</var><code>[</code><var>i</var><code>]</code>
+contains the user's name for the <var>i</var>-th vertex of <var>gamma</var>.
+<p>
+An immutable copy of <var>names</var> is assigned to <code></code><var>gamma</var><code>.names</code>. 
+<p>
+See also <a href="CHAP003.htm#SSEC005.1">VertexNames</a> and <a href="CHAP003.htm#SSEC004.1">VertexName</a>.
+<p>
+<pre>
+gap&gt; gamma := NullGraph( Group(()), 3 );
+rec(
+  isGraph := true,
+  order := 3,
+  group := Group( [ () ] ),
+  schreierVector := [ -1, -2, -3 ],
+  adjacencies := [ [  ], [  ], [  ] ],
+  representatives := [ 1, 2, 3 ],
+  isSimple := true )
+gap&gt; AssignVertexNames( gamma, ["a","b","c"] );
+gap&gt; gamma;
+rec(
+  isGraph := true,
+  order := 3,
+  group := Group( [ () ] ),
+  schreierVector := [ -1, -2, -3 ],
+  adjacencies := [ [  ], [  ], [  ] ],
+  representatives := [ 1, 2, 3 ],
+  isSimple := true,
+  names := [ "a", "b", "c" ] )
+</pre>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href ="CHAP003.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>grape manual<br>October 2018
+</address></body></html>
