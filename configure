@@ -2,4 +2,4 @@
 # usage: configure gappath
 # this script creates a `Makefile' from `Makefile.in' 
 . ${1:-"../.."}/sysinfo.gap
-sed -e "s?@GAPARCH@?\$GAParch?g" Makefile.in >Makefile
+sed -e "s?@GAPARCH@?$GAParch?g" Makefile.in >Makefile
