@@ -32,6 +32,10 @@ returns a graph <gamma> which has as vertex-names (an immutable copy of)
 \begintt
   <rel>( VertexName( <gamma>, <v> ), VertexName( <gamma>, <w> ) ).
 \endtt
+(Note that you may choose to have <G> act trivially on $S$, in
+which case <G> could be given as the trivial permutation group, 
+`Group( () )', and <act> could be given as the trivial action, 
+`function(x,g) return x; end'.)
 
 Now if the  parameter <invt> exists  and  has value `true',  then  it  is
 assumed  that <L> is invariant  under <G> with respect  to  action <act>.
