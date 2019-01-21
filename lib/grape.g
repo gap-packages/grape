@@ -3786,7 +3786,7 @@ if gamma.order=0 then
 elif IsNullGraph(gamma) then
    return [1];
 elif IsCompleteGraph(gamma) then
-   return [[1..gamma.order]];
+   return [1..gamma.order];
 fi;
 G:=AutomorphismGroup(gamma); 
 if G=gamma.group then 
