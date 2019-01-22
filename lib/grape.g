@@ -1,8 +1,8 @@
 ##############################################################################
 ##
-##  grape.g (Version 4.8.1)    GRAPE Library     Leonard Soicher
+##  grape.g (Version 4.8.2)    GRAPE Library     Leonard Soicher
 ##
-##  Copyright (C) 1992-2018 Leonard Soicher, School of Mathematical Sciences, 
+##  Copyright (C) 1992-2019 Leonard Soicher, School of Mathematical Sciences, 
 ##                      Queen Mary University of London, London E1 4NS, U.K.
 ##
 # This version includes code by Jerry James (debugged by LS) 
@@ -4334,15 +4334,8 @@ fi;
 return;
 end);
 
-#######################################################################
-#
-# Next comes the part of  GRAPE  depending on B.D.McKay's  nauty 
-# system or Tommi Junttila and Petteri Kaski's bliss 0.73 system.
-#
-# define some global variables so as not to get warning messages
-
+# Set up temporary directory for use with nauty/dreadnaut or bliss.
 BindGlobal("GRAPE_nautytmpdir",DirectoryTemporary());
-
 Add(GAPInfo.PostRestoreFuncs,function()
   MakeReadWriteGlobal("GRAPE_nautytmpdir");
   Unbind(GRAPE_nautytmpdir);
