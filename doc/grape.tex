@@ -11,7 +11,7 @@
 
 \Chapter{Grape}
 
-This manual describes the {\GRAPE} (Version~4.8.1) package for computing
+This manual describes the {\GRAPE} (Version~4.8.2) package for computing
 with graphs and groups.
 
 {\GRAPE} is primarily designed for the construction and analysis of
@@ -26,14 +26,11 @@ and in this case {\GRAPE} algorithms may perform more slowly than strictly
 combinatorial algorithms (although this degradation in performance is
 hopefully never more than a fixed constant factor).
 
-Most {\GRAPE} functions are written entirely in the {\GAP} language.
-However, the {\GRAPE} functions `AutomorphismGroup', `AutGroupGraph',
-`IsIsomorphicGraph', `GraphIsomorphismClassRepresentatives',
-`GraphIsomorphism'  and `PartialLinearSpaces' make direct or indirect
-use the {\nauty} \cite{Nau90}, \cite{MP14} or {\bliss} \cite{JK07} packages,
-via a {\GRAPE} interface.  These functions can only be used on a fully
-installed version of {\GRAPE}. Installation of {\GRAPE} is described in
-this chapter of the manual.
+Certain {\GRAPE} functions make direct or indirect use of the {\nauty}
+\cite{Nau90}, \cite{MP14} or {\bliss} \cite{JK07} packages, for computing
+automorphism groups of graphs and testing graph isomorphism Such functions
+can only be used on a fully installed version of {\GRAPE}. Installation
+of {\GRAPE} is described in this chapter of the manual.
 
 Except for the {\nauty} package of B.~D.~McKay included with {\GRAPE},
 the function `SmallestImageSet' by Steve Linton, the {\nauty} interface
@@ -47,16 +44,11 @@ version. For details, see \URL{http://www.gnu.org/licenses/gpl.html}.
 Further licensing and copyright information for {\GRAPE} is contained
 in its `COPYING' file.
 
-If you use {\GRAPE} to solve a problem then please send a short email
-about it to \Mailto{L.H.Soicher@qmul.ac.uk}, and reference the {\GRAPE} 
+If you use {\GRAPE} in a published work, then please reference the
 package as follows:
 
-L.H. Soicher, The {GRAPE} package for {GAP}, Version~4.8.1, 2018,
+L.H. Soicher, The {GRAPE} package for {GAP}, Version~4.8.2, 2019,
 \URL{https://gap-packages.github.io/grape}.
-
-If your work made use of a function depending on {\nauty} or {\bliss}
-then you should also reference {\nauty} \cite{Nau90,MP14} or {\bliss}
-\cite{JK07} as appropriate.
 
 The development of {\GRAPE} was partially supported by a European
 Union HCM grant in ``Computational Group Theory''. It is currently
