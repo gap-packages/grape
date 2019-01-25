@@ -1426,7 +1426,7 @@ function(gamma)
 # Returns the diameter of  gamma. 
 # A diameter of  -1  means that gamma is not (strongly) connected.  
 #
-local r,d,loc;
+local r,d,loc,reps;
 if not IsGraph(gamma) then
    TryNextMethod();
 fi;
@@ -1434,7 +1434,12 @@ if gamma.order=0 then
    Error("<gamma> has no vertices");
 fi;
 d:=-1;
-for r in gamma.representatives do 
+if IsBound(gamma.autGroup) then
+   reps:=GRAPE_OrbitNumbers(gamma.autGroup,gamma.order).representatives;
+else 
+   reps:=gamma.representatives;
+fi;
+for r in reps do 
    loc:=LocalInfo(gamma,r);
    if loc.localDiameter=-1 then
       return -1; 
@@ -1453,7 +1458,7 @@ function(gamma)
 # Returns the girth of  gamma,  which must be a simple graph. 
 # A girth of  -1  means that gamma is a forest.  
 #
-local r,g,locgirth,stoplayer,adj;
+local r,g,locgirth,stoplayer,adj,reps;
 if not IsGraph(gamma) then
    TryNextMethod();
 fi;
@@ -1469,7 +1474,12 @@ if adj<>[] and Intersection(adj,Adjacency(gamma,adj[1]))<>[] then
 fi;
 g:=-1;
 stoplayer:=0;
-for r in gamma.representatives do 
+if IsBound(gamma.autGroup) then
+   reps:=GRAPE_OrbitNumbers(gamma.autGroup,gamma.order).representatives;
+else 
+   reps:=gamma.representatives;
+fi;
+for r in reps do 
    locgirth:=LocalInfo(gamma,r,stoplayer).localGirth;
    if locgirth=3 then 
       return 3;
@@ -1826,7 +1836,11 @@ fi;
 if not IsSimpleGraph(gamma) then
    Error("<gamma> not a simple graph");
 fi;
-reps:=gamma.representatives;
+if IsBound(gamma.autGroup) then
+   reps:=GRAPE_OrbitNumbers(gamma.autGroup,gamma.order).representatives;
+else 
+   reps:=gamma.representatives;
+fi;
 loc:=LocalInfo(gamma,reps[1]);
 if loc.localDiameter=-1 then
    Error("<gamma> not a connected graph");
@@ -1866,7 +1880,11 @@ fi;
 if not IsSimpleGraph(gamma) then
    return false;
 fi;
-reps:=gamma.representatives;
+if IsBound(gamma.autGroup) then
+   reps:=GRAPE_OrbitNumbers(gamma.autGroup,gamma.order).representatives;
+else 
+   reps:=gamma.representatives;
+fi;
 loc:=LocalInfo(gamma,reps[1]);
 pars:=loc.localParameters;
 d:=loc.localDiameter;
