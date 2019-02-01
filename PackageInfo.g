@@ -13,7 +13,7 @@ PackageName := "GRAPE",
 Version := "4.8.2",
 
 ##  Release date of the current version in dd/mm/yyyy format.
-Date := "28/01/2019",
+Date := "08/02/2019",
 
 SourceRepository := rec(
     Type := "git",

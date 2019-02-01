@@ -36,16 +36,19 @@ https://gap-packages.github.io/grape
 
 ------------------------------------------------------------------------
 
-Main changes from GRAPE 4.8.1 to GRAPE 4.8.2 (January 2019):
+Main changes from GRAPE 4.8.1 to GRAPE 4.8.2 (February 2019):
 ------------------------------------------------------------
 
 (1) Bug fixed in MaximumClique.  This bug caused a wrong answer to be
 returned for an input complete graph (on more than one vertex) for the
 functions MaximumClique, MaximumCompleteSubgraph, and CliqueNumber.
 
-(2) All function calls `Stabiliser' changed to `Stabilizer'. 
+(2) Efficiency improvements made to functions Diameter, Girth, 
+GlobalParameters, IsDistanceRegular, and GRAPE_CliqueCovering. 
 
-(3) Documentation upgraded. 
+(3) All function calls `Stabiliser' changed to `Stabilizer'. 
+
+(4) Documentation upgraded. 
 
 
 Main changes from GRAPE 4.8 to GRAPE 4.8.1 (October 2018):
