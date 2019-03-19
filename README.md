@@ -11,7 +11,7 @@ The GRAPE package and the source included with this distribution are
 copyright (C) Leonard Soicher 1992-2019, except for the following:
 
 - Brendan McKay's nauty 2.2 system; see the nauty copyright notice in
-file nauty22/nauty.h
+file nauty22/nauty-h.in
 - Steve Linton's SmallestImageSet function in lib/smallestimage.g
 
 Except for Brendan McKay's nauty 2.2 package, GRAPE is licensed under the
