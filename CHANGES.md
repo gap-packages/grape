@@ -8,7 +8,7 @@ functions MaximumClique, MaximumCompleteSubgraph, and CliqueNumber.
 2. Efficiency improvements made to functions Diameter, Girth, 
 GlobalParameters, IsDistanceRegular, and GRAPE_CliqueCovering. 
 
-3. All function calls `Stabiliser' changed to `Stabilizer'. 
+3. All function calls ``Stabiliser`` changed to ``Stabilizer``. 
 
 4. Added function GeneralizedOrbitalGraphs.
 
@@ -146,31 +146,30 @@ functions.
 Main changes from GRAPE 4.2 to GRAPE 4.3
 ----------------------------------------
 
-1. GRAPE can now be installed via `/bin/sh configure ../..; make'.
+1. GRAPE can now be installed via ``/bin/sh configure ../..; make``.
 
 2. The version of nauty now used is 2.2 final, rather than 2.0beta5,
 and canonical labellings may have changed.  Moreover, dreadnautB is now
 used instead of dreadnaut, so there is no practical upper bound on the
 number of vertices when using nauty.  All graphs stored from previous
-versions of GRAPE should have their `canonicalLabelling' component
+versions of GRAPE should have their canonicalLabelling component
 unbound before use with this version.
 
-3. Added function `GraphIsomorphismClassRepresentatives', which should be
+3. Added function GraphIsomorphismClassRepresentatives, which should be
 used for efficient pairwise isomorphism testing of three or more graphs.
 
-4. `CompleteSubgraphsOfGivenSize' now fully documented to include
-the functionality of finding cliques with given vertex vector-weight
-sum.
+4. Function CompleteSubgraphsOfGivenSize now fully documented to include
+the functionality of finding cliques with given vertex vector-weight sum.
 
-5. `GraphIsomorphism' now documented, and for safety, `GraphIsomorphism'
-now has a third parameter <firstunbindcanon>, behaving as in
-`IsIsomorphicGraph'.
+5. Function GraphIsomorphism now documented, and for safety,
+GraphIsomorphism now has a third parameter, firstunbindcanon, behaving
+as in the function IsIsomorphicGraph.
 
 6. For safety, (possibly old) canonical labellings are no longer copied
-over to a graph returned by `CopyGraph', `GraphImage' or `NewGroupGraph'.
+over to a graph returned by CopyGraph, GraphImage, or NewGroupGraph.
 
-7. Changed call to  `StabChainBaseStrongGenerators'  to have three
-parameters to conform with the changed functionality in this procedure
+7. Changed call to StabChainBaseStrongGenerators to have three
+parameters to conform with the changed functionality in this function
 from GAP 4.4.5.
 
 8. Fixed minor problem in Makefile.in (reported by A.E. Brouwer).
@@ -182,41 +181,41 @@ from GAP 4.4.5.
 Main changes from GRAPE 4.1 to GRAPE 4.2
 ----------------------------------------
 
-1. Including Steve Linton's `SmallestImageSet' function, and using
-this function for faster isomorph rejection in `CompleteSubgraphs',
-`CompleteSubgraphsOfGivenSize', and `PartialLinearSpaces'.
+1. Including Steve Linton's SmallestImageSet function, and using
+this function for faster isomorph rejection in functions CompleteSubgraphs,
+CompleteSubgraphsOfGivenSize, and PartialLinearSpaces.
 
-2. Further improvements to `CompleteSubgraphs' and
-`CompleteSubgraphsOfGivenSize', including functionality in the latter
-which will be required by the `Design' package.
+2. Further improvements to CompleteSubgraphs and
+CompleteSubgraphsOfGivenSize, including functionality in the latter
+which will be required by the DESIGN package.
 
 3. All global function names are now read-only.
  
-4. `OrbitalGraphIntersectionMatrices' is no longer an 
-alternative name for `OrbitalGraphColadjMats'.
+4. OrbitalGraphIntersectionMatrices is no longer an 
+alternative name for OrbitalGraphColadjMats.
 This change is *not* backward compatible.
 
-5. The function `Vertices' is now an operation, so as not to
+5. The function Vertices is now an operation, so as not to
 conflict with the xgap package. 
 
 6. The default value for GRAPE_NRANGRENS has been increased to 18.
 
-7. Output streams are now used in `AutGroupGraph' and
-`SetAutGroupCanonicalLabelling'.
+7. Output streams are now used in AutGroupGraph and
+SetAutGroupCanonicalLabelling.
 
 Main changes from GRAPE 4.0 to GRAPE 4.1
 ----------------------------------------
 
-1. Extended functionality of `CompleteSubgraphsOfGivenSize' so that a 
+1. Extended functionality of CompleteSubgraphsOfGivenSize so that a 
 user can request only *maximal* complete subgraphs of a given size to
 be returned.
  
-2. Extended functionality of `CompleteSubgraphs' and
-`CompleteSubgraphsOfGivenSize' so that the required complete subgraphs
+2. Extended functionality of CompleteSubgraphs and
+CompleteSubgraphsOfGivenSize so that the required complete subgraphs
 can be classified up to equivalence under the permutation group associated
 with the input graph.
 
-3. Improvements to `CompleteSubgraphs' and `CompleteSubgraphsOfGivenSize'
+3. Improvements to CompleteSubgraphs and CompleteSubgraphsOfGivenSize
 which sometimes result in significant speed-ups.
 
 4. The default UNIX file permissions for GRAPE files now include write
@@ -224,28 +223,28 @@ permission for the owner. This is to make default file permissions more
 in line with those of GAP.
 
 5. The naming convention for the vertices of the graphs output (in a
-list) by `PartialLinearSpaces' has changed to be more consistent with
+list) by PartialLinearSpaces has changed to be more consistent with
 vertex-naming conventions in GRAPE.  The point-vertices of such a graph
-<delta> are 1,...,`<ptgraph>.order', with the name of point-vertex <i>
-being the name of vertex <i> of <ptgraph>. A line-vertex of <delta>
+delta are 1,...,ptgraph.order, with the name of point-vertex i
+being the name of vertex i of ptgraph. A line-vertex of delta
 is named by a list (not necessarily ordered) of the point-vertex names
 for the points on that line.  
 Warning: This change is *not* backward compatible.
 
 6. For non-simple input graphs, different nauty parameters than
-previously are set by `AutGroupGraph' and `SetAutGroupCanonicalLabelling'
-(which is called by `IsIsomorphicGraph').  This is in order to avoid a
+previously are set by AutGroupGraph and SetAutGroupCanonicalLabelling
+(which is called by IsIsomorphicGraph). This is in order to avoid a
 performance problem with certain sparse directed graphs.
 Warning: canonical labellings may be different than before.
 
-7. Input graph to `CollapsedIndependentOrbitsGraph' must be simple.
+7. Input graph to CollapsedIndependentOrbitsGraph must be simple.
 (The function did not always produce correct output for non-simple graphs.)
 
-8. Bug fixed so that `AutGroupGraph' and `SetAutGroupCanonicalLabelling'
+8. Bug fixed so that AutGroupGraph and SetAutGroupCanonicalLabelling
 always output ranges as full lists for processing as input to
 nauty/dreadnaut.
 
-9. Bug fixed in function `Girth'. This bug could cause wrong answers to
+9. Bug fixed in function Girth. This bug could cause wrong answers to
 be returned. 
 
 10. Improved documentation, including an example of research using GRAPE.
