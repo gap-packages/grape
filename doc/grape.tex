@@ -42,7 +42,7 @@ terms of the GNU General Public License as published by the Free Software
 Foundation; either version 2 of the License, or (at your option) any later
 version. For details, see \URL{http://www.gnu.org/licenses/gpl.html}.
 Further licensing and copyright information for {\GRAPE} is contained
-in its `COPYING' file.
+in its `README.md' file.
 
 If you use {\GRAPE} in a published work, then please reference the
 package as follows:
@@ -66,12 +66,12 @@ for Windows users of {\GAP}. What follows is for Unix users of {\GRAPE}.
 You do not need to download and unpack an archive for {\GRAPE} unless you
 want to install the package separately from your main {\GAP} installation
 or are installing an upgrade of {\GRAPE} to an existing installation
-of {\GAP} (see the main {\GAP} reference section "REF:Installing a GAP
+of {\GAP} (see the main {\GAP} reference section "ref:Installing a GAP
 Package").  If you do need to download {\GRAPE}, you can find the most
 recent `.tar.gz' archive at \URL{https://gap-packages.github.io/grape}.
 The archive file should be downloaded and unpacked in the `pkg'
 subdirectory of an appropriate {\GAP} root directory (see the main {\GAP}
-reference section "REF:GAP Root Directories").
+reference section "ref:GAP Root Directories").
 
 If your {\GRAPE} installation does not include a pre-compiled binary of 
 the nauty/dreadnaut programs included with {\GRAPE} and you do not want 
@@ -108,7 +108,7 @@ interface for {\GRAPE} has only been extensively tested with the
 included Version~2.2 of {\nauty}, and the {\bliss} interface has only
 been tested with Version~0.73 of {\bliss}. To use a separately
 installed version of {\nauty}, type the following commands in {\GAP}, or 
-place these commands in your `gaprc' file (see "REF:The gaprc file"), where
+place these commands in your `gaprc' file (see "ref:The gaprc file"), where
 `dreadnaut_or_dreadnautB_executable' should be the name of your
 dreadnaut or dreadnautB executable file:
 \begintt
@@ -118,7 +118,7 @@ GRAPE_DREADNAUT_EXE := "dreadnaut_or_dreadnautB_executable";
 \endtt 
 To use a separately installed version of {\bliss} instead of {\nauty},
 type the following commands in {\GAP}, or place these commands in your
-`gaprc' file (see "REF:The gaprc file"), where `bliss_executable' should be
+`gaprc' file (see "ref:The gaprc file"), where `bliss_executable' should be
 the name of your bliss executable file:
 \begintt
 LoadPackage("grape"); 
@@ -157,11 +157,10 @@ where you should also send any comments or bug reports.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{Loading GRAPE}
 
-Before using {\GRAPE} you must load the package within {\GAP} via: 
+Before using {\GRAPE} you must load the package within {\GAP} by typing:
 
 \begintt
-gap> LoadPackage("grape");
-true
+LoadPackage("grape");
 \endtt
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -100,6 +100,12 @@ gap> Girth(C);
 4
 gap> Diameter(C);
 6
+gap> G:=JohnsonGraph(7,3).group;;
+gap> L:=GeneralizedOrbitalGraphs(G);;
+gap> List(L,VertexDegrees);
+[ [ 12 ], [ 30 ], [ 34 ], [ 16 ], [ 18 ], [ 22 ], [ 4 ] ]
+gap> List(L,Diameter);
+[ 3, 2, 1, 2, 2, 2, 3 ]
 gap> gamma := NullGraph( Group( (1,3), (1,2)(3,4) ) );;
 gap> AddEdgeOrbit( gamma, [4,3] );
 gap> gamma;
