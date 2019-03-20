@@ -922,6 +922,51 @@ od;
 return gamma;
 end);
 
+BindGlobal("GeneralizedOrbitalGraphs",function(G)
+#
+# The input to this function is a non-trivial permutation group G,
+# acting transitively on [1..n] (where n:=LargestMovedPoint(G)).
+#
+# Then this function returns a list of all the generalized orbital
+# graphs for G (that is, the simple graphs with vertex set [1..n]
+# and edge-set a union of orbitals of G).
+#
+local comb,n,H,result,reps,i,L,M,mm;
+if not IsPermGroup(G) then
+   Error("usage: GeneralizedOrbitalGraphs( <PermGroup> )");
+fi;
+n:=LargestMovedPoint(G);
+if n=0 or not IsTransitive(G,[1..n]) then
+   Error("<G> must be a non-trivial transitive group on [1..LargestMovedPoint( <G> )");
+fi;
+H:=Stabilizer(G,1);
+reps:=Set(List(OrbitsDomain(H,[2..n]),Minimum));
+#
+# Now make a duplicate-free list  L  of the graphs
+# with vertex-set  [1..n]  and edge-set the union
+# of a nondiagonal G-orbital and its paired orbital.
+# At the same time, make a list  M  whose i-th element is
+# a list of edges of  L[i],  such that the union of the
+# G-orbits of the edges in  M[i]  is the edge-set of  L[i].
+#
+L:=[];
+M:=[];
+for i in [1..Length(reps)] do
+   if ForAll(L,x->not IsEdge(x,[1,reps[i]])) then
+      mm:=[[1,reps[i]],[reps[i],1]];
+      Add(L,EdgeOrbitsGraph(G,mm));
+      Add(M,mm);
+   fi;
+od;
+result:=[];
+for comb in Combinations(M) do
+   if comb<>[] then
+      Add(result,EdgeOrbitsGraph(G,Concatenation(comb)));
+   fi;
+od;
+return result;
+end);
+
 BindGlobal("CollapsedAdjacencyMat",function(arg)
 #
 # Returns the collapsed adjacency matrix  A  for  gamma=arg[2]  wrt  
