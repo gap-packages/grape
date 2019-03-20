@@ -299,6 +299,12 @@ gap> gamma:=NewGroupGraph(Group(()),gamma);;
 gap> AddEdgeOrbit(gamma,[5,5]);
 gap> Size(AutomorphismGroup(gamma));
 2
+gap> G:=JohnsonGraph(7,3).group;;
+gap> L:=GeneralizedOrbitalGraphs(G);;
+gap> List(L,VertexDegrees);
+[ [ 12 ], [ 30 ], [ 34 ], [ 16 ], [ 18 ], [ 22 ], [ 4 ] ]
+gap> List(L,Diameter);
+[ 3, 2, 1, 2, 2, 2, 3 ]
 gap> STOP_TEST( "testall.tst", 10000 );
 ## The first argument of STOP_TEST should be the name of the test file.
 ## The number is a proportionality factor that is used to output a 
