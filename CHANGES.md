@@ -5,8 +5,9 @@ Main changes from GRAPE 4.8.1 to GRAPE 4.8.2 (March 2019)
 returned for an input complete graph (on more than one vertex) for the
 functions MaximumClique, MaximumCompleteSubgraph, and CliqueNumber.
 
-2. Efficiency improvements made to functions Diameter, Girth, 
-GlobalParameters, IsDistanceRegular, and GRAPE_CliqueCovering. 
+2. Efficiency improvements made to functions Diameter, Girth,
+GlobalParameters, and IsDistanceRegular, so that if the automorphism
+group of the input graph is already known then it is made use of.
 
 3. All function calls ``Stabiliser`` changed to ``Stabilizer``. 
 

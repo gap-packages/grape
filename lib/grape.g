@@ -3951,7 +3951,7 @@ cliquecovering := function(delta,k,start,olddelta)
 # In addition, we assume that on the initial call to this recursive function 
 # that m is an integer and delta.names=[1..delta.order]. 
 #
-local m,C,CC,c,d,t,s,cov,newdelta,D,K,A,translation,wts,i,j,startadj,fstart; 
+local m,C,CC,c,d,t,s,cov,newdelta,D,K,A,translation,wts,i,j; 
 if IsInt(start) then
    m:=start;
 else
@@ -3970,10 +3970,9 @@ elif k=1 then
    fi;
 fi;
 if not IsInt(start) then
-   translation:=Difference(Vertices(olddelta),start);
-   # translation[i] is the vertex in olddelta corresponding to 
-   # the i-th vertex in delta. 
-   startadj:=List(start,x->Adjacency(olddelta,x));
+  translation:=Difference(Vertices(olddelta),start);
+  # translation[i] is the vertex in olddelta corresponding to 
+  # the i-th vertex in delta. 
 fi;
 s:=m;
 while s*k>=delta.order do 
@@ -3987,18 +3986,13 @@ while s*k>=delta.order do
          CC:=[];
          for c in C do 
             t:=translation{c}; 
-            if Length(t)=m and t<start then
+            d:=Union(t,Filtered(start,x->IsSubset(Adjacency(olddelta,x),t)));
+            if Length(d)>m then
                continue;
-            fi;
-            fstart:=Filtered([1..Length(startadj)],
-               x->IsSubset(startadj[x],t)); 
-            if Length(fstart)+Length(t)>m then
+            fi; 
+            if Length(d)=m and 
+               (d<start or SmallestImageSet(olddelta.group,d)<start) then 
                continue;
-            elif Length(fstart)+Length(t)=m then
-               d:=Union(t,start{fstart}); 
-               if d<start or SmallestImageSet(olddelta.group,d)<start then 
-                  continue;
-               fi;
             fi;
             Add(CC,c);
          od;
@@ -4029,7 +4023,7 @@ while s*k>=delta.order do
    fi;
    for c in C do
       A:=Difference(Vertices(delta),c);
-      newdelta:=InducedSubgraph(delta,A,Stabilizer(delta.group,c,OnSets));
+      newdelta:=InducedSubgraph(delta,A,Stabiliser(delta.group,c,OnSets));
       if exhaustive_search then 
          cov:=cliquecovering(newdelta,k-1,c,delta); 
       else
