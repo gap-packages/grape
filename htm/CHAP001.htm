@@ -11,7 +11,7 @@
 <li> <A HREF="CHAP001.htm#SECT004">Examples of the use of GRAPE</a>
 </ol><p>
 <p>
-This manual describes the GRAPE (Version&nbsp;4.8.1) package for computing
+This manual describes the GRAPE (Version&nbsp;4.8.2) package for computing
 with graphs and groups.
 <p>
 GRAPE is primarily designed for the construction and analysis of
@@ -26,14 +26,11 @@ and in this case GRAPE algorithms may perform more slowly than strictly
 combinatorial algorithms (although this degradation in performance is
 hopefully never more than a fixed constant factor).
 <p>
-Most GRAPE functions are written entirely in the <font face="Gill Sans,Helvetica,Arial">GAP</font> language.
-However, the GRAPE functions <code>AutomorphismGroup</code>, <code>AutGroupGraph</code>,
-<code>IsIsomorphicGraph</code>, <code>GraphIsomorphismClassRepresentatives</code>,
-<code>GraphIsomorphism</code>  and <code>PartialLinearSpaces</code> make direct or indirect
-use the nauty <a href="biblio.htm#Nau90"><cite>Nau90</cite></a>, <a href="biblio.htm#MP14"><cite>MP14</cite></a> or bliss <a href="biblio.htm#JK07"><cite>JK07</cite></a> packages,
-via a GRAPE interface.  These functions can only be used on a fully
-installed version of GRAPE. Installation of GRAPE is described in
-this chapter of the manual.
+Certain GRAPE functions make direct or indirect use of the nauty
+<a href="biblio.htm#Nau90"><cite>Nau90</cite></a>, <a href="biblio.htm#MP14"><cite>MP14</cite></a> or bliss <a href="biblio.htm#JK07"><cite>JK07</cite></a> packages, for computing
+automorphism groups of graphs and testing graph isomorphism. Such functions
+can only be used on a fully installed version of GRAPE. Installation
+of GRAPE is described in this chapter of the manual.
 <p>
 Except for the nauty package of B.&nbsp;D.&nbsp;McKay included with GRAPE,
 the function <code>SmallestImageSet</code> by Steve Linton, the nauty interface
@@ -45,18 +42,13 @@ terms of the GNU General Public License as published by the Free Software
 Foundation; either version 2 of the License, or (at your option) any later
 version. For details, see <a href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a>.
 Further licensing and copyright information for GRAPE is contained
-in its <code>COPYING</code> file.
+in its <code>README.md</code> file.
 <p>
-If you use GRAPE to solve a problem then please send a short email
-about it to <a href="mailto:L.H.Soicher@qmul.ac.uk">L.H.Soicher@qmul.ac.uk</a>, and reference the GRAPE 
+If you use GRAPE in a published work, then please reference the
 package as follows:
 <p>
-L.H. Soicher, The GRAPE package for GAP, Version&nbsp;4.8.1, 2018,
+L.H. Soicher, The GRAPE package for GAP, Version&nbsp;4.8.2, 2019,
 <a href="https://gap-packages.github.io/grape">https://gap-packages.github.io/grape</a>.
-<p>
-If your work made use of a function depending on nauty or bliss
-then you should also reference nauty <a href="biblio.htm#Nau90,MP14"><cite>Nau90,MP14</cite></a> or bliss
-<a href="biblio.htm#JK07"><cite>JK07</cite></a> as appropriate.
 <p>
 The development of GRAPE was partially supported by a European
 Union HCM grant in ``Computational Group Theory''. It is currently
@@ -73,11 +65,11 @@ for Windows users of <font face="Gill Sans,Helvetica,Arial">GAP</font>. What fol
 You do not need to download and unpack an archive for GRAPE unless you
 want to install the package separately from your main <font face="Gill Sans,Helvetica,Arial">GAP</font> installation
 or are installing an upgrade of GRAPE to an existing installation
-of <font face="Gill Sans,Helvetica,Arial">GAP</font> (see the main <font face="Gill Sans,Helvetica,Arial">GAP</font> reference section <a href="https://www.gap-system.org/Manuals/doc/ref/chap76.html#X82473E4B8756C6CD">REF:Installing a GAP Package</a>).  If you do need to download GRAPE, you can find the most
+of <font face="Gill Sans,Helvetica,Arial">GAP</font> (see the main <font face="Gill Sans,Helvetica,Arial">GAP</font> reference section <a href="https://www.gap-system.org/Manuals/doc/ref/chap76.html#X82473E4B8756C6CD">Installing a GAP Package</a>).  If you do need to download GRAPE, you can find the most
 recent <code>.tar.gz</code> archive at <a href="https://gap-packages.github.io/grape">https://gap-packages.github.io/grape</a>.
 The archive file should be downloaded and unpacked in the <code>pkg</code>
 subdirectory of an appropriate <font face="Gill Sans,Helvetica,Arial">GAP</font> root directory (see the main <font face="Gill Sans,Helvetica,Arial">GAP</font>
-reference section <a href="https://www.gap-system.org/Manuals/doc/ref/chap9.html#X7A4973627A5DB27D">REF:GAP Root Directories</a>).
+reference section <a href="https://www.gap-system.org/Manuals/doc/ref/chap9.html#X7A4973627A5DB27D">GAP Root Directories</a>).
 <p>
 If your GRAPE installation does not include a pre-compiled binary of 
 the nauty/dreadnaut programs included with GRAPE and you do not want 
@@ -114,7 +106,7 @@ interface for GRAPE has only been extensively tested with the
 included Version&nbsp;2.2 of nauty, and the bliss interface has only
 been tested with Version&nbsp;0.73 of bliss. To use a separately
 installed version of nauty, type the following commands in <font face="Gill Sans,Helvetica,Arial">GAP</font>, or 
-place these commands in your <code>gaprc</code> file (see <a href="https://www.gap-system.org/Manuals/doc/ref/chap3.html#X84D4CF587D437C00">REF:The gaprc file</a>), where
+place these commands in your <code>gaprc</code> file (see <a href="https://www.gap-system.org/Manuals/doc/ref/chap3.html#X84D4CF587D437C00">The gaprc file</a>), where
 <code>dreadnaut_or_dreadnautB_executable</code> should be the name of your
 dreadnaut or dreadnautB executable file:
 <pre>
@@ -124,7 +116,7 @@ GRAPE_DREADNAUT_EXE := "dreadnaut_or_dreadnautB_executable";
 </pre>
 To use a separately installed version of bliss instead of nauty,
 type the following commands in <font face="Gill Sans,Helvetica,Arial">GAP</font>, or place these commands in your
-<code>gaprc</code> file (see <a href="https://www.gap-system.org/Manuals/doc/ref/chap3.html#X84D4CF587D437C00">REF:The gaprc file</a>), where <code>bliss_executable</code> should be
+<code>gaprc</code> file (see <a href="https://www.gap-system.org/Manuals/doc/ref/chap3.html#X84D4CF587D437C00">The gaprc file</a>), where <code>bliss_executable</code> should be
 the name of your bliss executable file:
 <pre>
 LoadPackage("grape"); 
@@ -163,11 +155,10 @@ where you should also send any comments or bug reports.
 <p>
 <h2><a name="SECT002">1.2 Loading GRAPE</a></h2>
 <p><p>
-Before using GRAPE you must load the package within <font face="Gill Sans,Helvetica,Arial">GAP</font> via: 
+Before using GRAPE you must load the package within <font face="Gill Sans,Helvetica,Arial">GAP</font> by typing:
 <p>
 <pre>
-gap&gt; LoadPackage("grape");
-true
+LoadPackage("grape");
 </pre>
 <p>
 <p>
@@ -255,5 +246,5 @@ gap&gt; GlobalParameters(EP);
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>October 2018
+<address>grape manual<br>March 2019
 </address></body></html>
