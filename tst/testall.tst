@@ -305,6 +305,93 @@ gap> List(L,VertexDegrees);
 [ [ 12 ], [ 30 ], [ 34 ], [ 16 ], [ 18 ], [ 22 ], [ 4 ] ]
 gap> List(L,Diameter);
 [ 3, 2, 1, 2, 2, 2, 3 ]
+gap> G:=OnePrimitiveGroup(DegreeOperation,[275],Size,[898128000],IsSimple,[true]);;
+gap> gamma:=EdgeOrbitsGraph(G,[1,2]);;
+gap> if VertexDegrees(gamma)[1]>(gamma.order-1)/2 then
+>    McL:=ComplementGraph(gamma);
+> else
+>    McL:=gamma;
+> fi;
+gap> Size(AutomorphismGroup(McL))/Size(McL.group); 
+2
+gap> GlobalParameters(McL); 
+[ [ 0, 0, 112 ], [ 1, 30, 81 ], [ 56, 56, 0 ] ]
+gap> gamma:=CompleteGraph(Group(()),0);; 
+gap> MaximumClique(gamma);
+[  ]
+gap> CliqueNumber(gamma);
+0
+gap> ChromaticNumber(gamma);
+0
+gap> gamma:=CompleteGraph(Group(()),20);; 
+gap> MaximumClique(gamma);
+[ 1 .. 20 ]
+gap> CliqueNumber(gamma);
+20
+gap> ChromaticNumber(gamma);
+20
+gap> gamma:=BipartiteDouble(gamma);; 
+gap> MaximumClique(gamma);
+[ 1, 22 ]
+gap> CliqueNumber(gamma);
+2
+gap> ChromaticNumber(gamma);
+2
+gap> gamma:=NullGraph(Group(()),20);; 
+gap> MaximumClique(gamma);
+[ 1 ]
+gap> CliqueNumber(gamma);
+1
+gap> ChromaticNumber(gamma);
+1
+gap> gamma:=DistanceSetInduced(McL,1,1);; 
+gap> CliqueNumber(gamma);
+4
+gap> ChromaticNumber(gamma);
+8
+gap> gamma:=DistanceSetInduced(gamma,1,1);; 
+gap> CliqueNumber(gamma);
+3
+gap> ChromaticNumber(gamma);
+3
+gap> gamma:=DistanceSetInduced(DistanceSetInduced(McL,1,1),2,1);; 
+gap> CliqueNumber(gamma);
+3
+gap> ChromaticNumber(gamma);
+7
+gap> gamma:=DistanceSetInduced(McL,2,1);; 
+gap> CliqueNumber(gamma);
+3
+gap> ChromaticNumber(gamma);
+10
+gap> CliqueNumber(ComplementGraph(gamma));
+21
+gap> gamma:=DistanceSetInduced(gamma,1,1);; 
+gap> CliqueNumber(gamma);
+2
+gap> ChromaticNumber(gamma);
+4
+gap> gamma:=DistanceSetInduced(DistanceSetInduced(McL,2,1),2,1);; 
+gap> CliqueNumber(gamma);
+3
+gap> ChromaticNumber(gamma);
+6
+gap> gamma:=DistanceSetInduced(gamma,2,1);; 
+gap> ConnectedComponents(gamma); 
+[ [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 
+      39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 
+      57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72 ] ]
+gap> OrderGraph(gamma);
+72
+gap> VertexDegrees(gamma); 
+[ 20 ]
+gap> CliqueNumber(gamma);
+3
+gap> ChromaticNumber(gamma);
+5
+gap> ChromaticNumber(ComplementGraph(gamma));
+24
 gap> STOP_TEST( "testall.tst", 10000 );
 ## The first argument of STOP_TEST should be the name of the test file.
 ## The number is a proportionality factor that is used to output a 

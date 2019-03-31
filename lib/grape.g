@@ -4023,7 +4023,7 @@ while s*k>=delta.order do
    fi;
    for c in C do
       A:=Difference(Vertices(delta),c);
-      newdelta:=InducedSubgraph(delta,A,Stabiliser(delta.group,c,OnSets));
+      newdelta:=InducedSubgraph(delta,A,Stabilizer(delta.group,c,OnSets));
       if exhaustive_search then 
          cov:=cliquecovering(newdelta,k-1,c,delta); 
       else
