@@ -1,6 +1,6 @@
 ##############################################################################
 ##
-##  grape.g (Version 4.8.2)    GRAPE Library     Leonard Soicher
+##  grape.g (Version 4.9)    GRAPE Library     Leonard Soicher
 ##
 ##  Copyright (C) 1992-2019 Leonard Soicher, School of Mathematical Sciences, 
 ##                      Queen Mary University of London, London E1 4NS, U.K.
@@ -523,7 +523,7 @@ end);
 BindGlobal("CopyGraph",function(gamma)
 #
 # Returns a "structural" copy  delta  of the graph  gamma,  and
-# also ensures that the appropriate components of  delta  are  immutable. 
+# also ensures that the appropriate components of  delta  are immutable. 
 # 
 local delta;
 if not IsGraph(gamma) then
@@ -535,6 +535,12 @@ delta.representatives:=Immutable(delta.representatives);
 delta.schreierVector:=Immutable(delta.schreierVector);
 if IsBound(delta.names) then
    delta.names:=Immutable(delta.names);
+fi;
+if IsBound(delta.maximumClique) then
+   delta.maximumClique:=Immutable(delta.maximumClique);
+fi;
+if IsBound(delta.minimumVertexColouring) then
+   delta.minimumVertexColouring:=Immutable(delta.minimumVertexColouring);
 fi;
 Unbind(delta.canonicalLabelling); # for safety
 return delta;
@@ -831,6 +837,8 @@ if not(y in gamma.adjacencies[-sch[x]]) then
    fi;
    Unbind(gamma.autGroup);
    Unbind(gamma.canonicalLabelling);
+   Unbind(gamma.maximumClique);
+   Unbind(gamma.minimumVertexColouring);
 fi;   
 end);
 
@@ -890,6 +898,8 @@ if y in gamma.adjacencies[-sch[x]] then
    fi;
    Unbind(gamma.autGroup);
    Unbind(gamma.canonicalLabelling);
+   Unbind(gamma.maximumClique);
+   Unbind(gamma.minimumVertexColouring);
 fi;   
 end);
 
@@ -2417,6 +2427,12 @@ fi;
 if IsBound(gamma.names) then
    delta.names:=Immutable(gamma.names);
 fi;
+if IsBound(gamma.maximumClique) then
+   delta.maximumClique:=Immutable(gamma.maximumClique);
+fi;
+if IsBound(gamma.minimumVertexColouring) then
+   delta.minimumVertexColouring:=Immutable(gamma.minimumVertexColouring);
+fi;
 for i in [1..Length(delta.representatives)] do
    delta.adjacencies[i]:=Adjacency(gamma,delta.representatives[i]);
 od;
@@ -2668,6 +2684,13 @@ fi;
 # fi;
 perminv:=perm^-1;
 delta.names:=Immutable(List([1..delta.order],i->VertexName(gamma,i^perminv)));
+if IsBound(gamma.maximumClique) then
+   delta.maximumClique:=Immutable(OnSets(gamma.maximumClique,perm)); 
+fi;
+if IsBound(gamma.minimumVertexColouring) then
+   delta.minumumVertexColouring:=Immutable(List([1..delta.order],
+      i->gamma.minimumVertexColouring[i^perminv]));
+fi;
 for i in [1..Length(delta.representatives)] do
    delta.adjacencies[i]:=
       OnSets(Adjacency(gamma,delta.representatives[i]^perminv),perm);
@@ -2766,7 +2789,7 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 # giving  dovector  the value  [1..d].
 #
 local IsFixedPoint,HasLargerEntry,k,smallorder,weights,weighted,originalG,
-      CompleteSubgraphsSearch,K,clique;
+      CompleteSubgraphsSearch,K,clique,cliquenumber;
 
 IsFixedPoint := function(G,point)
 #
@@ -3475,6 +3498,15 @@ else
       return [];
    fi; 
 fi;
+if not weighted and k>=0 and IsBound(gamma.maximumClique) then
+   if k>Length(gamma.maximumClique) then
+      # gamma has no clique of size k.
+      return [];
+   fi; 
+   if allsubs=0 and (not allmaxes or k=Length(gamma.maximumClique)) then
+      return [gamma.maximumClique{[1..k]}]; 
+   fi; 
+fi;
 K:=CompleteSubgraphsSearch(gamma,kvector,[],[]);
 for clique in K do
    Sort(clique); 
@@ -3835,7 +3867,9 @@ DeclareOperation("MaximumClique",[IsRecord]);
 InstallMethod(MaximumClique,"for GRAPE graph",[IsRecord],0, 
 function(gamma)
 #
-# Returns a clique of maximum size of the simple graph  gamma.
+# Returns a clique  C  of maximum size of the simple graph  gamma, 
+# and if  gamma.maximumClique  is unbound, sets  gamma.maximumClique 
+# to be an immutable copy of  C. 
 #
 local G,delta,C,CC,lower,upper,mid; 
 if not IsGraph(gamma) then 
@@ -3844,18 +3878,27 @@ fi;
 if not IsSimpleGraph(gamma) then
    Error("<gamma> must be a simple graph");
 fi;
+if IsBound(gamma.maximumClique) then
+   return ShallowCopy(gamma.maximumClique);
+fi; 
 if gamma.order=0 then
-   return [];
+   C:=[];
+   gamma.maximumClique:=Immutable(C); 
+   return C; 
 elif IsNullGraph(gamma) then
-   return [1];
+   C:=[1];
+   gamma.maximumClique:=Immutable(C); 
+   return C; 
 elif IsCompleteGraph(gamma) then
-   return [1..gamma.order];
+   C:=[1..gamma.order];
+   gamma.maximumClique:=Immutable(C); 
+   return C; 
 fi;
 G:=AutomorphismGroup(gamma); 
 if G=gamma.group then 
    delta:=gamma;
 else
-  delta:=NewGroupGraph(G,gamma);
+  delta:=NewGroupGraph(G,gamma); # to take full advantage of Aut(gamma)
 fi;
 lower:=1;
 C:=[1]; 
@@ -3873,6 +3916,7 @@ while upper-lower>1 do
       C:=CC[1];
    fi;
 od;
+gamma.maximumClique:=Immutable(C); 
 return C;
 end); 
 
@@ -4172,6 +4216,14 @@ if IsBound(arg[3]) then
       return fail;
    fi;
 fi;
+if IsBound(gamma.minimumVertexColouring) then
+   C:=gamma.minimumVertexColouring;
+   if k<Length(Set(C)) then  # k < chromatic number of gamma
+      return fail;
+   else 
+      return ShallowCopy(C);
+   fi;
+fi;
 if gamma.order=0 then
    return [];
 fi;
@@ -4319,7 +4371,9 @@ InstallMethod(MinimumVertexColouring,"for GRAPE graph",[IsRecord],0,
 function(gamma)
 #
 # Let  gamma  be a simple graph. Then this function returns a proper vertex-
-# colouring of  gamma,  using as few colours as possible.
+# colouring  C  of  gamma,  using as few colours as possible, and if
+# gamma.minimumVertexColouring  is unbound, sets  gamma.minimumVertexColouring 
+# to be an immutable copy of  C. 
 #
 # A proper vertex-colouring of  gamma  is given as a list  C  of 
 # length  gamma.order  of positive integers, such that  C[i]  is the 
@@ -4333,6 +4387,9 @@ fi;
 if not IsSimpleGraph(gamma) then
    Error("<gamma> must be a simple graph");
 fi;
+if IsBound(gamma.minimumVertexColouring) then
+   return ShallowCopy(gamma.minimumVertexColouring); 
+fi;     
 cov:=GRAPE_MinimumCliqueCovering(ComplementGraph(gamma)); 
 C:=[];
 for i in [1..Length(cov)] do
@@ -4340,6 +4397,7 @@ for i in [1..Length(cov)] do
       C[j]:=i;
    od;
 od;
+gamma.minimumVertexColouring:=Immutable(C); 
 return C;
 end);
 
