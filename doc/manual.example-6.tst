@@ -218,3 +218,17 @@ gap> Size(delta.group);
 48
 gap> IsIsomorphicGraph( gamma, delta );
 true
+gap> J:=JohnsonGraph(4,2);
+rec( adjacencies := [ [ 2, 3, 4, 5 ] ], group := Group([ (1,4,6,3)(2,5), (2,4)
+  (3,5) ]), isGraph := true, isSimple := true,
+  names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 2, 4 ], [ 3, 4 ] ],
+  order := 6, representatives := [ 1 ],
+  schreierVector := [ -1, 2, 1, 1, 1, 1 ] )
+gap> JIm:=GraphImage(J,(1,2,3,4,5));
+rec( adjacencies := [ [ 2, 4, 5, 6 ] ], group := Group([ (1,3)(2,5,6,4), (1,4)
+  (3,5) ]), isGraph := true, isSimple := true,
+  names := [ [ 2, 4 ], [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 2, 3 ], [ 3, 4 ] ],
+  order := 6, representatives := [ 1 ],
+  schreierVector := [ -1, 1, 1, 2, 2, 1 ] )
+gap> IsIsomorphicGraph(J,JIm);
+true

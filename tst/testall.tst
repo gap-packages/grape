@@ -392,6 +392,10 @@ gap> ChromaticNumber(gamma);
 5
 gap> ChromaticNumber(ComplementGraph(gamma));
 24
+gap> J:=JohnsonGraph(4,2);;
+gap> JIm:=GraphImage(J,(1,2,3,4,5));;
+gap> IsIsomorphicGraph(J,JIm);
+true
 gap> STOP_TEST( "testall.tst", 10000 );
 ## The first argument of STOP_TEST should be the name of the test file.
 ## The number is a proportionality factor that is used to output a 
