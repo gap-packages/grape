@@ -10,10 +10,10 @@ PackageName := "GRAPE",
 
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers.
-Version := "4.8.2",
+Version := "4.8.3",
 
 ##  Release date of the current version in dd/mm/yyyy format.
-Date := "20/03/2019",
+Date := "16/07/2019",
 
 SourceRepository := rec(
     Type := "git",

@@ -1,3 +1,14 @@
+Main changes from GRAPE 4.8.2 to GRAPE 4.8.3 (July 2019)
+--------------------------------------------------------
+
+1. Implemented new optional components maximumClique and 
+minimumVertexColouring for (simple) GRAPE graphs.
+
+2. Function GraphImage documented, and a test added for this function. 
+
+3. Last (accidently) remaining function call ``Stabiliser`` changed 
+to ``Stabilizer``. 
+
 Main changes from GRAPE 4.8.1 to GRAPE 4.8.2 (March 2019)
 ---------------------------------------------------------
 
