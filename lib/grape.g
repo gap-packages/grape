@@ -2688,7 +2688,7 @@ if IsBound(gamma.maximumClique) then
    delta.maximumClique:=Immutable(OnSets(gamma.maximumClique,perm)); 
 fi;
 if IsBound(gamma.minimumVertexColouring) then
-   delta.minumumVertexColouring:=Immutable(List([1..delta.order],
+   delta.minimumVertexColouring:=Immutable(List([1..delta.order],
       i->gamma.minimumVertexColouring[i^perminv]));
 fi;
 for i in [1..Length(delta.representatives)] do
