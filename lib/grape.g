@@ -2788,8 +2788,9 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 # of [1..d].  There is no harm (except perhaps for efficiency) in 
 # giving  dovector  the value  [1..d].
 #
-local IsFixedPoint,HasLargerEntry,k,smallorder,weights,weighted,originalG,
-      CompleteSubgraphsSearch,K,clique,cliquenumber;
+local IsFixedPoint,HasLargerEntry,k,smallorder,weights,weighted,
+      originalG,originalgamma,includingallmaximalreps, 
+      CompleteSubgraphsSearch,K,clique,cliquenumber,chromaticnumber;
 
 IsFixedPoint := function(G,point)
 #
@@ -3476,20 +3477,23 @@ fi;
 smallorder:=8; # Any group with order <= smallorder is considered small,
                # and we calculate orbits on cliques explicitly for these
                # groups when  allsubs=2.
+originalgamma:=gamma;
+originalG:=gamma.group;
 gamma:=ShallowCopy(gamma);
 gamma.names:=Immutable([1..gamma.order]);
-originalG:=gamma.group;
 k:=Sum(kvector);
 if k<0 then
    if Length(kvector)<>1 then
       Error("cannot have Sum(<kvector>)<0 if Length(<kvector>)<>1");
    fi;
+   includingallmaximalreps:=(allsubs>0); 
    partialcolour:=false;
    weightvectors:=List([1..gamma.order],x->[1]);
    weights:=ListWithIdenticalEntries(gamma.order,1); 
    weighted:=false;
    dovector:=[1];
 else
+   includingallmaximalreps:=false; 
    weights:=List(weightvectors,x->Sum(x));
    weighted:=not ForAll(weightvectors,x->x=[1]);
    if weighted and ForAll(weights,x->x=weights[1]) 
@@ -3498,20 +3502,42 @@ else
       return [];
    fi; 
 fi;
-if not weighted and k>=0 and IsBound(gamma.maximumClique) then
-   if k>Length(gamma.maximumClique) then
-      # gamma has no clique of size k.
-      return [];
-   fi; 
-   if allsubs=0 and (not allmaxes or k=Length(gamma.maximumClique)) then
-      return [gamma.maximumClique{[1..k]}]; 
-   fi; 
+if not weighted and k>=0 then
+   if IsBound(gamma.maximumClique) then
+      cliquenumber:=Length(gamma.maximumClique);
+      if k>cliquenumber then
+         # gamma has no clique of size k.
+         return [];
+      fi; 
+      if allsubs=0 and (not allmaxes or k=cliquenumber) then
+         return [gamma.maximumClique{[1..k]}]; 
+      fi; 
+   elif IsBound(gamma.minimumVertexColouring) then
+      chromaticnumber:=Length(Set(gamma.minimumVertexColouring));
+      if k>chromaticnumber then
+         # gamma has no clique of size k.
+         return [];
+      fi; 
+   fi;
 fi;
 K:=CompleteSubgraphsSearch(gamma,kvector,[],[]);
 for clique in K do
    Sort(clique); 
 od;
 Sort(K);
+if not weighted and not IsBound(originalgamma.maximumClique) then 
+   if includingallmaximalreps then 
+      #  K  contains a maximum clique of  originalgamma.
+      cliquenumber:=Maximum(List(K,Length));
+      originalgamma.maximumClique:=Immutable(First(K,x->Length(x)=cliquenumber));
+   elif IsBound(originalgamma.minimumVertexColouring) then 
+      chromaticnumber:=Length(Set(originalgamma.minimumVertexColouring));
+      if ForAny(K,x->Length(x)=chromaticnumber) then
+         cliquenumber:=chromaticnumber;
+         originalgamma.maximumClique:=Immutable(First(K,x->Length(x)=cliquenumber));
+      fi;
+   fi;
+fi; 
 return K;
 end);
 
@@ -3902,7 +3928,11 @@ else
 fi;
 lower:=1;
 C:=[1]; 
-upper:=Maximum(VertexDegrees(delta))+2; 
+if IsBound(gamma.minimumVertexColouring) then
+   upper:=Length(Set(gamma.minimumVertexColouring))+1; 
+else
+   upper:=Maximum(VertexDegrees(delta))+2; 
+fi;
 while upper-lower>1 do 
    # Loop invariant: lower and upper are integers,
    # max clique size is in [lower,upper),
@@ -4223,6 +4253,10 @@ if IsBound(gamma.minimumVertexColouring) then
    else 
       return ShallowCopy(C);
    fi;
+elif IsBound(gamma.maximumClique) then
+   if k<Length(gamma.maximumClique) then
+      return fail;
+   fi;
 fi;
 if gamma.order=0 then
    return [];
@@ -4294,8 +4328,13 @@ for i in [1..Length(gamma.representatives)] do
 od;
 if maxcolour<=k then 
    #  C  is a k-colouring.
+   if IsBound(gamma.maximumClique) and Length(gamma.maximumClique)=Length(Set(C)) then
+      #  C  is a minimum vertex-colouring of  gamma.
+      gamma.minimumVertexColouring:=Immutable(C);
+   fi;
    return C;
 fi;
+# Otherwise, we need to work harder. 
 if IsBound(arg[3]) then 
    cov:=GRAPE_CliqueCovering(ComplementGraph(gamma),k,arg[3]);
 else
@@ -4311,6 +4350,10 @@ for i in [1..Length(cov)] do
       C[j]:=i;
    od;
 od;
+if IsBound(gamma.maximumClique) and Length(gamma.maximumClique)=Length(Set(C)) then
+   #  C  is a minimum vertex-colouring of  gamma.
+   gamma.minimumVertexColouring:=Immutable(C);
+fi;
 return C;   
 end);
 
