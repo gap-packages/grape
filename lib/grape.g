@@ -48,6 +48,52 @@ GRAPE_DREADNAUT_EXE :=
 GRAPE_BLISS_EXE := ExternalFilename(DirectoriesSystemPrograms(),"bliss"); 
    # filename of bliss executable
 
+# The following variant of GAP's Exec is more flexible, and does not require a
+# shell. That makes is more reliable on Windows resp. with Cygwin. Moreover,
+# it allows to redirect input and output.
+BindGlobal("GRAPE_Exec", function(cmd, args, infile, outfile)
+  local instream, outstream, dir, status;
+
+  if not IsString(cmd) then
+    Error("<cmd> must be a file path");
+  fi;
+
+  if IsInputStream(infile) then
+    instream := infile;
+  elif IsString(infile) then
+    instream := InputTextFile(infile);
+  else
+    Error("<infile> must be an input stream or a file name");
+  fi;
+
+  if IsOutputStream(outfile) then
+    outstream := outfile;
+  elif IsString(outfile) then
+    outstream := InputTextFile(outfile);
+    SetPrintFormattingStatus(outstream, false);
+  else
+    Error("<outfile> must be an output stream or a file name");
+  fi;
+
+  # execute in the current directory
+  dir := DirectoryCurrent();
+
+  # execute the command
+  status := Process(dir, cmd, instream, outstream, args);
+
+  # close any file streams that we opened (for stream given to us,
+  # the caller is responsible for closing them)
+  if IsString(infile) then
+    CloseStream(instream);
+  fi;
+  if IsString(outfile) then
+    CloseStream(outstream);
+  fi;
+
+  return status;
+end);
+
+
 BindGlobal("GRAPE_OrbitRepresentatives",function(arg)
 #
 # Let  G=arg[1],  L=arg[2],  act=arg[3]  (default: OnPoints).  Then this 
@@ -4705,7 +4751,7 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
   PrintTo(ftmp2_stream,gamma.order,"\n"); 
   CloseStream(ftmp2_stream);
 
-  Exec(GRAPE_DREADNAUT_EXE,"<",fdre);
+  GRAPE_Exec(GRAPE_DREADNAUT_EXE, [], fdre, OutputTextUser());
 
   if not IsBound(gr.autGroup) then 
     fg:=ReadOutputNauty(ftmp1);
@@ -4722,8 +4768,6 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
   RemoveFile(ftmp2);
   RemoveFile(fdre);
    
-  return;
-
 end);
 
 BindGlobal("PrintStreamBlissGraph",function(stream,gamma,col)
@@ -4829,9 +4873,9 @@ BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr, setcanon)
   CloseStream(fdre_stream);
 
   if setcanon then
-    Exec(GRAPE_BLISS_EXE, "-directed", "-can", fdre, ">", ftmp);
+    GRAPE_Exec(GRAPE_BLISS_EXE, [ "-directed", "-can", fdre ], InputTextUser(), ftmp);
   else
-    Exec(GRAPE_BLISS_EXE, "-directed", fdre, ">", ftmp);
+    GRAPE_Exec(GRAPE_BLISS_EXE, [ "-directed", fdre ], InputTextUser(), ftmp);
   fi;
 
   fg:=ReadOutputBliss(ftmp,setcanon);
@@ -4847,8 +4891,6 @@ BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr, setcanon)
 
   RemoveFile(ftmp);
   RemoveFile(fdre);
-   
-  return;
 
 end);
 
