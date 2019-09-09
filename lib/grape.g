@@ -51,28 +51,19 @@ GRAPE_BLISS_EXE := ExternalFilename(DirectoriesSystemPrograms(),"bliss");
 # The following variant of GAP's Exec is more flexible, and does not require a
 # shell. That makes is more reliable on Windows resp. with Cygwin. Moreover,
 # it allows to redirect input and output.
-BindGlobal("GRAPE_Exec", function(cmd, args, infile, outfile)
-  local instream, outstream, dir, status;
+BindGlobal("GRAPE_Exec", function(cmd, args, instream, outstream)
+  local dir, status;
 
   if not IsString(cmd) then
     Error("<cmd> must be a file path");
   fi;
 
-  if IsInputStream(infile) then
-    instream := infile;
-  elif IsString(infile) then
-    instream := InputTextFile(infile);
-  else
-    Error("<infile> must be an input stream or a file name");
+  if not IsInputStream(instream) then
+    Error("<instream> must be an input stream");
   fi;
 
-  if IsOutputStream(outfile) then
-    outstream := outfile;
-  elif IsString(outfile) then
-    outstream := InputTextFile(outfile);
-    SetPrintFormattingStatus(outstream, false);
-  else
-    Error("<outfile> must be an output stream or a file name");
+  if not IsOutputStream(outstream) then
+    Error("<outstream> must be an output stream");
   fi;
 
   # execute in the current directory
@@ -80,15 +71,6 @@ BindGlobal("GRAPE_Exec", function(cmd, args, infile, outfile)
 
   # execute the command
   status := Process(dir, cmd, instream, outstream, args);
-
-  # close any file streams that we opened (for stream given to us,
-  # the caller is responsible for closing them)
-  if IsString(infile) then
-    CloseStream(instream);
-  fi;
-  if IsString(outfile) then
-    CloseStream(outstream);
-  fi;
 
   return status;
 end);
