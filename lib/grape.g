@@ -48,6 +48,52 @@ GRAPE_DREADNAUT_EXE :=
 GRAPE_BLISS_EXE := ExternalFilename(DirectoriesSystemPrograms(),"bliss"); 
    # filename of bliss executable
 
+# The following variant of GAP's Exec is more flexible, and does not require a
+# shell. That makes is more reliable on Windows resp. with Cygwin. Moreover,
+# it allows to redirect input and output.
+BindGlobal("GRAPE_Exec", function(cmd, args, infile, outfile)
+  local instream, outstream, dir, status;
+
+  if not IsString(cmd) then
+    Error("<cmd> must be a file path");
+  fi;
+
+  if IsInputStream(infile) then
+    instream := infile;
+  elif IsString(infile) then
+    instream := InputTextFile(infile);
+  else
+    Error("<infile> must be an input stream or a file name");
+  fi;
+
+  if IsOutputStream(outfile) then
+    outstream := outfile;
+  elif IsString(outfile) then
+    outstream := InputTextFile(outfile);
+    SetPrintFormattingStatus(outstream, false);
+  else
+    Error("<outfile> must be an output stream or a file name");
+  fi;
+
+  # execute in the current directory
+  dir := DirectoryCurrent();
+
+  # execute the command
+  status := Process(dir, cmd, instream, outstream, args);
+
+  # close any file streams that we opened (for stream given to us,
+  # the caller is responsible for closing them)
+  if IsString(infile) then
+    CloseStream(instream);
+  fi;
+  if IsString(outfile) then
+    CloseStream(outstream);
+  fi;
+
+  return status;
+end);
+
+
 BindGlobal("GRAPE_OrbitRepresentatives",function(arg)
 #
 # Let  G=arg[1],  L=arg[2],  act=arg[3]  (default: OnPoints).  Then this 
@@ -4504,7 +4550,6 @@ Add(GAPInfo.PostRestoreFuncs,function()
   MakeReadWriteGlobal("GRAPE_nautytmpdir");
   Unbind(GRAPE_nautytmpdir);
   BindGlobal("GRAPE_nautytmpdir",DirectoryTemporary());
-  return;
 end);
 
 BindGlobal("PrintStreamNautyGraph",function(stream,gamma,col)
@@ -4669,16 +4714,14 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
 
   ftmp1:=Filename(GRAPE_nautytmpdir,"ftmp1");
   ftmp2:=Filename(GRAPE_nautytmpdir,"ftmp2");
-  fdre:=Filename(GRAPE_nautytmpdir,"fdre");
   
   # In principle redundant, but a failed call might have left files sitting
   # -- just throw out what will be overwritten anyhow.
   RemoveFile(ftmp1);
   RemoveFile(ftmp2);
-  RemoveFile(fdre);
 
-  fdre_stream:=OutputTextFile(fdre,false); 
-  
+  fdre:="";
+  fdre_stream:=OutputTextString(fdre,false);
   SetPrintFormattingStatus(fdre_stream,false);
   PrintStreamNautyGraph(fdre_stream,gamma,col);
   
@@ -4705,7 +4748,7 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
   PrintTo(ftmp2_stream,gamma.order,"\n"); 
   CloseStream(ftmp2_stream);
 
-  Exec(GRAPE_DREADNAUT_EXE,"<",fdre);
+  GRAPE_Exec(GRAPE_DREADNAUT_EXE, [], InputTextString(fdre), OutputTextUser());
 
   if not IsBound(gr.autGroup) then 
     fg:=ReadOutputNauty(ftmp1);
@@ -4720,10 +4763,7 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
 
   RemoveFile(ftmp1);
   RemoveFile(ftmp2);
-  RemoveFile(fdre);
    
-  return;
-
 end);
 
 BindGlobal("PrintStreamBlissGraph",function(stream,gamma,col)
@@ -4756,11 +4796,10 @@ BindGlobal("PrintStreamBlissGraph",function(stream,gamma,col)
   od;
 end);
 
-BindGlobal("ReadOutputBliss",function(file,canon)
+BindGlobal("ReadOutputBliss",function(f,canon)
 # Original procedure by Jerry James. Updated by Leonard Soicher.
-  local f, gens, l, i, pi, can;
+  local gens, l, i, pi, can;
 
-  f:=InputTextFile(file);
   if f=fail then
     Error("cannot find output produced by `bliss'");
   fi;
@@ -4789,7 +4828,7 @@ BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr, setcanon)
 # of the graph or graph with colour-classes  gr.
 # Uses the bliss system. 
 #
-  local gamma,col,ftmp,fdre,fg,fdre_stream,gp;
+  local gamma,col,ftmp,ftmp_stream,fdre,fg,fdre_stream,gp;
   if IsBound(gr.canonicalLabelling) then
     setcanon:=false;
   fi;
@@ -4814,27 +4853,28 @@ BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr, setcanon)
     return;
   fi;
 
-  ftmp:=Filename(GRAPE_nautytmpdir,"ftmp");
   fdre:=Filename(GRAPE_nautytmpdir,"fdre");
   
   # In principle redundant, but a failed call might have left files sitting
   # -- just throw out what will be overwritten anyhow.
-  RemoveFile(ftmp);
   RemoveFile(fdre);
 
   fdre_stream:=OutputTextFile(fdre,false); 
-  
   SetPrintFormattingStatus(fdre_stream,false);
   PrintStreamBlissGraph(fdre_stream,gamma,col);
   CloseStream(fdre_stream);
 
+  ftmp:="";
+  ftmp_stream:=OutputTextString(ftmp,false);
+  SetPrintFormattingStatus(ftmp_stream,false);
+
   if setcanon then
-    Exec(GRAPE_BLISS_EXE, "-directed", "-can", fdre, ">", ftmp);
+    GRAPE_Exec(GRAPE_BLISS_EXE, [ "-directed", "-can", fdre ], InputTextUser(), ftmp_stream);
   else
-    Exec(GRAPE_BLISS_EXE, "-directed", fdre, ">", ftmp);
+    GRAPE_Exec(GRAPE_BLISS_EXE, [ "-directed", fdre ], InputTextUser(), ftmp_stream);
   fi;
 
-  fg:=ReadOutputBliss(ftmp,setcanon);
+  fg:=ReadOutputBliss(InputTextString(ftmp),setcanon);
   # fg[1]=gens for the aut group, 
   # fg[2]=canonical labelling if setcanon=true, else the empty list
   if not IsBound(gr.autGroup) then 
@@ -4845,10 +4885,7 @@ BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr, setcanon)
     gr.canonicalLabelling:=fg[2];
   fi;
 
-  RemoveFile(ftmp);
   RemoveFile(fdre);
-   
-  return;
 
 end);
 
