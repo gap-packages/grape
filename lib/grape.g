@@ -75,35 +75,6 @@ BindGlobal("GRAPE_Exec", function(cmd, args, instream, outstream)
   return status;
 end);
 
-
-BindGlobal("GRAPE_OrbitRepresentatives",function(arg)
-#
-# Let  G=arg[1],  L=arg[2],  act=arg[3]  (default: OnPoints).  Then this 
-# function returns a list of representatives of  Orbits(G,L,act)  
-# (one representative per orbit),  although these representatives should 
-# not be regarded as canonical in any way, and may or may not be mutable.
-#
-local G,L,act,x,reps;
-G:=arg[1];
-L:=arg[2];
-if IsBound(arg[3]) then 
-   act:=arg[3];
-else
-   act:=OnPoints;
-fi;
-if not (IsGroup(G) and IsList(L) and IsFunction(act)) then 
-   Error("usage: GRAPE_OrbitRepresentatives( <Group>, <List> [, <Function> ] )");
-fi;
-reps:=[];
-for x in L do
-   if ForAll(reps,y->RepresentativeAction(G,x,y,act)=fail) then
-      # x is a new orbit-representative
-      Add(reps,x);
-   fi;
-od;
-return reps;
-end);
-
 BindGlobal("GRAPE_OrbitNumbers",function(G,n)
 #
 # Returns the orbits of  G  on  [1..n]  in the form of a record 
