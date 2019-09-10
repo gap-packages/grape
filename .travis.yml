@@ -5,10 +5,13 @@ addons:
     - libgmp-dev
     - libreadline-dev
     - zlib1g-dev
+    - bliss
 
 matrix:
   include:
     - env: GAPBRANCH=master
+    - env: GAPBRANCH=master GRAPE_NAUTY=false  # test with bliss
+    - env: GAPBRANCH=stable-4.11
     - env: GAPBRANCH=stable-4.10
     - env: GAPBRANCH=stable-4.9
     - env: GAPBRANCH=master ABI=32
