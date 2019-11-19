@@ -28,7 +28,11 @@ as follows:
 L.H. Soicher, The GRAPE package for GAP, Version 4.8.3, 2019,
 <https://gap-packages.github.io/grape>.
 
-Any comments or bug reports should go to <L.H.Soicher@qmul.ac.uk>.
+Questions, remarks, suggestions, and issues
+-------------------------------------------
+
+For questions, remarks, suggestions, and issues, please use the 
+issue tracker at <https://github.com/gap-packages/grape/issues>.
 
 Installing GRAPE
 ----------------
