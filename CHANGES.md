@@ -1,5 +1,5 @@
-Main changes from GRAPE 4.8.2 to GRAPE 4.8.3 (July 2019)
---------------------------------------------------------
+Main changes from GRAPE 4.8.2 to GRAPE 4.8.3 (November 2019)
+------------------------------------------------------------
 
 1. Implemented new optional components maximumClique and 
 minimumVertexColouring for (simple) GRAPE graphs.
@@ -10,6 +10,11 @@ minimumVertexColouring for (simple) GRAPE graphs.
 to ``Stabilizer``. 
 
 4. More tests added to tst/testall.tst.
+
+5. Removed unused function ``GRAPE_OrbitRepresentatives``. 
+
+6. Committed  Max Horn's pull requests to fix problems with 
+Windows 64-bit execution of nauty.
 
 Main changes from GRAPE 4.8.1 to GRAPE 4.8.2 (March 2019)
 ---------------------------------------------------------
