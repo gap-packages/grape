@@ -3482,10 +3482,11 @@ gamma:=ShallowCopy(gamma);
 gamma.names:=Immutable([1..gamma.order]);
 k:=Sum(kvector);
 if k<0 then
+   # We are computing maximal complete subgraphs (not of given size).
    if Length(kvector)<>1 then
       Error("cannot have Sum(<kvector>)<0 if Length(<kvector>)<>1");
    fi;
-   includingallmaximalreps:=(allsubs>0); 
+   includingallmaximalreps:=(allsubs in [1,2]); 
    partialcolour:=false;
    weightvectors:=List([1..gamma.order],x->[1]);
    weights:=ListWithIdenticalEntries(gamma.order,1); 
