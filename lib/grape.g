@@ -49,7 +49,7 @@ GRAPE_BLISS_EXE := ExternalFilename(DirectoriesSystemPrograms(),"bliss");
    # filename of bliss executable
 
 # The following variant of GAP's Exec is more flexible, and does not require a
-# shell. That makes is more reliable on Windows resp. with Cygwin. Moreover,
+# shell. That makes it more reliable on Windows resp. with Cygwin. Moreover,
 # it allows to redirect input and output.
 BindGlobal("GRAPE_Exec", function(cmd, args, instream, outstream)
   local dir, status;
@@ -265,7 +265,8 @@ BindGlobal("NullGraph",function(arg)
 # Returns a null graph with  n  vertices and group  G=arg[1].
 # If  arg[2]  is bound then  n=arg[2],  otherwise  n  is the maximum 
 # largest moved point of the generators of  G.
-# The  names,  autGroup,  and  canonicalLabelling  components of the 
+# The  names,  autGroup,  maximumClique,  minimumVertexColouring,
+# and  canonicalLabelling  components of the 
 # returned null graph are left unbound; however, the  isSimple  
 # component is set (to true).
 #
@@ -325,7 +326,8 @@ BindGlobal("CompleteGraph",function(arg)
 # value true then the complete graph will have all possible loops, 
 # otherwise it will have no loops (the default).
 #
-# The  names,  autGroup,  and  canonicalLabelling  components of the 
+# The  names,  autGroup,  maximumClique,  minimumVertexColouring,
+# and  canonicalLabelling  components of the 
 # returned complete graph are left unbound; however, the  isSimple  
 # component is set (appropriately).
 #
