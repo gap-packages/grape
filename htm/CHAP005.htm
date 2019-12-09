@@ -85,11 +85,11 @@ gap&gt; Bicomponents( BipartiteDouble( JohnsonGraph(4,2) ) );
 <li><code>DistanceSet( </code><var>gamma</var><code>, </code><var>distances</var><code>, </code><var>V</var><code>, </code><var>G</var><code> )</code>
 <p>
 Let <var>V</var> be a vertex or a nonempty list of vertices of <var>gamma</var>.
-This function returns the set of vertices <i>w</i> of <var>gamma</var>, such that
-<i>d</i>(<i>V</i> ,<i>w</i>) is in <var>distances</var> (a list or singleton distance).
+This function returns the set of vertices <var>w</var> of <var>gamma</var>, such that
+<var>d(<var>V</var>,w)</var> is in <var>distances</var> (a list or singleton distance).
 <p>
 The optional  parameter <var>G</var>, if  present, is assumed to be  a subgroup of
-\Aut(<i>gamma</i> )  fixing <var>V</var> setwise.  Including  such a <var>G</var> can speed  up
+<var>Aut(<var>gamma</var>)</var>  fixing <var>V</var> setwise.  Including  such a <var>G</var> can speed  up
 the function.
 <p>
 See also <a href="CHAP003.htm#SSEC015.1">Distance</a> and <a href="CHAP006.htm#SSEC002.1">DistanceSetInduced</a>.
@@ -107,11 +107,11 @@ gap&gt; DistanceSet( JohnsonGraph(4,2), 1, [1,6] );
 <li><code>Layers( </code><var>gamma</var><code>, </code><var>V</var><code>, </code><var>G</var><code> )</code>
 <p>
 Let <var>V</var> be a vertex or a nonempty list of vertices of <var>gamma</var>.  This
-function returns a list whose <i>i</i>-th element is the set of vertices of
-<var>gamma</var> at distance <i>i</i>&#8722;1 from <var>V</var>.
+function returns a list whose <var>i</var>-th element is the set of vertices of
+<var>gamma</var> at distance <var>i-1</var> from <var>V</var>.
 <p>
 The optional  parameter  <var>G</var>, if present, is assumed to  be a subgroup of
-\Aut(<i>gamma</i> ) which fixes <var>V</var>  setwise.  Including such a <var>G</var> can speed
+<var>Aut(<var>gamma</var>)</var> which fixes <var>V</var>  setwise.  Including such a <var>G</var> can speed
 up the function.
 <p>
 See also <a href="CHAP003.htm#SSEC015.1">Distance</a>.
@@ -151,5 +151,5 @@ gap&gt; IndependentSet( JohnsonGraph(4,2), [3] );
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP004.htm">Previous</a>] [<a href ="CHAP006.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>March 2019
+<address>grape manual<br>December 2019
 </address></body></html>

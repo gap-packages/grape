@@ -1,11 +1,11 @@
 
-The GRAPE 4.8.2 Package for GAP
+The GRAPE 4.8.3 Package for GAP
 ===============================
 
 GRAPE is a GAP package for computing with graphs and groups, 
 by Leonard H. Soicher, with contributions from Steve Linton, Alexander
-Hulpke and Jerry James, and including Brendan McKay's nauty 2.2 (final
-patched version) package.
+Hulpke, Jerry James and Max Horn, and including Brendan McKay's nauty 2.2 
+(final patched version) package.
 
 The GRAPE package and the source included with this distribution are
 copyright (C) Leonard Soicher 1992-2019, except for the following:
@@ -25,10 +25,14 @@ Referencing GRAPE
 Please reference your use of the GRAPE package in a published work
 as follows:
 
-L.H. Soicher, The GRAPE package for GAP, Version 4.8.2, 2019,
+L.H. Soicher, The GRAPE package for GAP, Version 4.8.3, 2019,
 <https://gap-packages.github.io/grape>.
 
-Any comments or bug reports should go to <L.H.Soicher@qmul.ac.uk>.
+Questions, remarks, suggestions, and issues
+-------------------------------------------
+
+For questions, remarks, suggestions, and issues, please use the 
+issue tracker at <https://github.com/gap-packages/grape/issues>.
 
 Installing GRAPE
 ----------------

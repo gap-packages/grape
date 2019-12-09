@@ -40,12 +40,12 @@ This function returns a proper vertex-colouring <var>C</var> for the graph
 <a name = "I1"></a>
 
 of <var>gamma</var> is an assignment of colours to the vertices
-of <var>gamma</var>, such that, if [<i>i</i>,<i>j</i>] is an edge, then vertices <i>i</i> and <i>j</i>
+of <var>gamma</var>, such that, if <var>[i,j]</var> is an edge, then vertices <var>i</var> and <var>j</var>
 are assigned different colours.
 <p>
 The returned proper vertex-colouring <var>C</var> is given as a list of positive
 integers (the <strong>colours</strong>), indexed by the vertices of <var>gamma</var>, with the
-property that <i>C</i> [<i>i</i>] &#8800; <i>C</i> [<i>j</i>] whenever [<i>i</i>,<i>j</i>] is an edge of <var>gamma</var>.
+property that <var><var>C</var>[i]not=<var>C</var>[j]</var> whenever <var>[i,j]</var> is an edge of <var>gamma</var>.
 <p>
 If the optional parameter <var>k</var> is given, then <var>k</var> must be a non-negative
 integer. In this case, a proper vertex-colouring using at most <var>k</var>
@@ -87,7 +87,7 @@ is a proper vertex-colouring using as few colours as possible.
 <p>
 The returned minimum vertex-colouring <var>C</var> is given as a list of positive
 integers (the <strong>colours</strong>), indexed by the vertices of <var>gamma</var>, with the
-property that <i>C</i> [<i>i</i>] &#8800; <i>C</i> [<i>j</i>] whenever [<i>i</i>,<i>j</i>] is an edge of <var>gamma</var>,
+property that <var><var>C</var>[i]not=<var>C</var>[j]</var> whenever <var>[i,j]</var> is an edge of <var>gamma</var>,
 and subject to this property, the number of distinct elements of <var>C</var>
 is as small as possible.
 <p>
@@ -144,7 +144,7 @@ represented by its vertex-set.  If <var>k</var> is non-negative then the element
 of <var>K</var> each have size <var>k</var>, otherwise the elements of <var>K</var> represent maximal
 complete subgraphs of <var>gamma</var>. (A <strong>maximal complete subgraph</strong> of <var>gamma</var>
 is a complete subgraph of <var>gamma</var> which is not properly contained in
-another complete subgraph of <var>gamma</var>.) The default for <var>k</var> is &#8722;1,
+another complete subgraph of <var>gamma</var>.) The default for <var>k</var> is <var>-1</var>,
 i.e. maximal complete subgraphs.  See also <code>CompleteSubgraphsOfGivenSize</code>,
 which can be used to compute the maximal complete subgraphs of given
 size, and can also be used to determine the (maximal or otherwise)
@@ -216,7 +216,7 @@ Let <var>gamma</var> be a simple graph, and <var>k</var> a non-negative integer 
 of non-negative integers.  This function returns a set <var>K</var> (possibly
 empty) of complete subgraphs of size <var>k</var> of <var>gamma</var>.  The vertices may
 have weights, which should be non-zero integers if <var>k</var> is an integer and
-non-zero <i>d</i>-vectors of non-negative integers if <var>k</var> is a <i>d</i>-vector,
+non-zero <var>d</var>-vectors of non-negative integers if <var>k</var> is a <var>d</var>-vector,
 and in these cases, a complete subgraph of <strong>size</strong> <var>k</var> means a complete
 subgraph whose vertex-weights sum to <var>k</var>.  The exact nature of the set
 <var>K</var> depends on the values of the parameters supplied to this function. A
@@ -270,22 +270,22 @@ compatibility, <var>col</var> a rational number means the same as <var>col</var>
 The optional parameter <var>wts</var> should be a list of vertex-weights; the list
 should be of length <code></code><var>gamma</var><code>.order</code>, with the <var>i</var>-th element being the
 weight of vertex <var>i</var>. The weights must be all positive integers if <var>k</var>
-is an integer, and all non-zero <i>d</i>-vectors of non-negative integers
-if <var>k</var> is a <i>d</i>-vector. The default is that all weights are equal to&nbsp;1.
+is an integer, and all non-zero <var>d</var>-vectors of non-negative integers
+if <var>k</var> is a <var>d</var>-vector. The default is that all weights are equal to&nbsp;1.
 (Recall that a complete subgraph of <strong>size</strong> <var>k</var> means a complete subgraph
 whose vertex-weights sum to <var>k</var>.)
 <p>
 If <var>wts</var> is a list of (positive) integers, then it is required that
-for all <i>g</i> in <code></code><var>gamma</var><code>.group</code> and all <i>v</i> in <code>Vertices(</code><var>gamma</var><code>)</code>,
-we have <i>wts</i> [<i>v</i><sup><i>g</i></sup>]=<i>wts</i> [<i>v</i>].
+for all <var>g</var> in <code></code><var>gamma</var><code>.group</code> and all <var>v</var> in <code>Vertices(</code><var>gamma</var><code>)</code>,
+we have <var><var>wts</var>[v<sup>g</sup>]=<var>wts</var>[v]</var>.
 <p>
-If <var>wts</var> is a list of <i>d</i>-vectors then we assume that there is some
-underlying action &#956; of <code></code><var>gamma</var><code>.group</code> on <code>[1..<i>d</i>]</code>. This results
-in an action of <code></code><var>gamma</var><code>.group</code> on the set of integer <i>d</i>-vectors, where
-if <i>w</i> is an integer <i>d</i>-vector and <i>g</i> in <code></code><var>gamma</var><code>.group</code> then <i>w</i><sup><i>g</i></sup>
-is defined by <i>w</i><sup><i>g</i></sup>[&#956;(<i>i</i>,<i>g</i>)]=<i>w</i>[<i>i</i>] for all <i>i</i> in <code>[1..<i>d</i>]</code>. It is
-then required that for all <i>g</i> in <code></code><var>gamma</var><code>.group</code>, we have <i>k</i> <sup><i>g</i></sup>=<i>k</i> 
-and for all <i>v</i> in <code>Vertices(</code><var>gamma</var><code>)</code> <i>wts</i> [<i>v</i><sup><i>g</i></sup>] = <i>wts</i> [<i>v</i>]<sup><i>g</i></sup>.
+If <var>wts</var> is a list of <var>d</var>-vectors then we assume that there is some
+underlying action <var>mu</var> of <code></code><var>gamma</var><code>.group</code> on <code>[1..</code><var>d</var><code>]</code>. This results
+in an action of <code></code><var>gamma</var><code>.group</code> on the set of integer <var>d</var>-vectors, where
+if <var>w</var> is an integer <var>d</var>-vector and <var>g</var> in <code></code><var>gamma</var><code>.group</code> then <var>w<sup>g</sup></var>
+is defined by <var>w<sup>g</sup>[mu(i,g)]=w[i]</var> for all <var>i</var> in <code>[1..</code><var>d</var><code>]</code>. It is
+then required that for all <var>g</var> in <code></code><var>gamma</var><code>.group</code>, we have <var><var>k</var><sup>g</sup>=<var>k</var></var>
+and for all <var>v</var> in <code>Vertices(</code><var>gamma</var><code>)</code> <var><var>wts</var>[v<sup>g</sup>] = <var>wts</var>[v]<sup>g</sup></var>.
 These requirements are <strong>not</strong> checked by the function, and the use of
 vector-weights is primarily for advanced users of GRAPE.
 <p>
@@ -379,5 +379,5 @@ gap&gt; CliqueNumber(JohnsonGraph(7,2));
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP006.htm">Previous</a>] [<a href ="CHAP008.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>March 2019
+<address>grape manual<br>December 2019
 </address></body></html>

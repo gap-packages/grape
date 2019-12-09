@@ -11,7 +11,7 @@
 <li> <A HREF="CHAP001.htm#SECT004">Examples of the use of GRAPE</a>
 </ol><p>
 <p>
-This manual describes the GRAPE (Version&nbsp;4.8.2) package for computing
+This manual describes the GRAPE (Version&nbsp;4.8.3) package for computing
 with graphs and groups.
 <p>
 GRAPE is primarily designed for the construction and analysis of
@@ -47,12 +47,15 @@ in its <code>README.md</code> file.
 If you use GRAPE in a published work, then please reference the
 package as follows:
 <p>
-L.H. Soicher, The GRAPE package for GAP, Version&nbsp;4.8.2, 2019,
+L.H. Soicher, The GRAPE package for GAP, Version&nbsp;4.8.3, 2019,
 <a href="https://gap-packages.github.io/grape">https://gap-packages.github.io/grape</a>.
+<p>
+For questions, remarks, suggestions, and issues, please use the issue
+tracker at <a href="https://github.com/gap-packages/grape/issues">https://github.com/gap-packages/grape/issues</a>.
 <p>
 The development of GRAPE was partially supported by a European
 Union HCM grant in ``Computational Group Theory''. It is currently
-partially supported by EPSRC grant EP/M022641/1 (CoDiMa: a Collaborative
+supported by EPSRC grant EP/M022641/1 (CoDiMa: a Collaborative
 Computational Project in the area of Computational Discrete Mathematics).
 <p>
 <p>
@@ -149,9 +152,6 @@ This should return the value <code>true</code>.
 A pdf version of the GRAPE manual is available as <code>manual.pdf</code> in the
 <code>doc</code> directory of the home directory of GRAPE.
 <p>
-If you install GRAPE, then please tell <a href="mailto:L.H.Soicher@qmul.ac.uk">L.H.Soicher@qmul.ac.uk</a>,
-where you should also send any comments or bug reports.
-<p>
 <p>
 <h2><a name="SECT002">1.2 Loading GRAPE</a></h2>
 <p><p>
@@ -166,8 +166,8 @@ LoadPackage("grape");
 <p><p>
 In general GRAPE deals with finite directed graphs which may have
 loops but have no multiple edges. However, many GRAPE functions only
-work for <strong>simple</strong> graphs (i.e. no loops, and whenever [<i>x</i>,<i>y</i>] is an
-edge then so is [<i>y</i>,<i>x</i>]), but these functions will check if an input
+work for <strong>simple</strong> graphs (i.e. no loops, and whenever <var>[x,y]</var> is an
+edge then so is <var>[y,x]</var>), but these functions will check if an input
 graph is simple.
 <p>
 In GRAPE, a graph <var>gamma</var> is stored as a record, with mandatory
@@ -196,8 +196,9 @@ of <var>gamma</var> (this is done by the function <code>Adjacency</code>).
 The only mandatory component which may change once a graph is initially
 constructed is <code>adjacencies</code> (when an edge-orbit of <code></code><var>gamma</var><code>.group</code> is
 added to, or removed from, <var>gamma</var>). A graph record may also have some
-of the optional components <code>isSimple</code>, <code>autGroup</code>, and
-<code>canonicalLabelling</code>, which record information about that graph.
+of the optional components <code>isSimple</code>, <code>autGroup</code>, <code>maximumClique</code>,
+<code>minimumVertexColouring</code>, and <code>canonicalLabelling</code>, which record
+information about that graph.
 <p>
 <p>
 <h2><a name="SECT004">1.4 Examples of the use of GRAPE</a></h2>
@@ -208,9 +209,9 @@ sophisticated examples of the use of GRAPE can be found in
 chapter <a href="CHAP009.htm#SSEC001.1">Partial Linear Spaces</a>, and also in the references <a href="biblio.htm#Cam99"><cite>Cam99</cite></a>,
 <a href="biblio.htm#CSS99"><cite>CSS99</cite></a>, <a href="biblio.htm#HL99"><cite>HL99</cite></a> and <a href="biblio.htm#Soi06"><cite>Soi06</cite></a>.
 <p>
-In the example here, we construct the Petersen graph <i>P</i>, and its edge
-graph (also called line graph) <i>EP</i>. We compute the global parameters
-of <i>EP</i>, and so verify that <i>EP</i> is distance-regular (see <a href="biblio.htm#BCN89"><cite>BCN89</cite></a>).
+In the example here, we construct the Petersen graph <var>P</var>, and its edge
+graph (also called line graph) <var>EP</var>. We compute the global parameters
+of <var>EP</var>, and so verify that <var>EP</var> is distance-regular (see <a href="biblio.htm#BCN89"><cite>BCN89</cite></a>).
 <p>
 <pre>
 gap&gt; LoadPackage("grape");
@@ -246,5 +247,5 @@ gap&gt; GlobalParameters(EP);
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP002.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>March 2019
+<address>grape manual<br>December 2019
 </address></body></html>
