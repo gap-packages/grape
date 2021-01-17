@@ -266,15 +266,16 @@ If <wts> is a list of (positive) integers, then it is required that
 for all $g$ in `<gamma>.group' and all $v$ in `Vertices(<gamma>)',
 we have $<wts>[v^g]=<wts>[v]$.
 
-If <wts> is a list of $d$-vectors then we assume that there is some
-underlying action $\mu$ of `<gamma>.group' on `[1..$d$]'. This results
-in an action of `<gamma>.group' on the set of integer $d$-vectors, where
-if $w$ is an integer $d$-vector and $g$ in `<gamma>.group' then $w^g$
-is defined by $w^g[\mu(i,g)]=w[i]$ for all $i$ in `[1..$d$]'. It is
-then required that for all $g$ in `<gamma>.group', we have $<k>^g=<k>$
-and for all $v$ in `Vertices(<gamma>)' $<wts>[v^g] = <wts>[v]^g$.
-These requirements are *not* checked by the function, and the use of
-vector-weights is primarily for advanced users of {\GRAPE}.
+If <wts> is a list of $d$-vectors then we assume that there is some group
+$G$ and epimorphism $\theta$ from $G$ to `<gamma>.group', such that there
+is an action $\mu$ of $G$ on `[1..$d$]', giving an action of $G$ on the
+set of integer $d$-vectors, where if $w$ is an integer $d$-vector and
+$g$ in $G$ then $w^g$ is defined by $w^g[\mu(i,g)]=w[i]$ for all $i$
+in `[1..$d$]'. It is then required that for all $g$ in $G$, we have
+$<k>^g=<k>$ and for all $v$ in `Vertices(<gamma>)', $<wts>[v^{g\theta}]
+= <wts>[v]^g$.  These requirements are *not* checked by the function,
+and the use of vector-weights is primarily for use by the {\DESIGN}
+package and advanced users of {\GRAPE}.
 
 An alternative name for this function is 
 `CliquesOfGivenSize'.
