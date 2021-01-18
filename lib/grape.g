@@ -2716,21 +2716,25 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 # The parameter  weightvectors  is then a list of length 
 # gamma.order  of non-zero d-vectors of non-negative integers, 
 # with the *weight-vector* (or *weightvector*) of a
-# vertex  v  of  gamma  being  weightvectors[v]
-# and the  *weight*  of  v  being the sum of the entries of its
-# weight-vector. Moreover, we assume that  gamma.group  acts on the 
-# set of all integer d-vectors by permuting vector positions, such that, 
-# for all  v  in  [1..gamma.order]  and  g  in  gamma.group,  we have
+# vertex  v  of  gamma  being  weightvectors[v],  and
+# the  *weight*  of  v  being the sum of the entries of its
+# weight-vector. Moreover, we assume that there is a group  GG  acting on
+# the set of all integer d-vectors by permuting vector positions, such that: 
 #
-#                weightvectors[v^g] = weightvectors[v]^g
+# (1) there is an epimorphism  theta : GG --> gamma.group,  and  
+# 
+# (2) for all  v  in  [1..gamma.order]  and  g  in  GG,  we have
 #
-# (where the first action is OnPoints, and the second action is the 
-# assumed one on integer d-vectors).  Note that, in particular, this implies 
-# that  Set(weightvectors)  is invariant under  gamma.group, 
-# and that the weight of a vertex is constant over a  gamma.group
-# orbit of vertices.
+#                weightvectors[v^((g)theta)] = weightvectors[v]^g
 #
-# We assume that  kvector  is fixed by  gamma.group,  and let  k=Sum(kvector).
+# (where the first action is OnPoints, and the second action is the assumed 
+# one of  GG  on integer d-vectors).  
+#
+# Note that, in particular, this implies that  Set(weightvectors)  
+# is invariant under  GG,  and that the weight of a vertex is constant 
+# over a  gamma.group  orbit of vertices.
+#
+# We assume that  kvector  is fixed by  GG,  and let  k=Sum(kvector).
 #
 # First, suppose that  kvector=[k],  with k<0. 
 #
@@ -2741,12 +2745,13 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 # 
 # The parameter  allsubs  is used to control how many 
 # complete subgraphs are returned.
-# If  allsubs=1,  then  K  will contain a set of  gamma.group  
-# orbit-representatives of the maximal  (if allmaxes=true)  
-# or of all (if allmaxes=false)  complete subgraphs of  gamma.  
+# If  allsubs=1,  then  K  will contain (perhaps properly) 
+# a set of  gamma.group  orbit-representatives of the maximal  
+# (if allmaxes=true)  or of all (if allmaxes=false)  
+# complete subgraphs of  gamma.  
 # If  allsubs=2  then  K  will be (exactly) a set of  gamma.group  
 # orbit-representatives of the maximal  (if allmaxes=true)  or all
-# (if  allmaxes=false) complete subgraphs of  gamma  (this is usually 
+# (if  allmaxes=false) complete subgraphs of  gamma  (this may be
 # more expensive than when  allsubs=1).  
 # If  allsubs=0,  then  K  will contain exactly one complete subgraph,
 # which is guaranteed to be maximal if  allmaxes=true.
@@ -2774,7 +2779,7 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 # If  allsubs=2  then  K  will be (exactly) a set of  gamma.group  
 # orbit-representatives of all the solutions  (if allmaxes=false)  or 
 # of the solutions that form maximal complete subgraphs  (if allmaxes=true)  
-# (this is usually more expensive than when  allsubs=1).  
+# (this may be more expensive than when  allsubs=1).  
 # If  allsubs=0, then  K  will contain at most one element and will 
 # contain one element iff  gamma   contains a solution,  unless  
 # allmaxes=true,  in which case   K  will contain one element iff  gamma  
@@ -2785,8 +2790,8 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 # or not partial proper vertex-colouring is used to try to cut
 # down the search tree.  The default is true (employ this vertex-colouring).
 #
-# The parameter  dovector  must be a d-vector containing an ordering 
-# of [1..d].  There is no harm (except perhaps for efficiency) in 
+# The parameter  dovector  must be a d-vector containing an ordering
+# of  [1..d].  There is no harm (except perhaps for efficiency) in
 # giving  dovector  the value  [1..d].
 #
 local IsFixedPoint,HasLargerEntry,k,smallorder,weights,weighted,
@@ -2833,20 +2838,23 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 # (pairwise) inequivalent under gamma.group. 
 # 
 # The parameter  sofar  is the set of vertices of the original graph 
-# chosen "so far".
+# chosen "so far".  We assume that  kvector  is equal to the original
+# kvector  passed to  CompleteSubgraphsMain  minus the sum of the 
+# weightvectors of the elements in  sofar. 
 #
 # The parameter  forbidden  is a  gamma.group-invariant  set of
-# vertex-names, none of which is allowed to be in any returned 
-# complete subgraph.  The value of  forbidden  may be changed by
-# this function.
+# vertex-names not in  sofar,  such that, for every element  f  in  forbidden, 
+# all required solutions have already been found containing  sofar union {f}. 
+# The value of  forbidden  may be changed by this function.
 #
 # If  allsubs>0  then this function returns a list of complete 
 # subgraphs which, when each of its elements is augmented by 
 # the elements in  sofar,  is a list of solutions containing 
-# a transversal of the distinct originalG-orbits  of all the originally 
+# a transversal of the distinct  originalG-orbits  of all the originally 
 # required solutions (maximal complete or otherwise) which contain sofar, 
-# except possibly for those orbits containing a complete subgraph 
-# which contains  sofar  and an element in  forbidden.  
+# except possibly those orbits containing a solution  S  having an  
+# element in  forbidden. 
+#
 # If  allsubs=0  then this function returns (a list of) 
 # at most one complete subgraph, and returns (a list of) one
 # complete subgraph  c  if and only if  c union sofar  is a solution
@@ -2860,10 +2868,13 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 #    sofar (in that group's action on  gamma.names), with equality if  
 #    allsubs=2.
 #
-# At each call, we will attempt possible ways of adding a 
-# vertex(-name)  v  to  sofar,  such that  
-# weightvectors[names[v]][doposition]<>0, 
-# where  doposition:=First(dovector,x->kvector[x])<>0); 
+# At each call, we will attempt the possible ways of adding 
+# a vertex(-name)  v  to  sofar,  such that  
+# 
+#     weightvectors[names[v]][doposition]<>0, 
+#
+# where  doposition  is a heuristically chosen position 
+# of a non-zero element of  kvector.
 # 
 # We "dynamically" order the search tree, as described in:
 # W. Myrvold, T. Prsa and N. Walker, A Dynamic programming approach
@@ -3022,13 +3033,24 @@ if ForAll(nadj,x->x=kk) then
       fi;
    fi;
 fi;
-endconsider:=Length(active);
+#
+# Now determine  doposition. 
+#
+doposition:=0;
+for i in [1..Length(kvector)] do
+   if kvector[i]<>0 then
+      if doposition=0 or nactivevector[i]<nactivevector[doposition] then
+         doposition:=i;
+      fi;
+   fi;
+od;
 #
 # Now order the vertices in active for processing.
 #
+endconsider:=Length(active);
+#
 # Begin by pushing ignorable active indices beyond  endconsider. 
 #
-doposition:=First(dovector,x->kvector[x]<>0);
 if (allmaxes and Length(kvector)=1) or Length(kvector)>1 then
    if Length(kvector)=1 then
       # allmaxes=true here
@@ -3321,7 +3343,7 @@ else
    mm:=[];
 fi;
 indorbwtsum:=0;
-doposition:=First(dovector,x->kvector[x]<>0);
+doposition:=First(dovector,x->kvector[x]<>0); 
 for j in [1..Length(J)] do 
    i:=1;
    for kk in [2..Length(J)] do 
@@ -3349,7 +3371,7 @@ for j in [1..Length(J)] do
       if b<>rep then
          rep:=b;
          adj:=Adjacency(gamma,rep);
-      fi;
+       fi;
    fi;
    if wt<>0 then
       # 
