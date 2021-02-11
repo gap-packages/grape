@@ -2723,7 +2723,7 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 #
 # (1) there is an epimorphism  theta : GG --> gamma.group,  and  
 # 
-# (2) for all  v  in  [1..gamma.order]  and  g  in  GG,  we have
+# (2) for all  v  in  Vertices(gamma)  and all  g  in  GG,  we have
 #
 #                weightvectors[v^((g)theta)] = weightvectors[v]^g
 #
@@ -2868,19 +2868,22 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 #    sofar (in that group's action on  gamma.names), with equality if  
 #    allsubs=2.
 #
-# At each call, we will attempt the possible ways of adding 
+# We will be attempting the possible ways of adding 
 # a vertex(-name)  v  to  sofar,  such that  
 # 
 #     weightvectors[names[v]][doposition]<>0, 
 #
 # where  doposition  is a heuristically chosen position 
-# of a non-zero element of  kvector.
+# of a non-zero element of  kvector.  Currently, we simply take  
+#           
+#      doposition:=First(dovector,x->kvector[x])<>0);
+#
 # 
 # We "dynamically" order the search tree, as described in:
 # W. Myrvold, T. Prsa and N. Walker, A Dynamic programming approach
 # for timing and designing clique algorithms, Algorithms and Experiments
 # (ALEX '98): Building Bridges Between Theory and Applications, 1998,
-# pp. 88-95, 1998.
+# pp. 88-95.
 #
 local k,n,i,j,delta,adj,rep,a,b,ans,ans1,ans2,names,W,H,HH,newsofar,
       G,orb,kk,ll,mm,active,nadj,verticesremoved,J,doposition,
@@ -2902,8 +2905,8 @@ CompleteSubgraphsSearch1 := function(mask,kvector,forbidmask)
 # forbidmask  is the empty set. 
 #
 # The variables n,  A,  names,  allmaxes,  allsubs,  partialcolour, 
-# weights,  weightvectors,  weighted,  dovector,  and  HasLargerEntry  
-# are global.
+# weights,  weightvectors,  weighted,  dovector,  
+# and  HasLargerEntry are global.
 # The parameter  mask  may be changed by this function, and if 
 # allmaxes=true  then  forbidmask  may be changed by this function.
 #
@@ -2954,7 +2957,7 @@ repeat
          fi;
          wt:=weights[names[i]];
          wtvector:=weightvectors[names[i]];
-         mm:=HasLargerEntry(wtvector,kvector);  
+         mm:=HasLargerEntry(wtvector,kvector); 
          if ll+wt<k or (mm and (not allmaxes)) then
             # eliminate vertex i  
             verticesremoved:=true;
@@ -3044,12 +3047,14 @@ for i in [1..Length(kvector)] do
       fi;
    fi;
 od;
+# doposition:=First(dovector,x->kvector[x]<>0);
 #
 # Now order the vertices in active for processing.
 #
 endconsider:=Length(active);
 #
-# Begin by pushing ignorable active indices beyond  endconsider. 
+# Begin by pushing active indices from which we do not need to search 
+# beyond  endconsider. 
 #
 if (allmaxes and Length(kvector)=1) or Length(kvector)>1 then
    if Length(kvector)=1 then
@@ -3247,7 +3252,7 @@ for i in [1..Length(J)] do
       else
          ll:=nadj[i];
       fi;
-      if ll+weights[names[rep]] < k 
+      if ll+weights[names[rep]] < k
             or HasLargerEntry(weightvectors[names[rep]],kvector) then  
          # forbid the vertex-orbit containing rep 
          verticesremoved:=true;
@@ -3331,9 +3336,10 @@ if allmaxes and Length(kvector)=1 then
    fi;
    if mm<>[] then
       #
-      # We can ignore the elements of the gamma.group-invariant set mm,
-      # since Length(kvector)=1, allmaxes=true and mm is the 
-      # adjacency of a single (heuristically) chosen vertex.
+      # We will not search from any vertex in the  gamma.group-invariant 
+      # set  mm,  since Length(kvector)=1,  allmaxes=true,  and  mm  is the 
+      # adjacency of a single (heuristically chosen) vertex, and so
+      # no solution can consist entirely of elements of  mm. 
       # 
       ll:=Filtered([1..Length(J)],x->not (gamma.representatives[J[x]] in mm));
       J:=J{ll};
@@ -3357,7 +3363,8 @@ for j in [1..Length(J)] do
    orb:=SSortedList(Orbit(G,rep));
    #  wt  will record the maximum entry in doposition of a vector in  orb.
    if Length(kvector)=1 then
-      wt:=weightvectors[names[rep]][1]; # does not depend on orbit rep.
+      wt:=weightvectors[names[rep]][1]; 
+      # wt>0 and does not depend on the orbit rep.
    else
       wt:=0;
       for a in orb do 
@@ -3377,11 +3384,13 @@ for j in [1..Length(J)] do
       # 
       # We consider searching for solutions containing  rep.
       # 
-      # However, if  k>=0  and  mm=[]  we shall ignore a 
-      # set of independent orbits, such that the sum  
+      # However, if  k>=0  and  mm=[]  we shall not search from any 
+      # vertex in certain independent orbits, such that the sum  
       # of the  wt's  for these orbits is less than  kvector[doposition].
       # This is because no solution can be made from vertices coming 
-      # only from these independent orbits. 
+      # only from these independent orbits, together with those orbits
+      # with  wt=0. (Note that if  wt=0  then we must have  
+      # Length(kvector)>1,  and so  k>=0,  mm=[].)
       # 
       if k>=0 and Length(mm)=0 and indorbwtsum+wt < kvector[doposition] 
                            and Length(Intersection(orb,adj))=0 then
@@ -4531,26 +4540,25 @@ Add(GAPInfo.PostRestoreFuncs,function()
 end);
 
 BindGlobal("PrintStreamNautyGraph",function(stream,gamma,col)
-  local adj, i, j;
-  PrintTo(stream,"d\n$1n",gamma.order,"g\n");
+  local i, j, issimple;
+  issimple:=IsSimpleGraph(gamma);
+  if issimple then
+    # output gamma to dreadnaut as an undirected loopless graph
+    PrintTo(stream,"$1n",gamma.order,"g\n");
+  else
+    # treat as a directed graph
+    PrintTo(stream,"d\n$1n",gamma.order,"g\n");
+  fi;
   for i in [1..gamma.order] do 
-    adj:=Adjacency(gamma,i);
-    if adj=[] then 
-      if i<gamma.order then
-	AppendTo(stream,";\n");
-      else
-	AppendTo(stream,".\n");
+    for j in Adjacency(gamma,i) do 
+      if (not issimple) or i<j then
+        AppendTo(stream,j,"\n");
       fi;
-    else 
-      for j in [1..Length(adj)] do
-        if j<Length(adj) then
-	  AppendTo(stream,adj[j],"\n");
-        elif i<gamma.order then
-	  AppendTo(stream,adj[j],";\n");
-        else
-  	  AppendTo(stream,adj[j],".\n");
-        fi;
-      od;
+    od;
+    if i<gamma.order then
+      AppendTo(stream,";\n");
+    else
+      AppendTo(stream,".\n");
     fi;
   od;
   AppendTo(stream,"f[\n");
@@ -4665,7 +4673,8 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
 # of the graph or graph with colour-classes  gr.
 # Uses the nauty system. 
 #
-  local gamma,col,ftmp1,ftmp2,fdre,fg,ftmp1_stream,ftmp2_stream,fdre_stream,gp;
+  local gamma,col,ftmp1,ftmp2,fdre,fg,status,
+        ftmp1_stream,ftmp2_stream,fdre_stream,gp;
   if IsBound(gr.canonicalLabelling) then
     setcanon:=false;
   fi;
@@ -4704,6 +4713,7 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
   PrintStreamNautyGraph(fdre_stream,gamma,col);
   
   if not setcanon then
+    # only the automorphism group is computed
     if IsSimpleGraph(gamma) then
       AppendTo( fdre_stream, "> ", ftmp1, " p,xq\n" );
     else
@@ -4726,7 +4736,12 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
   PrintTo(ftmp2_stream,gamma.order,"\n"); 
   CloseStream(ftmp2_stream);
 
-  GRAPE_Exec(GRAPE_DREADNAUT_EXE, [], InputTextString(fdre), OutputTextUser());
+  status:=GRAPE_Exec(GRAPE_DREADNAUT_EXE, [], InputTextString(fdre), OutputTextUser());
+
+  if status<>0 then
+    Error("error code ",status," returned by dreadnaut executable;\n",
+       "returned results may be wrong");
+  fi;
 
   if not IsBound(gr.autGroup) then 
     fg:=ReadOutputNauty(ftmp1);
@@ -4746,7 +4761,8 @@ end);
 
 BindGlobal("PrintStreamBlissGraph",function(stream,gamma,col)
 # Original procedure by Jerry James. Updated by Leonard Soicher.
-  local adj, i, j, nedges;
+  local i, j, nedges, issimple;
+  issimple:=IsSimpleGraph(gamma);
   if IsRegularGraph(gamma) and gamma.order > 0 then
     nedges := gamma.order*Length(Adjacency(gamma,1)); 
   else
@@ -4756,6 +4772,10 @@ BindGlobal("PrintStreamBlissGraph",function(stream,gamma,col)
     od;
   fi;
   # nedges = no. of directed edges of gamma. 
+  if issimple then
+    nedges := nedges/2;
+    # so in this case, nedges = no. of undirected edges of gamma.
+  fi;
   PrintTo(stream,"p edge ",gamma.order," ",nedges,"\n");
   if col<>MonochromaticColourClasses(gamma) then 
     for i in [1..Length(col)] do
@@ -4765,12 +4785,11 @@ BindGlobal("PrintStreamBlissGraph",function(stream,gamma,col)
     od;
   fi;
   for i in [1..gamma.order] do 
-    adj:=Adjacency(gamma,i);
-    if adj<>[] then 
-      for j in [1..Length(adj)] do
-        AppendTo(stream, "e ", i, " ", adj[j], "\n");
-      od;
-    fi;
+    for j in Adjacency(gamma,i) do
+      if (not issimple) or i<j then
+        AppendTo(stream, "e ", i, " ", j, "\n");
+      fi;
+    od;
   od;
 end);
 
@@ -4792,6 +4811,8 @@ BindGlobal("ReadOutputBliss",function(f,canon)
 	Add(gens,pi);
       elif canon and Length(l)>20 and l{[1..20]}="Canonical labeling: " then
 	can:=InverseSameMutability(EvalString(l{[21..Length(l)]}));
+      elif canon and Length(l)=20 and l{[1..20]}="Canonical labeling: " then
+	can:=();
       fi;
     fi;
   od;
@@ -4806,7 +4827,8 @@ BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr, setcanon)
 # of the graph or graph with colour-classes  gr.
 # Uses the bliss system. 
 #
-  local gamma,col,ftmp,ftmp_stream,fdre,fg,fdre_stream,gp;
+  local gamma,col,ftmp,ftmp_stream,fdre,fg,fdre_stream,
+        arglist,status,gp;
   if IsBound(gr.canonicalLabelling) then
     setcanon:=false;
   fi;
@@ -4846,10 +4868,27 @@ BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr, setcanon)
   ftmp_stream:=OutputTextString(ftmp,false);
   SetPrintFormattingStatus(ftmp_stream,false);
 
-  if setcanon then
-    GRAPE_Exec(GRAPE_BLISS_EXE, [ "-directed", "-can", fdre ], InputTextUser(), ftmp_stream);
+  if not setcanon then
+    # only the automorphism group is computed
+    if IsSimpleGraph(gamma) then
+      arglist:=[ fdre ];
+    else
+      arglist:=[ "-directed", fdre ];
+    fi;
   else
-    GRAPE_Exec(GRAPE_BLISS_EXE, [ "-directed", fdre ], InputTextUser(), ftmp_stream);
+    # compute the automorphism group and canonical labelling
+    if IsSimpleGraph(gamma) then
+      arglist:=[ "-can", fdre ];
+    else
+      arglist:=[ "-directed", "-can", fdre ];
+    fi;
+  fi;
+
+  status:=GRAPE_Exec(GRAPE_BLISS_EXE, arglist, InputTextUser(), ftmp_stream);
+
+  if status<>0 then
+    Error("error code ",status," returned by bliss executable;\n",
+       "returned results may be wrong");
   fi;
 
   fg:=ReadOutputBliss(InputTextString(ftmp),setcanon);
