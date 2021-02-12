@@ -3039,15 +3039,18 @@ fi;
 #
 # Now determine  doposition. 
 #
-doposition:=0;
-for i in [1..Length(kvector)] do
-   if kvector[i]<>0 then
-      if doposition=0 or nactivevector[i]<nactivevector[doposition] then
-         doposition:=i;
-      fi;
-   fi;
-od;
-# doposition:=First(dovector,x->kvector[x]<>0);
+# Standard heuristic:
+doposition:=First(dovector,x->kvector[x]<>0);
+#
+# # Alternative heuristic:
+# doposition:=0;
+# for i in [1..Length(kvector)] do
+#    if kvector[i]<>0 then
+#       if doposition=0 or nactivevector[i]<nactivevector[doposition] then
+#          doposition:=i;
+#       fi;
+#    fi;
+# od;
 #
 # Now order the vertices in active for processing.
 #
