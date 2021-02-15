@@ -1,7 +1,7 @@
 [![Code Coverage](https://codecov.io/github/gap-packages/grape/coverage.svg?branch=master&token=)](https://codecov.io/gh/gap-packages/grape)
 
 
-The GRAPE 4.8.3 Package for GAP
+The GRAPE 4.8.4 Package for GAP
 ===============================
 
 GRAPE is a GAP package for computing with graphs and groups, 
@@ -10,7 +10,7 @@ Hulpke, Jerry James and Max Horn, and including Brendan McKay's nauty 2.2
 (final patched version) package.
 
 The GRAPE package and the source included with this distribution are
-copyright (C) Leonard Soicher 1992-2019, except for the following:
+copyright (C) Leonard Soicher 1992-2021, except for the following:
 
 - Brendan McKay's nauty 2.2 system; see the nauty copyright notice in
 file nauty22/nauty-h.in
@@ -27,7 +27,7 @@ Referencing GRAPE
 Please reference your use of the GRAPE package in a published work
 as follows:
 
-L.H. Soicher, The GRAPE package for GAP, Version 4.8.3, 2019,
+L.H. Soicher, The GRAPE package for GAP, Version 4.8.4, 2021,
 <https://gap-packages.github.io/grape>.
 
 Questions, remarks, suggestions, and issues

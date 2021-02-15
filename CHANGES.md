@@ -1,3 +1,36 @@
+Main changes from GRAPE 4.8.3 to GRAPE 4.8.4 (February 2021)
+------------------------------------------------------------
+
+1. Simple GRAPE graphs are now output to nauty as nauty undirected graphs
+and are so treated by nauty.  (You should expect canonical labellings
+produced by nauty to change from previous versions of GRAPE and to
+be different from those produced by bliss.) Thanks to T. Jenrich for
+suggesting this efficiency improvement.
+
+2. Simple GRAPE graphs are now output to bliss as bliss undirected graphs
+and are so treated by bliss.  (You should expect canonical labellings
+produced by bliss to change from previous versions of GRAPE and to be
+different to those produced by nauty.) Thanks to T. Jenrich for suggesting
+this efficiency improvement.
+
+3. If the return value (i.e. exit code) of an execution of a bliss or
+dreadnaut executable is not zero, then an error message is printed and
+a break loop is entered. This is to help protect against an otherwise
+undetected program error exit or crash producing wrong results.  (We had
+run across one instance of such a problem with bliss and a particular
+large graph given as a directed graph.)
+
+4. The identity canonical labelling is now correctly returned from bliss.
+(The previously returned value in this case of the empty list should not
+have led to any wrong results for a graph isomorphism check, but should
+have caused a break loop to be entered.)
+
+5. Improvements made in the user documentation of
+'CompleteSubgraphsOfGivenSize'.
+
+6. Improvements made in the program documentation for
+'CompleteSubgraphsMain'.
+
 Main changes from GRAPE 4.8.2 to GRAPE 4.8.3 (December 2019)
 ------------------------------------------------------------
 

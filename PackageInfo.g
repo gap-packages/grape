@@ -10,10 +10,10 @@ PackageName := "GRAPE",
 
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers.
-Version := "4.8.3",
+Version := "4.8.4",
 
 ##  Release date of the current version in dd/mm/yyyy format.
-Date := "09/12/2019",
+Date := "16/02/2021",
 
 SourceRepository := rec(
     Type := "git",
@@ -86,7 +86,7 @@ PackageDoc := rec(
 Dependencies := rec(
   # GAP version, use version strings for specifying exact versions,
   # prepend a '>=' for specifying a least version.
-  GAP := ">=4.10",
+  GAP := ">=4.11",
   # list of pairs [package name, (least) version],  package name is case
   # insensitive, least version denoted with '>=' prepended to version string.
   # without these, the package will not load
