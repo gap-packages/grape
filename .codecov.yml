@@ -13,6 +13,7 @@ comment:
   behavior: default
 
 ignore:
+  - "nauty"
   - "PackageInfo.g"
   - "init.g"
   - "read.g"
