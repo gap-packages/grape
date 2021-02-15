@@ -1,3 +1,5 @@
+[![Code Coverage](https://codecov.io/github/gap-packages/grape/coverage.svg?branch=master&token=)](https://codecov.io/gh/gap-packages/grape)
+
 
 The GRAPE 4.8.3 Package for GAP
 ===============================
