@@ -1,8 +1,8 @@
 ##############################################################################
 ##
-##  grape.g (Version 4.8.3)    GRAPE Library     Leonard Soicher
+##  grape.g (Version 4.8.4)    GRAPE Library     Leonard Soicher
 ##
-##  Copyright (C) 1992-2019 Leonard Soicher, School of Mathematical Sciences, 
+##  Copyright (C) 1992-2021 Leonard Soicher, School of Mathematical Sciences, 
 ##                      Queen Mary University of London, London E1 4NS, U.K.
 ##
 # This version includes code by Jerry James (debugged by LS) 
@@ -4742,7 +4742,7 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
   status:=GRAPE_Exec(GRAPE_DREADNAUT_EXE, [], InputTextString(fdre), OutputTextUser());
 
   if status<>0 then
-    Error("error code ",status," returned by dreadnaut executable;\n",
+    Error("exit code ",status," returned by dreadnaut executable;\n",
        "returned results may be wrong");
   fi;
 
@@ -4890,7 +4890,7 @@ BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr, setcanon)
   status:=GRAPE_Exec(GRAPE_BLISS_EXE, arglist, InputTextUser(), ftmp_stream);
 
   if status<>0 then
-    Error("error code ",status," returned by bliss executable;\n",
+    Error("exit code ",status," returned by bliss executable;\n",
        "returned results may be wrong");
   fi;
 
