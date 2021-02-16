@@ -6,7 +6,7 @@ on:
 
 jobs:
   test:
-    name: "${{ matrix.abi }}-bit / GAP ${{ matrix.gap-branch }} / nauty=${{ matrix.nauty }}"
+    name: "${{ matrix.abi }}-bit / ${{ matrix.engine }} / GAP ${{ matrix.gap-branch }}"
     runs-on: ubuntu-latest
     # Don't run this twice on PRs for branches pushed to the same repository
     if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
@@ -20,24 +20,24 @@ jobs:
           - stable-4.9
         abi:
           - 64
-        nauty:
-          - true
+        engine:
+          - nauty
 
         include:
           - gap-branch: master
             abi: 32
-            nauty: true
+            engine: nauty
           - gap-branch: master
             abi: 64
-            nauty: false
+            engine: bliss
 
     env:
-      GRAPE_NAUTY: ${{ matrix.nauty }}
+      GRAPE_NAUTY: ${{ matrix.engine == 'nauty' }}
 
     steps:
       - uses: actions/checkout@v2
       - name: "Install bliss"
-        if: ${{ matrix.nauty == false }}
+        if: ${{ matrix.engine == 'bliss' }}
         run: sudo apt-get install bliss
       - uses: gap-actions/setup-gap-for-packages@v1
         with:
