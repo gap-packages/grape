@@ -4586,13 +4586,16 @@ BindGlobal("ReadOutputNauty",function(file)
   local f, bas, sgens, l, s, p, i, deg, processperm, pi;
 
   processperm:=function()
-    if Length(pi)=0 then return; fi;
+    if Length(pi)=0 then 
+      # no permutation to process
+      return; 
+    fi;
     if deg=fail then
+      # set degree
       deg:=Length(pi);
     else
       if Length(pi)<>deg then
-        Info(InfoWarning,1,"degree discrepancy in nauty output!",
-	     Length(pi),"vs",deg);
+        Error("degree discrepancy in nauty output! ",Length(pi)," vs ",deg);
       fi;
     fi;
     Add(sgens,PermList(pi));
@@ -4613,10 +4616,11 @@ BindGlobal("ReadOutputNauty",function(file)
       l:=Chomp(l);
 # Print(l,"\n");
       if Length(l)>4 and l{[1..5]}="level" then
+        # new base point 
 	processperm();
         s:=SplitString(l,";");
 	s:=s[Length(s)-1]; # should be " x...x fixed"
-	if Length(s)<4 or s{[Length(s)-4..Length(s)]}<>"fixed" then
+	if Length(s)<5 or s{[Length(s)-4..Length(s)]}<>"fixed" then
 	  Error("unparsable line ",l);
 	fi;
 	s:=s{[1..Length(s)-6]};
