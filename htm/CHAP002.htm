@@ -315,12 +315,12 @@ gap&gt; Diameter(C);
 <a name = "SSEC008.1"></a>
 <li><code>GeneralizedOrbitalGraphs( </code><var>G</var><code> )</code>
 <p>
-Suppose <var>G</var> is a non-trivial transitive permutation group on
-<var>{1,...,n}</var>, where <var>n</var> is the largest point moved by <var>G</var>.
-Then this function returns a list of all the generalized orbital
-graphs for <var>G</var>. These are precisely the simple graphs with vertex
-set <var>{1,...,n}</var> for which <var>G</var> is a (vertex-transitive) group of
-automorphisms.
+Suppose <var>G</var> is a non-trivial transitive permutation group
+on <var>{1,...,n}</var>, where <var>n</var> is the largest point moved by <var>G</var>.
+Then this function returns a list of all the non-null generalized
+orbital graphs for <var>G</var>. These are precisely the non-null simple graphs
+with vertex set <var>{1,...,n}</var> for which <var>G</var> is a (vertex-transitive)
+group of automorphisms.
 <p>
 <pre>
 gap&gt; G:=JohnsonGraph(7,3).group;;    
@@ -439,5 +439,5 @@ rec(
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href ="CHAP003.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>December 2019
+<address>grape manual<br>March 2021
 </address></body></html>

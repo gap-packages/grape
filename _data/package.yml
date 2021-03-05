@@ -1,6 +1,6 @@
 name: GRAPE
-version: 4.8.3
-date: 2019-12-09
+version: 4.8.4
+date: 2021-03-05
 description: |
     GRaph Algorithms using PErmutation groups
 
@@ -12,7 +12,7 @@ maintainers:
     - name: Leonard H. Soicher
       url: http://www.maths.qmul.ac.uk/~lsoicher/
 
-GAP: ">=4.10"
+GAP: ">=4.11"
 
 www: https://gap-packages.github.io/grape
 readme: README.md
@@ -20,7 +20,7 @@ packageinfo: https://gap-packages.github.io/grape/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/grape/releases/download/v4.8.3/grape-4.8.3.tar.gz
+      url: https://github.com/gap-packages/grape/releases/download/v4.8.4/grape-4.8.4.tar.gz
 
 abstract: |
     <span class="pkgname">GRAPE</span> is a package for computing with graphs and groups, and is primarily designed for constructing and analysing graphs related to groups, finite geometries, and designs.
@@ -32,27 +32,27 @@ keywords: |
     graph, geometry, design.
 citeas: |
     <p class='BibEntry'>
-    [<span class='BibKey'>Soi19</span>]   <b class='BibAuthor'>Soicher, L. H.</b>,
+    [<span class='BibKey'>Soi21</span>]   <b class='BibAuthor'>Soicher, L. H.</b>,
      <i class='BibTitle'>GRAPE, GRaph Algorithms using PErmutation groups,
-             Version 4.8.3</i>
-     (<span class='BibYear'>2019</span>)<br />
+             Version 4.8.4</i>
+     (<span class='BibYear'>2021</span>)<br />
     (<span class='BibNote'>Refereed GAP package</span>),
     <span class='BibHowpublished'><a href="https://gap-packages.github.io/grape">https://gap-packages.github.io/grape</a></span>.
     </p>
     
 
 bibtex: |
-    @misc{ GRAPE4.8.3,
+    @misc{ GRAPE4.8.4,
       author =           {Soicher, L. H.},
       title =            {{GRAPE},  GRaph  Algorithms  using PErmutation groups,
-                          {V}ersion 4.8.3},
-      month =            {Dec},
-      year =             {2019},
+                          {V}ersion 4.8.4},
+      month =            {Mar},
+      year =             {2021},
       note =             {Refereed GAP package},
       howpublished =     {\href           {https://gap-packages.github.io/grape}
                           {\texttt{https://gap-packages.github.io/}\discretionary
                           {}{}{}\texttt{grape}}},
       keywords =         {graph; geometry; design},
-      printedkey =       {Soi19}
+      printedkey =       {Soi21}
     }
 

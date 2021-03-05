@@ -279,15 +279,16 @@ If <var>wts</var> is a list of (positive) integers, then it is required that
 for all <var>g</var> in <code></code><var>gamma</var><code>.group</code> and all <var>v</var> in <code>Vertices(</code><var>gamma</var><code>)</code>,
 we have <var><var>wts</var>[v<sup>g</sup>]=<var>wts</var>[v]</var>.
 <p>
-If <var>wts</var> is a list of <var>d</var>-vectors then we assume that there is some
-underlying action <var>mu</var> of <code></code><var>gamma</var><code>.group</code> on <code>[1..</code><var>d</var><code>]</code>. This results
-in an action of <code></code><var>gamma</var><code>.group</code> on the set of integer <var>d</var>-vectors, where
-if <var>w</var> is an integer <var>d</var>-vector and <var>g</var> in <code></code><var>gamma</var><code>.group</code> then <var>w<sup>g</sup></var>
-is defined by <var>w<sup>g</sup>[mu(i,g)]=w[i]</var> for all <var>i</var> in <code>[1..</code><var>d</var><code>]</code>. It is
-then required that for all <var>g</var> in <code></code><var>gamma</var><code>.group</code>, we have <var><var>k</var><sup>g</sup>=<var>k</var></var>
-and for all <var>v</var> in <code>Vertices(</code><var>gamma</var><code>)</code> <var><var>wts</var>[v<sup>g</sup>] = <var>wts</var>[v]<sup>g</sup></var>.
-These requirements are <strong>not</strong> checked by the function, and the use of
-vector-weights is primarily for advanced users of GRAPE.
+If <var>wts</var> is a list of <var>d</var>-vectors then we assume that there is some group
+<var>G</var> and epimorphism <var>theta</var> from <var>G</var> to <code></code><var>gamma</var><code>.group</code>, such that there
+is an action <var>mu</var> of <var>G</var> on <code>[1..</code><var>d</var><code>]</code>, giving an action of <var>G</var> on the
+set of integer <var>d</var>-vectors, where if <var>w</var> is an integer <var>d</var>-vector and
+<var>g</var> in <var>G</var> then <var>w<sup>g</sup></var> is defined by <var>w<sup>g</sup>[mu(i,g)]=w[i]</var> for all <var>i</var>
+in <code>[1..</code><var>d</var><code>]</code>. It is then required that for all <var>g</var> in <var>G</var>, we have
+<var><var>k</var><sup>g</sup>=<var>k</var></var> and for all <var>v</var> in <code>Vertices(</code><var>gamma</var><code>)</code>, <var><var>wts</var>[v<sup>gtheta</sup>]
+= <var>wts</var>[v]<sup>g</sup></var>.  These requirements are <strong>not</strong> checked by the function,
+and the use of vector-weights is primarily for the DESIGN package
+and advanced users of GRAPE.
 <p>
 An alternative name for this function is 
 <code>CliquesOfGivenSize</code>.
@@ -379,5 +380,5 @@ gap&gt; CliqueNumber(JohnsonGraph(7,2));
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP006.htm">Previous</a>] [<a href ="CHAP008.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>December 2019
+<address>grape manual<br>March 2021
 </address></body></html>
