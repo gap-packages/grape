@@ -48,6 +48,12 @@ GRAPE_DREADNAUT_EXE :=
 GRAPE_BLISS_EXE := ExternalFilename(DirectoriesSystemPrograms(),"bliss"); 
    # filename of bliss executable
 
+GRAPE_DREADNAUT_INPUT_USE_STRING := true;
+   # If true then use a string for the stream used for input
+   # to dreadnaut/nauty, if false use a file for this. 
+   # Using a string is faster than using a file, but may use
+   # too much storage.
+
 # The following variant of GAP's Exec is more flexible, and does not require a
 # shell. That makes it more reliable on Windows resp. with Cygwin. Moreover,
 # it allows to redirect input and output.
@@ -4681,7 +4687,7 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
 # Uses the nauty system. 
 #
   local gamma,col,ftmp1,ftmp2,fdre,fg,status,
-        ftmp1_stream,ftmp2_stream,fdre_stream,gp;
+        ftmp1_stream,fdre_stream,gp;
   if IsBound(gr.canonicalLabelling) then
     setcanon:=false;
   fi;
@@ -4714,11 +4720,18 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
   RemoveFile(ftmp1);
   RemoveFile(ftmp2);
 
-  fdre:="";
-  fdre_stream:=OutputTextString(fdre,false);
+  if GRAPE_DREADNAUT_INPUT_USE_STRING then
+    # Use a string for fdre_stream.
+    fdre:="";
+    fdre_stream:=OutputTextString(fdre,false);
+  else
+    # Use a file for fdre_stream.
+    fdre:=Filename(GRAPE_nautytmpdir,"fdre");
+    RemoveFile(fdre); 
+    fdre_stream:=OutputTextFile(fdre,false);
+  fi;
   SetPrintFormattingStatus(fdre_stream,false);
   PrintStreamNautyGraph(fdre_stream,gamma,col);
-  
   if not setcanon then
     # only the automorphism group is computed
     if IsSimpleGraph(gamma) then
@@ -4734,16 +4747,16 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
                " bq\n" );
     fi;
   fi;
-
   CloseStream(fdre_stream);
 
-  # initialize tmp2 file with degree
-  ftmp2_stream:=OutputTextFile(ftmp2,false);
-  SetPrintFormattingStatus(ftmp2_stream,false);
-  PrintTo(ftmp2_stream,gamma.order,"\n"); 
-  CloseStream(ftmp2_stream);
-
-  status:=GRAPE_Exec(GRAPE_DREADNAUT_EXE, [], InputTextString(fdre), OutputTextUser());
+  PrintTo(ftmp2,gamma.order,"\n"); # initialize ftmp2 with gamma.order
+  if GRAPE_DREADNAUT_INPUT_USE_STRING then
+    fdre_stream := InputTextString(fdre);
+  else 
+    fdre_stream := InputTextFile(fdre);
+  fi;
+  status:=GRAPE_Exec(GRAPE_DREADNAUT_EXE, [], fdre_stream, OutputTextUser());
+  CloseStream(fdre_stream);
 
   if status<>0 then
     Error("exit code ",status," returned by dreadnaut executable;\n",
@@ -4763,6 +4776,9 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
 
   RemoveFile(ftmp1);
   RemoveFile(ftmp2);
+  if not GRAPE_DREADNAUT_INPUT_USE_STRING then
+    RemoveFile(fdre);
+  fi;
    
 end);
 
@@ -4800,10 +4816,11 @@ BindGlobal("PrintStreamBlissGraph",function(stream,gamma,col)
   od;
 end);
 
-BindGlobal("ReadOutputBliss",function(f,canon)
+BindGlobal("ReadOutputBliss",function(file,setcanon)
 # Original procedure by Jerry James. Updated by Leonard Soicher.
-  local gens, l, i, pi, can;
+  local f, gens, l, i, pi, can;
 
+  f:=InputTextFile(file);
   if f=fail then
     Error("cannot find output produced by `bliss'");
   fi;
@@ -4816,9 +4833,9 @@ BindGlobal("ReadOutputBliss",function(f,canon)
       if Length(l)>11 and l{[1..11]}="Generator: " then
 	pi:=EvalString(l{[12..Length(l)]});
 	Add(gens,pi);
-      elif canon and Length(l)>20 and l{[1..20]}="Canonical labeling: " then
+      elif setcanon and Length(l)>20 and l{[1..20]}="Canonical labeling: " then
 	can:=InverseSameMutability(EvalString(l{[21..Length(l)]}));
-      elif canon and Length(l)=20 and l{[1..20]}="Canonical labeling: " then
+      elif setcanon and Length(l)=20 and l{[1..20]}="Canonical labeling: " then
 	can:=();
       fi;
     fi;
@@ -4861,19 +4878,18 @@ BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr, setcanon)
   fi;
 
   fdre:=Filename(GRAPE_nautytmpdir,"fdre");
+  ftmp:=Filename(GRAPE_nautytmpdir,"ftmp");
   
   # In principle redundant, but a failed call might have left files sitting
   # -- just throw out what will be overwritten anyhow.
   RemoveFile(fdre);
+  RemoveFile(ftmp);
 
   fdre_stream:=OutputTextFile(fdre,false); 
   SetPrintFormattingStatus(fdre_stream,false);
+
   PrintStreamBlissGraph(fdre_stream,gamma,col);
   CloseStream(fdre_stream);
-
-  ftmp:="";
-  ftmp_stream:=OutputTextString(ftmp,false);
-  SetPrintFormattingStatus(ftmp_stream,false);
 
   if not setcanon then
     # only the automorphism group is computed
@@ -4891,14 +4907,19 @@ BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr, setcanon)
     fi;
   fi;
 
-  status:=GRAPE_Exec(GRAPE_BLISS_EXE, arglist, InputTextUser(), ftmp_stream);
+  ftmp_stream:=OutputTextFile(ftmp,false);
+  SetPrintFormattingStatus(ftmp_stream,false);
+
+  status:=GRAPE_Exec(GRAPE_BLISS_EXE, arglist, InputTextNone(), ftmp_stream);
+
+  CloseStream(ftmp_stream);
 
   if status<>0 then
     Error("exit code ",status," returned by bliss executable;\n",
        "returned results may be wrong");
   fi;
 
-  fg:=ReadOutputBliss(InputTextString(ftmp),setcanon);
+  fg:=ReadOutputBliss(ftmp,setcanon);
   # fg[1]=gens for the aut group, 
   # fg[2]=canonical labelling if setcanon=true, else the empty list
   if not IsBound(gr.autGroup) then 
@@ -4910,6 +4931,7 @@ BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr, setcanon)
   fi;
 
   RemoveFile(fdre);
+  RemoveFile(ftmp);
 
 end);
 
