@@ -1,6 +1,6 @@
 ##############################################################################
 ##
-##  grape.g (Version 4.8.4)    GRAPE Library     Leonard Soicher
+##  grape.g (Version 4.8.5)    GRAPE Library     Leonard Soicher
 ##
 ##  Copyright (C) 1992-2021 Leonard Soicher, School of Mathematical Sciences, 
 ##                      Queen Mary University of London, London E1 4NS, U.K.
@@ -48,7 +48,7 @@ GRAPE_DREADNAUT_EXE :=
 GRAPE_BLISS_EXE := ExternalFilename(DirectoriesSystemPrograms(),"bliss"); 
    # filename of bliss executable
 
-GRAPE_DREADNAUT_INPUT_USE_STRING := true;
+GRAPE_DREADNAUT_INPUT_USE_STRING := false;
    # If true then use a string for the stream used for input
    # to dreadnaut/nauty, if false use a file for this. 
    # Using a string is faster than using a file, but may use
@@ -4549,6 +4549,10 @@ Add(GAPInfo.PostRestoreFuncs,function()
 end);
 
 BindGlobal("PrintStreamNautyGraph",function(stream,gamma,col)
+#
+# Prints in dreadnaut graph format the graph  gamma  with 
+# colour-classes  col  onto the given output stream  stream. 
+#
   local i, j, issimple;
   issimple:=IsSimpleGraph(gamma);
   if issimple then
@@ -4588,7 +4592,12 @@ BindGlobal("PrintStreamNautyGraph",function(stream,gamma,col)
 end);
 
 BindGlobal("ReadOutputNauty",function(file)
-# by Alexander Hulpke
+#
+# Reads the output of a run of dreadnaut/nauty, given in the file  file.
+# Returns  [sgens,bas],  where  sgens  is a strong generating set
+# for the automorphism group wrt base  bas. 
+# Function originally written by Alexander Hulpke.
+# 
   local f, bas, sgens, l, s, p, i, deg, processperm, pi;
 
   processperm:=function()
@@ -4611,7 +4620,7 @@ BindGlobal("ReadOutputNauty",function(file)
   deg:=fail;
   f:=InputTextFile(file);
   if f=fail then
-    Error("cannot find output produced by `dreadnaut'");
+    Error("cannot find output produced by dreadnaut in file ",file);
   fi;
   bas:=[];
   sgens:=[];
@@ -4620,7 +4629,6 @@ BindGlobal("ReadOutputNauty",function(file)
     l:=ReadLine(f);
     if l<>fail then
       l:=Chomp(l);
-# Print(l,"\n");
       if Length(l)>4 and l{[1..5]}="level" then
         # new base point 
 	processperm();
@@ -4646,28 +4654,33 @@ BindGlobal("ReadOutputNauty",function(file)
 
     fi;
   od;
-  bas:=Reversed(bas);
   CloseStream(f);
+  bas:=Reversed(bas);
+  sgens:=Set(sgens);
   return [sgens,bas];
 end);
 
 BindGlobal("ReadCanonNauty",function(file)
-# by Alexander Hulpke
+#
+# Reads the canonical labelling output of a run of dreadnaut/nauty,
+# given in the file  file, and returns this canonical labelling. 
+# Function originally written by Alexander Hulpke.
+#
   local f, can, l, deg, s, i;
   f:=InputTextFile(file);
   if f=fail then
-    Error("cannot find canonization produced by `dreadnaut'");
+    Error("cannot find canonization produced by dreadnaut in file ",file);
   fi;
   can:=[];
   # first line: degree
-  l:=ReadLine(f);l:=Chomp(l);
-# Print(l,"\n");
+  l:=ReadLine(f);
+  l:=Chomp(l);
   deg:=Int(l);
   # now read in until you have enough integers for the permutation -- the
   # rest is the relabelled graph and can be discarded
   while Length(can)<deg do
-    l:=ReadLine(f);l:=Chomp(l);
-# Print(l,"\n");
+    l:=ReadLine(f);
+    l:=Chomp(l);
     s:=SplitString(l,' ');
     for i in s do
       if Length(i)>0 and Length(can)<deg then
@@ -4687,7 +4700,7 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
 # Uses the nauty system. 
 #
   local gamma,col,ftmp1,ftmp2,fdre,fg,status,
-        ftmp1_stream,fdre_stream,gp;
+        ftmp1_stream,fdre_stream,out_stream,gp;
   if IsBound(gr.canonicalLabelling) then
     setcanon:=false;
   fi;
@@ -4727,8 +4740,11 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
   else
     # Use a file for fdre_stream.
     fdre:=Filename(GRAPE_nautytmpdir,"fdre");
-    RemoveFile(fdre); 
+    RemoveFile(fdre);  # in case there is a leftover file
     fdre_stream:=OutputTextFile(fdre,false);
+    if fdre_stream=fail then
+       Error("error opening output text stream using file ", fdre); 
+    fi;
   fi;
   SetPrintFormattingStatus(fdre_stream,false);
   PrintStreamNautyGraph(fdre_stream,gamma,col);
@@ -4748,16 +4764,20 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
     fi;
   fi;
   CloseStream(fdre_stream);
-
-  PrintTo(ftmp2,gamma.order,"\n"); # initialize ftmp2 with gamma.order
+  PrintTo(ftmp2,gamma.order,"\n"); # initialize ftmp2
   if GRAPE_DREADNAUT_INPUT_USE_STRING then
     fdre_stream := InputTextString(fdre);
   else 
     fdre_stream := InputTextFile(fdre);
+    if fdre_stream=fail then
+       Error("error opening input text stream using file ", fdre); 
+    fi;
   fi;
-  status:=GRAPE_Exec(GRAPE_DREADNAUT_EXE, [], fdre_stream, OutputTextUser());
+  RewindStream(fdre_stream); # probably not necessary
+  out_stream := OutputTextUser(); 
+  status := GRAPE_Exec(GRAPE_DREADNAUT_EXE, [], fdre_stream, out_stream);
   CloseStream(fdre_stream);
-
+  CloseStream(out_stream); 
   if status<>0 then
     Error("exit code ",status," returned by dreadnaut executable;\n",
        "returned results may be wrong");
@@ -4779,11 +4799,14 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
   if not GRAPE_DREADNAUT_INPUT_USE_STRING then
     RemoveFile(fdre);
   fi;
-   
 end);
 
 BindGlobal("PrintStreamBlissGraph",function(stream,gamma,col)
-# Original procedure by Jerry James. Updated by Leonard Soicher.
+#
+# Prints in bliss graph format the graph  gamma  with 
+# colour-classes  col  onto the given output stream  stream. 
+# Procedure originally written by Jerry James. 
+#
   local i, j, nedges, issimple;
   issimple:=IsSimpleGraph(gamma);
   if IsRegularGraph(gamma) and gamma.order > 0 then
@@ -4817,12 +4840,18 @@ BindGlobal("PrintStreamBlissGraph",function(stream,gamma,col)
 end);
 
 BindGlobal("ReadOutputBliss",function(file,setcanon)
-# Original procedure by Jerry James. Updated by Leonard Soicher.
+#
+# Reads the output of a run of bliss given in the file  file.
+# Returns  [gens,can],  where  gens  is a generating list
+# for the automorphism group and  can  is the canonical labelling
+# if  setcanon=true,  and  can=[]  if  setcanon=false. 
+# Function originally written by Jerry James. 
+# 
   local f, gens, l, i, pi, can;
 
   f:=InputTextFile(file);
   if f=fail then
-    Error("cannot find output produced by `bliss'");
+    Error("cannot find output produced by bliss in file ",file);
   fi;
   gens:=[];
   can:=[];
@@ -4844,14 +4873,14 @@ BindGlobal("ReadOutputBliss",function(file,setcanon)
   return [gens,can];
 end);
 
-BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr, setcanon) 
+BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr,setcanon) 
 #
 # Sets the  autGroup  component (if not already bound) and the
 # canonicalLabelling  component (if not already bound and setcanon=true) 
 # of the graph or graph with colour-classes  gr.
 # Uses the bliss system. 
 #
-  local gamma,col,ftmp,ftmp_stream,fdre,fg,fdre_stream,
+  local gamma,col,ftmp,ftmp_stream,fdre,fg,fdre_stream,in_stream,
         arglist,status,gp;
   if IsBound(gr.canonicalLabelling) then
     setcanon:=false;
@@ -4886,8 +4915,10 @@ BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr, setcanon)
   RemoveFile(ftmp);
 
   fdre_stream:=OutputTextFile(fdre,false); 
+  if fdre_stream=fail then
+    Error("error opening output text stream using file ", fdre); 
+  fi;
   SetPrintFormattingStatus(fdre_stream,false);
-
   PrintStreamBlissGraph(fdre_stream,gamma,col);
   CloseStream(fdre_stream);
 
@@ -4908,12 +4939,14 @@ BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr, setcanon)
   fi;
 
   ftmp_stream:=OutputTextFile(ftmp,false);
+  if ftmp_stream=fail then
+    Error("error opening output text stream using file ", ftmp); 
+  fi;
   SetPrintFormattingStatus(ftmp_stream,false);
-
-  status:=GRAPE_Exec(GRAPE_BLISS_EXE, arglist, InputTextNone(), ftmp_stream);
-
+  in_stream:=InputTextNone();
+  status := GRAPE_Exec(GRAPE_BLISS_EXE, arglist, in_stream, ftmp_stream);
+  CloseStream(in_stream); 
   CloseStream(ftmp_stream);
-
   if status<>0 then
     Error("exit code ",status," returned by bliss executable;\n",
        "returned results may be wrong");
