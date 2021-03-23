@@ -1,5 +1,5 @@
 
-The GRAPE 4.8.4 Package for GAP
+The GRAPE 4.8.5 Package for GAP
 ===============================
 
 GRAPE is a GAP package for computing with graphs and groups, 
@@ -25,7 +25,7 @@ Referencing GRAPE
 Please reference your use of the GRAPE package in a published work
 as follows:
 
-L.H. Soicher, The GRAPE package for GAP, Version 4.8.4, 2021,
+L.H. Soicher, The GRAPE package for GAP, Version 4.8.5, 2021,
 <https://gap-packages.github.io/grape>.
 
 Questions, remarks, suggestions, and issues

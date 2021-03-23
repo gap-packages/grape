@@ -921,7 +921,8 @@ BindGlobal("EdgeOrbitsGraph",function(arg)
 local G,E,n,gamma,e;
 G:=arg[1];
 E:=arg[2];
-if IsInt(E[1]) then   # assume  E  consists of a single edge.
+if IsBound(E[1]) and IsInt(E[1]) then 
+   # assume  E  consists of a single edge.
    E:=[E];
 fi;
 if IsBound(arg[3]) then 
@@ -944,8 +945,8 @@ BindGlobal("GeneralizedOrbitalGraphs",function(G)
 # The input to this function is a non-trivial permutation group G,
 # acting transitively on [1..n] (where n:=LargestMovedPoint(G)).
 #
-# Then this function returns a list of all the generalized orbital
-# graphs for G (that is, the simple graphs with vertex set [1..n]
+# Then this function returns a list of all the non-null generalized orbital
+# graphs for G (that is, the non-null simple graphs with vertex set [1..n]
 # and edge-set a union of orbitals of G).
 #
 local comb,n,H,result,reps,i,L,M,mm;
@@ -4773,7 +4774,6 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
        Error("error opening input text stream using file ", fdre); 
     fi;
   fi;
-  RewindStream(fdre_stream); # probably not necessary
   out_stream := OutputTextUser(); 
   status := GRAPE_Exec(GRAPE_DREADNAUT_EXE, [], fdre_stream, out_stream);
   CloseStream(fdre_stream);

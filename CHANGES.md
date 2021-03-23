@@ -1,5 +1,26 @@
-Main changes from GRAPE 4.8.3 to GRAPE 4.8.4 (March 2021)
----------------------------------------------------------
+Main changes from GRAPE 4.8.4 to GRAPE 4.8.5 (late March 2021)
+--------------------------------------------------------------
+
+1. Fixed bug in EdgeOrbitsGraph, where previously when given an empty
+list of edges, an error occurred and a break loop was entered.
+
+2. Better error checking and more consistent use of streams for
+dreadnaut/nauty and bliss I/O. The default now is to use files for
+these streams.
+
+3. New boolean global variable `GRAPE_DREADNAUT_INPUT_USE_STRING` which
+by default is set to `false`. If set to `true` then a string is used
+for the stream for input to dreadnaut/nauty; if set to `false` a file
+is used for this stream.  Using a string is faster than using a file,
+but may use too much storage. Both possibilities for 
+`GRAPE_DREADNAUT_INPUT_USE_STRING` are now tested in the package tests.
+
+4. Since simple graphs are no-longer input as directed graphs to nauty
+and bliss, some tests for non-simple graphs with colour classes were
+added to the package tests.
+
+Main changes from GRAPE 4.8.3 to GRAPE 4.8.4 (early March 2021)
+---------------------------------------------------------------
 
 1. Simple GRAPE graphs are now output to nauty as nauty undirected graphs
 and are so treated by nauty.  (You should expect canonical labellings

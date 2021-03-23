@@ -396,6 +396,221 @@ gap> J:=JohnsonGraph(4,2);;
 gap> JIm:=GraphImage(J,(1,2,3,4,5));;
 gap> IsIsomorphicGraph(J,JIm);
 true
+gap> gamma := JohnsonGraph(5,3);;
+gap> AddEdgeOrbit(gamma,[1,1]); # so gamma is non-simple
+gap> delta := JohnsonGraph(5,2);;
+gap> AddEdgeOrbit(delta,[1,1]); # so delta is non-simple
+gap> IsIsomorphicGraph( gamma, delta );
+true
+gap> IsIsomorphicGraph(
+>    rec(graph:=gamma, colourClasses:=[[7],[1,2,3,4,5,6,8,9,10]]),
+>    rec(graph:=delta, colourClasses:=[[10],[1..9]]) );
+true
+gap> IsIsomorphicGraph(
+>    rec(graph:=gamma, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]),
+>    rec(graph:=delta, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) );
+false
+gap> R:=GraphIsomorphismClassRepresentatives([gamma,delta,
+>    ComplementGraph(gamma)]);;
+gap> Length(R);
+2
+gap> R:=GraphIsomorphismClassRepresentatives(
+>    [ rec(graph:=gamma, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]),
+>      rec(graph:=delta, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]),
+>      rec(graph:=ComplementGraph(gamma), 
+>         colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) ] );;
+gap> Length(R);
+3
+gap> GRAPE_DREADNAUT_INPUT_USE_STRING:=not GRAPE_DREADNAUT_INPUT_USE_STRING;; 
+gap> #
+gap> # Now repeat certain tests. 
+gap> # 
+gap> gamma := JohnsonGraph(4,2);;
+gap> aut := AutGroupGraph(gamma);;
+gap> Size(gamma.group);
+24
+gap> Size(aut);
+48
+gap> delta := NewGroupGraph( aut, gamma );;
+gap> Size(delta.group);
+48
+gap> IsIsomorphicGraph( gamma, delta );
+true
+gap> IsIsomorphicGraph(JohnsonGraph(7,3),JohnsonGraph(7,4));
+true
+gap> gamma:=JohnsonGraph(4,2);;
+gap> Size(AutomorphismGroup( rec(graph:=gamma,
+>    colourClasses:=[[1,6],[2,3,4,5]]) ));
+16
+gap> gamma := JohnsonGraph(5,3);;
+gap> delta := JohnsonGraph(5,2);;
+gap> IsIsomorphicGraph( gamma, delta );
+true
+gap> IsIsomorphicGraph(
+>    rec(graph:=gamma, colourClasses:=[[7],[1,2,3,4,5,6,8,9,10]]),
+>    rec(graph:=delta, colourClasses:=[[10],[1..9]]) );
+true
+gap> IsIsomorphicGraph(
+>    rec(graph:=gamma, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]),
+>    rec(graph:=delta, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) );
+false
+gap> R:=GraphIsomorphismClassRepresentatives([gamma,delta,
+>    ComplementGraph(gamma)]);;
+gap> Length(R);
+2
+gap> R:=GraphIsomorphismClassRepresentatives(
+>    [ rec(graph:=gamma, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]),
+>      rec(graph:=delta, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]),
+>      rec(graph:=ComplementGraph(gamma), 
+>         colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) ] );;
+gap> Length(R);
+3
+gap> T:=ComplementGraph(JohnsonGraph(10,2));;
+gap> P:=PartialLinearSpaces(T,4,6);;
+gap> Set(List(P,x->Size(x.group)));
+[ 216, 1512 ]
+gap> ChromaticNumber(JohnsonGraph(5,2));
+5
+gap> ChromaticNumber(JohnsonGraph(6,2));
+5
+gap> ChromaticNumber(JohnsonGraph(7,2));
+7
+gap> CliqueNumber(JohnsonGraph(5,2));
+4
+gap> CliqueNumber(JohnsonGraph(6,2));
+5
+gap> CliqueNumber(JohnsonGraph(7,2));
+6
+gap> gamma:=EdgeOrbitsGraph(Group((1,2,3,4,5,6,7)),[3,4]);;
+gap> Size(AutomorphismGroup(gamma));
+7
+gap> gamma:=NewGroupGraph(Group(()),gamma);;
+gap> AddEdgeOrbit(gamma,[5,5]);
+gap> Size(AutomorphismGroup(gamma));
+1
+gap> gamma:=UnderlyingGraph(EdgeOrbitsGraph(Group((1,2,3,4,5,6,7)),[3,4]));;
+gap> Size(AutomorphismGroup(gamma));
+14
+gap> gamma:=NewGroupGraph(Group(()),gamma);;
+gap> AddEdgeOrbit(gamma,[5,5]);
+gap> Size(AutomorphismGroup(gamma));
+2
+gap> G:=OnePrimitiveGroup(DegreeOperation,[275],Size,[898128000],IsSimple,[true]);;
+gap> gamma:=EdgeOrbitsGraph(G,[1,2]);;
+gap> if VertexDegrees(gamma)[1]>(gamma.order-1)/2 then
+>    McL:=ComplementGraph(gamma);
+> else
+>    McL:=gamma;
+> fi;
+gap> Size(AutomorphismGroup(McL))/Size(McL.group); 
+2
+gap> GlobalParameters(McL); 
+[ [ 0, 0, 112 ], [ 1, 30, 81 ], [ 56, 56, 0 ] ]
+gap> gamma:=CompleteGraph(Group(()),0);; 
+gap> MaximumClique(gamma);
+[  ]
+gap> CliqueNumber(gamma);
+0
+gap> ChromaticNumber(gamma);
+0
+gap> gamma:=CompleteGraph(Group(()),20);; 
+gap> MaximumClique(gamma);
+[ 1 .. 20 ]
+gap> CliqueNumber(gamma);
+20
+gap> ChromaticNumber(gamma);
+20
+gap> gamma:=BipartiteDouble(gamma);; 
+gap> MaximumClique(gamma);
+[ 1, 22 ]
+gap> CliqueNumber(gamma);
+2
+gap> ChromaticNumber(gamma);
+2
+gap> gamma:=NullGraph(Group(()),20);; 
+gap> MaximumClique(gamma);
+[ 1 ]
+gap> CliqueNumber(gamma);
+1
+gap> ChromaticNumber(gamma);
+1
+gap> gamma:=DistanceSetInduced(McL,1,1);; 
+gap> CliqueNumber(gamma);
+4
+gap> ChromaticNumber(gamma);
+8
+gap> gamma:=DistanceSetInduced(gamma,1,1);; 
+gap> CliqueNumber(gamma);
+3
+gap> ChromaticNumber(gamma);
+3
+gap> gamma:=DistanceSetInduced(DistanceSetInduced(McL,1,1),2,1);; 
+gap> CliqueNumber(gamma);
+3
+gap> ChromaticNumber(gamma);
+7
+gap> gamma:=DistanceSetInduced(McL,2,1);; 
+gap> CliqueNumber(gamma);
+3
+gap> ChromaticNumber(gamma);
+10
+gap> CliqueNumber(ComplementGraph(gamma));
+21
+gap> gamma:=DistanceSetInduced(gamma,1,1);; 
+gap> CliqueNumber(gamma);
+2
+gap> ChromaticNumber(gamma);
+4
+gap> gamma:=DistanceSetInduced(DistanceSetInduced(McL,2,1),2,1);; 
+gap> CliqueNumber(gamma);
+3
+gap> ChromaticNumber(gamma);
+6
+gap> gamma:=DistanceSetInduced(gamma,2,1);; 
+gap> ConnectedComponents(gamma); 
+[ [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
+      21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 
+      39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 
+      57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72 ] ]
+gap> OrderGraph(gamma);
+72
+gap> VertexDegrees(gamma); 
+[ 20 ]
+gap> CliqueNumber(gamma);
+3
+gap> ChromaticNumber(gamma);
+5
+gap> ChromaticNumber(ComplementGraph(gamma));
+24
+gap> J:=JohnsonGraph(4,2);;
+gap> JIm:=GraphImage(J,(1,2,3,4,5));;
+gap> IsIsomorphicGraph(J,JIm);
+true
+gap> gamma := JohnsonGraph(5,3);;
+gap> AddEdgeOrbit(gamma,[1,1]); # so gamma is non-simple
+gap> delta := JohnsonGraph(5,2);;
+gap> AddEdgeOrbit(delta,[1,1]); # so delta is non-simple
+gap> IsIsomorphicGraph( gamma, delta );
+true
+gap> IsIsomorphicGraph(
+>    rec(graph:=gamma, colourClasses:=[[7],[1,2,3,4,5,6,8,9,10]]),
+>    rec(graph:=delta, colourClasses:=[[10],[1..9]]) );
+true
+gap> IsIsomorphicGraph(
+>    rec(graph:=gamma, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]),
+>    rec(graph:=delta, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) );
+false
+gap> R:=GraphIsomorphismClassRepresentatives([gamma,delta,
+>    ComplementGraph(gamma)]);;
+gap> Length(R);
+2
+gap> R:=GraphIsomorphismClassRepresentatives(
+>    [ rec(graph:=gamma, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]),
+>      rec(graph:=delta, colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]),
+>      rec(graph:=ComplementGraph(gamma), 
+>         colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) ] );;
+gap> Length(R);
+3
 gap> STOP_TEST( "testall.tst", 10000 );
 ## The first argument of STOP_TEST should be the name of the test file.
 ## The number is a proportionality factor that is used to output a 
