@@ -1,6 +1,6 @@
 name: GRAPE
-version: 4.8.4
-date: 2021-03-05
+version: 4.8.5
+date: 2021-03-26
 description: |
     GRaph Algorithms using PErmutation groups
 
@@ -20,7 +20,7 @@ packageinfo: https://gap-packages.github.io/grape/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/grape/releases/download/v4.8.4/grape-4.8.4.tar.gz
+      url: https://github.com/gap-packages/grape/releases/download/v4.8.5/grape-4.8.5.tar.gz
 
 abstract: |
     <span class="pkgname">GRAPE</span> is a package for computing with graphs and groups, and is primarily designed for constructing and analysing graphs related to groups, finite geometries, and designs.
@@ -34,7 +34,7 @@ citeas: |
     <p class='BibEntry'>
     [<span class='BibKey'>Soi21</span>]   <b class='BibAuthor'>Soicher, L. H.</b>,
      <i class='BibTitle'>GRAPE, GRaph Algorithms using PErmutation groups,
-             Version 4.8.4</i>
+             Version 4.8.5</i>
      (<span class='BibYear'>2021</span>)<br />
     (<span class='BibNote'>Refereed GAP package</span>),
     <span class='BibHowpublished'><a href="https://gap-packages.github.io/grape">https://gap-packages.github.io/grape</a></span>.
@@ -42,10 +42,10 @@ citeas: |
     
 
 bibtex: |
-    @misc{ GRAPE4.8.4,
+    @misc{ GRAPE4.8.5,
       author =           {Soicher, L. H.},
       title =            {{GRAPE},  GRaph  Algorithms  using PErmutation groups,
-                          {V}ersion 4.8.4},
+                          {V}ersion 4.8.5},
       month =            {Mar},
       year =             {2021},
       note =             {Refereed GAP package},
