@@ -611,6 +611,7 @@ gap> R:=GraphIsomorphismClassRepresentatives(
 >         colourClasses:=[[1],[6],[2,3,4,5,7,8,9,10]]) ] );;
 gap> Length(R);
 3
+gap> GRAPE_DREADNAUT_INPUT_USE_STRING:=not GRAPE_DREADNAUT_INPUT_USE_STRING;; 
 gap> STOP_TEST( "testall.tst", 10000 );
 ## The first argument of STOP_TEST should be the name of the test file.
 ## The number is a proportionality factor that is used to output a 
