@@ -1,7 +1,7 @@
-Main changes from GRAPE 4.8.4 to GRAPE 4.8.5 (late March 2021)
---------------------------------------------------------------
+Main changes from GRAPE 4.8.4 to GRAPE 4.8.5 (26 March 2021)
+------------------------------------------------------------
 
-1. Fixed bug in EdgeOrbitsGraph, where previously when given an empty
+1. Fixed bug in `EdgeOrbitsGraph`, where previously when given an empty
 list of edges, an error occurred and a break loop was entered.
 
 2. Better error checking and more consistent use of streams for
@@ -19,8 +19,8 @@ but may use too much storage. Both possibilities for
 and bliss, some tests for non-simple graphs with colour classes were
 added to the package tests.
 
-Main changes from GRAPE 4.8.3 to GRAPE 4.8.4 (early March 2021)
----------------------------------------------------------------
+Main changes from GRAPE 4.8.3 to GRAPE 4.8.4 (05 March 2021)
+------------------------------------------------------------
 
 1. Simple GRAPE graphs are now output to nauty as nauty undirected graphs
 and are so treated by nauty.  (You should expect canonical labellings
