@@ -15,6 +15,9 @@ Version := "4.8.5",
 ##  Release date of the current version in dd/mm/yyyy format.
 Date := "26/03/2021",
 
+##  Machine readable license information (as an SPDX identifier)
+License := "GPL-2.0-or-later",
+
 SourceRepository := rec(
     Type := "git",
     URL :=  "https://github.com/gap-packages/grape",
