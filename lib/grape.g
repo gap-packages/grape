@@ -3563,6 +3563,9 @@ if not weighted and k>=0 then
       fi; 
    fi;
 fi;
+if not weighted and k>=0 and allsubs=0 and not IsCompleteGraph(gamma) and IsBound(gamma.autGroup) and Size(gamma.group)<Size(gamma.autGroup) then
+   gamma:=NewGroupGraph(gamma.autGroup,gamma);
+fi;
 K:=CompleteSubgraphsSearch(gamma,kvector,[],[]);
 for clique in K do
    Sort(clique); 
