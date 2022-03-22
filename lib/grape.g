@@ -3562,9 +3562,11 @@ if not weighted and k>=0 then
          return [];
       fi; 
    fi;
-fi;
-if not weighted and k>=0 and allsubs=0 and not IsCompleteGraph(gamma) and IsBound(gamma.autGroup) and Size(gamma.group)<Size(gamma.autGroup) then
-   gamma:=NewGroupGraph(gamma.autGroup,gamma);
+   if allsubs=0 and not IsCompleteGraph(gamma) and 
+      IsBound(gamma.autGroup) and Size(gamma.group)<Size(gamma.autGroup) then
+      # make use of the full automorphism group of  gamma 
+      gamma:=NewGroupGraph(gamma.autGroup,gamma);
+   fi;
 fi;
 K:=CompleteSubgraphsSearch(gamma,kvector,[],[]);
 for clique in K do
