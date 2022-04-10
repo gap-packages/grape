@@ -7,14 +7,14 @@
    The partial solutions to consider are those with with indices 
    argv[1] up to argv[2] (or until EOF if this comes first).
 
-   Leonard Soicher, 04/08/2020 */
+   Leonard Soicher, 03/01/2022 */
 
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 
-#define max_order 2000
+#define max_order 10000
 /* Maximum value of Gamma_order, the order of the graph with 
    adjacency matrix  Gamma. */
 
@@ -388,7 +388,7 @@ int lengthsofar,lengthactive,i,j,num,m,
     sofar[max_order+1],active[max_order+1],kvector[max_d+1];
 long int case_count,startwork,endwork;
 char **strptr;
-if(argc<3)
+if(argc<4)
    {
    fprintf(stderr,"\nerror: command must have at least 3 arguments.\n");
    exit(EXIT_FAILURE);

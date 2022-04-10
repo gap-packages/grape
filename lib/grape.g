@@ -54,6 +54,13 @@ GRAPE_DREADNAUT_INPUT_USE_STRING := false;
    # Using a string is faster than using a file, but may use
    # too much storage.
 
+GRAPE_CCLIQUE := 
+   ExternalFilename(DirectoriesPackagePrograms("grape"),"cclique")<>fail; 
+   # If true, use the external  cclique  program if it is appropriate,
+   # if false then use GAP code only for clique finding. 
+GRAPE_CCLIQUE_MAX_ORDER:=10000; # for now
+GRAPE_CCLIQUE_MAX_D:=1000; # for now
+                         
 # The following variant of GAP's Exec is more flexible, and does not require a
 # shell. That makes it more reliable on Windows resp. with Cygwin. Moreover,
 # it allows to redirect input and output.
@@ -2803,7 +2810,8 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 #
 local IsFixedPoint,HasLargerEntry,k,smallorder,weights,weighted,
       originalG,originalgamma,includingallmaximalreps, 
-      CompleteSubgraphsSearch,K,clique,cliquenumber,chromaticnumber;
+      CompleteSubgraphsSearch,K,clique,cliquenumber,chromaticnumber,
+      usecclique;
 
 IsFixedPoint := function(G,point)
 #
@@ -2836,10 +2844,10 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 # This function returns a dense list of distinct complete subgraphs of
 # gamma,  each of which is given as a dense list of distinct vertex-names.
 #
-# The variables  smallorder,  originalG,  allsubs,  allmaxes,  weights, 
-# weightvectors,  weighted,  partialcolour,  dovector,  IsFixedPoint,  and  
-# HasLargerEntry  are global.  (originalG  is the group of automorphisms 
-# associated with the original graph.)  
+# The variables  usecclique,  smallorder,  originalG,  
+# allsubs,  allmaxes,  weights,  weightvectors,  weighted,  partialcolour,  
+# dovector,  IsFixedPoint,  and  HasLargerEntry  are global.  (originalG  
+# is the group of automorphisms associated with the original graph.)  
 #
 # If  allsubs=2  then the returned complete subgraphs will be 
 # (pairwise) inequivalent under gamma.group. 
@@ -2894,7 +2902,8 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 #
 local k,n,i,j,delta,adj,rep,a,b,ans,ans1,ans2,names,W,H,HH,newsofar,
       G,orb,kk,ll,mm,active,nadj,verticesremoved,J,doposition,
-      A,nactive,nactivevector,wt,indorbwtsum,CompleteSubgraphsSearch1;
+      A,nactive,nactivevector,wt,indorbwtsum,CompleteSubgraphsSearch1,
+      ProcessPartialSolution;
 
 CompleteSubgraphsSearch1 := function(mask,kvector,forbidmask)
 #
@@ -3198,6 +3207,25 @@ od;
 return ans;
 end;
 
+# ProcessPartialSolution := function(sofar,activenames,kvector)
+# local i;
+# AppendTo(partialsolutionsfile,"\n");
+# AppendTo(partialsolutionsfile,Length(sofar),"\n");
+# for i in [1..Length(sofar)] do
+   # AppendTo(partialsolutionsfile,"  ",sofar[i]);
+# od;
+# AppendTo(partialsolutionsfile,"\n");
+# AppendTo(partialsolutionsfile,Length(activenames),"\n");
+# for i in [1..Length(activenames)] do
+   # AppendTo(partialsolutionsfile,"  ",activenames[i]);
+# od;
+# AppendTo(partialsolutionsfile,"\n");
+# for i in [1..Length(kvector)] do
+   # AppendTo(partialsolutionsfile," ",kvector[i]);
+# od;
+# AppendTo(partialsolutionsfile,"\n");
+# return;
+# end;
 #
 # begin  CompleteSubgraphsSearch
 #
@@ -3230,7 +3258,11 @@ fi;
 G:=gamma.group;
 if IsTrivial(G) then
    # The group will be trivial from here on, and we will use the 
-   # specialized function  CompleteSubgraphsSearch1. 
+   # ccliques  program or  CompleteSubgraphsSearch1. 
+   # if GRAPE_CCLIQUE then
+      # ProcessPartialSolution(sofar,gamma.names{active},kvector);
+      # return [];
+   # fi;
    if (not allmaxes) and forbidden<>[] then 
       # strip out the forbidden vertices.
       gamma:=InducedSubgraph(gamma,active,G);
@@ -3568,6 +3600,8 @@ if not weighted and k>=0 then
       gamma:=NewGroupGraph(gamma.autGroup,gamma);
    fi;
 fi;
+usecclique:=GRAPE_CCLIQUE and k>0 and gamma.order<=GRAPE_CCLIQUE_MAX_ORDER 
+   and Length(kvector)<=GRAPE_CCLIQUE_MAX_D;
 K:=CompleteSubgraphsSearch(gamma,kvector,[],[]);
 for clique in K do
    Sort(clique); 
