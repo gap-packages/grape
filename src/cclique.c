@@ -71,7 +71,7 @@ void InitialiseSolutions()
 {
 solution_count=0;
 solution_file=stdout;
-fprintf(solution_file,"GRAPE_cclique_solutions:=[\n");
+fprintf(solution_file,"[");
 }
 
 void ProcessSolution(solution)
@@ -79,21 +79,22 @@ int *solution;  /* integer list */
 {
 int i;
 if (solution_count>0)
-   fprintf(solution_file,",\n"); /* after previous solution */
+   fprintf(solution_file,","); /* after previous solution */
 solution_count++;
 fprintf(solution_file,"["); /* start of current solution */
 for(i=1;i<=Length(solution);i++)
    {
    if(i>1)
       fprintf(solution_file,",");
-   fprintf(solution_file,"%d",solution[i]); 
+      fprintf(solution_file,"%d",solution[i]); 
    }
 fprintf(solution_file,"]"); 
 }
 
 void FinaliseSolutions()
 {
-fprintf(solution_file,"\n];");
+fprintf(solution_file,"]");
+fclose(solution_file);
 }
 
 void CliqueSearch1(sofar,active,kvector)
