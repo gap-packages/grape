@@ -17,7 +17,7 @@ file nauty22/nauty-h.in
 Except for Brendan McKay's nauty 2.2 package, GRAPE is licensed under the
 terms of the GNU General Public License as published by the Free Software
 Foundation; either version 2 of the License, or (at your option) any
-later version. For details, see <http://www.gnu.org/licenses/gpl.html>.
+later version. For details, see <https://www.gnu.org/licenses/gpl.html>.
 
 Referencing GRAPE
 -----------------
