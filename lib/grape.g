@@ -2827,7 +2827,7 @@ local IsFixedPoint,HasLargerEntry,k,smallorder,weights,weighted,
       usecclique,startedccliqueinput,  # booleans
       StartCcliqueInput,ProcessPartialSolution,  # functions
       cclique_in,cclique_out,  # streams
-      cclique_in_file,cclique_out_string,status;
+      cclique_in_file,cclique_out_string,status,L;
 
 IsFixedPoint := function(G,point)
 #
@@ -2866,11 +2866,7 @@ if weightvectors<>[] then
 else
    d:=0;
 fi;
-if allsubs=0 then
-   PrintTo(cclique_in,0," ",n," ",d,"\n");
-else
-   PrintTo(cclique_in,1," ",n," ",d,"\n");
-fi;
+PrintTo(cclique_in,allsubs," ",n," ",d,"\n");
 for i in [1..n] do
    adj:=Adjacency(graph,i); 
    for j in [1..n] do
@@ -3662,8 +3658,8 @@ if not weighted and k>=0 then
       gamma:=NewGroupGraph(gamma.autGroup,gamma);
    fi;
 fi;
-usecclique := GRAPE_CCLIQUE 
-   and k>0 and (not allmaxes)
+usecclique := GRAPE_CCLIQUE and k>0 
+   and not allmaxes and allsubs<2 
    and gamma.order<=GRAPE_CCLIQUE_MAX_ORDER 
    and Length(kvector)<=GRAPE_CCLIQUE_MAX_D
    and IsExistingFile(GRAPE_CCLIQUE_EXE);
@@ -3671,7 +3667,7 @@ startedccliqueinput:=false;
 K:=CompleteSubgraphsSearch(gamma,kvector,[],[]);
 if startedccliqueinput then
   CloseStream(cclique_in); 
-  if allsubs>0 or K=[] then
+  if not (allsubs=0 and K<>[]) then
      # run  cclique  and use its output
      cclique_in:=InputTextFile(cclique_in_file); 
      RewindStream(cclique_in);
@@ -3685,7 +3681,8 @@ if startedccliqueinput then
      fi;
      CloseStream(cclique_in); 
      CloseStream(cclique_out); 
-     K:=Concatenation(K,EvalString(cclique_out_string));
+     L:=EvalString(cclique_out_string);
+     K:=Concatenation(K,L);
      if allsubs=0 and Length(K)>1 then
        K:=[K[1]];
      fi;
@@ -3695,10 +3692,6 @@ fi;
 for clique in K do
    Sort(clique); 
 od;
-if startedccliqueinput and allsubs=2 and Length(K)>1 then 
-   # remove any isomorphic duplicates
-   K:=Set(K,clique->SmallestImageSet(originalG,clique));
-fi; 
 Sort(K);
 if not weighted and not IsBound(originalgamma.maximumClique) then 
    if includingallmaximalreps then 
