@@ -3405,13 +3405,11 @@ if ForAll(nadj,x->x=kk) then
       fi;
    fi;
 fi;
-if allsubs=2 then
-   # set up translation vector  W  from vertex-names to vertices (of gamma).
-   W:=[];
-   for i in [1..Length(names)] do 
-      W[names[i]]:=i; 
-   od;
-fi;
+# set up translation vector  W  from vertex-names to vertices (of gamma).
+W:=[];
+for i in [1..Length(names)] do 
+   W[names[i]]:=i; 
+od;
 # next initialize ans
 if k<0 and (not allmaxes) then
    ans:=[[]];
@@ -3501,41 +3499,19 @@ for j in [1..Length(J)] do
          indorbwtsum:=indorbwtsum+wt;
       else 
          newsofar:=Union(sofar,[names[rep]]);
-         if allsubs<>2 and (not allmaxes) then
-            # We can strip out all forbidden vertices since in this case:
-            #   (1) we are stabilizing each successive sofar with 
-            #       (a constituent image of) a subgroup of 
-            #       the previous stabilizer of sofar, and
-            #       so the set of non-forbidden vertices will *always* be 
-            #       invariant under further  gamma.groups;  
-            #   (2) we need not check whether our complete subgraphs are maximal
-            delta:=InducedSubgraph(gamma,
-                                   Filtered(adj,x->not (names[x] in forbidden)),
-                                   ProbablyStabilizer(gamma.group,rep));
+         delta:=InducedSubgraph(gamma,adj,Stabilizer(gamma.group,rep));
+         HH:=Stabilizer(originalG,newsofar,OnSets);
+         if not IsFixedPoint(HH,names[rep]) then 
+            H:=Action(HH,names{adj},OnPoints);
+            delta:=NewGroupGraph(H,delta);
             ans1:=CompleteSubgraphsSearch(delta,
-                     kvector-weightvectors[names[rep]],newsofar,[]);
-         elif allsubs<>2 then
-            delta:=InducedSubgraph(gamma,adj,
-                                   ProbablyStabilizer(gamma.group,rep));
+                     kvector-weightvectors[names[rep]],newsofar,
+                     Intersection(delta.names,Union(Orbits(HH,forbidden))));
+         else
             ans1:=CompleteSubgraphsSearch(delta,
                      kvector-weightvectors[names[rep]],newsofar,
                      Intersection(delta.names,forbidden));
-         else
-            # allsubs=2 
-            delta:=InducedSubgraph(gamma,adj,Stabilizer(gamma.group,rep));
-            HH:=Stabilizer(originalG,newsofar,OnSets);
-            if not IsFixedPoint(HH,names[rep]) then 
-               H:=Action(HH,names{adj},OnPoints);
-               delta:=NewGroupGraph(H,delta);
-               ans1:=CompleteSubgraphsSearch(delta,
-                        kvector-weightvectors[names[rep]],newsofar,
-                        Intersection(delta.names,Union(Orbits(HH,forbidden))));
-            else
-               ans1:=CompleteSubgraphsSearch(delta,
-                        kvector-weightvectors[names[rep]],newsofar,
-                        Intersection(delta.names,forbidden));
-            fi; 
-         fi;
+         fi; 
          if Length(ans1)>0 then
             for a in ans1 do
                Add(a,names[rep]);
