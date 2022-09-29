@@ -54,7 +54,9 @@ GRAPE_DREADNAUT_INPUT_USE_STRING := false;
    # Using a string is faster than using a file, but may use
    # too much storage.
 
-GRAPE_CCLIQUE := true; 
+GRAPE_MINORDER_USE_GROUP:=60;
+
+GRAPE_CCLIQUE:=true; 
    # If true, use the external  cclique  program if it exists and
    # is appropriate to use;  if false then use GAP code only for 
    # clique finding and classifying. 
@@ -3310,9 +3312,8 @@ if HasLargerEntry(kvector,nactivevector) then
 fi;
 # now k<0 or nactive >= k > 0.
 G:=gamma.group;
-if IsTrivial(G) then
-   # The group will be trivial from here on, and we will use the 
-   # ccliques  program or  CompleteSubgraphsSearch1. 
+if IsTrivial(G) or (allsubs in [0,1] and Size(G)<=GRAPE_MINORDER_USE_GROUP) then
+   # We will use the  ccliques  program or  CompleteSubgraphsSearch1. 
    if usecclique then
       if not startedccliqueinput then
          startedccliqueinput:=true;
@@ -3329,7 +3330,7 @@ if IsTrivial(G) then
       active:=[1..n];
    fi;
    # now A := adjacency matrix of gamma.
-   A:=List([1..n],i->BlistList([1..n],gamma.adjacencies[i]));
+   A:=List([1..n],i->BlistList([1..n],Adjacency(gamma,i)));
    return CompleteSubgraphsSearch1(BlistList([1..n],[1..n]), kvector,
             BlistList([1..n],Difference([1..n],active)));
 fi;
@@ -3635,7 +3636,7 @@ if not weighted and k>=0 then
    fi;
 fi;
 usecclique := GRAPE_CCLIQUE and k>0 
-   and not allmaxes and allsubs<2 
+   and not allmaxes and allsubs in [0,1] 
    and gamma.order<=GRAPE_CCLIQUE_MAX_ORDER 
    and Length(kvector)<=GRAPE_CCLIQUE_MAX_D
    and IsExistingFile(GRAPE_CCLIQUE_EXE);
