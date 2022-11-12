@@ -39,24 +39,26 @@ GRAPE_RANDOM := false; # Determines if certain random methods are to be used
 GRAPE_NRANGENS := 18;  # The number of random generators taken for a subgroup
 		       # when  GRAPE_RANDOM=true.
 
-GRAPE_NAUTY := true;   # Use nauty when true, else use bliss.
+GRAPE_NAUTY := false;   # Use nauty when true, else use bliss.
 
 GRAPE_DREADNAUT_EXE := 
-   ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnautB"); 
+   ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnaut"); 
    # filename of dreadnaut or dreadnautB executable
 
 GRAPE_BLISS_EXE := ExternalFilename(DirectoriesSystemPrograms(),"bliss"); 
    # filename of bliss executable
 
-GRAPE_DREADNAUT_INPUT_USE_STRING := false;
+GRAPE_DREADNAUT_INPUT_USE_STRING := true;
    # If true then use a string for the stream used for input
    # to dreadnaut/nauty, if false use a file for this. 
    # Using a string is faster than using a file, but may use
    # too much storage.
 
-GRAPE_MINORDER_USE_GROUP:=60;
+GRAPE_CLIQUE_C1:=1;
+GRAPE_CLIQUE_C2:=infinity;
+GRAPE_CLIQUE_SETSTAB:=false;
 
-GRAPE_CCLIQUE:=true; 
+GRAPE_CCLIQUE:=false; 
    # If true, use the external  cclique  program if it exists and
    # is appropriate to use;  if false then use GAP code only for 
    # clique finding and classifying. 
@@ -1081,7 +1083,7 @@ BindGlobal("OrbitalGraphColadjMats",function(arg)
 #
 # If  arg[2]  is bound, then it is assumed to be  Stabilizer(G,1).
 #
-local G,H,orbs,deg,i,j,k,n,intmats,A,orbnum,reps,gamma;
+local G,H,orbs,deg,i,j,k,n,coladjmats,A,orbnum,reps,gamma;
 G:=arg[1];
 if not IsPermGroup(G) or (IsBound(arg[2]) and not IsPermGroup(arg[2])) then
    Error("usage: OrbitalGraphColadjMats( <PermGroup> [, <PermGroup> ] )");
@@ -1106,7 +1108,7 @@ if reps[1]<>1 then # this cannot happen!
    Error("internal error");
 fi;
 n:=Length(reps);
-intmats:=[];
+coladjmats:=[];
 for i in [1..n] do
    AddEdgeOrbit(gamma,[1,reps[i]],H);
    A:=NullMat(n,n);
@@ -1115,13 +1117,51 @@ for i in [1..n] do
 	 A[j][orbnum[k]]:=A[j][orbnum[k]]+1;
       od;
    od;
-   intmats[i]:=A;
+   coladjmats[i]:=A;
    if i < n then
       RemoveEdgeOrbit(gamma,[1,reps[i]],H);
    fi;
 od;
-return intmats;
+return coladjmats;
 end);
+
+DeclareOperation("IntersectionMats",[IsPermGroup]);
+InstallMethod(IntersectionMats,"for GRAPE graph",[IsPermGroup],0, 
+function(G)
+#
+# This function returns a sequence  L  of the intersection matrices
+# corresponding to the orbital digraphs in some fixed order for the 
+# (assumed) transitive permutation group  G,  with the diagonal
+# (or trivial) orbital coming first.
+#
+# Where  C  denotes the field of complex numbers and A_i 
+# is the adjacency matrix of the  i-th  orbital digraph
+# (in the fixed ordering), the map defined by  A_i |--> L_i  is a 
+# C-algebra isomorphism from the "adjacency algebra" with 
+# basis  A_1,...,A_n  to the "intersection algebra" with basis
+# L_1,...,L_n. 
+#
+local deg,CM,pairedorbital,L,n,i,j,k;
+deg:=Maximum(LargestMovedPoint(G),1);
+if not IsTransitive(G,[1..deg]) then
+   Error("<G> is not transitive");
+fi;
+CM:=OrbitalGraphColadjMats(G); 
+n:=Length(CM);
+pairedorbital:=[];;
+for i in [1..n] do
+   pairedorbital[i]:=First([1..n],j->CM[i][j][1]=1);
+od;
+L:=List([1..n],x->NullMat(n,n));
+for i in [1..n] do
+   for j in [1..n] do
+      for k in [1..n] do
+         L[i][j][k]:=CM[pairedorbital[i]][k][j];
+      od;
+   od;
+od;
+return L;
+end);  
 
 BindGlobal("LocalInfo",function(arg)
 #
@@ -3312,7 +3352,7 @@ if HasLargerEntry(kvector,nactivevector) then
 fi;
 # now k<0 or nactive >= k > 0.
 G:=gamma.group;
-if IsTrivial(G) or (allsubs in [0,1] and Size(G)<=GRAPE_MINORDER_USE_GROUP) then
+if IsTrivial(G) or (k>0 and allsubs in [0,1] and Size(G)<=GRAPE_CLIQUE_C1 and nactive<=GRAPE_CLIQUE_C2) then
    # We will use the  ccliques  program or  CompleteSubgraphsSearch1. 
    if usecclique then
       if not startedccliqueinput then
@@ -3406,11 +3446,13 @@ if ForAll(nadj,x->x=kk) then
       fi;
    fi;
 fi;
-# set up translation vector  W  from vertex-names to vertices (of gamma).
-W:=[];
-for i in [1..Length(names)] do 
-   W[names[i]]:=i; 
-od;
+if allsubs=2 then
+   # set up translation vector  W  from vertex-names to vertices (of gamma).
+   W:=[];
+   for i in [1..Length(names)] do 
+      W[names[i]]:=i; 
+   od;
+fi;
 # next initialize ans
 if k<0 and (not allmaxes) then
    ans:=[[]];
@@ -3500,19 +3542,55 @@ for j in [1..Length(J)] do
          indorbwtsum:=indorbwtsum+wt;
       else 
          newsofar:=Union(sofar,[names[rep]]);
-         delta:=InducedSubgraph(gamma,adj,Stabilizer(gamma.group,rep));
-         HH:=Stabilizer(originalG,newsofar,OnSets);
-         if not IsFixedPoint(HH,names[rep]) then 
-            H:=Action(HH,names{adj},OnPoints);
-            delta:=NewGroupGraph(H,delta);
+         if allsubs<>2 and (not allmaxes) and not GRAPE_CLIQUE_SETSTAB then
+            # We can strip out all forbidden vertices since in this case:
+            #   (1) we are stabilizing each successive sofar with 
+            #       (a constituent image of) a subgroup of 
+            #       the previous stabilizer of sofar, and
+            #       so the set of non-forbidden vertices will *always* be 
+            #       invariant under further  gamma.groups;  
+            #   (2) we need not check whether our complete subgraphs are maximal
+            delta:=InducedSubgraph(gamma,
+                                   Filtered(adj,x->not (names[x] in forbidden)),
+                                   ProbablyStabilizer(gamma.group,rep));
             ans1:=CompleteSubgraphsSearch(delta,
-                     kvector-weightvectors[names[rep]],newsofar,
-                     Intersection(delta.names,Union(Orbits(HH,forbidden))));
-         else
+                     kvector-weightvectors[names[rep]],newsofar,[]);
+         elif allsubs<>2 and not GRAPE_CLIQUE_SETSTAB then
+            delta:=InducedSubgraph(gamma,adj,
+                                   ProbablyStabilizer(gamma.group,rep));
             ans1:=CompleteSubgraphsSearch(delta,
                      kvector-weightvectors[names[rep]],newsofar,
                      Intersection(delta.names,forbidden));
-         fi; 
+         else
+            # allsubs=2 or GRAPE_CLIQUE_SETSTAB
+            delta:=InducedSubgraph(gamma,adj,Stabilizer(gamma.group,rep));
+            HH:=Stabilizer(originalG,newsofar,OnSets);
+            if not IsFixedPoint(HH,names[rep]) then 
+               H:=Action(HH,names{adj},OnPoints);
+               delta:=NewGroupGraph(H,delta);
+               ans1:=CompleteSubgraphsSearch(delta,
+                        kvector-weightvectors[names[rep]],newsofar,
+                        Intersection(delta.names,Union(Orbits(HH,forbidden))));
+            else
+               ans1:=CompleteSubgraphsSearch(delta,
+                        kvector-weightvectors[names[rep]],newsofar,
+                        Intersection(delta.names,forbidden));
+            fi; 
+         fi;
+         # newsofar:=Union(sofar,[names[rep]]);
+         # delta:=InducedSubgraph(gamma,adj,Stabilizer(gamma.group,rep));
+         # HH:=Stabilizer(originalG,newsofar,OnSets);
+         # if not IsFixedPoint(HH,names[rep]) then 
+            # H:=Action(HH,names{adj},OnPoints);
+            # delta:=NewGroupGraph(H,delta);
+            # ans1:=CompleteSubgraphsSearch(delta,
+                     # kvector-weightvectors[names[rep]],newsofar,
+                     # Intersection(delta.names,Union(Orbits(HH,forbidden))));
+         # else
+            # ans1:=CompleteSubgraphsSearch(delta,
+                     # kvector-weightvectors[names[rep]],newsofar,
+                     # Intersection(delta.names,forbidden));
+         # fi; 
          if Length(ans1)>0 then
             for a in ans1 do
                Add(a,names[rep]);
@@ -3635,11 +3713,10 @@ if not weighted and k>=0 then
       gamma:=NewGroupGraph(gamma.autGroup,gamma);
    fi;
 fi;
-usecclique := GRAPE_CCLIQUE and k>0 
-   and not allmaxes and allsubs in [0,1] 
+usecclique := GRAPE_CCLIQUE and GRAPE_CCLIQUE_EXE<>fail
+   and k > 0 and not allmaxes and allsubs in [0,1] 
    and gamma.order<=GRAPE_CCLIQUE_MAX_ORDER 
-   and Length(kvector)<=GRAPE_CCLIQUE_MAX_D
-   and IsExistingFile(GRAPE_CCLIQUE_EXE);
+   and Length(kvector)<=GRAPE_CCLIQUE_MAX_D; 
 startedccliqueinput:=false;
 K:=CompleteSubgraphsSearch(gamma,kvector,[],[]);
 if startedccliqueinput then

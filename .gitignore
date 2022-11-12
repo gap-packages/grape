@@ -1,13 +1,13 @@
 /Makefile
 /bin/
 
-/nauty22/config.cache
-/nauty22/config.log
-/nauty22/config.status
-/nauty22/gtools.h
-/nauty22/makefile
-/nauty22/naututil.h
-/nauty22/nauty.h
+/nauty27r4/config.cache
+/nauty27r4/config.log
+/nauty27r4/config.status
+/nauty27r4/gtools.h
+/nauty27r4/makefile
+/nauty27r4/naututil.h
+/nauty27r4/nauty.h
 
 doc/manual.aux
 doc/manual.bbl
