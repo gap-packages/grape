@@ -39,7 +39,7 @@ GRAPE_RANDOM := false; # Determines if certain random methods are to be used
 GRAPE_NRANGENS := 18;  # The number of random generators taken for a subgroup
 		       # when  GRAPE_RANDOM=true.
 
-GRAPE_NAUTY := false;   # Use nauty when true, else use bliss.
+GRAPE_NAUTY := true;   # Use nauty when true, else use bliss.
 
 GRAPE_DREADNAUT_EXE := 
    ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnaut"); 
@@ -48,7 +48,7 @@ GRAPE_DREADNAUT_EXE :=
 GRAPE_BLISS_EXE := ExternalFilename(DirectoriesSystemPrograms(),"bliss"); 
    # filename of bliss executable
 
-GRAPE_DREADNAUT_INPUT_USE_STRING := true;
+GRAPE_DREADNAUT_INPUT_USE_STRING := false;
    # If true then use a string for the stream used for input
    # to dreadnaut/nauty, if false use a file for this. 
    # Using a string is faster than using a file, but may use
@@ -1126,17 +1126,17 @@ return coladjmats;
 end);
 
 DeclareOperation("IntersectionMats",[IsPermGroup]);
-InstallMethod(IntersectionMats,"for GRAPE graph",[IsPermGroup],0, 
+InstallMethod(IntersectionMats,"for transitive permutation group",
+[IsPermGroup],0, 
 function(G)
 #
 # This function returns a sequence  L  of the intersection matrices
-# corresponding to the orbital digraphs in some fixed order for the 
-# (assumed) transitive permutation group  G,  with the diagonal
-# (or trivial) orbital coming first.
+# corresponding to the orbital digraphs  D_1,...,D_n  (in some order)
+# for the (assumed) transitive permutation group  G,  with  D_1  
+# corresponding to the diagonal (or trivial) orbital.
 #
-# Where  C  denotes the field of complex numbers and A_i 
-# is the adjacency matrix of the  i-th  orbital digraph
-# (in the fixed ordering), the map defined by  A_i |--> L_i  is a 
+# Where  C  denotes the field of complex numbers and  A_i  is the
+# adjacency matrix of  D_i,  the map defined by  A_i |--> L_i  is a 
 # C-algebra isomorphism from the "adjacency algebra" with 
 # basis  A_1,...,A_n  to the "intersection algebra" with basis
 # L_1,...,L_n. 
