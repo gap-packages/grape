@@ -1,13 +1,18 @@
 /Makefile
 /bin/
 
+/nauty27r4/confdefs.h
 /nauty27r4/config.cache
 /nauty27r4/config.log
 /nauty27r4/config.status
+/nauty27r4/conftest.c
+/nauty27r4/conftest.err
 /nauty27r4/gtools.h
 /nauty27r4/makefile
 /nauty27r4/naututil.h
 /nauty27r4/nauty.h
+/nauty27r4/*.o
+/nauty27r4/*.tmp
 
 doc/manual.aux
 doc/manual.bbl
