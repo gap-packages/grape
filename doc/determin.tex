@@ -142,7 +142,7 @@ of 1.
 The reader is warned that collapsed adjacency matrices can have different,
 but related meanings depending on the setting and the author.
 
-See also "OrbitalGraphColadjMats".
+See also "OrbitalDigraphColadjMats".
 
 \beginexample
 gap> gamma := JohnsonGraph(4,2);
@@ -160,31 +160,54 @@ gap> CollapsedAdjacencyMat( gamma );
 \endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{OrbitalGraphColadjMats}
+\Section{OrbitalDigraphColadjMats}
 
-\>OrbitalGraphColadjMats( <G> )
-\>OrbitalGraphColadjMats( <G>, <H> )
+\>OrbitalDigraphColadjMats( <G> )
+\>OrbitalDigraphColadjMats( <G>, <H> )
 
 This function returns a list of collapsed adjacency matrices for the
 orbital digraphs of the transitive permutation group <G>, collapsed
 with respect to `Stabilizer(<G>,1)' (creating collapsed adjacency
 matrices for the orbital digraphs in the sense of \cite{PS97}). Also,
-the matrices are collapsed with respect to a fixed ordering of the
-orbits of `Stabilizer(<G>,1)', with the trivial orbit `[1]' coming
-first.
+the matrices are collapsed with respect to some ordering of the
+orbits of `Stabilizer(<G>,1)' (the *suborbits*), with the trivial 
+suborbit `[1]' coming first.
 
 The optional parameter <H>, if included, should be equal to
 `Stabilizer(<G>,1)'. The knowledge of this stabilizer can speed up the
 function.
 
+Prior to {\GAP} 4.8.6 this function was called `OrbitalGraphColadjMats',
+and for backward compatibility, this name will still work.
+
 The reader is warned that collapsed adjacency matrices can have different,
-but related meanings depending on the setting and the author.
+but related meanings depending on the setting and the author. Note also
+that the $i$-th *intersection matrix* for the coherent configuration
+defined by <G> is the transpose of the collapsed adjacency matrix
+corresponding to the suborbit paired with the suborbit defining the
+$i$-th collapsed adjacency matrix for <G>. See Chapter 3 of \cite{Cam99}.
 
 See also "CollapsedAdjacencyMat".
 
 \beginexample
-gap> OrbitalGraphColadjMats( SymmetricGroup(7) );
-[ [ [ 1, 0 ], [ 0, 1 ] ], [ [ 0, 6 ], [ 1, 5 ] ] ] 
+gap> G:=JohnsonGraph(5,3).group;;
+gap> OrbitalDigraphColadjMats(G);
+[ [ [ 1, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ], 
+  [ [ 0, 6, 0 ], [ 1, 3, 2 ], [ 0, 4, 2 ] ], 
+  [ [ 0, 0, 3 ], [ 0, 2, 1 ], [ 1, 2, 0 ] ] ]
+gap> C:=CyclicGroup(IsPermGroup,5);
+Group([ (1,2,3,4,5) ])
+gap> OrbitalDigraphColadjMats(C);
+[ [ [ 1, 0, 0, 0, 0 ], [ 0, 1, 0, 0, 0 ], [ 0, 0, 1, 0, 0 ], 
+      [ 0, 0, 0, 1, 0 ], [ 0, 0, 0, 0, 1 ] ], 
+  [ [ 0, 1, 0, 0, 0 ], [ 0, 0, 1, 0, 0 ], [ 0, 0, 0, 1, 0 ], 
+      [ 0, 0, 0, 0, 1 ], [ 1, 0, 0, 0, 0 ] ], 
+  [ [ 0, 0, 1, 0, 0 ], [ 0, 0, 0, 1, 0 ], [ 0, 0, 0, 0, 1 ], 
+      [ 1, 0, 0, 0, 0 ], [ 0, 1, 0, 0, 0 ] ], 
+  [ [ 0, 0, 0, 1, 0 ], [ 0, 0, 0, 0, 1 ], [ 1, 0, 0, 0, 0 ], 
+      [ 0, 1, 0, 0, 0 ], [ 0, 0, 1, 0, 0 ] ], 
+  [ [ 0, 0, 0, 0, 1 ], [ 1, 0, 0, 0, 0 ], [ 0, 1, 0, 0, 0 ], 
+      [ 0, 0, 1, 0, 0 ], [ 0, 0, 0, 1, 0 ] ] ]
 \endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -201,8 +224,8 @@ permutation rank of <G> is not too large).
 In the first form of this function, the input parameter <coladjmats> must
 be a list of collapsed adjacency matrices for the orbital digraphs of some
 non-trivial transitive permutation group <G>, collapsed with respect to a
-point stabilizer (such as the list of matrices produced by the function
-`OrbitalGraphColadjMats').  It is assumed that the orbital/suborbit
+fixed point stabilizer (such as the list of matrices produced by the function
+`OrbitalDigraphColadjMats').  It is assumed that the orbital/suborbit
 indexing used is the same as that for the rows (and columns) of each of
 the matrices, as well as for the indexing of the matrices themselves,
 with the trivial orbital first, so that, in particular, `<coladjmats>[1]'
@@ -210,7 +233,7 @@ must be an identity matrix.
 
 In the second form of this function, the input parameter <G> must be a
 non-trivial transitive permutation group, and then the result returned
-will be the same as `VertexTransitiveDRGs( OrbitalGraphColadjMats( <G>
+will be the same as `VertexTransitiveDRGs( OrbitalDigraphColadjMats( <G>
 ) )'.
 
 In either case, this function returns a record <result>, which gives

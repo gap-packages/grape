@@ -106,6 +106,18 @@ gap> List(L,VertexDegrees);
 [ [ 12 ], [ 30 ], [ 34 ], [ 16 ], [ 18 ], [ 22 ], [ 4 ] ]
 gap> List(L,Diameter);
 [ 3, 2, 1, 2, 2, 2, 3 ]
+gap> C:=CyclicGroup(IsPermGroup,6);
+Group([ (1,2,3,4,5,6) ])
+gap> GeneralizedOrbitalGraphs(C,1);
+[ rec( adjacencies := [ [ 2, 6 ] ], group := Group([ (1,2,3,4,5,6) ]),
+      isGraph := true, order := 6, representatives := [ 1 ],
+      schreierVector := [ -1, 1, 1, 1, 1, 1 ] ),
+  rec( adjacencies := [ [ 3, 5 ] ], group := Group([ (1,2,3,4,5,6) ]),
+      isGraph := true, order := 6, representatives := [ 1 ],
+      schreierVector := [ -1, 1, 1, 1, 1, 1 ] ),
+  rec( adjacencies := [ [ 4 ] ], group := Group([ (1,2,3,4,5,6) ]),
+      isGraph := true, isSimple := true, order := 6,
+      representatives := [ 1 ], schreierVector := [ -1, 1, 1, 1, 1, 1 ] ) ]
 gap> gamma := NullGraph( Group( (1,3), (1,2)(3,4) ) );;
 gap> AddEdgeOrbit( gamma, [4,3] );
 gap> gamma;

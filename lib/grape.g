@@ -940,22 +940,47 @@ od;
 return gamma;
 end);
 
-BindGlobal("GeneralizedOrbitalGraphs",function(G)
+BindGlobal("GeneralizedOrbitalGraphs",function(arg)
 #
-# The input to this function is a non-trivial permutation group G,
-# acting transitively on [1..n] (where n:=LargestMovedPoint(G)).
+# Let  G=arg[1]. Then  G  must be a non-trivial permutation group,
+# acting transitively on  [1..n],  where n:=LargestMovedPoint(G).
 #
-# Then this function returns a list of all the non-null generalized orbital
-# graphs for G (that is, the non-null simple graphs with vertex set [1..n]
-# and edge-set a union of orbitals of G).
+# The optional second parameter  k=arg[2]  (default: false)  must
+# be true or false or a non-negative integer. 
 #
-local comb,n,H,result,reps,i,L,M,mm;
-if not IsPermGroup(G) then
-   Error("usage: GeneralizedOrbitalGraphs( <PermGroup> )");
+# Then this function returns a list of distinct generalized orbital
+# graphs for  G  (where a *generalized orbital graph* for  G  is a 
+# (simple) graph with vertex set [1..n] and edge-set a union of 
+# some G-orbits of 2-subsets of  [1..n]).
+#
+# If  k=true  then *all*  the generalized orbital graphs 
+# for  G  are in the list,  if  k=false  (the default)  then all
+# the non-null generalized orbital graphs for  G  are in the list,
+# and if  k  is a non-negative integer then the list consists of
+# all the generalized orbital graphs for  G  whose edge-set is the
+# union of exactly  k  G-orbits of 2-subsets of  [1..n].
+#
+# The group associated with each returned graph in the list is  G. 
+#
+local G,k,comb,combinations,n,H,result,reps,i,L,M,mm;
+if not (Length(arg) in [1,2]) then
+   Error("must have 1 or 2 arguments");
+fi;
+G:=arg[1];
+if IsBound(arg[2]) then
+   k:=arg[2];
+else
+   k:=false;
+fi;
+if not (IsPermGroup(G) and (IsBool(k) or IsInt(k))) then
+   Error("usage: GeneralizedOrbitalGraphs( <PermGroup> [, <Bool> or <Int> ] )");
 fi;
 n:=LargestMovedPoint(G);
 if n=0 or not IsTransitive(G,[1..n]) then
    Error("<G> must be a non-trivial transitive group on [1..LargestMovedPoint( <G> )");
+fi;
+if not ((k in [false,true]) or (IsInt(k) and k>=0)) then 
+   Error("<k> must be in  [false,true]  or be a non-negative integer");
 fi;
 H:=Stabilizer(G,1);
 reps:=Set(List(OrbitsDomain(H,[2..n]),Minimum));
@@ -977,8 +1002,14 @@ for i in [1..Length(reps)] do
    fi;
 od;
 result:=[];
-for comb in Combinations(M) do
-   if comb<>[] then
+if k in [false,true] then
+   combinations:=Combinations(M);
+else  
+   # k is a non-negative integer
+   combinations:=Combinations(M,k);
+fi;
+for comb in combinations do
+   if k<>false or comb<>[] then
       Add(result,EdgeOrbitsGraph(G,Concatenation(comb)));
    fi;
 od;
@@ -1048,10 +1079,10 @@ od;
 return A;
 end);
 
-BindGlobal("OrbitalGraphColadjMats",function(arg)
+BindGlobal("OrbitalDigraphColadjMats",function(arg)
 #
 # This function returns a sequence of collapsed adjacency 
-# matrices for the the orbital graphs of the (assumed) transitive  
+# matrices for the the orbital digraphs of the (assumed) transitive  
 # G=arg[1].  The matrices are collapsed w.r.t.  Stabilizer(G,1),  so
 # that these are collapsed adjacency matrices in the sense of 
 # Praeger and Soicher, "Low Rank Representations and Graphs for 
@@ -1064,7 +1095,7 @@ BindGlobal("OrbitalGraphColadjMats",function(arg)
 local G,H,orbs,deg,i,j,k,n,coladjmats,A,orbnum,reps,gamma;
 G:=arg[1];
 if not IsPermGroup(G) or (IsBound(arg[2]) and not IsPermGroup(arg[2])) then
-   Error("usage: OrbitalGraphColadjMats( <PermGroup> [, <PermGroup> ] )");
+   Error("usage: OrbitalDigraphColadjMats( <PermGroup> [, <PermGroup> ] )");
 fi;
 if IsBound(arg[2]) then
    H:=arg[2];
@@ -1102,6 +1133,9 @@ for i in [1..n] do
 od;
 return coladjmats;
 end);
+
+BindGlobal("OrbitalGraphColadjMats",OrbitalDigraphColadjMats);
+# for backward compatibility
 
 BindGlobal("LocalInfo",function(arg)
 #
@@ -2898,8 +2932,9 @@ local k,n,i,j,delta,adj,rep,a,b,ans,ans1,ans2,names,W,H,HH,newsofar,
 
 CompleteSubgraphsSearch1 := function(mask,kvector,forbidmask)
 #
-# This function does the work of  CompleteSubgraphsSearch  
-# when the group associated with the graph is trivial.  
+# This function does the work of  CompleteSubgraphsSearch,   
+# but assuming the group associated to the graph is trivial.
+#
 # The parameters  mask  and  forbidmask  are boolean lists of length  n,  
 # and the global variable  A  has value an  n x n  adjacency matrix 
 # for a graph  gamma  (given as a length  n  list of boolean lists).  
@@ -3229,8 +3264,8 @@ fi;
 # now k<0 or nactive >= k > 0.
 G:=gamma.group;
 if IsTrivial(G) then
-   # The group will be trivial from here on, and we will use the 
-   # specialized function  CompleteSubgraphsSearch1. 
+   # Use the specialized function  CompleteSubgraphsSearch1, 
+   # which works as if the group associated to the graph is trivial. 
    if (not allmaxes) and forbidden<>[] then 
       # strip out the forbidden vertices.
       gamma:=InducedSubgraph(gamma,active,G);
@@ -3516,9 +3551,14 @@ fi;
 if not IsSimpleGraph(gamma) then
    Error("<gamma> must be a simple graph");
 fi;
-smallorder:=8; # Any group with order <= smallorder is considered small,
-               # and we calculate orbits on cliques explicitly for these
-               # groups when  allsubs=2.
+smallorder:=8; 
+# Any group with order <= smallorder is considered small for this function.
+#
+# In  CompleteSubgraphsSearch,  when the group associated with the graph 
+# under consideration is nontrivial but has order <= smallorder then,
+# if  allsubs=2,  we perform isomorph rejection via 
+# explicit orbits on cliques.
+#
 originalgamma:=gamma;
 originalG:=gamma.group;
 gamma:=ShallowCopy(gamma);
@@ -3841,13 +3881,13 @@ end);
 BindGlobal("VertexTransitiveDRGs",function(gpin)
 #
 # If  gpin  is a permutation group G, then it must be transitive 
-# and non-trivial, and we set coladjmats:=OrbitalGraphColadjMats(gpin).
+# and non-trivial, and we set coladjmats:=OrbitalDigraphColadjMats(gpin).
 #
 # Otherwise, we take  coladjmats:=gpin,  which must be a list of collapsed
 # adjacency matrices for the orbital digraphs of a non-trivial 
 # transitive permutation group  G  (on a set V say), collapsed 
-# w.r.t. a point stabilizer (such as the list of matrices produced by  
-# OrbitalGraphColadjMats ).
+# w.r.t. a fixed point stabilizer (such as the list of matrices produced
+# by  OrbitalDigraphColadjMats ).
 #
 # In either case, this function returns a record (called  result),
 # which gives information on  G.
@@ -3877,12 +3917,12 @@ if not IsList(gpin) and not IsPermGroup(gpin) then
    Error("usage: VertexTransitiveDRGs( <List> or <PermGroup> )");
 fi;
 if IsPermGroup(gpin) then
-   # Remark: OrbitalGraphColadjMats will check if  gpin  is transitive,
+   # Remark: OrbitalDigraphColadjMats will check if  gpin  is transitive,
    # so we do not do this here.
    if IsTrivial(gpin) then
       Error("Input group must must be non-trivial,");
    fi;
-   coladjmats := OrbitalGraphColadjMats(gpin);
+   coladjmats := OrbitalDigraphColadjMats(gpin);
 else
    coladjmats := gpin;
 fi;

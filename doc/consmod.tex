@@ -293,21 +293,45 @@ gap> Diameter(C);
 \Section{GeneralizedOrbitalGraphs}
 
 \>GeneralizedOrbitalGraphs( <G> )
+\>GeneralizedOrbitalGraphs( <G>, <k> )
 
 Suppose <G> is a non-trivial transitive permutation group
 on $\{1,\ldots,n\}$, where $n$ is the largest point moved by <G>.
-Then this function returns a list of all the non-null generalized
-orbital graphs for <G>. These are precisely the non-null simple graphs
-with vertex set $\{1,\ldots,n\}$ for which <G> is a (vertex-transitive)
-group of automorphisms.
+Then this function returns a list of distinct generalized
+orbital graphs for <G>, where a  *generalized orbital graph*
+\index{generalized orbital graph}
+for <G>  is a (simple) graph with vertex set $\{1,\ldots,n\}$ 
+and edge set a union of some <G>-orbits of 2-subsets of $\{1,\ldots,n\}$.
+
+The optional second parameter <k> (default: `false') must be `false',
+`true', or a non-negative integer. If <k>=`true' then all the generalized
+orbital graphs for <G> are in the returned list, if <k>=`false' (the
+default) then only the non-null generalized orbital graphs for <G> are in
+this list, and if <k> is a non-negative integer then the list consists
+of all the generalized orbital graphs for <G> whose edge set is the 
+union of exactly <k> <G>-orbits of 2-subsets of $\{1,\ldots,n\}$.
+
+The group associated with each graph in the returned list is <G>. 
 
 \beginexample
-gap> G:=JohnsonGraph(7,3).group;;    
+gap> G:=JohnsonGraph(7,3).group;;
 gap> L:=GeneralizedOrbitalGraphs(G);;
-gap> List(L,VertexDegrees);   
+gap> List(L,VertexDegrees);
 [ [ 12 ], [ 30 ], [ 34 ], [ 16 ], [ 18 ], [ 22 ], [ 4 ] ]
 gap> List(L,Diameter);
 [ 3, 2, 1, 2, 2, 2, 3 ]
+gap> C:=CyclicGroup(IsPermGroup,6);
+Group([ (1,2,3,4,5,6) ])
+gap> GeneralizedOrbitalGraphs(C,1);
+[ rec( adjacencies := [ [ 2, 6 ] ], group := Group([ (1,2,3,4,5,6) ]), 
+      isGraph := true, order := 6, representatives := [ 1 ], 
+      schreierVector := [ -1, 1, 1, 1, 1, 1 ] ), 
+  rec( adjacencies := [ [ 3, 5 ] ], group := Group([ (1,2,3,4,5,6) ]), 
+      isGraph := true, order := 6, representatives := [ 1 ], 
+      schreierVector := [ -1, 1, 1, 1, 1, 1 ] ), 
+  rec( adjacencies := [ [ 4 ] ], group := Group([ (1,2,3,4,5,6) ]), 
+      isGraph := true, isSimple := true, order := 6, 
+      representatives := [ 1 ], schreierVector := [ -1, 1, 1, 1, 1, 1 ] ) ]
 \endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -31,8 +31,24 @@ gap> CollapsedAdjacencyMat( G, gamma );
 [ [ 0, 4 ], [ 2, 2 ] ]
 gap> CollapsedAdjacencyMat( gamma );
 [ [ 0, 4, 0 ], [ 1, 2, 1 ], [ 0, 4, 0 ] ]
-gap> OrbitalGraphColadjMats( SymmetricGroup(7) );
-[ [ [ 1, 0 ], [ 0, 1 ] ], [ [ 0, 6 ], [ 1, 5 ] ] ]
+gap> G:=JohnsonGraph(5,3).group;;
+gap> OrbitalDigraphColadjMats(G);
+[ [ [ 1, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ],
+  [ [ 0, 6, 0 ], [ 1, 3, 2 ], [ 0, 4, 2 ] ],
+  [ [ 0, 0, 3 ], [ 0, 2, 1 ], [ 1, 2, 0 ] ] ]
+gap> C:=CyclicGroup(IsPermGroup,5);
+Group([ (1,2,3,4,5) ])
+gap> OrbitalDigraphColadjMats(C);
+[ [ [ 1, 0, 0, 0, 0 ], [ 0, 1, 0, 0, 0 ], [ 0, 0, 1, 0, 0 ],
+      [ 0, 0, 0, 1, 0 ], [ 0, 0, 0, 0, 1 ] ],
+  [ [ 0, 1, 0, 0, 0 ], [ 0, 0, 1, 0, 0 ], [ 0, 0, 0, 1, 0 ],
+      [ 0, 0, 0, 0, 1 ], [ 1, 0, 0, 0, 0 ] ],
+  [ [ 0, 0, 1, 0, 0 ], [ 0, 0, 0, 1, 0 ], [ 0, 0, 0, 0, 1 ],
+      [ 1, 0, 0, 0, 0 ], [ 0, 1, 0, 0, 0 ] ],
+  [ [ 0, 0, 0, 1, 0 ], [ 0, 0, 0, 0, 1 ], [ 1, 0, 0, 0, 0 ],
+      [ 0, 1, 0, 0, 0 ], [ 0, 0, 1, 0, 0 ] ],
+  [ [ 0, 0, 0, 0, 1 ], [ 1, 0, 0, 0, 0 ], [ 0, 1, 0, 0, 0 ],
+      [ 0, 0, 1, 0, 0 ], [ 0, 0, 0, 1, 0 ] ] ]
 gap> m22:=PrimitiveGroup(22,1);;
 gap> syl:=SylowSubgroup(m22,11);;
 gap> part:=Set(Orbit(syl,1));;
