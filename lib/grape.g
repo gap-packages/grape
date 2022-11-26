@@ -3263,7 +3263,7 @@ if HasLargerEntry(kvector,nactivevector) then
 fi;
 # now k<0 or nactive >= k > 0.
 G:=gamma.group;
-if IsTrivial(G) then
+if Size(G)<=smallorder then
    # Use the specialized function  CompleteSubgraphsSearch1, 
    # which works as if the group associated to the graph is trivial. 
    if (not allmaxes) and forbidden<>[] then 
@@ -3273,11 +3273,30 @@ if IsTrivial(G) then
       names:=gamma.names;
       active:=[1..n];
    fi;
-   # now A := adjacency matrix of gamma.
-   A:=List([1..n],i->BlistList([1..n],gamma.adjacencies[i]));
-   return CompleteSubgraphsSearch1(BlistList([1..n],[1..n]), kvector,
+   A:=List([1..n],i->BlistList([1..n],Adjacency(gamma,i)));
+   # So now  A  is the bit-adjacency-matrix of  gamma.
+   ans1:=CompleteSubgraphsSearch1(BlistList([1..n],[1..n]), kvector,
             BlistList([1..n],Difference([1..n],active)));
+   Unbind(A); # A is no longer needed
+   if Length(ans1)<=1 or IsTrivial(gamma.group) then
+      # no isomorph rejection is required
+      return ans1;
+   fi;
+   # Otherwise, perform isomorph rejection using explicit orbits
+   # (even if  allsubs=1).
+   # First, set up a translation vector  W  from vertex-names 
+   # to vertices of  gamma.
+   W:=[];
+   for i in [1..Length(names)] do 
+      W[names[i]]:=i; 
+   od;
+   ans1:=List(ans1,x->Set(W{x}));
+   ans1:=List(Orbits(gamma.group,ans1,OnSets),x->names{x[1]});
+   return ans1;
 fi;
+#
+# Now handle the general case.
+#
 J:=Filtered([1..Length(gamma.representatives)],
             x->gamma.representatives[x] in active);
 IsSSortedList(J);
@@ -3493,13 +3512,6 @@ for j in [1..Length(J)] do
                for a in ans1 do
                   Add(ans,a);
                od;
-            elif Size(gamma.group)<=smallorder then
-               # perform isomorph rejection using explicit orbits
-               ans1:=List(ans1,x->Set(W{x}));
-               ans1:=List(Orbits(gamma.group,ans1,OnSets),x->names{x[1]});
-               for a in ans1 do
-                  Add(ans,a);
-               od;
             else
                # perform isomorph rejection using SmallestImageSet
                ans2:=List(ans1,x->
@@ -3551,12 +3563,10 @@ fi;
 if not IsSimpleGraph(gamma) then
    Error("<gamma> must be a simple graph");
 fi;
-smallorder:=8; 
-# Any group with order <= smallorder is considered small for this function.
-#
-# In  CompleteSubgraphsSearch,  when the group associated with the graph 
-# under consideration is nontrivial but has order <= smallorder then,
-# if  allsubs=2,  we perform isomorph rejection via 
+smallorder:=8; # to try to optimise when  CompleteSubgraphsSearch1  is used. 
+# In  CompleteSubgraphsSearch,  when the group associated with the 
+# graph under consideration has order <= smallorder then we use 
+# CompleteSubgraphsSearch1  and perform isomorph rejection via 
 # explicit orbits on cliques.
 #
 originalgamma:=gamma;
@@ -4250,8 +4260,8 @@ if not IsBound(m) then
    m:=CliqueNumber(delta);
 fi;
 # 
-smallorder:=24; # To optimise when exact cover is used. 
-# smallorder can be given any positive integer value, but a value
+smallorder:=24; # To try to optimise when exact cover is used. 
+# smallorder  can be given any positive integer value, but a value
 # in the range 8 to 120 seems to work well. 
 #
 exhaustive_search:=false;
