@@ -515,7 +515,7 @@ for i in [1..d] do
 od; 
 return count=1;
 end;
-# Now contruct and return the Hamming graph.
+# Now construct and return the Hamming graph.
 return Graph(W,Tuples([1..q],d),act,rel,true);
 end); 
 
@@ -1427,7 +1427,7 @@ BindGlobal("InducedSubgraph",function(arg)
 # with the returned induced subgraph. 
 # If  arg[3]  is bound, this function assumes that  G=arg[3]   fixes  
 # V  setwise, and is a group of automorphisms of the induced subgraph 
-# when restriced to  V.  In this case, the image of  G  acting on  V  is 
+# when restricted to  V.  In this case, the image of  G  acting on  V  is 
 # the group associated with the returned induced subgraph. 
 #
 # The i-th vertex of the induced subgraph corresponds to vertex V[i] of
@@ -5052,7 +5052,7 @@ BindGlobal("AutGroupGraph",function(arg)
 #
 # Let  gr:=arg[1]  be a graph or a graph with colour-classes.
 #
-# If arg[2] is unbound (the ususal case) then this function returns 
+# If arg[2] is unbound (the usual case) then this function returns 
 # the automorphism group of  gr  (making use of B.McKay's 
 # dreadnaut, nauty  programs).
 # 
