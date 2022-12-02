@@ -300,16 +300,17 @@ on $\{1,\ldots,n\}$, where $n$ is the largest point moved by <G>.
 Then this function returns a list of distinct generalized
 orbital graphs for <G>, where a  *generalized orbital graph*
 \index{generalized orbital graph}
-for <G>  is a (simple) graph with vertex set $\{1,\ldots,n\}$ 
-and edge set a union of some <G>-orbits of 2-subsets of $\{1,\ldots,n\}$.
+for <G>  is a (simple) graph with vertex set $\{1,\ldots,n\}$
+and undirected-edge set a union of some <G>-orbits of 2-subsets of
+$\{1,\ldots,n\}$.
 
 The optional second parameter <k> (default: `false') must be `false',
 `true', or a non-negative integer. If <k>=`true' then all the generalized
 orbital graphs for <G> are in the returned list, if <k>=`false' (the
 default) then only the non-null generalized orbital graphs for <G> are in
 this list, and if <k> is a non-negative integer then the list consists
-of all the generalized orbital graphs for <G> whose edge set is the 
-union of exactly <k> <G>-orbits of 2-subsets of $\{1,\ldots,n\}$.
+of all the generalized orbital graphs for <G> whose undirected-edge set
+is the union of exactly <k> <G>-orbits of 2-subsets of $\{1,\ldots,n\}$.
 
 The group associated with each graph in the returned list is <G>. 
 

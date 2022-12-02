@@ -1,7 +1,7 @@
 binaries:
 	mkdir -p bin/@GAPARCH@/
-	cd nauty27r4 && rm -f *.o config.log config.cache config.status makefile && ./configure && make dreadnaut && mv dreadnaut ../bin/@GAPARCH@ && chmod 755 ../bin/@GAPARCH@/dreadnaut && rm -f *.o
+	cd nauty2_8_6 && rm -f *.o config.log config.cache config.status makefile && ./configure && make dreadnaut && mv dreadnaut ../bin/@GAPARCH@ && chmod 755 ../bin/@GAPARCH@/dreadnaut && rm -f *.o
 
 clean:
-	( cd nauty27r4 && make clean )
+	( cd nauty2_8_6 && make clean )
 	rm -rf bin/@GAPARCH@

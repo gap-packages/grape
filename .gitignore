@@ -1,18 +1,18 @@
 /Makefile
 /bin/
 
-/nauty27r4/confdefs.h
-/nauty27r4/config.cache
-/nauty27r4/config.log
-/nauty27r4/config.status
-/nauty27r4/conftest.c
-/nauty27r4/conftest.err
-/nauty27r4/gtools.h
-/nauty27r4/makefile
-/nauty27r4/naututil.h
-/nauty27r4/nauty.h
-/nauty27r4/*.o
-/nauty27r4/*.tmp
+/nauty2_8_6/confdefs.h
+/nauty2_8_6/config.cache
+/nauty2_8_6/config.log
+/nauty2_8_6/config.status
+/nauty2_8_6/conftest.c
+/nauty2_8_6/conftest.err
+/nauty2_8_6/gtools.h
+/nauty2_8_6/makefile
+/nauty2_8_6/naututil.h
+/nauty2_8_6/nauty.h
+/nauty2_8_6/*.o
+/nauty2_8_6/*.tmp
 
 doc/manual.aux
 doc/manual.bbl
