@@ -1,5 +1,6 @@
 name: CI
 
+# Trigger the workflow on push or pull request
 on:
   push:
     branches:
@@ -15,41 +16,78 @@ concurrency:
   cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 
 jobs:
+  # The CI test job
   test:
-    name: "${{ matrix.abi }}-bit / ${{ matrix.engine }} / GAP ${{ matrix.gap-branch }}"
+    name: "${{ matrix.ABI }}-bit / ${{ matrix.engine }} / GAP ${{ matrix.gap-branch }}"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         gap-branch:
           - master
+          - stable-4.12
           - stable-4.11
-        abi:
+        ABI:
           - 64
         engine:
           - nauty
 
         include:
           - gap-branch: master
-            abi: 32
+            ABI: 32
             engine: nauty
           - gap-branch: master
-            abi: 64
+            ABI: 64
             engine: bliss
 
     env:
       GRAPE_NAUTY: ${{ matrix.engine == 'nauty' }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: "Install bliss"
         if: ${{ matrix.engine == 'bliss' }}
         run: sudo apt-get install bliss
       - uses: gap-actions/setup-gap@v2
         with:
           GAPBRANCH: ${{ matrix.gap-branch }}
-          ABI: ${{ matrix.abi }}
+          ABI: ${{ matrix.ABI }}
       - uses: gap-actions/build-pkg@v1
       - uses: gap-actions/run-pkg-tests@v2
       - uses: gap-actions/process-coverage@v2
-      - uses: codecov/codecov-action@v2
+      - uses: codecov/codecov-action@v3
+
+  test-cygwin:
+    name: "master cygwin64"
+    # if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
+    runs-on: windows-2019
+    env:
+      CHERE_INVOKING: 1
+    steps:
+      - uses: actions/checkout@v3
+      - uses: gap-actions/setup-cygwin@v1
+      - uses: gap-actions/setup-gap@cygwin-v2
+        with:
+          GAP_PKGS_TO_BUILD: 'profiling io'
+      - uses: gap-actions/build-pkg@cygwin-v1
+      - uses: gap-actions/run-pkg-tests@cygwin-v2
+      - uses: gap-actions/process-coverage@cygwin-v2
+      - uses: codecov/codecov-action@v3
+
+  # The documentation job
+  manual:
+    name: Build manuals
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: gap-actions/setup-gap@v2
+      - uses: gap-actions/build-pkg-docs@v1
+        with:
+          use-latex: 'true'
+      - name: 'Upload documentation'
+        uses: actions/upload-artifact@v3
+        with:
+          name: manual
+          path: ./doc/manual.pdf
+          if-no-files-found: error
