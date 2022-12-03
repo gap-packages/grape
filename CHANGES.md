@@ -79,7 +79,7 @@ various GRAPE functions.
 
 2. Function GraphImage documented, and a test added for this function. 
 
-3. Last (accidently) remaining function call ``Stabiliser`` changed 
+3. Last (accidentally) remaining function call ``Stabiliser`` changed 
 to ``Stabilizer``. 
 
 4. More tests added to tst/testall.tst.
