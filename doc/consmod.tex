@@ -300,9 +300,9 @@ on $\{1,\ldots,n\}$, where $n$ is the largest point moved by <G>.
 Then this function returns a list of distinct generalized
 orbital graphs for <G>, where a  *generalized orbital graph*
 \index{generalized orbital graph}
-for <G>  is a (simple) graph with vertex set $\{1,\ldots,n\}$
-and undirected-edge set a union of some <G>-orbits of 2-subsets of
-$\{1,\ldots,n\}$.
+for <G>  is a (simple) graph with vertex set $\{1,\ldots,n\}$ and
+undirected-edge set a union of zero or more <G>-orbits of 2-subsets
+of $\{1,\ldots,n\}$.
 
 The optional second parameter <k> (default: `false') must be `false',
 `true', or a non-negative integer. If <k>=`true' then all the generalized
@@ -331,8 +331,8 @@ gap> GeneralizedOrbitalGraphs(C,1);
       isGraph := true, order := 6, representatives := [ 1 ], 
       schreierVector := [ -1, 1, 1, 1, 1, 1 ] ), 
   rec( adjacencies := [ [ 4 ] ], group := Group([ (1,2,3,4,5,6) ]), 
-      isGraph := true, isSimple := true, order := 6, 
-      representatives := [ 1 ], schreierVector := [ -1, 1, 1, 1, 1, 1 ] ) ]
+      isGraph := true, isSimple := true, order := 6, representatives := [ 1 ],
+      schreierVector := [ -1, 1, 1, 1, 1, 1 ] ) ]
 \endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

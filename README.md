@@ -11,7 +11,7 @@ The GRAPE package and the source included with this distribution are
 copyright (C) Leonard Soicher 1992-2022, except for the following:
 
 - the nauty 2.8.6 package; see the copyright notice in the file
-nauty2.8.6/COPYRIGHT
+nauty2_8_6/COPYRIGHT
 - Steve Linton's SmallestImageSet function in lib/smallestimage.g
 
 Except for the nauty 2.8.6 package, which is licensed under the Apache
@@ -25,7 +25,7 @@ Referencing GRAPE
 
 Please reference your use of the GRAPE package in a published work
 as follows:
-%
+
 L.H. Soicher, The GRAPE package for GAP, Version 4.9.0, 2022,
 <https://gap-packages.github.io/grape>.
 

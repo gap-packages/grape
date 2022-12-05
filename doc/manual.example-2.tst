@@ -116,8 +116,8 @@ gap> GeneralizedOrbitalGraphs(C,1);
       isGraph := true, order := 6, representatives := [ 1 ],
       schreierVector := [ -1, 1, 1, 1, 1, 1 ] ),
   rec( adjacencies := [ [ 4 ] ], group := Group([ (1,2,3,4,5,6) ]),
-      isGraph := true, isSimple := true, order := 6,
-      representatives := [ 1 ], schreierVector := [ -1, 1, 1, 1, 1, 1 ] ) ]
+      isGraph := true, isSimple := true, order := 6, representatives := [ 1 ],
+      schreierVector := [ -1, 1, 1, 1, 1, 1 ] ) ]
 gap> gamma := NullGraph( Group( (1,3), (1,2)(3,4) ) );;
 gap> AddEdgeOrbit( gamma, [4,3] );
 gap> gamma;

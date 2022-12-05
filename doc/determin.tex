@@ -166,15 +166,20 @@ gap> CollapsedAdjacencyMat( gamma );
 \>OrbitalDigraphColadjMats( <G>, <H> )
 
 This function returns a list of collapsed adjacency matrices for the
-orbital digraphs of the transitive permutation group <G>, collapsed
-with respect to `Stabilizer(<G>,1)' (creating collapsed adjacency
-matrices for the orbital digraphs in the sense of \cite{PS97}). Also,
-the matrices are given with respect to some ordering of the
-orbits of `Stabilizer(<G>,1)' (the *suborbits*), with the trivial 
-suborbit `[1]' coming first.
+orbital digraphs of the transitive permutation group <G>, collapsed with
+respect to `Stabilizer(<G>,1)', creating collapsed adjacency matrices
+for the orbital digraphs in the sense of \cite{PS97}.  These matrices are
+given with respect to some ordering of the orbits of `Stabilizer(<G>,1)'
+(the *suborbits*), with the trivial suborbit `[1]' coming first, and
+with the $k$-th matrix corresponding to the orbital digraph having the
+$k$-th suborbit as the adjacency of the vertex~1. The $(i,j)$-entry of the
+$k$-th matrix in the returned list equals the number of (directed) edges
+of the $k$-th orbital digraph that are in 
+$\{ [x,y]\mid y \in j$-th~suborbit$\}$, 
+where $x$ is a fixed vertex in the $i$-th suborbit.
 
 The optional parameter <H>, if included, should be equal to
-`Stabilizer(<G>,1)'. The knowledge of this stabilizer can speed up the
+`Stabilizer(<G>,1)'. The knowledge of this stabilizer may speed up the
 function.
 
 Prior to {\GRAPE}~4.9.0 this function was called `OrbitalGraphColadjMats',
@@ -182,10 +187,10 @@ and for backward compatibility, this name will still work.
 
 The reader is warned that collapsed adjacency matrices can have different,
 but related meanings depending on the setting and the author. Note also
-that the $i$-th *intersection matrix* for the coherent configuration
+that the $k$-th *intersection matrix* for the coherent configuration
 defined by <G> is the transpose of the collapsed adjacency matrix
 corresponding to the suborbit paired with the suborbit defining the
-$i$-th collapsed adjacency matrix for <G>. See Chapter 3 of \cite{Cam99}.
+$k$-th collapsed adjacency matrix for <G>. See Chapter 3 of \cite{Cam99}.
 
 See also "CollapsedAdjacencyMat".
 
@@ -224,7 +229,7 @@ permutation rank of <G> is not too large).
 In the first form of this function, the input parameter <coladjmats> must
 be a list of collapsed adjacency matrices for the orbital digraphs of some
 non-trivial transitive permutation group <G>, collapsed with respect to a
-fixed point stabilizer (such as the list of matrices produced by the function
+fixed point-stabilizer (such as the list of matrices produced by the function
 `OrbitalDigraphColadjMats').  It is assumed that the orbital/suborbit
 indexing used is the same as that for the rows (and columns) of each of
 the matrices, as well as for the indexing of the matrices themselves,

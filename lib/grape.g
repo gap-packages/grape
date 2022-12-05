@@ -951,7 +951,7 @@ BindGlobal("GeneralizedOrbitalGraphs",function(arg)
 # Then this function returns a list of distinct generalized orbital
 # graphs for  G  (where a *generalized orbital graph* for  G  is a 
 # (simple) graph with vertex set [1..n] and edge-set a union of 
-# some G-orbits of 2-subsets of  [1..n]).
+# zero or more G-orbits of 2-subsets of  [1..n]).
 #
 # If  k=true  then *all*  the generalized orbital graphs 
 # for  G  are in the list,  if  k=false  (the default)  then all
@@ -977,7 +977,7 @@ if not (IsPermGroup(G) and (IsBool(k) or IsInt(k))) then
 fi;
 n:=LargestMovedPoint(G);
 if n=0 or not IsTransitive(G,[1..n]) then
-   Error("<G> must be a non-trivial transitive group on [1..LargestMovedPoint( <G> )");
+   Error("<G> must be a non-trivial transitive group on [1..LargestMovedPoint( <G> )]");
 fi;
 if not ((k in [false,true]) or (IsInt(k) and k>=0)) then 
    Error("<k> must be in  [false,true]  or be a non-negative integer");
@@ -3896,7 +3896,7 @@ BindGlobal("VertexTransitiveDRGs",function(gpin)
 # Otherwise, we take  coladjmats:=gpin,  which must be a list of collapsed
 # adjacency matrices for the orbital digraphs of a non-trivial 
 # transitive permutation group  G  (on a set V say), collapsed 
-# w.r.t. a fixed point stabilizer (such as the list of matrices produced
+# w.r.t. a fixed point-stabilizer (such as the list of matrices produced
 # by  OrbitalDigraphColadjMats ).
 #
 # In either case, this function returns a record (called  result),
