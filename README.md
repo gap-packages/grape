@@ -3,7 +3,7 @@ The GRAPE 4.9.0 Package for GAP
 ===============================
 
 GRAPE is a GAP package for computing with graphs and groups, by 
-Leonard H. Soicher, with contributions from Steve Linton, Alexander
+Leonard Soicher, with contributions from Steve Linton, Alexander
 Hulpke, Jerry James and Max Horn, and including Brendan McKay's nauty
 (Version 2.8.6) package.
 

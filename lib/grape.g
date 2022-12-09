@@ -2835,7 +2835,7 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 # of  [1..d].  There is no harm (except perhaps for efficiency) in
 # giving  dovector  the value  [1..d].
 #
-local IsFixedPoint,HasLargerEntry,k,smallorder,weights,weighted,
+local IsFixedPoint,HasLargerEntry,k,smallorder,smallorder1,weights,weighted,
       originalG,originalgamma,includingallmaximalreps, 
       CompleteSubgraphsSearch,K,clique,cliquenumber,chromaticnumber;
 
@@ -2870,9 +2870,10 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 # This function returns a dense list of distinct complete subgraphs of
 # gamma,  each of which is given as a dense list of distinct vertex-names.
 #
-# The variables  smallorder,  originalG,  allsubs,  allmaxes,  weights, 
-# weightvectors,  weighted,  partialcolour,  dovector,  IsFixedPoint,  and  
-# HasLargerEntry  are global.  (originalG  is the group of automorphisms 
+# The variables  smallorder,  smallorder1,  originalG,  
+# allsubs,  allmaxes,  weights,  weightvectors,  weighted,  
+# partialcolour,  dovector,  IsFixedPoint,  and  HasLargerEntry  
+# are global.  (originalG  is the group of automorphisms 
 # associated with the original graph.)  
 #
 # If  allsubs=2  then the returned complete subgraphs will be 
@@ -3263,7 +3264,7 @@ if HasLargerEntry(kvector,nactivevector) then
 fi;
 # now k<0 or nactive >= k > 0.
 G:=gamma.group;
-if Size(G)<=smallorder then
+if IsTrivial(G) or ((not weighted) and Size(G)<=smallorder1) then
    # Use the specialized function  CompleteSubgraphsSearch1, 
    # which works as if the group associated to the graph is trivial. 
    if (not allmaxes) and forbidden<>[] then 
@@ -3512,6 +3513,13 @@ for j in [1..Length(J)] do
                for a in ans1 do
                   Add(ans,a);
                od;
+            elif Size(gamma.group)<=smallorder then
+               # perform isomorph rejection using explicit orbits
+               ans1:=List(ans1,x->Set(W{x}));
+               ans1:=List(Orbits(gamma.group,ans1,OnSets),x->names{x[1]});
+               for a in ans1 do
+                  Add(ans,a);
+               od;
             else
                # perform isomorph rejection using SmallestImageSet
                ans2:=List(ans1,x->
@@ -3563,11 +3571,16 @@ fi;
 if not IsSimpleGraph(gamma) then
    Error("<gamma> must be a simple graph");
 fi;
-smallorder:=8; # to try to optimise when  CompleteSubgraphsSearch1  is used. 
-# In  CompleteSubgraphsSearch,  when the group associated with the 
-# graph under consideration has order <= smallorder then we use 
-# CompleteSubgraphsSearch1  and perform isomorph rejection via 
-# explicit orbits on cliques.
+smallorder:=8; # to try to optimize isomorph rejection. 
+# If allsubs=2, we perform isomorph rejection via explicit orbits 
+# on cliques when the group associated with the graph under 
+# consideration has  order<=smallorder. 
+smallorder1:=8; # to try to optimise when  CompleteSubgraphsSearch1  
+# is used for unweighted graphs. 
+# In  CompleteSubgraphsSearch,  if the graph under consideration 
+# is unweighted, and the group associated with that graph 
+# has  order <= smallorder1,  then we use  CompleteSubgraphsSearch1
+# and perform isomorph rejection via explicit orbits on cliques.
 #
 originalgamma:=gamma;
 originalG:=gamma.group;

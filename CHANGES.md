@@ -1,4 +1,4 @@
-Main changes from GRAPE 4.8.5 to GRAPE 4.9.0 (07 December 2022)
+Main changes from GRAPE 4.8.5 to GRAPE 4.9.0 (09 December 2022)
 ---------------------------------------------------------------
 
 1. The included version of nauty is now 2.8.6. You should expect canonical

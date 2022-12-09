@@ -13,7 +13,7 @@ PackageName := "GRAPE",
 Version := "4.9.0",
 
 ##  Release date of the current version in dd/mm/yyyy format.
-Date := "07/12/2022",
+Date := "09/12/2022",
 
 ##  Machine readable license information (as an SPDX identifier)
 License := "Apache-2.0 AND GPL-2.0-or-later",
@@ -42,7 +42,7 @@ Persons := [
     IsMaintainer := true,
     Email := "L.H.Soicher@qmul.ac.uk",
     WWWHome := "https://webspace.maths.qmul.ac.uk/l.h.soicher/",
-    Place := "London",
+    Place := "London, UK",
     Institution := Concatenation( [
       "School of Mathematical Sciences, ",
       "Queen Mary University of London",
