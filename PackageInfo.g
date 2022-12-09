@@ -10,10 +10,13 @@ PackageName := "GRAPE",
 
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers.
-Version := "4.8.5",
+Version := "4.9.0",
 
 ##  Release date of the current version in dd/mm/yyyy format.
-Date := "26/03/2021",
+Date := "09/12/2022",
+
+##  Machine readable license information (as an SPDX identifier)
+License := "Apache-2.0 AND GPL-2.0-or-later",
 
 SourceRepository := rec(
     Type := "git",
@@ -29,7 +32,7 @@ ArchiveURL      := Concatenation( ~.SourceRepository.URL,
 
 ArchiveFormats := ".tar.gz", 
 
-BinaryFiles := ["doc/manual.dvi","doc/manual.pdf","nauty22/nug.pdf","bin/i686-pc-cygwin-gcc-default32/dreadnautB.exe"],
+BinaryFiles := ["doc/manual.dvi","doc/manual.pdf","nauty2_8_6/nug28.pdf"],
 
 Persons := [
   rec(
@@ -38,8 +41,8 @@ Persons := [
     IsAuthor := true,
     IsMaintainer := true,
     Email := "L.H.Soicher@qmul.ac.uk",
-    WWWHome := "http://www.maths.qmul.ac.uk/~lsoicher/",
-    Place := "London",
+    WWWHome := "https://webspace.maths.qmul.ac.uk/l.h.soicher/",
+    Place := "London, UK",
     Institution := Concatenation( [
       "School of Mathematical Sciences, ",
       "Queen Mary University of London",
@@ -57,7 +60,7 @@ AcceptDate := "07/1993",
 ##  for a Webpage with more detailed information about the package
 ##  (not more than a few lines, less is ok):
 ##  Please, use '<span class="pkgname">GAP</span>' and
-##  '<span class="pkgname">MyPKG</span>' for specifing package names.
+##  '<span class="pkgname">MyPKG</span>' for specifying package names.
 ##  
 AbstractHTML := "<span class=\"pkgname\">GRAPE</span> is a package for \
 computing with graphs and groups, \

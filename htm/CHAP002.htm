@@ -224,7 +224,7 @@ Let <var>d</var> and <var>q</var> be positive integers.  Then this function retu
 graph <var>gamma</var> isomorphic to the Hamming graph <var>H(<var>d</var>,<var>q</var>)</var>.  The vertices
 (actually the vertex-names) of <var>gamma</var> are the <var>d</var>-vectors with entries
 in <var>{1,...,<var>q</var>}</var>, with <var>x</var> joined to <var>y</var> if and only if <var>x</var> and <var>y</var>
-differ in exactly one co-ordinate (that is, <var>x</var> and <var>y</var> are at Hamming
+differ in exactly one coordinate (that is, <var>x</var> and <var>y</var> are at Hamming
 distance&nbsp;1).  The group associated with <var>gamma</var> is the image of the wreath
 product of the symmetric group <var>S<sub><</sub>q&gt;</var> with the symmetric group <var>S<sub><</sub>d&gt;</var>,
 in its product action on the vertices.
@@ -314,21 +314,47 @@ gap&gt; Diameter(C);
 <p><p>
 <a name = "SSEC008.1"></a>
 <li><code>GeneralizedOrbitalGraphs( </code><var>G</var><code> )</code>
+<li><code>GeneralizedOrbitalGraphs( </code><var>G</var><code>, </code><var>k</var><code> )</code>
 <p>
 Suppose <var>G</var> is a non-trivial transitive permutation group
 on <var>{1,...,n}</var>, where <var>n</var> is the largest point moved by <var>G</var>.
-Then this function returns a list of all the non-null generalized
-orbital graphs for <var>G</var>. These are precisely the non-null simple graphs
-with vertex set <var>{1,...,n}</var> for which <var>G</var> is a (vertex-transitive)
-group of automorphisms.
+Then this function returns a list of distinct generalized
+orbital graphs for <var>G</var>, where a  <strong>generalized orbital graph</strong>
+<a name = "I1"></a>
+
+for <var>G</var>  is a (simple) graph with vertex set <var>{1,...,n}</var> and
+undirected-edge set a union of zero or more <var>G</var>-orbits of 2-subsets
+of <var>{1,...,n}</var>.
+<p>
+The optional second parameter <var>k</var> (default: <code>false</code>) must be <code>false</code>,
+<code>true</code>, or a non-negative integer. If <var>k</var>=<code>true</code> then all the generalized
+orbital graphs for <var>G</var> are in the returned list, if <var>k</var>=<code>false</code> (the
+default) then only the non-null generalized orbital graphs for <var>G</var> are in
+this list, and if <var>k</var> is a non-negative integer then the list consists
+of all the generalized orbital graphs for <var>G</var> whose undirected-edge set
+is the union of exactly <var>k</var> <var>G</var>-orbits of 2-subsets of <var>{1,...,n}</var>.
+<p>
+The group associated with each graph in the returned list is <var>G</var>. 
 <p>
 <pre>
-gap&gt; G:=JohnsonGraph(7,3).group;;    
+gap&gt; G:=JohnsonGraph(7,3).group;;
 gap&gt; L:=GeneralizedOrbitalGraphs(G);;
-gap&gt; List(L,VertexDegrees);   
+gap&gt; List(L,VertexDegrees);
 [ [ 12 ], [ 30 ], [ 34 ], [ 16 ], [ 18 ], [ 22 ], [ 4 ] ]
 gap&gt; List(L,Diameter);
 [ 3, 2, 1, 2, 2, 2, 3 ]
+gap&gt; C:=CyclicGroup(IsPermGroup,6);
+Group([ (1,2,3,4,5,6) ])
+gap&gt; GeneralizedOrbitalGraphs(C,1);
+[ rec( adjacencies := [ [ 2, 6 ] ], group := Group([ (1,2,3,4,5,6) ]), 
+      isGraph := true, order := 6, representatives := [ 1 ], 
+      schreierVector := [ -1, 1, 1, 1, 1, 1 ] ), 
+  rec( adjacencies := [ [ 3, 5 ] ], group := Group([ (1,2,3,4,5,6) ]), 
+      isGraph := true, order := 6, representatives := [ 1 ], 
+      schreierVector := [ -1, 1, 1, 1, 1, 1 ] ), 
+  rec( adjacencies := [ [ 4 ] ], group := Group([ (1,2,3,4,5,6) ]), 
+      isGraph := true, isSimple := true, order := 6, representatives := [ 1 ],
+      schreierVector := [ -1, 1, 1, 1, 1, 1 ] ) ]
 </pre>
 <p>
 <p>
@@ -439,5 +465,5 @@ rec(
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP001.htm">Previous</a>] [<a href ="CHAP003.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>March 2021
+<address>grape manual<br>December 2022
 </address></body></html>

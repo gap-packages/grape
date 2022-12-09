@@ -10,7 +10,7 @@
 <li> <A HREF="CHAP004.htm#SECT003">GlobalParameters</a>
 <li> <A HREF="CHAP004.htm#SECT004">IsDistanceRegular</a>
 <li> <A HREF="CHAP004.htm#SECT005">CollapsedAdjacencyMat</a>
-<li> <A HREF="CHAP004.htm#SECT006">OrbitalGraphColadjMats</a>
+<li> <A HREF="CHAP004.htm#SECT006">OrbitalDigraphColadjMats</a>
 <li> <A HREF="CHAP004.htm#SECT007">VertexTransitiveDRGs</a>
 </ol><p>
 <p>
@@ -151,7 +151,7 @@ of 1.
 The reader is warned that collapsed adjacency matrices can have different,
 but related meanings depending on the setting and the author.
 <p>
-See also <a href="CHAP004.htm#SSEC006.1">OrbitalGraphColadjMats</a>.
+See also <a href="CHAP004.htm#SSEC006.1">OrbitalDigraphColadjMats</a>.
 <p>
 <pre>
 gap&gt; gamma := JohnsonGraph(4,2);
@@ -169,32 +169,60 @@ gap&gt; CollapsedAdjacencyMat( gamma );
 </pre>
 <p>
 <p>
-<h2><a name="SECT006">4.6 OrbitalGraphColadjMats</a></h2>
+<h2><a name="SECT006">4.6 OrbitalDigraphColadjMats</a></h2>
 <p><p>
 <a name = "SSEC006.1"></a>
-<li><code>OrbitalGraphColadjMats( </code><var>G</var><code> )</code>
-<li><code>OrbitalGraphColadjMats( </code><var>G</var><code>, </code><var>H</var><code> )</code>
+<li><code>OrbitalDigraphColadjMats( </code><var>G</var><code> )</code>
+<li><code>OrbitalDigraphColadjMats( </code><var>G</var><code>, </code><var>H</var><code> )</code>
 <p>
 This function returns a list of collapsed adjacency matrices for the
-orbital digraphs of the transitive permutation group <var>G</var>, collapsed
-with respect to <code>Stabilizer(</code><var>G</var><code>,1)</code> (creating collapsed adjacency
-matrices for the orbital digraphs in the sense of <a href="biblio.htm#PS97"><cite>PS97</cite></a>). Also,
-the matrices are collapsed with respect to a fixed ordering of the
-orbits of <code>Stabilizer(</code><var>G</var><code>,1)</code>, with the trivial orbit <code>[1]</code> coming
-first.
+orbital digraphs of the transitive permutation group <var>G</var>, collapsed with
+respect to <code>Stabilizer(</code><var>G</var><code>,1)</code>, creating collapsed adjacency matrices
+for the orbital digraphs in the sense of <a href="biblio.htm#PS97"><cite>PS97</cite></a>.  These matrices are
+given with respect to some ordering of the orbits of <code>Stabilizer(</code><var>G</var><code>,1)</code>
+(the <strong>suborbits</strong>), with the trivial suborbit <code>[1]</code> coming first, and
+with the <var>k</var>-th matrix corresponding to the orbital digraph having the
+<var>k</var>-th suborbit as the adjacency of the vertex&nbsp;1. The <var>(i,j)</var>-entry of the
+<var>k</var>-th matrix in the returned list equals the number of (directed) edges
+of the <var>k</var>-th orbital digraph that are in 
+<var>{ [x,y]midy inj</var>-th&nbsp;suborbit<var>}</var>, 
+where <var>x</var> is a fixed vertex in the <var>i</var>-th suborbit.
 <p>
 The optional parameter <var>H</var>, if included, should be equal to
-<code>Stabilizer(</code><var>G</var><code>,1)</code>. The knowledge of this stabilizer can speed up the
+<code>Stabilizer(</code><var>G</var><code>,1)</code>. The knowledge of this stabilizer may speed up the
 function.
 <p>
+Prior to GRAPE&nbsp;4.9.0 this function was called <code>OrbitalGraphColadjMats</code>,
+and for backward compatibility, this name will still work.
+<p>
 The reader is warned that collapsed adjacency matrices can have different,
-but related meanings depending on the setting and the author.
+but related meanings depending on the setting and the author. Note also
+that the <var>k</var>-th <strong>intersection matrix</strong> for the coherent configuration
+defined by <var>G</var> is the transpose of the collapsed adjacency matrix
+corresponding to the suborbit paired with the suborbit defining the
+<var>k</var>-th collapsed adjacency matrix for <var>G</var>. See Chapter 3 of <a href="biblio.htm#Cam99"><cite>Cam99</cite></a>.
 <p>
 See also <a href="CHAP004.htm#SSEC005.1">CollapsedAdjacencyMat</a>.
 <p>
 <pre>
-gap&gt; OrbitalGraphColadjMats( SymmetricGroup(7) );
-[ [ [ 1, 0 ], [ 0, 1 ] ], [ [ 0, 6 ], [ 1, 5 ] ] ] 
+gap&gt; G:=JohnsonGraph(5,3).group;;
+gap&gt; OrbitalDigraphColadjMats(G);
+[ [ [ 1, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ], 
+  [ [ 0, 6, 0 ], [ 1, 3, 2 ], [ 0, 4, 2 ] ], 
+  [ [ 0, 0, 3 ], [ 0, 2, 1 ], [ 1, 2, 0 ] ] ]
+gap&gt; C:=CyclicGroup(IsPermGroup,5);
+Group([ (1,2,3,4,5) ])
+gap&gt; OrbitalDigraphColadjMats(C);
+[ [ [ 1, 0, 0, 0, 0 ], [ 0, 1, 0, 0, 0 ], [ 0, 0, 1, 0, 0 ], 
+      [ 0, 0, 0, 1, 0 ], [ 0, 0, 0, 0, 1 ] ], 
+  [ [ 0, 1, 0, 0, 0 ], [ 0, 0, 1, 0, 0 ], [ 0, 0, 0, 1, 0 ], 
+      [ 0, 0, 0, 0, 1 ], [ 1, 0, 0, 0, 0 ] ], 
+  [ [ 0, 0, 1, 0, 0 ], [ 0, 0, 0, 1, 0 ], [ 0, 0, 0, 0, 1 ], 
+      [ 1, 0, 0, 0, 0 ], [ 0, 1, 0, 0, 0 ] ], 
+  [ [ 0, 0, 0, 1, 0 ], [ 0, 0, 0, 0, 1 ], [ 1, 0, 0, 0, 0 ], 
+      [ 0, 1, 0, 0, 0 ], [ 0, 0, 1, 0, 0 ] ], 
+  [ [ 0, 0, 0, 0, 1 ], [ 1, 0, 0, 0, 0 ], [ 0, 1, 0, 0, 0 ], 
+      [ 0, 0, 1, 0, 0 ], [ 0, 0, 0, 1, 0 ] ] ]
 </pre>
 <p>
 <p>
@@ -212,8 +240,8 @@ permutation rank of <var>G</var> is not too large).
 In the first form of this function, the input parameter <var>coladjmats</var> must
 be a list of collapsed adjacency matrices for the orbital digraphs of some
 non-trivial transitive permutation group <var>G</var>, collapsed with respect to a
-point stabilizer (such as the list of matrices produced by the function
-<code>OrbitalGraphColadjMats</code>).  It is assumed that the orbital/suborbit
+fixed point-stabilizer (such as the list of matrices produced by the function
+<code>OrbitalDigraphColadjMats</code>).  It is assumed that the orbital/suborbit
 indexing used is the same as that for the rows (and columns) of each of
 the matrices, as well as for the indexing of the matrices themselves,
 with the trivial orbital first, so that, in particular, <code></code><var>coladjmats</var><code>[1]</code>
@@ -221,7 +249,7 @@ must be an identity matrix.
 <p>
 In the second form of this function, the input parameter <var>G</var> must be a
 non-trivial transitive permutation group, and then the result returned
-will be the same as <code>VertexTransitiveDRGs( OrbitalGraphColadjMats( </code><var>G</var><code>
+will be the same as <code>VertexTransitiveDRGs( OrbitalDigraphColadjMats( </code><var>G</var><code>
 ) )</code>.
 <p>
 In either case, this function returns a record <var>result</var>, which gives
@@ -256,5 +284,5 @@ rec( degree := 672, rank := 6, isPrimitive := true,
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP003.htm">Previous</a>] [<a href ="CHAP005.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>March 2021
+<address>grape manual<br>December 2022
 </address></body></html>
