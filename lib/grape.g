@@ -54,6 +54,28 @@ GRAPE_DREADNAUT_INPUT_USE_STRING := false;
    # Using a string is faster than using a file, but may use
    # too much storage.
 
+GRAPE_CLIQUE_C1:=1;
+GRAPE_CLIQUE_C2:=infinity;
+GRAPE_CLIQUE_SETSTAB:=false;
+
+GRAPE_CCLIQUE:=true; 
+   # If true, use the external  cclique  program if it exists and
+   # is appropriate to use;  if false then use GAP code only for 
+   # clique finding and classifying. 
+GRAPE_CCLIQUE_EXE := 
+   ExternalFilename(DirectoriesPackagePrograms("grape"),"cclique"); 
+   # filename of  cclique  executable if it exists
+GRAPE_CCLIQUE_MAX_ORDER:=10000; # for now
+GRAPE_CCLIQUE_MAX_D:=1000; # for now
+                         
+# Set up temporary directory for use with nauty/dreadnaut, bliss, and cclique.
+BindGlobal("GRAPE_TMPDIR",DirectoryTemporary());
+Add(GAPInfo.PostRestoreFuncs,function()
+  MakeReadWriteGlobal("GRAPE_TMPDIR");
+  Unbind(GRAPE_TMPDIR);
+  BindGlobal("GRAPE_TMPDIR",DirectoryTemporary());
+end);
+
 # The following variant of GAP's Exec is more flexible, and does not require a
 # shell. That makes it more reliable on Windows resp. with Cygwin. Moreover,
 # it allows to redirect input and output.
@@ -2835,9 +2857,15 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 # of  [1..d].  There is no harm (except perhaps for efficiency) in
 # giving  dovector  the value  [1..d].
 #
-local IsFixedPoint,HasLargerEntry,k,smallorder,smallorder1,weights,weighted,
+local IsFixedPoint,HasLargerEntry,k,smallorder,weights,weighted,
       originalG,originalgamma,includingallmaximalreps, 
-      CompleteSubgraphsSearch,K,clique,cliquenumber,chromaticnumber;
+      CompleteSubgraphsSearch,K,clique,cliquenumber,chromaticnumber,
+      #
+      # variables for using  cclique 
+      usecclique,startedccliqueinput,  # booleans
+      StartCcliqueInput,ProcessPartialSolution,  # functions
+      cclique_in,cclique_out,  # streams
+      cclique_in_file,cclique_out_string,status,L;
 
 IsFixedPoint := function(G,point)
 #
@@ -2861,6 +2889,61 @@ od;
 return false;
 end;
 
+StartCcliqueInput := function(graph,weightvectors,allsubs) 
+local i,j,adj,n,d;
+cclique_in_file:=Filename(GRAPE_TMPDIR,"cclique_in_file");
+RemoveFile(cclique_in_file);  # in case there is a leftover file
+cclique_in:=OutputTextFile(cclique_in_file,false);
+if cclique_in=fail then
+   Error("error opening output text stream using file ",cclique_in_file); 
+fi;
+SetPrintFormattingStatus(cclique_in,false);
+n:=graph.order; 
+if weightvectors<>[] then
+   d:=Length(weightvectors[1]); 
+else
+   d:=0;
+fi;
+PrintTo(cclique_in,allsubs," ",n," ",d,"\n");
+for i in [1..n] do
+   adj:=Adjacency(graph,i); 
+   for j in [1..n] do
+      if j in adj then 
+          AppendTo(cclique_in," ",1);
+      else
+          AppendTo(cclique_in," ",0);
+      fi;
+   od;
+   AppendTo(cclique_in,"\n");
+od;
+for i in [1..n] do
+   for j in [1..d] do
+      AppendTo(cclique_in," ",weightvectors[i][j]);
+    od;
+    AppendTo(cclique_in,"\n");
+od; 
+return;
+end; 
+
+ProcessPartialSolution := function(sofar,activenames,kvector)
+local i;
+AppendTo(cclique_in,Length(sofar),"\n");
+for i in [1..Length(sofar)] do
+   AppendTo(cclique_in,"  ",sofar[i]);
+od;
+AppendTo(cclique_in,"\n");
+AppendTo(cclique_in,Length(activenames),"\n");
+for i in [1..Length(activenames)] do
+   AppendTo(cclique_in,"  ",activenames[i]);
+od;
+AppendTo(cclique_in,"\n");
+for i in [1..Length(kvector)] do
+   AppendTo(cclique_in," ",kvector[i]);
+od;
+AppendTo(cclique_in,"\n");
+return;
+end;
+
 CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 #
 # This recursive function is called by  CompleteSubgraphsMain  to do all 
@@ -2870,11 +2953,13 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 # This function returns a dense list of distinct complete subgraphs of
 # gamma,  each of which is given as a dense list of distinct vertex-names.
 #
-# The variables  smallorder,  smallorder1,  originalG,  
-# allsubs,  allmaxes,  weights,  weightvectors,  weighted,  
-# partialcolour,  dovector,  IsFixedPoint,  and  HasLargerEntry  
-# are global.  (originalG  is the group of automorphisms 
-# associated with the original graph.)  
+# The variables  usecclique,  startedccliqueinput,  
+# StartCcliqueInput,  ProcessPartialSolution,  
+# cclique_in,  cclique_out,  cclique_in_file,  cclique_out_string, 
+# smallorder,  originalG,  allsubs,  allmaxes,  weights,  weightvectors,  
+# weighted,  partialcolour,  dovector,  IsFixedPoint,  and  HasLargerEntry  
+# are global.  (originalG  is the group of automorphisms associated with 
+# the original graph.)  
 #
 # If  allsubs=2  then the returned complete subgraphs will be 
 # (pairwise) inequivalent under gamma.group. 
@@ -2933,9 +3018,8 @@ local k,n,i,j,delta,adj,rep,a,b,ans,ans1,ans2,names,W,H,HH,newsofar,
 
 CompleteSubgraphsSearch1 := function(mask,kvector,forbidmask)
 #
-# This function does the work of  CompleteSubgraphsSearch,   
-# but assuming the group associated to the graph is trivial.
-#
+# This function does the work of  CompleteSubgraphsSearch  
+# when the group associated with the graph is trivial.  
 # The parameters  mask  and  forbidmask  are boolean lists of length  n,  
 # and the global variable  A  has value an  n x n  adjacency matrix 
 # for a graph  gamma  (given as a length  n  list of boolean lists).  
@@ -3264,9 +3348,16 @@ if HasLargerEntry(kvector,nactivevector) then
 fi;
 # now k<0 or nactive >= k > 0.
 G:=gamma.group;
-if IsTrivial(G) or ((not weighted) and Size(G)<=smallorder1) then
-   # Use the specialized function  CompleteSubgraphsSearch1, 
-   # which works as if the group associated to the graph is trivial. 
+if IsTrivial(G) or (k>0 and allsubs in [0,1] and Size(G)<=GRAPE_CLIQUE_C1 and nactive<=GRAPE_CLIQUE_C2) then
+   # We will use the  ccliques  program or  CompleteSubgraphsSearch1. 
+   if usecclique then
+      if not startedccliqueinput then
+         startedccliqueinput:=true;
+         StartCcliqueInput(originalgamma,weightvectors,allsubs); 
+      fi;
+      ProcessPartialSolution(sofar,gamma.names{active},kvector);
+      return [];
+   fi;
    if (not allmaxes) and forbidden<>[] then 
       # strip out the forbidden vertices.
       gamma:=InducedSubgraph(gamma,active,G);
@@ -3274,30 +3365,11 @@ if IsTrivial(G) or ((not weighted) and Size(G)<=smallorder1) then
       names:=gamma.names;
       active:=[1..n];
    fi;
+   # now A := adjacency matrix of gamma.
    A:=List([1..n],i->BlistList([1..n],Adjacency(gamma,i)));
-   # So now  A  is the bit-adjacency-matrix of  gamma.
-   ans1:=CompleteSubgraphsSearch1(BlistList([1..n],[1..n]), kvector,
+   return CompleteSubgraphsSearch1(BlistList([1..n],[1..n]), kvector,
             BlistList([1..n],Difference([1..n],active)));
-   Unbind(A); # A is no longer needed
-   if Length(ans1)<=1 or IsTrivial(gamma.group) then
-      # no isomorph rejection is required
-      return ans1;
-   fi;
-   # Otherwise, perform isomorph rejection using explicit orbits
-   # (even if  allsubs=1).
-   # First, set up a translation vector  W  from vertex-names 
-   # to vertices of  gamma.
-   W:=[];
-   for i in [1..Length(names)] do 
-      W[names[i]]:=i; 
-   od;
-   ans1:=List(ans1,x->Set(W{x}));
-   ans1:=List(Orbits(gamma.group,ans1,OnSets),x->names{x[1]});
-   return ans1;
 fi;
-#
-# Now handle the general case.
-#
 J:=Filtered([1..Length(gamma.representatives)],
             x->gamma.representatives[x] in active);
 IsSSortedList(J);
@@ -3466,7 +3538,7 @@ for j in [1..Length(J)] do
          indorbwtsum:=indorbwtsum+wt;
       else 
          newsofar:=Union(sofar,[names[rep]]);
-         if allsubs<>2 and (not allmaxes) then
+         if allsubs<>2 and (not allmaxes) and not GRAPE_CLIQUE_SETSTAB then
             # We can strip out all forbidden vertices since in this case:
             #   (1) we are stabilizing each successive sofar with 
             #       (a constituent image of) a subgroup of 
@@ -3479,14 +3551,14 @@ for j in [1..Length(J)] do
                                    ProbablyStabilizer(gamma.group,rep));
             ans1:=CompleteSubgraphsSearch(delta,
                      kvector-weightvectors[names[rep]],newsofar,[]);
-         elif allsubs<>2 then
+         elif allsubs<>2 and not GRAPE_CLIQUE_SETSTAB then
             delta:=InducedSubgraph(gamma,adj,
                                    ProbablyStabilizer(gamma.group,rep));
             ans1:=CompleteSubgraphsSearch(delta,
                      kvector-weightvectors[names[rep]],newsofar,
                      Intersection(delta.names,forbidden));
          else
-            # allsubs=2 
+            # allsubs=2 or GRAPE_CLIQUE_SETSTAB
             delta:=InducedSubgraph(gamma,adj,Stabilizer(gamma.group,rep));
             HH:=Stabilizer(originalG,newsofar,OnSets);
             if not IsFixedPoint(HH,names[rep]) then 
@@ -3501,6 +3573,20 @@ for j in [1..Length(J)] do
                         Intersection(delta.names,forbidden));
             fi; 
          fi;
+         # newsofar:=Union(sofar,[names[rep]]);
+         # delta:=InducedSubgraph(gamma,adj,Stabilizer(gamma.group,rep));
+         # HH:=Stabilizer(originalG,newsofar,OnSets);
+         # if not IsFixedPoint(HH,names[rep]) then 
+            # H:=Action(HH,names{adj},OnPoints);
+            # delta:=NewGroupGraph(H,delta);
+            # ans1:=CompleteSubgraphsSearch(delta,
+                     # kvector-weightvectors[names[rep]],newsofar,
+                     # Intersection(delta.names,Union(Orbits(HH,forbidden))));
+         # else
+            # ans1:=CompleteSubgraphsSearch(delta,
+                     # kvector-weightvectors[names[rep]],newsofar,
+                     # Intersection(delta.names,forbidden));
+         # fi; 
          if Length(ans1)>0 then
             for a in ans1 do
                Add(a,names[rep]);
@@ -3571,17 +3657,9 @@ fi;
 if not IsSimpleGraph(gamma) then
    Error("<gamma> must be a simple graph");
 fi;
-smallorder:=8; # to try to optimize isomorph rejection. 
-# If allsubs=2, we perform isomorph rejection via explicit orbits 
-# on cliques when the group associated with the graph under 
-# consideration has  order<=smallorder. 
-smallorder1:=8; # to try to optimise when  CompleteSubgraphsSearch1  
-# is used for unweighted graphs. 
-# In  CompleteSubgraphsSearch,  if the graph under consideration 
-# is unweighted, and the group associated with that graph 
-# has  order <= smallorder1,  then we use  CompleteSubgraphsSearch1
-# and perform isomorph rejection via explicit orbits on cliques.
-#
+smallorder:=8; # Any group with order <= smallorder is considered small,
+               # and we calculate orbits on cliques explicitly for these
+               # groups when  allsubs=2.
 originalgamma:=gamma;
 originalG:=gamma.group;
 gamma:=ShallowCopy(gamma);
@@ -3625,14 +3703,42 @@ if not weighted and k>=0 then
          return [];
       fi; 
    fi;
-   if allsubs=0 and IsBound(gamma.autGroup) and
-      not IsCompleteGraph(gamma) and not IsNullGraph(gamma) and
-      Size(gamma.group)<Size(gamma.autGroup) then
-      # Make use of the full automorphism group of  gamma.
+   if allsubs=0 and not IsCompleteGraph(gamma) and 
+      IsBound(gamma.autGroup) and Size(gamma.group)<Size(gamma.autGroup) then
+      # make use of the full automorphism group of  gamma 
       gamma:=NewGroupGraph(gamma.autGroup,gamma);
    fi;
 fi;
+usecclique := GRAPE_CCLIQUE and GRAPE_CCLIQUE_EXE<>fail
+   and k > 0 and not allmaxes and allsubs in [0,1] 
+   and gamma.order<=GRAPE_CCLIQUE_MAX_ORDER 
+   and Length(kvector)<=GRAPE_CCLIQUE_MAX_D; 
+startedccliqueinput:=false;
 K:=CompleteSubgraphsSearch(gamma,kvector,[],[]);
+if startedccliqueinput then
+  CloseStream(cclique_in); 
+  if not (allsubs=0 and K<>[]) then
+     # run  cclique  and use its output
+     cclique_in:=InputTextFile(cclique_in_file); 
+     RewindStream(cclique_in);
+     cclique_out_string:="";
+     cclique_out:=OutputTextString(cclique_out_string,false); 
+     SetPrintFormattingStatus(cclique_out,false);
+     status:=GRAPE_Exec(GRAPE_CCLIQUE_EXE,["1","-1"],cclique_in,cclique_out);
+     if status<>0 then
+       Error("exit code ",status," returned by cclique executable;\n",
+          "returned results may be wrong");
+     fi;
+     CloseStream(cclique_in); 
+     CloseStream(cclique_out); 
+     L:=EvalString(cclique_out_string);
+     K:=Concatenation(K,L);
+     if allsubs=0 and Length(K)>1 then
+       K:=[K[1]];
+     fi;
+  fi;
+  RemoveFile(cclique_in_file); 
+fi;
 for clique in K do
    Sort(clique); 
 od;
@@ -4610,14 +4716,6 @@ fi;
 return;
 end);
 
-# Set up temporary directory for use with nauty/dreadnaut or bliss.
-BindGlobal("GRAPE_nautytmpdir",DirectoryTemporary());
-Add(GAPInfo.PostRestoreFuncs,function()
-  MakeReadWriteGlobal("GRAPE_nautytmpdir");
-  Unbind(GRAPE_nautytmpdir);
-  BindGlobal("GRAPE_nautytmpdir",DirectoryTemporary());
-end);
-
 BindGlobal("PrintStreamNautyGraph",function(stream,gamma,col)
 #
 # Prints in dreadnaut graph format the graph  gamma  with 
@@ -4795,8 +4893,8 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
     return;
   fi;
 
-  ftmp1:=Filename(GRAPE_nautytmpdir,"ftmp1");
-  ftmp2:=Filename(GRAPE_nautytmpdir,"ftmp2");
+  ftmp1:=Filename(GRAPE_TMPDIR,"ftmp1");
+  ftmp2:=Filename(GRAPE_TMPDIR,"ftmp2");
   
   # In principle redundant, but a failed call might have left files sitting
   # -- just throw out what will be overwritten anyhow.
@@ -4809,7 +4907,7 @@ BindGlobal("SetAutGroupCanonicalLabellingNauty",function(gr,setcanon)
     fdre_stream:=OutputTextString(fdre,false);
   else
     # Use a file for fdre_stream.
-    fdre:=Filename(GRAPE_nautytmpdir,"fdre");
+    fdre:=Filename(GRAPE_TMPDIR,"fdre");
     RemoveFile(fdre);  # in case there is a leftover file
     fdre_stream:=OutputTextFile(fdre,false);
     if fdre_stream=fail then
@@ -4975,8 +5073,8 @@ BindGlobal("SetAutGroupCanonicalLabellingBliss",function(gr,setcanon)
     return;
   fi;
 
-  fdre:=Filename(GRAPE_nautytmpdir,"fdre");
-  ftmp:=Filename(GRAPE_nautytmpdir,"ftmp");
+  fdre:=Filename(GRAPE_TMPDIR,"fdre");
+  ftmp:=Filename(GRAPE_TMPDIR,"ftmp");
   
   # In principle redundant, but a failed call might have left files sitting
   # -- just throw out what will be overwritten anyhow.
