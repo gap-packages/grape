@@ -15,11 +15,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#define max_order 10000
+#define max_order 30000
 /* Maximum value of Gamma_order, the order of the graph with 
    adjacency matrix  Gamma. */
 
-#define max_d 1000
+#define max_d 315
 /* Maximum value of Gamma_d,  the length of each  weightvector. */
 
 /* Integer lists are stored in arrays, with indexing starting at 1.

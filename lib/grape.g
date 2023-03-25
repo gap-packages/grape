@@ -36,10 +36,10 @@ GRAPE_RANDOM := false; # Determines if certain random methods are to be used
                        # the use of random methods is rarely necessary,
                        # and should only be employed by GRAPE experts.
 
-GRAPE_NRANGENS := 18;  # The number of random generators taken for a subgroup
+GRAPE_NRANGENS := 20;  # The number of random generators taken for a subgroup
 		       # when  GRAPE_RANDOM=true.
 
-GRAPE_NAUTY := true;   # Use nauty when true, else use bliss.
+GRAPE_NAUTY := false;   # Use nauty when true, else use bliss.
 
 GRAPE_DREADNAUT_EXE := 
    ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnaut"); 
@@ -48,25 +48,28 @@ GRAPE_DREADNAUT_EXE :=
 GRAPE_BLISS_EXE := ExternalFilename(DirectoriesSystemPrograms(),"bliss"); 
    # filename of bliss executable
 
-GRAPE_DREADNAUT_INPUT_USE_STRING := false;
+GRAPE_DREADNAUT_INPUT_USE_STRING := true;
    # If true then use a string for the stream used for input
    # to dreadnaut/nauty, if false use a file for this. 
    # Using a string is faster than using a file, but may use
    # too much storage.
 
-GRAPE_CLIQUE_C1:=1;
+GRAPE_CLIQUE_C1:=8;
 GRAPE_CLIQUE_C2:=infinity;
-GRAPE_CLIQUE_SETSTAB:=false;
+GRAPE_CLIQUE_SETSTAB:=true;
 
-GRAPE_CCLIQUE:=true; 
+GRAPE_CCLIQUE:=true;
    # If true, use the external  cclique  program if it exists and
    # is appropriate to use;  if false then use GAP code only for 
    # clique finding and classifying. 
+   # If this variable is a string, then output the input for
+   # cclique to the file named by this string, but do not run 
+   # cclique.
 GRAPE_CCLIQUE_EXE := 
    ExternalFilename(DirectoriesPackagePrograms("grape"),"cclique"); 
    # filename of  cclique  executable if it exists
-GRAPE_CCLIQUE_MAX_ORDER:=10000; # for now
-GRAPE_CCLIQUE_MAX_D:=1000; # for now
+GRAPE_CCLIQUE_MAX_ORDER:=30000; # for now
+GRAPE_CCLIQUE_MAX_D:=315; # for now
                          
 # Set up temporary directory for use with nauty/dreadnaut, bliss, and cclique.
 BindGlobal("GRAPE_TMPDIR",DirectoryTemporary());
@@ -2862,10 +2865,10 @@ local IsFixedPoint,HasLargerEntry,k,smallorder,weights,weighted,
       CompleteSubgraphsSearch,K,clique,cliquenumber,chromaticnumber,
       #
       # variables for using  cclique 
-      usecclique,startedccliqueinput,  # booleans
+      usecclique, startedccliqueinput,  # booleans
       StartCcliqueInput,ProcessPartialSolution,  # functions
       cclique_in,cclique_out,  # streams
-      cclique_in_file,cclique_out_string,status,L;
+      cclique_in_file,cclique_out_string,status;
 
 IsFixedPoint := function(G,point)
 #
@@ -2889,9 +2892,13 @@ od;
 return false;
 end;
 
-StartCcliqueInput := function(graph,weightvectors,allsubs) 
+StartCcliqueInput := function(graph,weightvectors,isolevel) 
 local i,j,adj,n,d;
-cclique_in_file:=Filename(GRAPE_TMPDIR,"cclique_in_file");
+if IsString(GRAPE_CCLIQUE) then
+   cclique_in_file:=GRAPE_CCLIQUE;
+else
+   cclique_in_file:=Filename(GRAPE_TMPDIR,"cclique_in_file");
+fi; 
 RemoveFile(cclique_in_file);  # in case there is a leftover file
 cclique_in:=OutputTextFile(cclique_in_file,false);
 if cclique_in=fail then
@@ -2904,7 +2911,7 @@ if weightvectors<>[] then
 else
    d:=0;
 fi;
-PrintTo(cclique_in,allsubs," ",n," ",d,"\n");
+PrintTo(cclique_in,isolevel," ",n," ",d,"\n");
 for i in [1..n] do
    adj:=Adjacency(graph,i); 
    for j in [1..n] do
@@ -2922,11 +2929,19 @@ for i in [1..n] do
     od;
     AppendTo(cclique_in,"\n");
 od; 
+startedccliqueinput:=true; 
 return;
 end; 
 
 ProcessPartialSolution := function(sofar,activenames,kvector)
 local i;
+if not startedccliqueinput then
+   if not allmaxes and allsubs=0 then
+      StartCcliqueInput(originalgamma,weightvectors,0);
+   else
+      StartCcliqueInput(originalgamma,weightvectors,1);
+   fi;
+fi;
 AppendTo(cclique_in,Length(sofar),"\n");
 for i in [1..Length(sofar)] do
    AppendTo(cclique_in,"  ",sofar[i]);
@@ -2953,8 +2968,7 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 # This function returns a dense list of distinct complete subgraphs of
 # gamma,  each of which is given as a dense list of distinct vertex-names.
 #
-# The variables  usecclique,  startedccliqueinput,  
-# StartCcliqueInput,  ProcessPartialSolution,  
+# The variables  usecclique,  StartCcliqueInput,  ProcessPartialSolution,  
 # cclique_in,  cclique_out,  cclique_in_file,  cclique_out_string, 
 # smallorder,  originalG,  allsubs,  allmaxes,  weights,  weightvectors,  
 # weighted,  partialcolour,  dovector,  IsFixedPoint,  and  HasLargerEntry  
@@ -3348,16 +3362,16 @@ if HasLargerEntry(kvector,nactivevector) then
 fi;
 # now k<0 or nactive >= k > 0.
 G:=gamma.group;
-if IsTrivial(G) or (k>0 and allsubs in [0,1] and Size(G)<=GRAPE_CLIQUE_C1 and nactive<=GRAPE_CLIQUE_C2) then
-   # We will use the  ccliques  program or  CompleteSubgraphsSearch1. 
-   if usecclique then
-      if not startedccliqueinput then
-         startedccliqueinput:=true;
-         StartCcliqueInput(originalgamma,weightvectors,allsubs); 
-      fi;
+if Size(G)<=GRAPE_CLIQUE_C1 and nactive<=GRAPE_CLIQUE_C2 then
+   # Make input for cclique or use CompleteSubgraphsSearch1, 
+   # as appropriate.
+   if k>0 and (usecclique or IsString(GRAPE_CCLIQUE)) then
+      # Make input for cclique.
       ProcessPartialSolution(sofar,gamma.names{active},kvector);
       return [];
    fi;
+   # Here, use the specialized function  CompleteSubgraphsSearch1, 
+   # which works as if the group associated to the graph is trivial. 
    if (not allmaxes) and forbidden<>[] then 
       # strip out the forbidden vertices.
       gamma:=InducedSubgraph(gamma,active,G);
@@ -3365,11 +3379,30 @@ if IsTrivial(G) or (k>0 and allsubs in [0,1] and Size(G)<=GRAPE_CLIQUE_C1 and na
       names:=gamma.names;
       active:=[1..n];
    fi;
-   # now A := adjacency matrix of gamma.
    A:=List([1..n],i->BlistList([1..n],Adjacency(gamma,i)));
-   return CompleteSubgraphsSearch1(BlistList([1..n],[1..n]), kvector,
+   # So now  A  is the bit-adjacency-matrix of  gamma.
+   ans1:=CompleteSubgraphsSearch1(BlistList([1..n],[1..n]), kvector,
             BlistList([1..n],Difference([1..n],active)));
+   Unbind(A); # as A is no longer needed
+   if Length(ans1)<=1 or IsTrivial(gamma.group) then
+      # no isomorph rejection is required
+      return ans1;
+   fi;
+   # Otherwise, perform isomorph rejection using explicit orbits
+   # (even if  allsubs=1).
+   # First, set up a translation vector  W  from vertex-names 
+   # to vertices of  gamma.
+   W:=[];
+   for i in [1..Length(names)] do 
+      W[names[i]]:=i; 
+   od;
+   ans1:=List(ans1,x->Set(W{x}));
+   ans1:=List(Orbits(gamma.group,ans1,OnSets),x->names{x[1]});
+   return ans1;
 fi;
+#
+# Now handle the general case.
+#
 J:=Filtered([1..Length(gamma.representatives)],
             x->gamma.representatives[x] in active);
 IsSSortedList(J);
@@ -3402,7 +3435,8 @@ if verticesremoved then
 fi;
 # At this point,  active  is the set of non-forbidden vertices,
 # and  k<0  or  nactive>=k>0.  Moreover, if  k>0,  then no
-# entry of  kvector  is greater than the corresponding entry of  nactivevector. 
+# entry of  kvector  is greater than the corresponding entry of  
+# nactivevector. 
 if nactive=k and (not allmaxes or forbidden=[]) then
    # k>0  and we are down to a complete graph on active 
    # vertices which forms a required solution.
@@ -3657,14 +3691,30 @@ fi;
 if not IsSimpleGraph(gamma) then
    Error("<gamma> must be a simple graph");
 fi;
-smallorder:=8; # Any group with order <= smallorder is considered small,
-               # and we calculate orbits on cliques explicitly for these
-               # groups when  allsubs=2.
+smallorder:=24; # Any group with order <= smallorder is considered small,
+                # and we calculate orbits on cliques explicitly for these
+                # groups when  allsubs=2.
 originalgamma:=gamma;
 originalG:=gamma.group;
 gamma:=ShallowCopy(gamma);
 gamma.names:=Immutable([1..gamma.order]);
 k:=Sum(kvector);
+usecclique := GRAPE_CCLIQUE=true 
+   and ARCH_IS_UNIX() and GRAPE_CCLIQUE_EXE<>fail
+   and k > 0 and not (allmaxes and allsubs=0)
+   and gamma.order<=GRAPE_CCLIQUE_MAX_ORDER 
+   and Length(kvector)<=GRAPE_CCLIQUE_MAX_D; 
+startedccliqueinput:=false;
+if k<=0 and IsString(GRAPE_CCLIQUE) then
+   Error("must have k>0 if GRAPE_CCLIQUE is a string");
+fi;
+if IsString(GRAPE_CCLIQUE) then
+   if not allmaxes and allsubs=0 then
+      StartCcliqueInput(originalgamma,weightvectors,0);
+   else 
+      StartCcliqueInput(originalgamma,weightvectors,1);
+   fi;
+fi;
 if k<0 then
    # We are computing maximal complete subgraphs (not of given size).
    if Length(kvector)<>1 then
@@ -3694,7 +3744,11 @@ if not weighted and k>=0 then
          return [];
       fi; 
       if allsubs=0 and (not allmaxes or k=cliquenumber) then
-         return [gamma.maximumClique{[1..k]}]; 
+         K:=[gamma.maximumClique{[1..k]}]; 
+         if IsString(GRAPE_CCLIQUE) then
+            ProcessPartialSolution(K[1],[],ListWithIdenticalEntries(Length(kvector),0)); 
+         fi;
+         return K;
       fi; 
    elif IsBound(gamma.minimumVertexColouring) then
       chromaticnumber:=Length(Set(gamma.minimumVertexColouring));
@@ -3709,40 +3763,65 @@ if not weighted and k>=0 then
       gamma:=NewGroupGraph(gamma.autGroup,gamma);
    fi;
 fi;
-usecclique := GRAPE_CCLIQUE and GRAPE_CCLIQUE_EXE<>fail
-   and k > 0 and not allmaxes and allsubs in [0,1] 
-   and gamma.order<=GRAPE_CCLIQUE_MAX_ORDER 
-   and Length(kvector)<=GRAPE_CCLIQUE_MAX_D; 
-startedccliqueinput:=false;
+# 
+# Now do the main work.
+#
 K:=CompleteSubgraphsSearch(gamma,kvector,[],[]);
-if startedccliqueinput then
-  CloseStream(cclique_in); 
-  if not (allsubs=0 and K<>[]) then
-     # run  cclique  and use its output
-     cclique_in:=InputTextFile(cclique_in_file); 
-     RewindStream(cclique_in);
-     cclique_out_string:="";
-     cclique_out:=OutputTextString(cclique_out_string,false); 
-     SetPrintFormattingStatus(cclique_out,false);
-     status:=GRAPE_Exec(GRAPE_CCLIQUE_EXE,["1","-1"],cclique_in,cclique_out);
-     if status<>0 then
-       Error("exit code ",status," returned by cclique executable;\n",
-          "returned results may be wrong");
-     fi;
-     CloseStream(cclique_in); 
-     CloseStream(cclique_out); 
-     L:=EvalString(cclique_out_string);
-     K:=Concatenation(K,L);
-     if allsubs=0 and Length(K)>1 then
-       K:=[K[1]];
-     fi;
-  fi;
-  RemoveFile(cclique_in_file); 
-fi;
 for clique in K do
-   Sort(clique); 
+   Sort(clique);
 od;
 Sort(K);
+if IsString(GRAPE_CCLIQUE) then 
+   for clique in K do
+      ProcessPartialSolution(clique,[],ListWithIdenticalEntries(Length(kvector),0));
+   od;
+   CloseStream(cclique_in); 
+   if allsubs<>0 or K=[] then
+      # May not have the correct answer to return, 
+      # even though the input file to cclique should have
+      # been created correctly.
+      return false;
+   fi;
+fi;
+if usecclique and startedccliqueinput and (allsubs<>0 or K=[]) then
+   # need to run  cclique
+   for clique in K do
+      ProcessPartialSolution(clique,[],ListWithIdenticalEntries(Length(kvector),0));
+   od;
+   CloseStream(cclique_in); 
+   cclique_in:=InputTextFile(cclique_in_file); 
+   RewindStream(cclique_in);
+   cclique_out_string:="";
+   cclique_out:=OutputTextString(cclique_out_string,false); 
+   SetPrintFormattingStatus(cclique_out,false);
+   status:=GRAPE_Exec(GRAPE_CCLIQUE_EXE,["1","-1"],cclique_in,cclique_out);
+   if status<>0 then
+     Error("exit code ",status," returned by cclique executable;\n",
+        "returned results may be wrong");
+   fi;
+   CloseStream(cclique_in); 
+   CloseStream(cclique_out); 
+   RemoveFile(cclique_in_file); 
+   K:=EvalString(cclique_out_string);
+   if allmaxes then
+      # Filter to obtain the maximal complete subgraphs.
+      K:=Filtered(K,x->Intersection(List(x,y->Adjacency(gamma,y)))=[]);
+   fi;
+   for clique in K do
+      Sort(clique);
+   od;
+   if allsubs=0 and Length(K)>1 then
+      K:=[K[1]];
+   fi;
+   if allsubs=2 then
+      K:=Set(List(K,x->SmallestImageSet(originalgamma.group,x)));
+   else 
+      Sort(K);
+   fi;
+fi; 
+# 
+# Now K should be a correct result to return.
+#
 if not weighted and not IsBound(originalgamma.maximumClique) then 
    if includingallmaximalreps then 
       #  K  contains a maximum clique of  originalgamma.
