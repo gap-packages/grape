@@ -36,10 +36,10 @@ GRAPE_RANDOM := false; # Determines if certain random methods are to be used
                        # the use of random methods is rarely necessary,
                        # and should only be employed by GRAPE experts.
 
-GRAPE_NRANGENS := 20;  # The number of random generators taken for a subgroup
+GRAPE_NRANGENS := 18;  # The number of random generators taken for a subgroup
 		       # when  GRAPE_RANDOM=true.
 
-GRAPE_NAUTY := false;   # Use nauty when true, else use bliss.
+GRAPE_NAUTY := true;  # Use nauty when true, else use bliss.
 
 GRAPE_DREADNAUT_EXE := 
    ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnaut"); 
@@ -48,13 +48,13 @@ GRAPE_DREADNAUT_EXE :=
 GRAPE_BLISS_EXE := ExternalFilename(DirectoriesSystemPrograms(),"bliss"); 
    # filename of bliss executable
 
-GRAPE_DREADNAUT_INPUT_USE_STRING := true;
+GRAPE_DREADNAUT_INPUT_USE_STRING := false;
    # If true then use a string for the stream used for input
    # to dreadnaut/nauty, if false use a file for this. 
    # Using a string is faster than using a file, but may use
    # too much storage.
 
-GRAPE_CLIQUE_C1:=8;
+GRAPE_CLIQUE_C1:=1;
 GRAPE_CLIQUE_C2:=infinity;
 GRAPE_CLIQUE_SETSTAB:=true;
 
@@ -68,8 +68,8 @@ GRAPE_CCLIQUE:=true;
 GRAPE_CCLIQUE_EXE := 
    ExternalFilename(DirectoriesPackagePrograms("grape"),"cclique"); 
    # filename of  cclique  executable if it exists
-GRAPE_CCLIQUE_MAX_ORDER:=30000; # for now
-GRAPE_CCLIQUE_MAX_D:=315; # for now
+GRAPE_CCLIQUE_MAX_ORDER:=10000; # for now
+GRAPE_CCLIQUE_MAX_D:=1000; # for now
                          
 # Set up temporary directory for use with nauty/dreadnaut, bliss, and cclique.
 BindGlobal("GRAPE_TMPDIR",DirectoryTemporary());
@@ -2892,7 +2892,7 @@ od;
 return false;
 end;
 
-StartCcliqueInput := function(graph,weightvectors,isolevel) 
+StartCcliqueInput := function(graph,weightvectors,allsubs,allmaxes) 
 local i,j,adj,n,d;
 if IsString(GRAPE_CCLIQUE) then
    cclique_in_file:=GRAPE_CCLIQUE;
@@ -2911,7 +2911,19 @@ if weightvectors<>[] then
 else
    d:=0;
 fi;
-PrintTo(cclique_in,isolevel," ",n," ",d,"\n");
+if allmaxes then
+   if allsubs=0 then
+      PrintTo(cclique_in," 0 1 ",n," ",d,"\n");
+   else
+      PrintTo(cclique_in," 1 1 ",n," ",d,"\n");
+   fi;
+else
+   if allsubs=0 then
+      PrintTo(cclique_in," 0 0 ",n," ",d,"\n");
+   else
+      PrintTo(cclique_in," 1 0 ",n," ",d,"\n");
+   fi;
+fi;
 for i in [1..n] do
    adj:=Adjacency(graph,i); 
    for j in [1..n] do
@@ -2936,11 +2948,7 @@ end;
 ProcessPartialSolution := function(sofar,activenames,kvector)
 local i;
 if not startedccliqueinput then
-   if not allmaxes and allsubs=0 then
-      StartCcliqueInput(originalgamma,weightvectors,0);
-   else
-      StartCcliqueInput(originalgamma,weightvectors,1);
-   fi;
+   StartCcliqueInput(originalgamma,weightvectors,allsubs,allmaxes);
 fi;
 AppendTo(cclique_in,Length(sofar),"\n");
 for i in [1..Length(sofar)] do
@@ -3701,19 +3709,15 @@ gamma.names:=Immutable([1..gamma.order]);
 k:=Sum(kvector);
 usecclique := GRAPE_CCLIQUE=true 
    and ARCH_IS_UNIX() and GRAPE_CCLIQUE_EXE<>fail
-   and k > 0 and not (allmaxes and allsubs=0)
+   and k > 0 
    and gamma.order<=GRAPE_CCLIQUE_MAX_ORDER 
    and Length(kvector)<=GRAPE_CCLIQUE_MAX_D; 
 startedccliqueinput:=false;
-if k<=0 and IsString(GRAPE_CCLIQUE) then
-   Error("must have k>0 if GRAPE_CCLIQUE is a string");
-fi;
 if IsString(GRAPE_CCLIQUE) then
-   if not allmaxes and allsubs=0 then
-      StartCcliqueInput(originalgamma,weightvectors,0);
-   else 
-      StartCcliqueInput(originalgamma,weightvectors,1);
+   if k<=0 then
+      Error("must have k>0 if GRAPE_CCLIQUE is a string");
    fi;
+   StartCcliqueInput(originalgamma,weightvectors,allsubs,allmaxes);
 fi;
 if k<0 then
    # We are computing maximal complete subgraphs (not of given size).
@@ -3803,10 +3807,6 @@ if usecclique and startedccliqueinput and (allsubs<>0 or K=[]) then
    CloseStream(cclique_out); 
    RemoveFile(cclique_in_file); 
    K:=EvalString(cclique_out_string);
-   if allmaxes then
-      # Filter to obtain the maximal complete subgraphs.
-      K:=Filtered(K,x->Intersection(List(x,y->Adjacency(gamma,y)))=[]);
-   fi;
    for clique in K do
       Sort(clique);
    od;
@@ -4380,7 +4380,7 @@ while s*k>=delta.order do
             od;
          od;
          K:=CompleteSubgraphsOfGivenSize(D,
-               ListWithIdenticalEntries(delta.order,1),0,true,true,wts);
+               ListWithIdenticalEntries(delta.order,1),0,false,true,wts);
          if K=[] then 
             return fail;
          else

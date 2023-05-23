@@ -1,25 +1,25 @@
 /* This program determines the cliques with a given vertex vector-weight
    sum in a graph with adjacency matrix  Gamma,  given a sequence 
    of partial solutions and corresponding lists of active vertices 
-   from which to augment the partial solutions and the required 
-   vertex vector-weight sums for the augmentations. 
+   from which to augment the partial solutions and the corresponding 
+   required vertex vector-weight sums for the augmentations. 
 
    The partial solutions to consider are those with with indices 
    strtol(argv[1]) up to strtol(argv[2]), or until EOF if this 
    comes first or if strtol(argv[2])==-1.
 
-   Leonard Soicher, 14/04/2022 */
+   Leonard Soicher, 22/05/2023 */
 
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 
-#define max_order 30000
+#define max_order 10000
 /* Maximum value of Gamma_order, the order of the graph with 
    adjacency matrix  Gamma. */
 
-#define max_d 315
+#define max_d 1000
 /* Maximum value of Gamma_d,  the length of each  weightvector. */
 
 /* Integer lists are stored in arrays, with indexing starting at 1.
@@ -42,14 +42,22 @@ int weightvectors[max_order+1][max_d+1],weightpositions[max_order+1][max_d+1];
 /* weightvectors[i] stores the (vector-)weight of vertex  i. 
    Each weightvector must be a non-zero list of non-negative integers of
    length  Gamma_d.  weightpositions[i] is a list giving the positions in
-   weightvectors[i] of non-zero elements.*/
+   weightvectors[i] of the non-zero elements.*/
 
 int isolevel;
 /* The value of isolevel must be  0  or  1.
    If isolevel==1 then all solutions will be found.
    If isolevel==0 then just one solution will be found
-   (if a solution exists). */
+   (iff a solution exists). */
 
+int allmaxes;
+/* The value of  allmaxes  must be  0,  1,  or  2. 
+   If  allmaxes==0  then solutions that are not necessarily 
+   maximal are returned. 
+   If  allmaxes>0  then only maximal solutions are returned.
+   If  allmaxes==2  then a non-colouring heuristic is used for
+   pruning. */
+   
 long long int solution_count,f_count; 
 FILE *solution_file;
 
@@ -65,6 +73,42 @@ if((a=(int *)malloc(((unsigned)n)*sizeof(int)))==NULL)
    exit(EXIT_FAILURE);
    }
 return a;
+}
+
+int IsClique(vertexlist) 
+/* Where  vertexlist  is an integer list of vertices of  Gamma,
+   this function returns  1  if these vertices form a clique of  
+   Gamma,  and returns  0  if not.  */
+int *vertexlist;
+{
+int i,j; 
+for(i=1;i<=Length(vertexlist)-1;i++)
+   for(j=i+1;j<=Length(vertexlist);j++)
+      if(!Gamma[vertexlist[i]][vertexlist[j]])
+         return 0;
+return 1;
+}
+
+int IsMaximal(clique) 
+/* Where  clique  is an integer list of vertices of  Gamma,
+   which form a clique, this function returns  1  if this clique
+   is maximal in  Gamma,  and returns  0  if not.  */
+int *clique;
+{
+int i,j; 
+for(i=1;i<=Gamma_order;i++)
+   {
+   for(j=1;j<=Length(clique);j++)
+      {
+      if(!Gamma[i][clique[j]])
+         /* vertex  i  is not joined to every element of  clique. */
+         break;
+      }
+   if(j>Length(clique))
+      /* vertex  i  is joined to every element of  clique. */
+      return 0;
+   }
+return 1;
 }
 
 void InitialiseSolutions()
@@ -112,6 +156,12 @@ int *sofar,*active,*kvector;  /* integer lists */
    there is a solution, and if  isolevel==1,  then all
    solutions are found.   
 
+   If  allmaxes==0  then each such  C  together with  sofar  is a 
+   solution, and if  allmaxes>0, each such  C  together with  sofar  
+   that is a maximal clique is a solution.
+
+   Each solution found is processed by the function  ProcessSolution.
+
    The list  active  may be changed by this function. */
 {   
 int k,i,j,m,ll,count,vertex,endconsider,equality,
@@ -135,7 +185,16 @@ for(i=1; i<=Length(kvector); i++)
    k+=kvector[i];
 if(k==0)
    {
-   /* The list  sofar  is the only solution. */
+   /* The list  sofar  is the only possible solution. */
+   if(allmaxes)
+      {
+      /* determine whether  sofar  is maximal */
+      if(Length(active)>0)
+         /* sofar is not maximal */
+         return;
+      if(!IsMaximal(sofar))
+         return;
+      }
    ProcessSolution(sofar);
    return;
    }
@@ -187,18 +246,19 @@ for(i=1; i<=Length(active); i++)
 SetLength(active,count); 
 if(equality)
    {	
-   /* We have a solution iff graph on active vertices is complete. */
-   for(i=1; i<=Length(active)-1; i++)
-      for(j=i+1; j<=Length(active); j++)
-         if(!Gamma[active[i]][active[j]])
-            /* No solution. */
-	    return; 
-   /* Now the list  active concat sofar  is the only solution. */	
+   /* We have a solution iff the active vertices form a clique,
+      and if allmaxes, then also this clique must be maximal. */
+   if(!IsClique(active))
+      return;
+   /* Now the clique  active concat sofar  is the only possible solution. */	
    for(i=1; i<=Length(sofar); i++)
       {
       SetLength(active,Length(active)+1);
       active[Length(active)]=sofar[i];
       }
+   if(allmaxes)
+      if(!IsMaximal(active))
+         return;
    ProcessSolution(active); 
    return;
    }
@@ -390,10 +450,15 @@ startwork=strtol(argv[1],strptr,10);
 endwork=strtol(argv[2],strptr,10);
 f_count=0;
 InitialiseSolutions();
-m=scanf("%d %d %d",&isolevel,&Gamma_order,&Gamma_d);
+m=scanf("%d %d %d %d",&isolevel,&allmaxes,&Gamma_order,&Gamma_d);
 if (isolevel!=0 && isolevel!=1) 
    {
    fprintf(stderr,"\nerror: isolevel must be  0  or  1\n");
+   exit(EXIT_FAILURE);
+   }
+if (allmaxes!=0 && allmaxes!=1 && allmaxes!=2) 
+   {
+   fprintf(stderr,"\nerror: allmaxes must be  0,  1  or  2\n");
    exit(EXIT_FAILURE);
    }
 if(Gamma_order>max_order) 
