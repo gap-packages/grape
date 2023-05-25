@@ -51,12 +51,10 @@ int isolevel;
    (iff a solution exists). */
 
 int allmaxes;
-/* The value of  allmaxes  must be  0,  1,  or  2. 
+/* The value of  allmaxes  must be  0  or  1. 
    If  allmaxes==0  then solutions that are not necessarily 
    maximal are returned. 
-   If  allmaxes>0  then only maximal solutions are returned.
-   If  allmaxes==2  then a non-colouring heuristic is used for
-   pruning. */
+   If  allmaxes>0  then only maximal solutions are returned. */
    
 long long int solution_count,f_count; 
 FILE *solution_file;
@@ -165,7 +163,7 @@ int *sofar,*active,*kvector;  /* integer lists */
    The list  active  may be changed by this function. */
 {   
 int k,i,j,m,ll,count,vertex,endconsider,equality,
-   doposition,temp,wt,cwsum,minptr,*wv,*wp,
+   doposition,temp,wt,cwsum,minptr,*wv,*wp,startcolouring,
    nactivevector[max_d+1],activecountvector[max_d+1], 
    *adj; /* For storing the sizes of adjacencies or for storing 
             the vertices in an adjacency to be passed as "active". 
@@ -277,28 +275,48 @@ for(i=1; i<=Length(activecountvector); i++)
             doposition=i;
       }
 endconsider=Length(active);
-/* Push  active  vertices whose weightvectors have 0 in the doposition
-   beyond endconsider. */
-i=1;
-while(i<=endconsider)
-   if(weightvectors[active[i]][doposition])
-      i++;
-   else
-      {
-      if(i<endconsider)
+if(Gamma_d>1)
+   {
+   /* Push  active  vertices whose weightvectors have 0 in the doposition
+      beyond endconsider. */
+   i=1;
+   while(i<=endconsider)
+      if(weightvectors[active[i]][doposition])
+         i++;
+      else
          {
-         temp=active[endconsider];
-         active[endconsider]=active[i];
-         active[i]=temp;
-	 }
-      endconsider--;
-      }
+         if(i<endconsider)
+            {
+            temp=active[endconsider];
+            active[endconsider]=active[i];
+            active[i]=temp;
+	    }
+         endconsider--;
+         }
+   }
+if(Gamma_d==1 && allmaxes)
+   {
+   /* Push  active  vertices joined to  active[1]  beyond endconsider. */
+   i=2;
+   while(i<=endconsider)
+      if(!Gamma[active[1]][active[i]])
+         i++;
+      else
+         {
+         if(i<endconsider)
+            {
+            temp=active[endconsider];
+            active[endconsider]=active[i];
+            active[i]=temp;
+	    }
+         endconsider--;
+         }
+   }
 adj=IntArray(Gamma_order+1); 
 if(kvector[doposition]>1) 
    {
-   /* Order (heuristically) the vertices in 
-      active[1],...,active[endconsider],  and
-      apply partial proper vertex-colouring. */
+   /* Order (heuristically) the vertices in active[1],...,active[endconsider],
+      and apply partial proper vertex-colouring appropriately. */
    SetLength(adj,endconsider); 
    /* adj[i] will be used to record the number of active vertices 
       adjacent to  active[i],  for  i=1,...,endconsider. */
@@ -333,12 +351,16 @@ if(kvector[doposition]>1)
          if(a[active[j]])
             adj[j]--;
       }
-   /* Now do partial proper vertex-colouring, in
-      reverse order of the vertices in  active,  starting
-      from the  endconsider  position.  
+   if(Gamma_d>1)
+      startcolouring=endconsider;
+   else
+      startcolouring=Length(active);
+    /* Do partial proper vertex-colouring, in reverse order 
+      of the vertices in  active,  starting from the  startcolouring  
+      position.  
    
-      col[i]  will record the colour of  active[i],
-      if and when  active[i]  is coloured. 
+      col[i]  will record the colour of  active[i], if and when  
+      active[i]  is coloured. 
    
       cw[j]  will record the largest entry in the doposition 
       of a weightvector of a vertex having colour  j. 
@@ -347,12 +369,12 @@ if(kvector[doposition]>1)
       integer lists. */ 
    cwsum=0;
    m=0;  /* maximum colour used so far */
-   for(i=endconsider; i>=1; i--) 
+   for(i=startcolouring; i>=1; i--) 
       {
       for(j=1; j<=m+1; j++)
          adjcol[j]=0; /* false */
       a=Gamma[active[i]];
-      for(j=i+1; j<=endconsider; j++)
+      for(j=i+1; j<=startcolouring; j++)
          if(a[active[j]])
             adjcol[col[j]]=1; /* true */
       j=1;
@@ -376,7 +398,8 @@ if(kvector[doposition]>1)
       if(cwsum>=kvector[doposition])
          {
          /* stop colouring */
-         endconsider=i;
+         if(i<endconsider)
+            endconsider=i;
          break;
          }
       }
@@ -456,9 +479,9 @@ if (isolevel!=0 && isolevel!=1)
    fprintf(stderr,"\nerror: isolevel must be  0  or  1\n");
    exit(EXIT_FAILURE);
    }
-if (allmaxes!=0 && allmaxes!=1 && allmaxes!=2) 
+if (allmaxes!=0 && allmaxes!=1) 
    {
-   fprintf(stderr,"\nerror: allmaxes must be  0,  1  or  2\n");
+   fprintf(stderr,"\nerror: allmaxes must be  0  or  1\n");
    exit(EXIT_FAILURE);
    }
 if(Gamma_order>max_order) 
