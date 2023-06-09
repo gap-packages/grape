@@ -8,19 +8,12 @@
    strtol(argv[1]) up to strtol(argv[2]), or until EOF if this 
    comes first or if strtol(argv[2])==-1.
 
-   Leonard Soicher, 22/05/2023 */
+   Leonard Soicher, 09/06/2023 */
 
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
-
-#define max_order 10000
-/* Maximum value of Gamma_order, the order of the graph with 
-   adjacency matrix  Gamma. */
-
-#define max_d 1000
-/* Maximum value of Gamma_d,  the length of each  weightvector. */
 
 /* Integer lists are stored in arrays, with indexing starting at 1.
    For an integer list  x,  x[0] is used to store the length of  x,
@@ -33,12 +26,12 @@
 
 typedef unsigned char byte;
 
-byte Gamma[max_order+1][max_order+1]; 
+byte **Gamma; 
 /* the (0,1)-adjacency matrix, with indexing starting at 1 */
 
 int Gamma_order,Gamma_d; 
 
-int weightvectors[max_order+1][max_d+1],weightpositions[max_order+1][max_d+1]; 
+int **weightvectors,**weightpositions; 
 /* weightvectors[i] stores the (vector-)weight of vertex  i. 
    Each weightvector must be a non-zero list of non-negative integers of
    length  Gamma_d.  weightpositions[i] is a list giving the positions in
@@ -70,6 +63,54 @@ if((a=(int *)malloc(((unsigned)n)*sizeof(int)))==NULL)
       "\n*** error trying to allocate memory for integer array\n"); 
    exit(EXIT_FAILURE);
    }
+return a;
+}
+
+byte *ByteArray(n) 
+/* Returns an uninitialized byte array with n elements. */
+int n;
+{
+byte *a;
+if((a=(byte *)malloc(((unsigned)n)*sizeof(byte)))==NULL)
+   {
+   fprintf(stderr,
+      "\n*** error trying to allocate memory for byte array\n"); 
+   exit(EXIT_FAILURE);
+   }
+return a;
+}
+
+int **IntArrayArray(m,n) 
+/* Returns an uninitialized m by n int array. */
+int m,n;
+{
+int **a;
+int i;
+if((a=(int **)malloc(((unsigned)m)*sizeof(int *)))==NULL)
+   {
+   fprintf(stderr,
+      "\n*** error trying to allocate memory for an m by n int array\n"); 
+   exit(EXIT_FAILURE);
+   }
+for(i=1;i<=m;i++)
+   a[i]=IntArray(n);
+return a;
+}
+
+byte **ByteArrayArray(m,n) 
+/* Returns an uninitialized m by n byte array. */
+int m,n;
+{
+byte **a;
+int i;
+if((a=(byte **)malloc(((unsigned)m)*sizeof(byte *)))==NULL)
+   {
+   fprintf(stderr,
+      "\n*** error trying to allocate memory for an m by n byte array\n"); 
+   exit(EXIT_FAILURE);
+   }
+for(i=1;i<=m;i++)
+   a[i]=ByteArray(n);
 return a;
 }
 
@@ -164,18 +205,14 @@ int *sofar,*active,*kvector;  /* integer lists */
 {   
 int k,i,j,m,ll,count,vertex,endconsider,equality,
    doposition,temp,wt,cwsum,minptr,*wv,*wp,startcolouring,
-   nactivevector[max_d+1],activecountvector[max_d+1], 
+   nactivevector[Gamma_d+1],activecountvector[Gamma_d+1], 
    *adj; /* For storing the sizes of adjacencies or for storing 
-            the vertices in an adjacency to be passed as "active". 
-	    Must be allocated store for  Gamma_order+1  integers 
-	    by this function, and this store should be freed on 
-	    function return. This use of the heap is to prevent 
-	    stack overflow. */ 
+            the vertices in an adjacency to be passed as "active". */
 byte *a;
 
-/* Static variables used when calculating a partial vertex-colouring. */
-static int col[max_order+1],cw[max_order+1];
-static byte adjcol[max_order+1]; 
+/* Arrays to be used for partial proper vertex-colouring. */
+int *col,*cw;
+byte *adjcol;
 
 f_count++; /* Counts the number of times this function is called. */
 k=0;
@@ -367,6 +404,9 @@ if(kvector[doposition]>1)
 
       The arrays  col  and  cw  are *not* considered to be 
       integer lists. */ 
+   col=IntArray(Gamma_order+1);
+   cw=IntArray(Gamma_order+1);
+   adjcol=ByteArray(Gamma_order+1); 
    cwsum=0;
    m=0;  /* maximum colour used so far */
    for(i=startcolouring; i>=1; i--) 
@@ -403,6 +443,9 @@ if(kvector[doposition]>1)
          break;
          }
       }
+   free(col);
+   free(cw);
+   free(adjcol);
    if(cwsum<kvector[doposition])
       {
       /* there is no solution */
@@ -461,7 +504,7 @@ int argc;
 char *argv[];
 {  
 int lengthsofar,lengthactive,i,j,num,m,
-    sofar[max_order+1],active[max_order+1],kvector[max_d+1];
+    *sofar,*active,*kvector;
 long int case_count,startwork,endwork;
 char **strptr;
 if(argc<3)
@@ -484,16 +527,7 @@ if (allmaxes!=0 && allmaxes!=1)
    fprintf(stderr,"\nerror: allmaxes must be  0  or  1\n");
    exit(EXIT_FAILURE);
    }
-if(Gamma_order>max_order) 
-   {
-   fprintf(stderr,"\nerror: max_order too small.\n");
-   exit(EXIT_FAILURE);
-   }
-if(Gamma_d>max_d) 
-   {
-   fprintf(stderr,"\nerror: max_d too small.\n");
-   exit(EXIT_FAILURE);
-   }
+Gamma=ByteArrayArray(Gamma_order+1,Gamma_order+1);
 /* Read adjacency matrix  Gamma. */
 for(i=1; i<=Gamma_order; i++)
    {
@@ -508,6 +542,8 @@ for(i=1; i<=Gamma_order; i++)
       Gamma[i][j]=(byte)num;
       }
    }
+weightvectors=IntArrayArray(Gamma_order+1,Gamma_d+1);
+weightpositions=IntArrayArray(Gamma_order+1,Gamma_d+1);
 for(i=1; i<=Gamma_order; i++)
    {
    SetLength(weightvectors[i],Gamma_d);
@@ -524,6 +560,9 @@ for(i=1; i<=Gamma_order; i++)
       }
    }
 case_count=0;
+sofar=IntArray(Gamma_order+1);
+active=IntArray(Gamma_order+1);
+kvector=IntArray(Gamma_d+1);
 while(1==scanf("%d",&lengthsofar))
    {
    /* Successful read indicates new partial solution to consider. */ 

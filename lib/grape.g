@@ -68,8 +68,6 @@ GRAPE_CCLIQUE:=true;
 GRAPE_CCLIQUE_EXE := 
    ExternalFilename(DirectoriesPackagePrograms("grape"),"cclique"); 
    # filename of  cclique  executable if it exists
-GRAPE_CCLIQUE_MAX_ORDER:=10000; # for now
-GRAPE_CCLIQUE_MAX_D:=1000; # for now
                          
 # Set up temporary directory for use with nauty/dreadnaut, bliss, and cclique.
 BindGlobal("GRAPE_TMPDIR",DirectoryTemporary());
@@ -3709,9 +3707,7 @@ gamma.names:=Immutable([1..gamma.order]);
 k:=Sum(kvector);
 usecclique := GRAPE_CCLIQUE=true 
    and ARCH_IS_UNIX() and GRAPE_CCLIQUE_EXE<>fail
-   and k > 0 
-   and gamma.order<=GRAPE_CCLIQUE_MAX_ORDER 
-   and Length(kvector)<=GRAPE_CCLIQUE_MAX_D; 
+   and k > 0; 
 startedccliqueinput:=false;
 if IsString(GRAPE_CCLIQUE) then
    if k<=0 then
