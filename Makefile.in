@@ -4,6 +4,7 @@ include $(GAPPATH)/sysinfo.gap
 
 NAUTYDIR = nauty2_8_6
 BINDIR = bin/$(GAParch)
+SRCDIR = src
 
 binaries: Makefile
 	mkdir -p $(BINDIR)
@@ -15,6 +16,13 @@ binaries: Makefile
 	mv $(NAUTYDIR)/dreadnaut $(BINDIR)
 	chmod 755 $(BINDIR)/dreadnaut
 	rm -f $(NAUTYDIR)/*.o
+
+cclique: Makefile
+	mkdir -p $(BINDIR)
+	rm -f $(SRCDIR)/cclique.o
+	gcc -O2 -o $(BINDIR)/cclique $(SRCDIR)/cclique.c
+	rm -f $(SRCDIR)/cclique.o
+	chmod 755 $(BINDIR)/cclique
 
 clean: Makefile
 	make -C $(NAUTYDIR) clean

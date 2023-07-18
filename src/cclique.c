@@ -205,7 +205,7 @@ int *sofar,*active,*kvector;  /* integer lists */
 {   
 int k,i,j,m,ll,count,vertex,endconsider,equality,
    doposition,temp,wt,cwsum,minptr,*wv,*wp,startcolouring,
-   nactivevector[Gamma_d+1],activecountvector[Gamma_d+1], 
+   *nactivevector,*activecountvector, 
    *adj; /* For storing the sizes of adjacencies or for storing 
             the vertices in an adjacency to be passed as "active". */
 byte *a;
@@ -233,6 +233,8 @@ if(k==0)
    ProcessSolution(sofar);
    return;
    }
+nactivevector=IntArray(Gamma_d+1);
+activecountvector=IntArray(Gamma_d+1);
 SetLength(nactivevector,Length(kvector)); 
 SetLength(activecountvector,Length(kvector)); 
 for(j=1; j<=Length(nactivevector); j++)
@@ -262,8 +264,12 @@ equality=1;
 for(j=1; j<=Length(nactivevector); j++)
    {
    if(kvector[j]>nactivevector[j])
+      {
       /* No solution is possible. */
+      free(nactivevector);
+      free(activecountvector);
       return;
+      }
    if(kvector[j]!=nactivevector[j])
          equality=0;
    }
@@ -284,7 +290,11 @@ if(equality)
    /* We have a solution iff the active vertices form a clique,
       and if allmaxes, then also this clique must be maximal. */
    if(!IsClique(active))
+      {
+      free(nactivevector);
+      free(activecountvector);
       return;
+      }
    /* Now the clique  active concat sofar  is the only possible solution. */	
    for(i=1; i<=Length(sofar); i++)
       {
@@ -293,7 +303,14 @@ if(equality)
       }
    if(allmaxes)
       if(!IsMaximal(active))
+         {
+         free(nactivevector);
+         free(activecountvector);
          return;
+         }
+   /* Now  active  is the only solution. */
+   free(nactivevector);
+   free(activecountvector);
    ProcessSolution(active); 
    return;
    }
@@ -450,6 +467,8 @@ if(kvector[doposition]>1)
       {
       /* there is no solution */
       free(adj); 
+      free(nactivevector);
+      free(activecountvector);
       return; 
       }
    }
@@ -486,16 +505,22 @@ for(i=1; i<=endconsider; i++)
       {
       /* We are done. */
       free(adj);
+      free(nactivevector);
+      free(activecountvector);
       return;
       }
    for(j=1; j<=Length(wp); j++)
       if((nactivevector[wp[j]]-=wv[wp[j]])<kvector[wp[j]])
 	 {
 	 free(adj);
+         free(nactivevector);
+         free(activecountvector);
          return;
 	 }
    }
 free(adj); 
+free(nactivevector);
+free(activecountvector);
 return;
 }
 

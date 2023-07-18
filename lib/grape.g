@@ -56,7 +56,7 @@ GRAPE_DREADNAUT_INPUT_USE_STRING := false;
 
 GRAPE_CLIQUE_C1:=1;
 GRAPE_CLIQUE_C2:=infinity;
-GRAPE_CLIQUE_SETSTAB:=true;
+GRAPE_CLIQUE_SETSTAB:=false;
 
 GRAPE_CCLIQUE:=true;
    # If true, use the external  cclique  program if it exists and
@@ -2861,6 +2861,7 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 local IsFixedPoint,HasLargerEntry,k,smallorder,weights,weighted,
       originalG,originalgamma,includingallmaximalreps, 
       CompleteSubgraphsSearch,K,clique,cliquenumber,chromaticnumber,
+      weightpositions,
       #
       # variables for using  cclique 
       usecclique, startedccliqueinput,  # booleans
@@ -3021,10 +3022,7 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 #     weightvectors[names[v]][doposition]<>0, 
 #
 # where  doposition  is a heuristically chosen position 
-# of a non-zero element of  kvector.  Currently, we simply take  
-#           
-#      doposition:=First(dovector,x->kvector[x])<>0);
-#
+# of a non-zero element of  kvector. 
 # 
 # We "dynamically" order the search tree, as described in:
 # W. Myrvold, T. Prsa and N. Walker, A Dynamic programming approach
@@ -3034,7 +3032,8 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 #
 local k,n,i,j,delta,adj,rep,a,b,ans,ans1,ans2,names,W,H,HH,newsofar,
       G,orb,kk,ll,mm,active,nadj,verticesremoved,J,doposition,
-      A,nactive,nactivevector,wt,indorbwtsum,CompleteSubgraphsSearch1;
+      A,nactive,nactivevector,activecountvector,wt,indorbwtsum,
+      CompleteSubgraphsSearch1;
 
 CompleteSubgraphsSearch1 := function(mask,kvector,forbidmask)
 #
@@ -3059,7 +3058,7 @@ CompleteSubgraphsSearch1 := function(mask,kvector,forbidmask)
 #
 local k,active,activemask,a,b,c,col,verticesremoved,i,j,ans,ans1,kk,ll,mm,
       vertices,nactive,nactivevector,wt,wtvector,cw,cwsum,endconsider,nadj,
-      doposition,minptr;
+      activecountvector,doposition,minptr;
 
 activemask:=DifferenceBlist(mask,forbidmask);
 active:=ListBlist([1..n],activemask);
@@ -3080,8 +3079,14 @@ if nactive<k then
    # in particular, if nactive=0 then
    return [];
 fi;
-nactivevector:=ShallowCopy(Sum(weightvectors{names{active}}));
-# (ShallowCopy since the value of nactivevecter may be changed)
+nactivevector:=ListWithIdenticalEntries(Length(kvector),0); 
+activecountvector:=ListWithIdenticalEntries(Length(kvector),0); 
+for i in active do
+   for j in weightpositions[names[i]] do 
+      nactivevector[j]:=nactivevector[j]+weightvectors[names[i]][j];      
+      activecountvector[j]:=activecountvector[j]+1; 
+   od;
+od;
 if HasLargerEntry(kvector,nactivevector) then
    return [];
 fi;
@@ -3187,7 +3192,7 @@ fi;
 # Now determine  doposition. 
 #
 # Standard heuristic:
-doposition:=First(dovector,x->kvector[x]<>0);
+# doposition:=First(dovector,x->kvector[x]<>0);
 #
 # # Alternative heuristic:
 # doposition:=0;
@@ -3198,6 +3203,15 @@ doposition:=First(dovector,x->kvector[x]<>0);
 #       fi;
 #    fi;
 # od;
+#
+doposition:=0;
+for i in [1..Length(activecountvector)] do 
+   if kvector[i]>0 then 
+      if doposition=0 or activecountvector[i]<activecountvector[doposition] then
+         doposition:=i;
+      fi;
+   fi; 
+od;
 #
 # Now order the vertices in active for processing.
 #
@@ -3361,8 +3375,14 @@ if nactive<k then
    # in particular, if nactive=0 then
    return [];
 fi;
-nactivevector:=ShallowCopy(Sum(weightvectors{names{active}}));
-# (ShallowCopy since the value of nactivevecter may be changed)
+nactivevector:=ListWithIdenticalEntries(Length(kvector),0); 
+activecountvector:=ListWithIdenticalEntries(Length(kvector),0); 
+for i in active do
+   for j in weightpositions[names[i]] do 
+      nactivevector[j]:=nactivevector[j]+weightvectors[names[i]][j];      
+      activecountvector[j]:=activecountvector[j]+1; 
+   od;
+od;
 if HasLargerEntry(kvector,nactivevector) then
    return [];
 fi;
@@ -3526,7 +3546,30 @@ else
    mm:=[];
 fi;
 indorbwtsum:=0;
-doposition:=First(dovector,x->kvector[x]<>0); 
+#
+# Now determine  doposition. 
+#
+# Standard heuristic:
+# doposition:=First(dovector,x->kvector[x]<>0);
+#
+# # Alternative heuristic:
+# doposition:=0;
+# for i in [1..Length(kvector)] do
+#    if kvector[i]<>0 then
+#       if doposition=0 or nactivevector[i]<nactivevector[doposition] then
+#          doposition:=i;
+#       fi;
+#    fi;
+# od;
+#
+doposition:=0;
+for i in [1..Length(activecountvector)] do 
+   if kvector[i]>0 then 
+      if doposition=0 or activecountvector[i]<activecountvector[doposition] then
+         doposition:=i;
+      fi;
+   fi; 
+od;
 for j in [1..Length(J)] do 
    i:=1;
    for kk in [2..Length(J)] do 
@@ -3705,9 +3748,8 @@ originalG:=gamma.group;
 gamma:=ShallowCopy(gamma);
 gamma.names:=Immutable([1..gamma.order]);
 k:=Sum(kvector);
-usecclique := GRAPE_CCLIQUE=true 
-   and ARCH_IS_UNIX() and GRAPE_CCLIQUE_EXE<>fail
-   and k > 0; 
+usecclique := GRAPE_CCLIQUE=true and GRAPE_CCLIQUE_EXE<>fail 
+   and k>0 and allsubs in [0,1];
 startedccliqueinput:=false;
 if IsString(GRAPE_CCLIQUE) then
    if k<=0 then
@@ -3766,6 +3808,8 @@ fi;
 # 
 # Now do the main work.
 #
+weightpositions:=List([1..gamma.order],
+   x->Filtered([1..Length(kvector)],y->weightvectors[x][y]<>0)); 
 K:=CompleteSubgraphsSearch(gamma,kvector,[],[]);
 for clique in K do
    Sort(clique);
@@ -3809,11 +3853,7 @@ if usecclique and startedccliqueinput and (allsubs<>0 or K=[]) then
    if allsubs=0 and Length(K)>1 then
       K:=[K[1]];
    fi;
-   if allsubs=2 then
-      K:=Set(List(K,x->SmallestImageSet(originalgamma.group,x)));
-   else 
-      Sort(K);
-   fi;
+   Sort(K);
 fi; 
 # 
 # Now K should be a correct result to return.
