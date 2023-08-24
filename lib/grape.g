@@ -3058,7 +3058,7 @@ CompleteSubgraphsSearch1 := function(mask,kvector,forbidmask)
 #
 local k,active,activemask,a,b,c,col,verticesremoved,i,j,ans,ans1,kk,ll,mm,
       vertices,nactive,nactivevector,wt,wtvector,cw,cwsum,endconsider,nadj,
-      activecountvector,doposition,minptr;
+      activecountvector,doposition,minptr,cn,jj;
 
 activemask:=DifferenceBlist(mask,forbidmask);
 active:=ListBlist([1..n],activemask);
@@ -3275,6 +3275,7 @@ if k>=0 and partialcolour then
    col:=[];
    cw:=[]; # cw[j] will record the largest weight (entry) in the doposition of 
            # (a weightvector of) a vertex having colour j
+   cn:=[]; # cn[jj] will record the current number of vertices having colour jj 
    cwsum:=0;
    mm:=0;  # max. colour used so far
    if Length(kvector)>1 then
@@ -3290,19 +3291,33 @@ if k>=0 and partialcolour then
             c[col[j]]:=true;
          fi;
       od;
-      j:=1;
-      while c[j] do
-         j:=j+1;
+      j:=mm+1; # current colour choice for active[i]
+      for jj in [1..mm] do
+         if not c[jj] then
+            # jj is a feasible colour for active[i] 
+            if j=mm+1 then
+               j:=jj; # new current colour choice
+            elif cn[jj]>cn[j] then
+               # More vertices are currently coloured with jj than
+               # current colour choice j.
+               j:=jj; # new current colour choice
+            fi;
+         fi;
       od;
+      # We colour  active[i]  with the colour  j. 
       col[i]:=j;
       wt:=weightvectors[names[active[i]]][doposition];
       if j>mm then
          mm:=j;
          cwsum:=cwsum+wt;
          cw[mm]:=wt;
-      elif cw[j]<wt then
-         cwsum:=cwsum+(wt-cw[j]);
-         cw[j]:=wt;
+         cn[mm]:=1;
+      else
+         cn[j]:=cn[j]+1;
+         if cw[j]<wt then
+            cwsum:=cwsum+(wt-cw[j]);
+            cw[j]:=wt;
+         fi;
       fi;
       if cwsum>=kvector[doposition] then
          # stop colouring      
@@ -3388,7 +3403,7 @@ if HasLargerEntry(kvector,nactivevector) then
 fi;
 # now k<0 or nactive >= k > 0.
 G:=gamma.group;
-if Size(G)<=GRAPE_CLIQUE_C1 and nactive<=GRAPE_CLIQUE_C2 then
+if Size(G)<=GRAPE_CLIQUE_C1 and Length(active)<=GRAPE_CLIQUE_C2 then
    # Make input for cclique or use CompleteSubgraphsSearch1, 
    # as appropriate.
    if k>0 and (usecclique or IsString(GRAPE_CCLIQUE)) then

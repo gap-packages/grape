@@ -203,7 +203,7 @@ int *sofar,*active,*kvector;  /* integer lists */
 
    The list  active  may be changed by this function. */
 {   
-int k,i,j,m,ll,count,vertex,endconsider,equality,
+int k,i,j,m,ll,jj,count,vertex,endconsider,equality,
    doposition,temp,wt,cwsum,minptr,*wv,*wp,startcolouring,
    *nactivevector,*activecountvector, 
    *adj; /* For storing the sizes of adjacencies or for storing 
@@ -211,7 +211,7 @@ int k,i,j,m,ll,count,vertex,endconsider,equality,
 byte *a;
 
 /* Arrays to be used for partial proper vertex-colouring. */
-int *col,*cw;
+int *col,*cw,*cn;
 byte *adjcol;
 
 f_count++; /* Counts the number of times this function is called. */
@@ -413,44 +413,68 @@ if(kvector[doposition]>1)
       of the vertices in  active,  starting from the  startcolouring  
       position.  
    
-      col[i]  will record the colour of  active[i], if and when  
+      col[i]  will record the colour of  active[i],  if and when  
       active[i]  is coloured. 
    
       cw[j]  will record the largest entry in the doposition 
       of a weightvector of a vertex having colour  j. 
 
-      The arrays  col  and  cw  are *not* considered to be 
+      cn[jj]  will record the number of vertices currently having
+      colour  jj.
+
+      The arrays  col,  cw,  and  cn  are *not* considered to be 
       integer lists. */ 
    col=IntArray(Gamma_order+1);
    cw=IntArray(Gamma_order+1);
+   cn=IntArray(Gamma_order+1);
    adjcol=ByteArray(Gamma_order+1); 
    cwsum=0;
    m=0;  /* maximum colour used so far */
    for(i=startcolouring; i>=1; i--) 
       {
+      /* try to colour active[i] */
       for(j=1; j<=m+1; j++)
-         adjcol[j]=0; /* false */
+         adjcol[j]=0; /* initialize to false */
       a=Gamma[active[i]];
       for(j=i+1; j<=startcolouring; j++)
          if(a[active[j]])
             adjcol[col[j]]=1; /* true */
-      j=1;
-      while(adjcol[j])
-         j++;
+      j=m+1; /* current colour choice for active[i] */
+      for(jj=1; jj<=m; jj++)
+         {
+         if(!adjcol[jj])
+            {
+            /* jj is a feasible colour for active[i] */
+            if(j==m+1)
+               j=jj; /* new current colour choice */
+            else
+               {
+               if(cn[jj]>cn[j])
+                  /* More vertices are currently coloured with jj than
+                     current colour choice j. */
+                  j=jj; /* new current colour choice */
+               }
+            }
+         }
       /* We plan to colour  active[i]  with the colour  j. */
       col[i]=j;
       wt=weightvectors[active[i]][doposition];
       if(j>m)
          {
-         /* new colour */
+         /* j is a new colour */
          m++;
          cwsum=cwsum+wt;
          cw[j]=wt;
+         cn[j]=1;
          }
-      else if(cw[j]<wt)
+      else 
          {
-         cwsum=cwsum+(wt-cw[j]);
-         cw[j]=wt;
+         cn[j]++;
+         if(cw[j]<wt)
+            {
+            cwsum=cwsum+(wt-cw[j]);
+            cw[j]=wt;
+            }
          }
       if(cwsum>=kvector[doposition])
          {
@@ -462,6 +486,7 @@ if(kvector[doposition]>1)
       }
    free(col);
    free(cw);
+   free(cn);
    free(adjcol);
    if(cwsum<kvector[doposition])
       {

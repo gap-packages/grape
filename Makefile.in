@@ -28,7 +28,7 @@ clean: Makefile
 	make -C $(NAUTYDIR) clean
 	rm -rf $(BINDIR)
 
-.PHONY: binaries clean
+.PHONY: binaries cclique clean
 
 # re-run configure if configure, Makefile.in or GAP itself changed
 Makefile: configure Makefile.in $(GAPPATH)/sysinfo.gap
