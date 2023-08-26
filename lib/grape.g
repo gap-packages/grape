@@ -2978,9 +2978,9 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 # The variables  usecclique,  StartCcliqueInput,  ProcessPartialSolution,  
 # cclique_in,  cclique_out,  cclique_in_file,  cclique_out_string, 
 # smallorder,  originalG,  allsubs,  allmaxes,  weights,  weightvectors,  
-# weighted,  partialcolour,  dovector,  IsFixedPoint,  and  HasLargerEntry  
-# are global.  (originalG  is the group of automorphisms associated with 
-# the original graph.)  
+# weightpositions,  weighted,  partialcolour,  dovector,  IsFixedPoint,  
+# and  HasLargerEntry   are global.  (originalG  is the group of automorphisms 
+# associated with the original graph.)  
 #
 # If  allsubs=2  then the returned complete subgraphs will be 
 # (pairwise) inequivalent under gamma.group. 
@@ -3032,7 +3032,7 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 #
 local k,n,i,j,delta,adj,rep,a,b,ans,ans1,ans2,names,W,H,HH,newsofar,
       G,orb,kk,ll,mm,active,nadj,verticesremoved,J,doposition,
-      A,nactive,nactivevector,activecountvector,wt,indorbwtsum,
+      A,nactive,nactivevector,activecountvector,wt,indorbwtsum,nm,
       CompleteSubgraphsSearch1;
 
 CompleteSubgraphsSearch1 := function(mask,kvector,forbidmask)
@@ -3051,14 +3051,15 @@ CompleteSubgraphsSearch1 := function(mask,kvector,forbidmask)
 # forbidmask  is the empty set. 
 #
 # The variables n,  A,  names,  allmaxes,  allsubs,  partialcolour, 
-# weights,  weightvectors,  weighted,  dovector,  
-# and  HasLargerEntry are global.
+# weights,  weightvectors,  weightpositions,  weighted,  dovector,  
+# and  HasLargerEntry  are global.
+#
 # The parameter  mask  may be changed by this function, and if 
 # allmaxes=true  then  forbidmask  may be changed by this function.
 #
 local k,active,activemask,a,b,c,col,verticesremoved,i,j,ans,ans1,kk,ll,mm,
       vertices,nactive,nactivevector,wt,wtvector,cw,cwsum,endconsider,nadj,
-      activecountvector,doposition,minptr,cn,jj;
+      activecountvector,doposition,minptr,cn,jj,nm;
 
 activemask:=DifferenceBlist(mask,forbidmask);
 active:=ListBlist([1..n],activemask);
@@ -3080,11 +3081,10 @@ if nactive<k then
    return [];
 fi;
 nactivevector:=ListWithIdenticalEntries(Length(kvector),0); 
-activecountvector:=ListWithIdenticalEntries(Length(kvector),0); 
 for i in active do
-   for j in weightpositions[names[i]] do 
-      nactivevector[j]:=nactivevector[j]+weightvectors[names[i]][j];      
-      activecountvector[j]:=activecountvector[j]+1; 
+   nm:=names[i];
+   for j in weightpositions[nm] do 
+      nactivevector[j]:=nactivevector[j]+weightvectors[nm][j];      
    od;
 od;
 if HasLargerEntry(kvector,nactivevector) then
@@ -3191,26 +3191,20 @@ fi;
 #
 # Now determine  doposition. 
 #
-# Standard heuristic:
-# doposition:=First(dovector,x->kvector[x]<>0);
-#
-# # Alternative heuristic:
-# doposition:=0;
-# for i in [1..Length(kvector)] do
-#    if kvector[i]<>0 then
-#       if doposition=0 or nactivevector[i]<nactivevector[doposition] then
-#          doposition:=i;
-#       fi;
-#    fi;
-# od;
-#
+activecountvector:=ListWithIdenticalEntries(Length(kvector),0);
+for i in active do
+   nm:=names[i];
+   for j in weightpositions[nm] do
+      activecountvector[j]:=activecountvector[j]+1;
+   od;
+od;
 doposition:=0;
-for i in [1..Length(activecountvector)] do 
-   if kvector[i]>0 then 
+for i in [1..Length(activecountvector)] do
+   if kvector[i]>0 then
       if doposition=0 or activecountvector[i]<activecountvector[doposition] then
          doposition:=i;
       fi;
-   fi; 
+   fi;
 od;
 #
 # Now order the vertices in active for processing.
@@ -3391,11 +3385,10 @@ if nactive<k then
    return [];
 fi;
 nactivevector:=ListWithIdenticalEntries(Length(kvector),0); 
-activecountvector:=ListWithIdenticalEntries(Length(kvector),0); 
 for i in active do
-   for j in weightpositions[names[i]] do 
-      nactivevector[j]:=nactivevector[j]+weightvectors[names[i]][j];      
-      activecountvector[j]:=activecountvector[j]+1; 
+   nm:=names[i];
+   for j in weightpositions[nm] do 
+      nactivevector[j]:=nactivevector[j]+weightvectors[nm][j];      
    od;
 od;
 if HasLargerEntry(kvector,nactivevector) then
@@ -3560,31 +3553,28 @@ if allmaxes and Length(kvector)=1 then
 else
    mm:=[];
 fi;
-indorbwtsum:=0;
 #
 # Now determine  doposition. 
 #
-# Standard heuristic:
+# Old heuristic:
 # doposition:=First(dovector,x->kvector[x]<>0);
 #
-# # Alternative heuristic:
-# doposition:=0;
-# for i in [1..Length(kvector)] do
-#    if kvector[i]<>0 then
-#       if doposition=0 or nactivevector[i]<nactivevector[doposition] then
-#          doposition:=i;
-#       fi;
-#    fi;
-# od;
-#
+activecountvector:=ListWithIdenticalEntries(Length(kvector),0);
+for i in active do
+   nm:=names[i];
+   for j in weightpositions[nm] do
+      activecountvector[j]:=activecountvector[j]+1;
+   od;
+od;
 doposition:=0;
-for i in [1..Length(activecountvector)] do 
-   if kvector[i]>0 then 
+for i in [1..Length(activecountvector)] do
+   if kvector[i]>0 then
       if doposition=0 or activecountvector[i]<activecountvector[doposition] then
          doposition:=i;
       fi;
-   fi; 
+   fi;
 od;
+indorbwtsum:=0;
 for j in [1..Length(J)] do 
    i:=1;
    for kk in [2..Length(J)] do 
