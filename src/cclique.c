@@ -5,10 +5,10 @@
    required vertex vector-weight sums for the augmentations. 
 
    The partial solutions to consider are those with with indices 
-   strtol(argv[1]) up to strtol(argv[2]), or until EOF if this 
-   comes first or if strtol(argv[2])==-1.
+   argv[1] up to argv[2], or until EOF if this comes first or if 
+   argv[2] is -1.
 
-   Leonard Soicher, 09/06/2023 */
+   Leonard Soicher, 09/09/2023 */
 
 #include <stdlib.h>
 #include <stddef.h>
@@ -47,7 +47,7 @@ int allmaxes;
 /* The value of  allmaxes  must be  0  or  1. 
    If  allmaxes==0  then solutions that are not necessarily 
    maximal are returned. 
-   If  allmaxes>0  then only maximal solutions are returned. */
+   If  allmaxes==1  then only maximal solutions are returned. */
    
 long long int solution_count,f_count; 
 FILE *solution_file;
@@ -177,29 +177,34 @@ fprintf(solution_file,"]");
 void FinaliseSolutions()
 {
 fprintf(solution_file,"]");
-fclose(solution_file);
 }
 
 void CliqueSearch1(sofar,active,kvector)
-int *sofar,*active,*kvector;  /* integer lists */
+int *sofar,*active,*kvector;  
+/* The function parameters are integer lists. 
+   The lists  sofar  and  active  are assumed each to have have 
+   storage for their length and for  Gamma_order  integers. 
+   The list  kvector  is assumed to have storage for its length 
+   and for  Gamma_d  integers. */ 
 
 /* Given a partial solution in the list  sofar,  and a list  
-   active  of vertices which can be used to augment  sofar,  
+   active  of vertices which can be used to augment  sofar  
+   (in particular, every element of  active  is joined to 
+   every element of  sofar  in the graph  Gamma),
    this function determines cliques  C  in the induced 
-   subgraph of  Gamma  on the vertices in  active, such that the 
-   sum of the weight-vectors of the vertices of  C  is equal to  kvector.  
-   Then each such  C  together with  sofar  is a solution, 
-   which is processed by a call to  ProcessSolution. 
-   
-   If  isolevel==0,  just one solution is found iff 
-   there is a solution, and if  isolevel==1,  then all
-   solutions are found.   
+   subgraph of  Gamma  on the vertices in  active,  such that the 
+   sum of the weight-vectors of the vertices of  C  is equal to  
+   kvector.  
 
    If  allmaxes==0  then each such  C  together with  sofar  is a 
-   solution, and if  allmaxes>0, each such  C  together with  sofar  
+   solution, and if  allmaxes==1,  each such  C  together with  sofar  
    that is a maximal clique is a solution.
 
-   Each solution found is processed by the function  ProcessSolution.
+   If  isolevel==0,  just one solution is determined iff 
+   there is a solution, and if  isolevel==1,  then all
+   solutions are determined.   
+
+   Each solution determined is processed by the function  ProcessSolution.
 
    The list  active  may be changed by this function. */
 {   
@@ -331,7 +336,7 @@ for(i=1; i<=Length(activecountvector); i++)
 endconsider=Length(active);
 if(Gamma_d>1)
    {
-   /* Push  active  vertices whose weightvectors have 0 in the doposition
+   /* Push active vertices whose weightvectors have 0 in the doposition
       beyond endconsider. */
    i=1;
    while(i<=endconsider)
@@ -350,7 +355,7 @@ if(Gamma_d>1)
    }
 if(Gamma_d==1 && allmaxes)
    {
-   /* Push  active  vertices joined to  active[1]  beyond endconsider. */
+   /* Push active vertices joined to  active[1]  beyond endconsider. */
    i=2;
    while(i<=endconsider)
       if(!Gamma[active[1]][active[i]])
@@ -410,8 +415,8 @@ if(kvector[doposition]>1)
    else
       startcolouring=Length(active);
     /* Do partial proper vertex-colouring, in reverse order 
-      of the vertices in  active,  starting from the  startcolouring  
-      position.  
+      of the vertices in  active,  starting from the  
+      startcolouring  position.  
    
       col[i]  will record the colour of  active[i],  if and when  
       active[i]  is coloured. 
@@ -424,10 +429,10 @@ if(kvector[doposition]>1)
 
       The arrays  col,  cw,  and  cn  are *not* considered to be 
       integer lists. */ 
-   col=IntArray(Gamma_order+1);
-   cw=IntArray(Gamma_order+1);
-   cn=IntArray(Gamma_order+1);
-   adjcol=ByteArray(Gamma_order+1); 
+   col=IntArray(startcolouring+1);
+   cw=IntArray(startcolouring+1);
+   cn=IntArray(startcolouring+1);
+   adjcol=ByteArray(startcolouring+1); 
    cwsum=0;
    m=0;  /* maximum colour used so far */
    for(i=startcolouring; i>=1; i--) 
@@ -553,7 +558,7 @@ int main(argc,argv)
 int argc;
 char *argv[];
 {  
-int lengthsofar,lengthactive,i,j,num,m,
+int lengthsofar,lengthactive,i,j,num,m,count,
     *sofar,*active,*kvector;
 long int case_count,startwork,endwork;
 char **strptr;
@@ -593,21 +598,27 @@ for(i=1; i<=Gamma_order; i++)
       }
    }
 weightvectors=IntArrayArray(Gamma_order+1,Gamma_d+1);
-weightpositions=IntArrayArray(Gamma_order+1,Gamma_d+1);
+weightpositions=IntArrayArray(Gamma_order+1,1+1); /* for starters */
 for(i=1; i<=Gamma_order; i++)
    {
+   /* Determine  weightvectors[i]  and  weightpositions[i]. */
    SetLength(weightvectors[i],Gamma_d);
-   SetLength(weightpositions[i],0); 
+   count=0; /* counts the number of non-zero entries in weightvectors[i] */
    for(j=1; j<=Gamma_d; j++)
       {
       m=scanf("%d",&num);
       weightvectors[i][j]=num;
       if(num)
-         {
-         SetLength(weightpositions[i],Length(weightpositions[i])+1);
-         weightpositions[i][Length(weightpositions[i])]=j;
-         }
+         count++;
       }
+   if(count>1)
+      /* need to enlarge  weightpositions[i] */
+      weightpositions[i]=IntArray(count+1); 
+   SetLength(weightpositions[i],count);
+   count=0;
+   for(j=1; j<=Gamma_d; j++)
+      if(weightvectors[i][j])
+         weightpositions[i][++count]=j;
    }
 case_count=0;
 sofar=IntArray(Gamma_order+1);
