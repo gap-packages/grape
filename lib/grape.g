@@ -3661,20 +3661,6 @@ for j in [1..Length(J)] do
                         Intersection(delta.names,forbidden));
             fi; 
          fi;
-         # newsofar:=Union(sofar,[names[rep]]);
-         # delta:=InducedSubgraph(gamma,adj,Stabilizer(gamma.group,rep));
-         # HH:=Stabilizer(originalG,newsofar,OnSets);
-         # if not IsFixedPoint(HH,names[rep]) then 
-            # H:=Action(HH,names{adj},OnPoints);
-            # delta:=NewGroupGraph(H,delta);
-            # ans1:=CompleteSubgraphsSearch(delta,
-                     # kvector-weightvectors[names[rep]],newsofar,
-                     # Intersection(delta.names,Union(Orbits(HH,forbidden))));
-         # else
-            # ans1:=CompleteSubgraphsSearch(delta,
-                     # kvector-weightvectors[names[rep]],newsofar,
-                     # Intersection(delta.names,forbidden));
-         # fi; 
          if Length(ans1)>0 then
             for a in ans1 do
                Add(a,names[rep]);
@@ -3804,9 +3790,10 @@ if not weighted and k>=0 then
          return [];
       fi; 
    fi;
-   if allsubs=0 and not IsCompleteGraph(gamma) and 
-      IsBound(gamma.autGroup) and Size(gamma.group)<Size(gamma.autGroup) then
-      # make use of the full automorphism group of  gamma 
+   if allsubs=0 and IsBound(gamma.autGroup) and
+      not IsCompleteGraph(gamma) and not IsNullGraph(gamma) and
+      Size(gamma.group)<Size(gamma.autGroup) then
+      # Make use of the full automorphism group of  gamma.
       gamma:=NewGroupGraph(gamma.autGroup,gamma);
    fi;
 fi;
