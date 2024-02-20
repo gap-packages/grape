@@ -1,5 +1,6 @@
 name: GRAPE
-version: 4.9.0
+version: "4.9.0"
+license: "Apache-2.0 AND GPL-2.0-or-later"
 date: 2022-12-09
 description: |
     GRaph Algorithms using PErmutation groups
