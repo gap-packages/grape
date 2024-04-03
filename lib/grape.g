@@ -4174,6 +4174,9 @@ while s*k>=delta.order do
          CC:=[];
          for c in C do 
             t:=translation{c}; 
+            if Length(t)=m and t<start then
+               continue;
+            fi;
             d:=Union(t,Filtered(start,x->IsSubset(Adjacency(olddelta,x),t)));
             if Length(d)>m then
                continue;
