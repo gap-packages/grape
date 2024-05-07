@@ -4096,8 +4096,6 @@ BindGlobal("GRAPE_CliqueCovering",function(arg)
 #
 # This function returns a covering of  gamma  by at most  k  pairwise disjoint
 # non-empty cliques if such a covering exists, and otherwise returns  fail.  
-# The heart of the method used for this, which exploits the automorphism group
-# of  gamma,  is described in  ../doc/talks/halle_2019.pdf 
 #
 # A returned covering is given as a set of sets, forming a partition 
 # of the vertex set of  gamma  into at most  k  non-empty cliques. 
