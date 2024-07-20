@@ -4137,7 +4137,8 @@ cliquecovering := function(delta,k,start,olddelta)
 # In addition, we assume that on the initial call to this recursive function 
 # that m is an integer and delta.names=[1..delta.order]. 
 #
-local m,C,CC,c,d,t,s,cov,newdelta,D,K,A,translation,wts,i,j; 
+local m,C,CC,c,d,t,s,cov,newdelta,D,K,A,translation,wts,i,j,
+   exclude,eps,dtranslation; 
 if IsInt(start) then
    m:=start;
 else
@@ -4163,18 +4164,41 @@ fi;
 s:=m;
 while s*k>=delta.order do 
    if exhaustive_search then
-      if IsTrivial(delta.group) then 
-         C:=CompleteSubgraphsOfGivenSize(delta,s,1,true);
-      else 
-         C:=CompleteSubgraphsOfGivenSize(delta,s,2,true);
+      if s=m and (not IsInt(start)) then
+         # Some vertices of delta may be excluded from 
+         # the returned maximal cliques of size s. 
+         exclude:=[];
+         for i in [1..delta.order] do
+            if translation[i]>start[1] then
+               break;
+            fi;
+            Add(exclude,i);
+         od;
+         if Length(exclude)>0 then
+            exclude:=Union(Orbits(delta.group,exclude));
+            dtranslation:=Difference(Vertices(delta),exclude);
+            eps:=InducedSubgraph(delta,dtranslation,delta.group);
+            # dtranslation[i] is the vertex in delta corresponding to 
+            # the i-th vertex in eps. 
+            C:=CompleteSubgraphsOfGivenSize(eps,s,2,true);
+            C:=Set(C,c->dtranslation{c});
+            C:=Filtered(C,c->
+               Length(Intersection(List(c,x->Adjacency(delta,x))))=0);
+            # Each element of C must be a maximal clique of delta.
+         else
+            C:=CompleteSubgraphsOfGivenSize(delta,s,2,true);
+         fi;
+      else
+         if IsTrivial(delta.group) then 
+            C:=CompleteSubgraphsOfGivenSize(delta,s,1,true);
+         else 
+            C:=CompleteSubgraphsOfGivenSize(delta,s,2,true);
+         fi;
       fi;
       if not IsInt(start) then
          CC:=[];
          for c in C do 
             t:=translation{c}; 
-            if Length(t)=m and t<start then
-               continue;
-            fi;
             d:=Union(t,Filtered(start,x->IsSubset(Adjacency(olddelta,x),t)));
             if Length(d)>m then
                continue;
@@ -4205,7 +4229,7 @@ while s*k>=delta.order do
             return List(K[1],x->delta.names{D.names[x]});
          fi;
       elif not IsTrivial(delta.group) then
-         C:=Set(List(C,x->SmallestImageSet(delta.group,x))); 
+         C:=Set(C,x->SmallestImageSet(delta.group,x)); 
       fi;
    else
       C:=CompleteSubgraphsOfGivenSize(delta,s,0,true);
