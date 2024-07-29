@@ -1,0 +1,46 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%A  smallestim.tex           GRAPE documentation             Leonard Soicher
+%
+%
+%
+\def\GRAPE{\sf GRAPE}
+\def\nauty{\it nauty}
+\def\G{\Gamma}
+\def\Aut{{\rm Aut}\,}
+\def\x{\times}
+\Chapter{Steve Linton's function SmallestImageSet}
+
+This chapter documents the straightforward application of Steve Linton's
+function `SmallestImageSet' \cite{Lin04}, which is included and used
+in {\GRAPE}. The function is of use when classifying objects up to
+the action of a given permutation group $G$, when the objects can be
+represented as subsets of the permutation domain of $G$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{SmallestImageSet}
+
+\>SmallestImageSet( <G>, <S> )
+
+Let <G> be a permutation group on $\{1,\ldots,n\}$, and let <S>
+be a subset of $\{1,\ldots,n\}$. Then this function returns the
+lexicographically least set in the <G>-orbit of <S>, with respect to the
+action `OnSets', without explicitly computing this (possibly huge) orbit.
+
+Thus, if <C> is a list of subsets of $\{1,\ldots,n\}$ and we
+want to determine a set of (canonical) representatives for the
+distinct <G>-orbits of the elements of <C>, we can do this as
+`Set(<C>,c->SmallestImageSet(<G>,c))'.
+
+\beginexample
+gap> J:=JohnsonGraph(12,5);;
+gap> OrderGraph(J);
+792
+gap> G:=J.group;;
+gap> Size(G);
+479001600
+gap> S:=[67,93,100,204,677];;
+gap> SmallestImageSet(G,S);
+[ 1, 2, 22, 220, 453 ]
+\endexample
+
