@@ -26,9 +26,21 @@ BindGlobal("SmallestImageSet",function(arg)
             cases,  case,  newpath, g, set;
     
 # Function by Steve Linton. 
-# Slightly modified by Leonard Soicher, and renamed from `SmallestImage' 
-# to `SmallestImageSet'.
-    # This algorithm is iterative. At level i it
+# Slightly modified by Leonard Soicher to have more parameter checking,
+# and renamed from `SmallestImage' to `SmallestImageSet'.
+#
+# Let  g:=arg[1]  be a permutation group on  [1..n],  and let 
+# set:=arg[2]  be a subset of [1..n]. 
+#
+# Then this function returns the lexicographically least set in 
+# the  g-orbit  of  set,  with respect to the action OnSets, without 
+# explicitly computing this (possibly huge) orbit.
+#
+# If the setwise stabilizer in  g  of  set  is known, then this 
+# group can be given as  arg[3]  to avoid the recomputation of 
+# this stabilizer, but this parameter is not completely checked. 
+#
+    # The algorithm is iterative. At level i it
     # computes the lex-least i-set which can be an image
     # of any subset of set, and all the essentially different ways
     # in which this can happen. The lex-least image of set must arise
@@ -48,8 +60,8 @@ BindGlobal("SmallestImageSet",function(arg)
     # Each iteration is done in two phases. In the first we examine
     # each entry in paths to see what is the smallest point to which
     # any entry of remainder^perm can be mapped by h, and which entries of
-    # remainder can be mapped there. We remember in goodpaths the ones that achieve
-    # the global smallest point, which we add to best
+    # remainder can be mapped there. We remember in goodpaths the ones that 
+    # achieve the global smallest point, which we add to best
     #
     # In the second part, we take each entry on goodpaths and see what
     # essentially different (under substab) ways there are to extend it
@@ -65,6 +77,10 @@ BindGlobal("SmallestImageSet",function(arg)
     if not IsPermGroup(g) or not IsSet(set) then
         Error("usage: SmallestImageSet( <PermGroup>, <Set> [, <PermGroup> ] )");
     fi;
+    
+    if not ForAll(set,IsPosInt) then
+        Error("<set> must be a set of positive integers");
+    fi;
          
     if set = [] then
         return [];
@@ -79,9 +95,12 @@ BindGlobal("SmallestImageSet",function(arg)
         k := arg[3];
         if k = false then
             k := Group(());
-        fi;
-        if not IsPermGroup(k) then
-           Error("<k> must be a permutation group");
+        elif not IsPermGroup(k) then
+            Error("<arg[3]> must be a permutation group");
+        elif not IsSubgroup(g,k) then
+            Error("<arg[3]> is not a subgroup of <G>");
+        elif not ForAll(GeneratorsOfGroup(k),x->OnSets(set,x)=set) then
+            Error("<arg[3]> is not contained in the <G>-stabilizer of <set>");
         fi;
     else
         k := Stabilizer(g,set,OnSets);

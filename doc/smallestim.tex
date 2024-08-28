@@ -21,6 +21,7 @@ represented as subsets of the permutation domain of $G$.
 \Section{SmallestImageSet}
 
 \>SmallestImageSet( <G>, <S> )
+\>SmallestImageSet( <G>, <S>, <H> )
 
 Let <G> be a permutation group on $\{1,\ldots,n\}$, and let <S>
 be a subset of $\{1,\ldots,n\}$. Then this function returns the
@@ -31,6 +32,9 @@ Thus, if <C> is a list of subsets of $\{1,\ldots,n\}$ and we
 want to determine a set of (canonical) representatives for the
 distinct <G>-orbits of the elements of <C>, we can do this as
 `Set(<C>,c->SmallestImageSet(<G>,c))'.
+
+If the setwise stabiliser in <G> of <S> is known, then this should be
+given as the optional third parameter.
 
 \beginexample
 gap> J:=JohnsonGraph(12,5);;
