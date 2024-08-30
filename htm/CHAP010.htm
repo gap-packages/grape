@@ -1,0 +1,54 @@
+<html><head><title>[grape] 10 Steve Linton's function SmallestImageSet</title></head>
+<body text="#000000" bgcolor="#ffffff">
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP009.htm">Previous</a>] [<a href = "theindex.htm">Index</a>]
+<h1>10 Steve Linton's function SmallestImageSet</h1><p>
+<P>
+<H3>Sections</H3>
+<oL>
+<li> <A HREF="CHAP010.htm#SECT001">SmallestImageSet</a>
+</ol><p>
+<p>
+This chapter documents the straightforward application of Steve Linton's
+function <code>SmallestImageSet</code> <a href="biblio.htm#Lin04"><cite>Lin04</cite></a>, which is included and used
+in GRAPE. The function is of use when classifying objects up to
+the action of a given permutation group <var>G</var>, when the objects can be
+represented as subsets of the permutation domain of <var>G</var>.
+<p>
+<p>
+<h2><a name="SECT001">10.1 SmallestImageSet</a></h2>
+<p><p>
+<a name = "SSEC001.1"></a>
+<li><code>SmallestImageSet( </code><var>G</var><code>, </code><var>S</var><code> )</code>
+<li><code>SmallestImageSet( </code><var>G</var><code>, </code><var>S</var><code>, </code><var>H</var><code> )</code>
+<p>
+Let <var>G</var> be a permutation group on <var>{1,...,n}</var>, and let <var>S</var>
+be a subset of <var>{1,...,n}</var>. Then this function returns the
+lexicographically least set in the <var>G</var>-orbit of <var>S</var>, with respect to the
+action <code>OnSets</code>, without explicitly computing this (possibly huge) orbit.
+<p>
+Thus, if <var>C</var> is a list of subsets of <var>{1,...,n}</var> and we
+want to determine a set of (canonical) representatives for the
+distinct <var>G</var>-orbits of the elements of <var>C</var>, we can do this as
+<code>Set(</code><var>C</var><code>,c-&gt;SmallestImageSet(</code><var>G</var><code>,c))</code>.
+<p>
+If the setwise stabilizer in <var>G</var> of <var>S</var> is known, then this should be
+given as the optional third parameter, to avoid the recomputation of
+this stabilizer.
+<p>
+<pre>
+gap&gt; J:=JohnsonGraph(12,5);;
+gap&gt; OrderGraph(J);
+792
+gap&gt; G:=J.group;;
+gap&gt; Size(G);
+479001600
+gap&gt; S:=[67,93,100,204,677];;
+gap&gt; SmallestImageSet(G,S);
+[ 1, 2, 22, 220, 453 ]
+</pre>
+<p>
+<p>
+[<a href = "chapters.htm">Up</a>] [<a href ="CHAP009.htm">Previous</a>] [<a href = "theindex.htm">Index</a>]
+<P>
+<address>grape manual<br>August 2024
+</address></body></html>
