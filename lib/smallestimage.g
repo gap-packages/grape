@@ -38,7 +38,7 @@ BindGlobal("SmallestImageSet",function(arg)
 #
 # If the setwise stabilizer in  g  of  set  is known, then this 
 # group can be given as  arg[3]  to avoid the recomputation of 
-# this stabilizer, but this parameter is not completely checked. 
+# this stabilizer. 
 #
     # The algorithm is iterative. At level i it
     # computes the lex-least i-set which can be an image
@@ -98,9 +98,9 @@ BindGlobal("SmallestImageSet",function(arg)
         elif not IsPermGroup(k) then
             Error("<arg[3]> must be a permutation group");
         elif not IsSubgroup(g,k) then
-            Error("<arg[3]> is not a subgroup of <G>");
+            Error("<arg[3]> is not a subgroup of <g>");
         elif not ForAll(GeneratorsOfGroup(k),x->OnSets(set,x)=set) then
-            Error("<arg[3]> is not contained in the <G>-stabilizer of <set>");
+            Error("<arg[3]> is not contained in the <g>-stabilizer of <set>");
         fi;
     else
         k := Stabilizer(g,set,OnSets);

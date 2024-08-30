@@ -1,8 +1,8 @@
 ##############################################################################
 ##
-##  grape.g (Version 4.9.0)    GRAPE Library     Leonard Soicher
+##  grape.g (Version 4.9.1)    GRAPE Library     Leonard Soicher
 ##
-##  Copyright (C) 1992-2022 Leonard Soicher, School of Mathematical Sciences, 
+##  Copyright (C) 1992-2024 Leonard Soicher, School of Mathematical Sciences, 
 ##                      Queen Mary University of London, London E1 4NS, U.K.
 ##
 # This version includes code by Jerry James (debugged by LS) 
@@ -4157,9 +4157,9 @@ elif k=1 then
    fi;
 fi;
 if not IsInt(start) then
-  translation:=Difference(Vertices(olddelta),start);
-  # translation[i] is the vertex in olddelta corresponding to 
-  # the i-th vertex in delta. 
+   translation:=Difference(Vertices(olddelta),start);
+   # translation[i] is the vertex in olddelta corresponding to 
+   # the i-th vertex in delta. 
 fi;
 s:=m;
 while s*k>=delta.order do 

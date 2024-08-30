@@ -12,7 +12,7 @@
 
 \Chapter{Grape}
 
-This manual describes the {\GRAPE} (Version~4.9.0) package for computing
+This manual describes the {\GRAPE} (Version~4.9.1) package for computing
 with graphs and groups.
 
 {\GRAPE} is primarily designed for the construction and analysis of
@@ -48,7 +48,7 @@ in its `README.md' file.
 If you use {\GRAPE} in a published work, then please reference the
 package as follows:
 
-L.H. Soicher, The {GRAPE} package for {GAP}, Version~4.9.0, 2022,
+L.H. Soicher, The {GRAPE} package for {GAP}, Version~4.9.1, 2024,
 \URL{https://gap-packages.github.io/grape}.
 
 For questions, remarks, suggestions, and issues, please use the issue
@@ -76,7 +76,7 @@ The archive file should be downloaded and unpacked in the `pkg'
 subdirectory of an appropriate {\GAP} root directory (see the main {\GAP}
 reference section "ref:GAP Root Directories").
 
-If your {\GRAPE} installation does not include a pre-compiled binary of 
+If your {\GRAPE} installation does not include a compiled binary of 
 the nauty/dreadnaut programs included with {\GRAPE} and you do not want 
 to use an already installed version of {\nauty} or {\bliss}, you will 
 need to perform compilation of the nauty/dreadnaut programs included with
@@ -89,21 +89,11 @@ directory of the {\GAP} home directory, run
 \begintt 
 ./configure ../..
 \endtt 
-This will fetch the name of the architecture for which {\GAP}
-has been most recently configured, and create a `Makefile'. Now run
+Then run
 \begintt 
 make 
 \endtt 
-to create the nauty/dreadnaut binary and to put
-it in the appropriate place.  This configuration/make process for
-{\GRAPE} only works for the *last* architecture for which {\GAP} was
-configured. Therefore, you should always follow the above procedure to
-install the nauty/dreadnaut binary immediately after compiling {\GAP}
-for a given configuration, say for a different architecture on a common
-file system. However, if you want to add {\GRAPE} later, you can just run
-`./configure' again in the {\GAP} home directory for the architecture,
-before performing the {\GRAPE} configure/make process to install the
-nauty/dreadnaut binary for that architecture.
+to complete the installation of {\GRAPE}.
 
 To use {\GRAPE} with a separately installed version of {\nauty} or
 {\bliss} you should proceed as follows. Please note that the {\nauty}

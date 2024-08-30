@@ -1,3 +1,14 @@
+Main changes from GRAPE 4.9.0 to GRAPE 4.9.1 (30 August 2024)
+-------------------------------------------------------------
+
+1. Made an improvement to the proper vertex-colouring search process.
+
+2. Added documentation and test for Steve Linton's function
+``SmallestImageSet``.
+
+3. Added further (small) improvements to the documentation, including
+three new references.
+
 Main changes from GRAPE 4.8.5 to GRAPE 4.9.0 (09 December 2022)
 ---------------------------------------------------------------
 

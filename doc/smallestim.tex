@@ -33,8 +33,9 @@ want to determine a set of (canonical) representatives for the
 distinct <G>-orbits of the elements of <C>, we can do this as
 `Set(<C>,c->SmallestImageSet(<G>,c))'.
 
-If the setwise stabiliser in <G> of <S> is known, then this should be
-given as the optional third parameter.
+If the setwise stabilizer in <G> of <S> is known, then this should be
+given as the optional third parameter, to avoid the recomputation of
+this stabilizer.
 
 \beginexample
 gap> J:=JohnsonGraph(12,5);;
