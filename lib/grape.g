@@ -2836,7 +2836,7 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 # giving  dovector  the value  [1..d].
 #
 local IsFixedPoint,HasLargerEntry,k,smallorder,smallorder1,weights,weighted,
-      originalG,originalgamma,includingallmaximalreps, 
+      originalG,originalgamma,includingallmaximalreps,zeroonevectorweighted, 
       CompleteSubgraphsSearch,K,clique,cliquenumber,chromaticnumber;
 
 IsFixedPoint := function(G,point)
@@ -2871,7 +2871,7 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 # gamma,  each of which is given as a dense list of distinct vertex-names.
 #
 # The variables  smallorder,  smallorder1,  originalG,  
-# allsubs,  allmaxes,  weights,  weightvectors,  weighted,  
+# allsubs,  allmaxes,  weights,  weightvectors,  weighted, 
 # partialcolour,  dovector,  IsFixedPoint,  and  HasLargerEntry  
 # are global.  (originalG  is the group of automorphisms 
 # associated with the original graph.)  
@@ -2948,7 +2948,7 @@ CompleteSubgraphsSearch1 := function(mask,kvector,forbidmask)
 # forbidmask  is the empty set. 
 #
 # The variables n,  A,  names,  allmaxes,  allsubs,  partialcolour, 
-# weights,  weightvectors,  weighted,  dovector,  
+# weights,  weightvectors,  weighted,  zeroonevectorweighted,  dovector,  
 # and  HasLargerEntry are global.
 # The parameter  mask  may be changed by this function, and if 
 # allmaxes=true  then  forbidmask  may be changed by this function.
@@ -3082,18 +3082,21 @@ fi;
 #
 # Now determine  doposition. 
 #
-# Standard heuristic:
-doposition:=First(dovector,x->kvector[x]<>0);
-#
-# # Alternative heuristic:
-# doposition:=0;
-# for i in [1..Length(kvector)] do
-#    if kvector[i]<>0 then
-#       if doposition=0 or nactivevector[i]<nactivevector[doposition] then
-#          doposition:=i;
-#       fi;
-#    fi;
-# od;
+if not zeroonevectorweighted then
+   # Use the Standard heuristic.
+   doposition:=First(dovector,x->kvector[x]<>0);
+else
+   # Weightvectors have dimension > 1 and all weightvector entries are <= 1. 
+   # Use the alternative heuristic.
+   doposition:=0;
+   for i in [1..Length(kvector)] do
+      if kvector[i]<>0 then
+         if doposition=0 or nactivevector[i]<nactivevector[doposition] then
+            doposition:=i;
+         fi;
+      fi;
+   od;
+fi;
 #
 # Now order the vertices in active for processing.
 #
@@ -3632,6 +3635,8 @@ if not weighted and k>=0 then
       gamma:=NewGroupGraph(gamma.autGroup,gamma);
    fi;
 fi;
+zeroonevectorweighted:=weightvectors<>[] and Length(weightvectors[1])>1 and
+   ForAll(weightvectors,x->ForAll(x,y->y<=1));
 K:=CompleteSubgraphsSearch(gamma,kvector,[],[]);
 for clique in K do
    Sort(clique); 
