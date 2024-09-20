@@ -1702,7 +1702,6 @@ else
 fi;
 end);
 
-
 DeclareOperation("ConnectedComponent",[IsRecord,IsPosInt]);
 InstallMethod(ConnectedComponent,"for GRAPE graph",[IsRecord,IsPosInt],0, 
 function(gamma,v)
@@ -4094,6 +4093,70 @@ fi;
 return Length(MaximumClique(gamma));
 end); 
 
+BindGlobal("GRAPE_ExactSetCover",function(arg)
+#
+# Let  n:=arg[3]  be a positive integer, 
+# let  G:=arg[1]  be a permutation group on  [1..n],  
+# let  blocks:=arg[2]  be a set of non-empty subsets of  [1..n],  
+# and let  H:=arg[4]  (default: Group(()))  be a subgroup of  G.
+#
+# Then this function returns an H-invariant exact set-cover
+# of  [1..n]  by elements from  Concatenation(Orbits(G,blocks,OnSets)),  
+# if such a cover exists, and returns  `fail'  otherwise. 
+# 
+local G,blocks,n,H,gamma,hom,i,j,wts,K,N;
+if not Length(arg) in [3,4] then
+   Error("GRAPE_ExactSetCover should have 3 or 4 arguments");
+fi;
+n:=arg[3];
+if not IsPosInt(n) then
+   Error("<n> must be a positive integer");
+fi;
+G:=arg[1];
+if not (IsPermGroup(G) and LargestMovedPoint(G)<=n) then
+   Error("<G> must be a permutation group on [1..<n>]"); 
+fi;
+blocks:=arg[2];
+if blocks=[] then
+   return fail;
+fi;
+if not IsSet(blocks) and 
+   ForAll(blocks,x->IsSet(x) and x<>[] and IsSubset([1..n],x)) then
+   Error("<blocks> must be a set of non-empty subsets of [1..<n>]");
+fi;
+if IsBound(arg[4]) then
+   H:=arg[4];
+   if not IsSubgroup(G,H) then
+      Error("<H> must be a subgroup of <G>");
+   fi;
+else
+   H:=Group(());
+fi;
+gamma:=Graph(G,blocks,OnSets,function(x,y) return Intersection(x,y)=[]; end);
+if Size(H)>1 then
+   hom:=ActionHomomorphism(G,VertexNames(gamma),OnSets);
+   N:=Image(hom,Normalizer(G,H));
+   H:=Image(hom,H);
+   gamma:=CollapsedCompleteOrbitsGraph(H,gamma,N);
+else
+   AssignVertexNames(gamma,List(VertexNames(gamma),x->[x]));
+fi;
+wts:=[];
+for i in [1..gamma.order] do
+   wts[i]:=ListWithIdenticalEntries(n,0); 
+   for j in Concatenation(gamma.names[i]) do 
+      wts[i][j]:=1;
+   od;
+od;
+K:=CompleteSubgraphsOfGivenSize(gamma,ListWithIdenticalEntries(n,1),
+   0,true,true,wts);
+if K=[] then
+   return fail;
+else
+   return Union(gamma.names{K[1]});
+fi;
+end);
+      
 BindGlobal("GRAPE_CliqueCovering",function(arg)
 #
 # Let  gamma:=arg[1]  be a simple graph and let  k:=arg[2]  be 
@@ -4142,8 +4205,7 @@ cliquecovering := function(delta,k,start,olddelta)
 # In addition, we assume that on the initial call to this recursive function 
 # that m is an integer and delta.names=[1..delta.order]. 
 #
-local m,C,CC,c,d,t,s,cov,newdelta,D,K,A,translation,wts,i,j,
-   exclude,eps,dtranslation; 
+local m,C,CC,c,d,t,s,cov,newdelta,K,A,translation,i,exclude,eps,dtranslation; 
 if IsInt(start) then
    m:=start;
 else
@@ -4218,20 +4280,11 @@ while s*k>=delta.order do
       fi;
       if s*k=delta.order and Size(delta.group)<=smallorder then
          # Use exact cover.
-         D:=Graph(delta.group,C,OnSets,
-               function(x,y) return Intersection(x,y)=[]; end);
-         wts:=List([1..D.order],x->ListWithIdenticalEntries(delta.order,0));
-         for i in [1..D.order] do
-            for j in D.names[i] do 
-               wts[i][j]:=1;
-            od;
-         od;
-         K:=CompleteSubgraphsOfGivenSize(D,
-               ListWithIdenticalEntries(delta.order,1),0,true,true,wts);
-         if K=[] then 
+         K:=GRAPE_ExactSetCover(delta.group,C,delta.order);
+         if K=fail then
             return fail;
          else
-            return List(K[1],x->delta.names{D.names[x]});
+            return List(K,x->delta.names{x});
          fi;
       elif not IsTrivial(delta.group) then
          C:=Set(C,x->SmallestImageSet(delta.group,x)); 
@@ -4322,22 +4375,76 @@ for c in cov do
    Sort(c);
 od;
 Sort(cov);
-# 
-# Check.
-#
-if not IsSet(cov) 
-   or Length(cov)>k 
-   or not ForAll(cov,x->x<>[] and IsSet(x)) 
-   or Union(cov)<>Vertices(gamma) 
-   or Sum(List(cov,Length))<>gamma.order
-   or not ForAll(cov,x->IsCompleteGraph(InducedSubgraph(gamma,x))) then
-   # This should never happen.
-   Error("BUG: returned cov is not a clique k-covering given as a set of pairwise disjoint non-empty cliques"); 
-fi;
-#
-# End of check. 
-#
 return cov;
+end);
+
+BindGlobal("GRAPE_IsVertexColouring",function(arg)
+#
+# Let  gamma:=arg[1]  be a simple graph, let  C:=arg[2]  be a list of 
+# positive integers of length  OrderGraph(gamma),  and let  k:=arg[3]  
+# be a non-negative integer (default: Length(C)).  
+#
+# Then this function returns  true  if  C  is a vertex k-colouring 
+# of  gamma,  and returns  false  if not.  (The list  C  is a vertex 
+# k-colouring of  gamma  iff  C[v]<>C[w]  whenever  [v,w]  is an edge of  
+# gamma,  and the number of distinct elements of  C  (the colours) is
+# at most  k.  A proper vertex-colouring of  gamma  is the same thing 
+# as a vertex OrderGraph(gamma)-colouring of  gamma.)
+# 
+local gamma,C,k,v,w;  
+if not Length(arg) in [2,3] then
+   Error("GRAPE_IsVertexColouring should have 2 or 3 arguments");
+fi;
+gamma:=arg[1];
+if not IsSimpleGraph(gamma) then
+   Error("<gamma> must be a simple graph");
+fi;
+C:=arg[2];
+if not (IsList(C) and Length(C)=OrderGraph(gamma) and ForAll(C,IsPosInt)) then
+   Error("<C> must be a list of length OrderGraph(<gamma>) of positive integers"); 
+fi;
+if IsBound(arg[3]) then
+   k:=arg[3];
+   if not (IsInt(k) and k>=0) then
+      Error("<k> must be a non-negative integer"); 
+   fi;
+else
+   k:=OrderGraph(gamma);
+fi;
+if Length(Set(C))>k then
+   # too many colours
+   return false;
+fi; 
+for v in Vertices(gamma) do
+   for w in Adjacency(gamma,v) do
+      if v<w then
+         if C[v]=C[w] then
+            # The adjacent vertices v and w have the same colour.
+            return false;
+         fi;
+      fi;
+   od;
+od;
+return true;
+end); 
+
+DeclareOperation("IsVertexColouring",[IsRecord,IsList]);
+InstallMethod(IsVertexColouring,"for use in GRAPE with 2 parameters",
+[IsRecord,IsList],0,
+function(gamma,C)
+if not IsGraph(gamma) then
+   TryNextMethod();
+fi;
+return GRAPE_IsVertexColouring(gamma,C);
+end);
+DeclareOperation("IsVertexColouring",[IsRecord,IsList,IsInt]);
+InstallMethod(IsVertexColouring,"for use in GRAPE with 3 parameters",
+[IsRecord,IsList,IsInt],0,
+function(gamma,C,k)
+if not IsGraph(gamma) then
+   TryNextMethod();
+fi;
+return GRAPE_IsVertexColouring(gamma,C,k);
 end);
 
 BindGlobal("VertexColouring",function(arg)
@@ -4471,7 +4578,11 @@ for i in [1..Length(gamma.representatives)] do
    fi; 
 od;
 if maxcolour<=k then 
-   #  C  is a k-colouring.
+   #  C  is a vertex k-colouring of  gamma.
+   if not IsVertexColouring(gamma,C,k) then
+      # This should not happen!
+      Error("BUG: <C> should be a (proper) vertex <k>-colouring of <gamma>");
+   fi;
    if IsBound(gamma.maximumClique) and Length(gamma.maximumClique)=Length(Set(C)) then
       #  C  is a minimum vertex-colouring of  gamma.
       gamma.minimumVertexColouring:=Immutable(C);
@@ -4494,6 +4605,10 @@ for i in [1..Length(cov)] do
       C[j]:=i;
    od;
 od;
+if not IsVertexColouring(gamma,C,k) then
+   # This should not happen!
+   Error("BUG: <C> should be a (proper) vertex <k>-colouring of <gamma>");
+fi;
 if IsBound(gamma.maximumClique) and Length(gamma.maximumClique)=Length(Set(C)) then
    #  C  is a minimum vertex-colouring of  gamma.
    gamma.minimumVertexColouring:=Immutable(C);
@@ -4552,7 +4667,6 @@ while upper-lower>1 do
 od;
 return C;
 end); 
-
 DeclareOperation("MinimumVertexColouring",[IsRecord]);
 InstallMethod(MinimumVertexColouring,"for GRAPE graph",[IsRecord],0, 
 function(gamma)
