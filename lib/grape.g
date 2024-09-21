@@ -4378,7 +4378,7 @@ Sort(cov);
 return cov;
 end);
 
-BindGlobal("GRAPE_IsVertexColouring",function(arg)
+BindGlobal("IsVertexColouring",function(arg)
 #
 # Let  gamma:=arg[1]  be a simple graph, let  C:=arg[2]  be a list of 
 # positive integers of length  OrderGraph(gamma),  and let  k:=arg[3]  
@@ -4393,7 +4393,7 @@ BindGlobal("GRAPE_IsVertexColouring",function(arg)
 # 
 local gamma,C,k,v,w;  
 if not Length(arg) in [2,3] then
-   Error("GRAPE_IsVertexColouring should have 2 or 3 arguments");
+   Error("IsVertexColouring should have 2 or 3 arguments");
 fi;
 gamma:=arg[1];
 if not IsSimpleGraph(gamma) then
@@ -4427,25 +4427,6 @@ for v in Vertices(gamma) do
 od;
 return true;
 end); 
-
-DeclareOperation("IsVertexColouring",[IsRecord,IsList]);
-InstallMethod(IsVertexColouring,"for use in GRAPE with 2 parameters",
-[IsRecord,IsList],0,
-function(gamma,C)
-if not IsGraph(gamma) then
-   TryNextMethod();
-fi;
-return GRAPE_IsVertexColouring(gamma,C);
-end);
-DeclareOperation("IsVertexColouring",[IsRecord,IsList,IsInt]);
-InstallMethod(IsVertexColouring,"for use in GRAPE with 3 parameters",
-[IsRecord,IsList,IsInt],0,
-function(gamma,C,k)
-if not IsGraph(gamma) then
-   TryNextMethod();
-fi;
-return GRAPE_IsVertexColouring(gamma,C,k);
-end);
 
 BindGlobal("VertexColouring",function(arg)
 #
@@ -4667,6 +4648,7 @@ while upper-lower>1 do
 od;
 return C;
 end); 
+
 DeclareOperation("MinimumVertexColouring",[IsRecord]);
 InstallMethod(MinimumVertexColouring,"for GRAPE graph",[IsRecord],0, 
 function(gamma)
