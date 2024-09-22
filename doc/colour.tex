@@ -69,6 +69,31 @@ fail
 \endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{IsVertexColouring}
+
+\>IsVertexColouring( <gamma>, <C> )
+\>IsVertexColouring( <gamma>, <C>, <k> )
+
+Suppose that <gamma> is a simple graph, <C> is a list of positive integers
+of length `OrderGraph(<gamma>)', and <k> is a non-negative integer
+(default: `OrderGraph(<gamma>)').
+
+Then this function returns `true' if <C> is a vertex <k>-colouring of
+<gamma>, that is, a proper vertex-colouring using at most <k>-colours (for
+which $<C>[i]$ is the colour of the $i$-th vertex), and `false' if not.
+
+\beginexample
+gap> gamma:=JohnsonGraph(7,3);;
+gap> C:=VertexColouring(gamma,6);
+[ 1, 2, 3, 4, 5, 5, 6, 2, 4, 1, 6, 3, 5, 2, 1, 3, 4, 5, 2, 5, 1, 4, 2, 1, 3, 
+  2, 4, 1, 1, 3, 6, 3, 6, 2, 4 ]
+gap> IsVertexColouring(gamma,C);
+true
+gap> IsVertexColouring(gamma,C,5);
+false
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Section{MinimumVertexColouring}
 
 \>MinimumVertexColouring( <gamma> )
