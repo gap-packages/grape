@@ -12,10 +12,12 @@ gap> VertexColouring(J,5);
 gap> VertexColouring(J,4);
 fail
 gap> gamma:=JohnsonGraph(7,3);;
-gap> C:=VertexColouring(gamma,6);
-[ 1, 2, 3, 4, 5, 5, 6, 2, 4, 1, 6, 3, 5, 2, 1, 3, 4, 5, 2, 5, 1, 4, 2, 1, 3,
-  2, 4, 1, 1, 3, 6, 3, 6, 2, 4 ]
+gap> C:=VertexColouring(gamma,6);;
 gap> IsVertexColouring(gamma,C);
+true
+gap> IsVertexColouring(gamma,C,7);
+true
+gap> IsVertexColouring(gamma,C,6);
 true
 gap> IsVertexColouring(gamma,C,5);
 false
