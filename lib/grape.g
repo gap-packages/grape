@@ -3082,10 +3082,11 @@ fi;
 # Now determine  doposition. 
 #
 if not zeroonevectorweighted then
-   # Use the Standard heuristic.
+   # Use the standard heuristic.
    doposition:=First(dovector,x->kvector[x]<>0);
 else
-   # Weightvectors have dimension > 1 and all weightvector entries are <= 1. 
+   # The weight-vectors have dimension > 1 and 
+   # all weight-vector entries are <= 1. 
    # Use the alternative heuristic.
    doposition:=0;
    for i in [1..Length(kvector)] do
@@ -4095,9 +4096,9 @@ end);
 
 BindGlobal("GRAPE_ExactSetCover",function(arg)
 #
-# Let  n:=arg[3]  be a positive integer, 
+# Let  n:=arg[3]  be a non-negative integer, 
 # let  G:=arg[1]  be a permutation group on  [1..n],  
-# let  blocks:=arg[2]  be a set of non-empty subsets of  [1..n],  
+# let  blocks:=arg[2]  be a list of non-empty subsets of  [1..n],
 # and let  H:=arg[4]  (default: Group(()))  be a subgroup of  G.
 #
 # Then this function returns an H-invariant exact set-cover
@@ -4109,20 +4110,17 @@ if not Length(arg) in [3,4] then
    Error("GRAPE_ExactSetCover should have 3 or 4 arguments");
 fi;
 n:=arg[3];
-if not IsPosInt(n) then
-   Error("<n> must be a positive integer");
+if not IsInt(n) and n>=0 then
+   Error("<n> must be a non-negative integer");
 fi;
 G:=arg[1];
 if not (IsPermGroup(G) and LargestMovedPoint(G)<=n) then
    Error("<G> must be a permutation group on [1..<n>]"); 
 fi;
 blocks:=arg[2];
-if blocks=[] then
-   return fail;
-fi;
-if not IsSet(blocks) and 
+if not IsList(blocks) and 
    ForAll(blocks,x->IsSet(x) and x<>[] and IsSubset([1..n],x)) then
-   Error("<blocks> must be a set of non-empty subsets of [1..<n>]");
+   Error("<blocks> must be a list of non-empty subsets of [1..<n>]");
 fi;
 if IsBound(arg[4]) then
    H:=arg[4];
@@ -4131,6 +4129,11 @@ if IsBound(arg[4]) then
    fi;
 else
    H:=Group(());
+fi;
+if n=0 then
+   return [];
+elif blocks=[] then
+   return false;
 fi;
 gamma:=Graph(G,blocks,OnSets,function(x,y) return Intersection(x,y)=[]; end);
 if Size(H)>1 then

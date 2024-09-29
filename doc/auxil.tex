@@ -35,7 +35,7 @@ given as the optional third parameter, to avoid the recomputation of
 this stabilizer.
 
 The function `SmallestImageSet' was written by Steve Linton, based
-on his algoritm described in \cite{Lin04}. 
+on his algorithm described in \cite{Lin04}. 
 
 \beginexample
 gap> J:=JohnsonGraph(12,5);;
@@ -55,13 +55,13 @@ gap> SmallestImageSet(G,S);
 \>GRAPE_ExactSetCover( <G>, <blocks>, <n> )
 \>GRAPE_ExactSetCover( <G>, <blocks>, <n>, <H> )
 
-Suppose <n> is a positive integer, <G> is a permutation group
-on $\{1,\ldots,n\}$, <blocks> is a set of non-empty subsets
+Suppose <n> is a non-negative integer, <G> is a permutation group
+on $\{1,\ldots,n\}$, <blocks> is a list of non-empty subsets
 of $\{1,\ldots,n\}$, and the optional parameter <H> (default:
 `Group(())') is a subgroup of <G>. 
 
 Then this function returns an <H>-invariant exact 
-set-cover of $\{1,\ldots,n\}$, by elements from the union of
+set-cover of $\{1,\ldots,n\}$, consisting of elements from the union of
 `Orbits(<G>,<blocks>,OnSets)', if such a cover exists,
 and returns  `fail'  otherwise. An exact set-cover is given as a set of
 sets forming a partition of $\{1,\ldots,n\}$.
