@@ -4133,7 +4133,7 @@ fi;
 if n=0 then
    return [];
 elif blocks=[] then
-   return false;
+   return fail;
 fi;
 gamma:=Graph(G,blocks,OnSets,function(x,y) return Intersection(x,y)=[]; end);
 if Size(H)>1 then
