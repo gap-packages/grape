@@ -1,3 +1,17 @@
+Main changes from GRAPE 4.9.1 to GRAPE 4.9.2 (03 October 2024)
+--------------------------------------------------------------
+
+1. Included new functions ``IsVertexColouring`` and
+``GRAPE_ExactSetCover``.
+
+2. Made new documentation chapter ``Auxiliary Functions``,
+currently containing documentation for ``SmallestImageSet`` and
+``GRAPE_ExactSetCover``.
+
+3. Made a performance improvement for ``CompleteSubgraphsOfGivenSize``
+for the case when all weightvectors are (0,1)-vectors of dimension
+greater than 1.
+
 Main changes from GRAPE 4.9.0 to GRAPE 4.9.1 (30 August 2024)
 -------------------------------------------------------------
 
