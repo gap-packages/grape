@@ -6,12 +6,13 @@
 <H3>Sections</H3>
 <oL>
 <li> <A HREF="CHAP007.htm#SECT001">VertexColouring</a>
-<li> <A HREF="CHAP007.htm#SECT002">MinimumVertexColouring</a>
-<li> <A HREF="CHAP007.htm#SECT003">ChromaticNumber</a>
-<li> <A HREF="CHAP007.htm#SECT004">CompleteSubgraphs</a>
-<li> <A HREF="CHAP007.htm#SECT005">CompleteSubgraphsOfGivenSize</a>
-<li> <A HREF="CHAP007.htm#SECT006">MaximumClique</a>
-<li> <A HREF="CHAP007.htm#SECT007">CliqueNumber</a>
+<li> <A HREF="CHAP007.htm#SECT002">IsVertexColouring</a>
+<li> <A HREF="CHAP007.htm#SECT003">MinimumVertexColouring</a>
+<li> <A HREF="CHAP007.htm#SECT004">ChromaticNumber</a>
+<li> <A HREF="CHAP007.htm#SECT005">CompleteSubgraphs</a>
+<li> <A HREF="CHAP007.htm#SECT006">CompleteSubgraphsOfGivenSize</a>
+<li> <A HREF="CHAP007.htm#SECT007">MaximumClique</a>
+<li> <A HREF="CHAP007.htm#SECT008">CliqueNumber</a>
 </ol><p>
 <p>
 The following sections describe functions for (proper) vertex-colouring
@@ -75,9 +76,39 @@ fail
 </pre>
 <p>
 <p>
-<h2><a name="SECT002">7.2 MinimumVertexColouring</a></h2>
+<h2><a name="SECT002">7.2 IsVertexColouring</a></h2>
 <p><p>
 <a name = "SSEC002.1"></a>
+<li><code>IsVertexColouring( </code><var>gamma</var><code>, </code><var>C</var><code> )</code>
+<li><code>IsVertexColouring( </code><var>gamma</var><code>, </code><var>C</var><code>, </code><var>k</var><code> )</code>
+<p>
+Suppose that <var>gamma</var> is a simple graph, <var>C</var> is a list of positive integers
+of length <code>OrderGraph(</code><var>gamma</var><code>)</code>, and <var>k</var> is a non-negative integer
+(default: <code>OrderGraph(</code><var>gamma</var><code>)</code>).
+<p>
+Then this function returns <code>true</code> if <var>C</var> is a vertex <var>k</var>-colouring of
+<var>gamma</var>, that is, a proper vertex-colouring using at most <var>k</var>-colours (for
+which <var><var>C</var>[i]</var> is the colour of the <var>i</var>-th vertex), and <code>false</code> if not.
+<p>
+See also <a href="CHAP007.htm#SSEC001.1">VertexColouring</a>.
+<p>
+<pre>
+gap&gt; gamma:=JohnsonGraph(7,3);;
+gap&gt; C:=VertexColouring(gamma,6);;
+gap&gt; IsVertexColouring(gamma,C);
+true
+gap&gt; IsVertexColouring(gamma,C,7);
+true
+gap&gt; IsVertexColouring(gamma,C,6);
+true
+gap&gt; IsVertexColouring(gamma,C,5);
+false
+</pre>
+<p>
+<p>
+<h2><a name="SECT003">7.3 MinimumVertexColouring</a></h2>
+<p><p>
+<a name = "SSEC003.1"></a>
 <li><code>MinimumVertexColouring( </code><var>gamma</var><code> )</code>
 <p>
 This function returns a minimum vertex-colouring <var>C</var> for the graph
@@ -107,9 +138,9 @@ gap&gt; MinimumVertexColouring(J);
 </pre>
 <p>
 <p>
-<h2><a name="SECT003">7.3 ChromaticNumber</a></h2>
+<h2><a name="SECT004">7.4 ChromaticNumber</a></h2>
 <p><p>
-<a name = "SSEC003.1"></a>
+<a name = "SSEC004.1"></a>
 <li><code>ChromaticNumber( </code><var>gamma</var><code> )</code>
 <p>
 This function returns the chromatic number of the given graph <var>gamma</var>,
@@ -120,7 +151,7 @@ of <var>gamma</var> is the minimum number of colours needed to properly vertex-c
 <var>gamma</var>, that is, the number of colours used in a minimum vertex-colouring
 of <var>gamma</var>.
 <p>
-See also <a href="CHAP007.htm#SSEC002.1">MinimumVertexColouring</a>.
+See also <a href="CHAP007.htm#SSEC003.1">MinimumVertexColouring</a>.
 <p>
 <pre>
 gap&gt; ChromaticNumber(JohnsonGraph(5,2));
@@ -132,9 +163,9 @@ gap&gt; ChromaticNumber(JohnsonGraph(7,2));
 </pre>
 <p>
 <p>
-<h2><a name="SECT004">7.4 CompleteSubgraphs</a></h2>
+<h2><a name="SECT005">7.5 CompleteSubgraphs</a></h2>
 <p><p>
-<a name = "SSEC004.1"></a>
+<a name = "SSEC005.1"></a>
 <li><code>CompleteSubgraphs( </code><var>gamma</var><code> )</code>
 <li><code>CompleteSubgraphs( </code><var>gamma</var><code>, </code><var>k</var><code> )</code>
 <li><code>CompleteSubgraphs( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code> )</code>
@@ -185,7 +216,7 @@ An alternative name for this function is <code>Cliques</code>.
 <a name = "I4"></a>
 
 <p>
-See also <a href="CHAP007.htm#SSEC005.1">CompleteSubgraphsOfGivenSize</a>.
+See also <a href="CHAP007.htm#SSEC006.1">CompleteSubgraphsOfGivenSize</a>.
 <p>
 <pre>
 gap&gt; gamma := JohnsonGraph(5,2);
@@ -204,9 +235,9 @@ gap&gt; CompleteSubgraphs(gamma,-1,0);
 </pre>
 <p>
 <p>
-<h2><a name="SECT005">7.5 CompleteSubgraphsOfGivenSize</a></h2>
+<h2><a name="SECT006">7.6 CompleteSubgraphsOfGivenSize</a></h2>
 <p><p>
-<a name = "SSEC005.1"></a>
+<a name = "SSEC006.1"></a>
 <li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code> )</code>
 <li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code> )</code>
 <li><code>CompleteSubgraphsOfGivenSize( </code><var>gamma</var><code>, </code><var>k</var><code>, </code><var>alls</var><code>, </code><var>maxi</var><code> )</code>
@@ -296,7 +327,7 @@ An alternative name for this function is
 <a name = "I5"></a>
 
 <p>
-See also <a href="CHAP007.htm#SSEC004.1">CompleteSubgraphs</a>.
+See also <a href="CHAP007.htm#SSEC005.1">CompleteSubgraphs</a>.
 <p>
 <pre>
 gap&gt; gamma:=JohnsonGraph(6,2);                         
@@ -326,9 +357,9 @@ gap&gt; CompleteSubgraphsOfGivenSize(delta,5,1,false,true,
   [ 13, 14 ] ]
 </pre>
 <p>
-<h2><a name="SECT006">7.6 MaximumClique</a></h2>
+<h2><a name="SECT007">7.7 MaximumClique</a></h2>
 <p><p>
-<a name = "SSEC006.1"></a>
+<a name = "SSEC007.1"></a>
 <li><code>MaximumClique( </code><var>gamma</var><code> )</code>
 <p>
 This function returns a maximum clique of the graph <var>gamma</var>, which must
@@ -343,7 +374,7 @@ An alternative name for this function is
 <a name = "I7"></a>
 
 <p>
-See also <a href="CHAP007.htm#SSEC005.1">CompleteSubgraphsOfGivenSize</a>.
+See also <a href="CHAP007.htm#SSEC006.1">CompleteSubgraphsOfGivenSize</a>.
 <p>
 <pre>
 gap&gt; J:=JohnsonGraph(5,2);
@@ -358,9 +389,9 @@ gap&gt; MaximumClique(J);
 </pre>
 <p>
 <p>
-<h2><a name="SECT007">7.7 CliqueNumber</a></h2>
+<h2><a name="SECT008">7.8 CliqueNumber</a></h2>
 <p><p>
-<a name = "SSEC007.1"></a>
+<a name = "SSEC008.1"></a>
 <li><code>CliqueNumber( </code><var>gamma</var><code> )</code>
 <p>
 This function returns the clique number of the given graph <var>gamma</var>,
@@ -381,5 +412,5 @@ gap&gt; CliqueNumber(JohnsonGraph(7,2));
 <p>
 [<a href = "chapters.htm">Up</a>] [<a href ="CHAP006.htm">Previous</a>] [<a href ="CHAP008.htm">Next</a>] [<a href = "theindex.htm">Index</a>]
 <P>
-<address>grape manual<br>August 2024
+<address>grape manual<br>October 2024
 </address></body></html>
