@@ -1,4 +1,4 @@
-Main changes from GRAPE 4.9.1 to GRAPE 4.9.2 (03 October 2024)
+Main changes from GRAPE 4.9.1 to GRAPE 4.9.2 (11 October 2024)
 --------------------------------------------------------------
 
 1. Included new functions ``IsVertexColouring`` and

@@ -13,7 +13,7 @@ PackageName := "GRAPE",
 Version := "4.9.2",
 
 ##  Release date of the current version in dd/mm/yyyy format.
-Date := "03/10/2024",
+Date := "11/10/2024",
 
 ##  Machine readable license information (as an SPDX identifier)
 License := "Apache-2.0 AND GPL-2.0-or-later",
