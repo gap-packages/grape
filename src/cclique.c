@@ -52,9 +52,8 @@ int allmaxes;
 long long int solution_count,f_count; 
 FILE *solution_file;
 
-int *IntArray(n) 
+int *IntArray(int n) 
 /* Returns an uninitialized integer array with n elements. */
-int n;
 {
 int *a;
 if((a=(int *)malloc(((unsigned)n)*sizeof(int)))==NULL)
@@ -66,9 +65,8 @@ if((a=(int *)malloc(((unsigned)n)*sizeof(int)))==NULL)
 return a;
 }
 
-byte *ByteArray(n) 
+byte *ByteArray(int n) 
 /* Returns an uninitialized byte array with n elements. */
-int n;
 {
 byte *a;
 if((a=(byte *)malloc(((unsigned)n)*sizeof(byte)))==NULL)
@@ -80,9 +78,8 @@ if((a=(byte *)malloc(((unsigned)n)*sizeof(byte)))==NULL)
 return a;
 }
 
-int **IntArrayArray(m,n) 
+int **IntArrayArray(int m,int n) 
 /* Returns an uninitialized m by n int array. */
-int m,n;
 {
 int **a;
 int i;
@@ -97,9 +94,8 @@ for(i=1;i<=m;i++)
 return a;
 }
 
-byte **ByteArrayArray(m,n) 
+byte **ByteArrayArray(int m,int n) 
 /* Returns an uninitialized m by n byte array. */
-int m,n;
 {
 byte **a;
 int i;
@@ -114,11 +110,10 @@ for(i=1;i<=m;i++)
 return a;
 }
 
-int IsClique(vertexlist) 
+int IsClique(int *vertexlist) 
 /* Where  vertexlist  is an integer list of vertices of  Gamma,
    this function returns  1  if these vertices form a clique of  
    Gamma,  and returns  0  if not.  */
-int *vertexlist;
 {
 int i,j; 
 for(i=1;i<=Length(vertexlist)-1;i++)
@@ -128,11 +123,10 @@ for(i=1;i<=Length(vertexlist)-1;i++)
 return 1;
 }
 
-int IsMaximal(clique) 
+int IsMaximal(int *clique) 
 /* Where  clique  is an integer list of vertices of  Gamma,
    which form a clique, this function returns  1  if this clique
    is maximal in  Gamma,  and returns  0  if not.  */
-int *clique;
 {
 int i,j; 
 for(i=1;i<=Gamma_order;i++)
@@ -157,8 +151,8 @@ solution_file=stdout;
 fprintf(solution_file,"[");
 }
 
-void ProcessSolution(solution)
-int *solution;  /* integer list */
+void ProcessSolution(int *solution)
+/* Processes the solution in the list  solution  of vertices of  Gamma. */
 {
 int i;
 if (solution_count>0)
@@ -169,7 +163,7 @@ for(i=1;i<=Length(solution);i++)
    {
    if(i>1)
       fprintf(solution_file,",");
-      fprintf(solution_file,"%d",solution[i]); 
+   fprintf(solution_file,"%d",solution[i]); 
    }
 fprintf(solution_file,"]"); 
 }
@@ -179,8 +173,7 @@ void FinaliseSolutions()
 fprintf(solution_file,"]");
 }
 
-void CliqueSearch1(sofar,active,kvector)
-int *sofar,*active,*kvector;  
+void CliqueSearch1(int *sofar,int *active,int *kvector)
 /* The function parameters are integer lists. 
    The lists  sofar  and  active  are assumed each to have have 
    storage for their length and for  Gamma_order  integers. 
@@ -554,9 +547,7 @@ free(activecountvector);
 return;
 }
 
-int main(argc,argv)
-int argc;
-char *argv[];
+int main(int argc, char *argv[])
 {  
 int lengthsofar,lengthactive,i,j,num,m,count,
     *sofar,*active,*kvector;
