@@ -3132,30 +3132,33 @@ if (allmaxes and Length(kvector)=1) or Length(kvector)>1 then
    od;
 fi;
 #
-# Now order the elements in active{[1..endconsider]}, and the corresponding 
-# elements of nadj.
+# Now, if Length(kvector)=1 or kvector[doposition]>1 then
+# order the elements in active{[1..endconsider]} 
+# and the corresponding elements of nadj.
 #
-for i in [1..endconsider] do
-   minptr:=i;
-   for j in [i+1..endconsider] do
-      if nadj[j]<nadj[minptr] then
-         minptr:=j;
-      fi;
-   od; 
-   a:=active[i];
-   active[i]:=active[minptr];
-   active[minptr]:=a;
-   a:=nadj[i];
-   nadj[i]:=nadj[minptr];
-   nadj[minptr]:=a;
-   mm:=A[active[i]];
-   for j in [i+1..endconsider] do
-      if mm[active[j]] then
-         nadj[j]:=nadj[j]-1;
-      fi;
+if Length(kvector)=1 or kvector[doposition]>1 then
+   for i in [1..endconsider] do
+      minptr:=i;
+      for j in [i+1..endconsider] do
+         if nadj[j]<nadj[minptr] then
+            minptr:=j;
+         fi;
+      od; 
+      a:=active[i];
+      active[i]:=active[minptr];
+      active[minptr]:=a;
+      a:=nadj[i];
+      nadj[i]:=nadj[minptr];
+      nadj[minptr]:=a;
+      mm:=A[active[i]];
+      for j in [i+1..endconsider] do
+         if mm[active[j]] then
+            nadj[j]:=nadj[j]-1;
+         fi;
+      od;
    od;
-od;
-if k>=0 and partialcolour then 
+fi;
+if k>=0 and partialcolour and kvector[doposition]>1 then 
    # We do (perhaps partial) proper vertex-colouring.
    col:=[];
    cw:=[]; # cw[j] will record the largest weight (entry) in the doposition of 
