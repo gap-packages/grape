@@ -348,18 +348,29 @@ if(Gamma_d>1)
    }
 if(Gamma_d==1 && allmaxes)
    {
-   /* Push active vertices joined to  active[1]  beyond endconsider. */
-   i=2;
-   while(i<=endconsider)
-      if(!Gamma[active[1]][active[i]])
-         i++;
+   for(i=1;i<=Gamma_order;i++)
+      {
+      for(j=1;j<=Length(sofar);j++)
+         {
+         if(!Gamma[i][sofar[j]])
+            break;
+         }
+      if(j>Length(sofar))
+         /* vertex  i  is joined to every element of  sofar. */
+         break;
+      }
+   /* Push active vertices joined to  active[i]  beyond endconsider. */
+   j=1;
+   while(j<=endconsider)
+      if(!Gamma[active[j]][active[i]])
+         j++;
       else
          {
-         if(i<endconsider)
+         if(j<endconsider)
             {
             temp=active[endconsider];
-            active[endconsider]=active[i];
-            active[i]=temp;
+            active[endconsider]=active[j];
+            active[j]=temp;
 	    }
          endconsider--;
          }
