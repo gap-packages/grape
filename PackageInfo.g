@@ -10,10 +10,10 @@ PackageName := "GRAPE",
 
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers.
-Version := "4.9.0",
+Version := "4.9.2",
 
 ##  Release date of the current version in dd/mm/yyyy format.
-Date := "09/12/2022",
+Date := "11/10/2024",
 
 ##  Machine readable license information (as an SPDX identifier)
 License := "Apache-2.0 AND GPL-2.0-or-later",
@@ -31,8 +31,6 @@ ArchiveURL      := Concatenation( ~.SourceRepository.URL,
                                  "/grape-", ~.Version ),
 
 ArchiveFormats := ".tar.gz", 
-
-BinaryFiles := ["doc/manual.dvi","doc/manual.pdf","nauty2_8_6/nug28.pdf"],
 
 Persons := [
   rec(
@@ -135,7 +133,7 @@ TestFile := "tst/testall.g",
 
 ##  *Optional*: Here you can list some keyword related to the topic 
 ##  of the package.
-Keywords := ["graph","geometry","design"]
+Keywords := ["graph","design","finite geometry","clique number","chromatic number"]
 
 ));
 

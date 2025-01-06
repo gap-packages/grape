@@ -1,0 +1,92 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%A  auxil.tex           GRAPE documentation             Leonard Soicher
+%
+%
+%
+\def\GRAPE{\sf GRAPE}
+\def\nauty{\it nauty}
+\def\G{\Gamma}
+\def\Aut{{\rm Aut}\,}
+\def\x{\times}
+\Chapter{Auxiliary Functions}
+
+This chapter documents some auxiliary functions used in {\GRAPE},
+which may be of wider interest. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Steve Linton's Function SmallestImageSet}
+
+\>SmallestImageSet( <G>, <S> )
+\>SmallestImageSet( <G>, <S>, <H> )
+
+Let <G> be a permutation group on $\{1,\ldots,n\}$, and let <S>
+be a subset of $\{1,\ldots,n\}$. Then this function returns the
+lexicographically least set in the <G>-orbit of <S>, with respect to the
+action `OnSets', without explicitly computing this (possibly huge) orbit.
+
+Thus, if <C> is a list of subsets of $\{1,\ldots,n\}$ and we
+want to determine a set of (canonical) representatives for the
+distinct <G>-orbits of the elements of <C>, we can do this as
+`Set(<C>,c->SmallestImageSet(<G>,c))'.
+
+If the setwise stabilizer in <G> of <S> is known, then this should be
+given as the optional third parameter, to avoid the recomputation of
+this stabilizer.
+
+The function `SmallestImageSet' was written by Steve Linton, based
+on his algorithm described in \cite{Lin04}. 
+
+\beginexample
+gap> J:=JohnsonGraph(12,5);;
+gap> OrderGraph(J);
+792
+gap> G:=J.group;;
+gap> Size(G);
+479001600
+gap> S:=[67,93,100,204,677,750];;
+gap> SmallestImageSet(G,S);
+[ 1, 2, 22, 212, 242, 446 ]
+\endexample
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Section{Exact Set-cover}
+
+\>GRAPE_ExactSetCover( <G>, <blocks>, <n> )
+\>GRAPE_ExactSetCover( <G>, <blocks>, <n>, <H> )
+
+Suppose <n> is a non-negative integer, <G> is a permutation group
+on $\{1,\ldots,n\}$, <blocks> is a list of non-empty subsets
+of $\{1,\ldots,n\}$, and the optional parameter <H> (default:
+`Group(())') is a subgroup of <G>. 
+
+Then this function returns an <H>-invariant exact 
+set-cover of $\{1,\ldots,n\}$, consisting of elements from the union of
+`Orbits(<G>,<blocks>,OnSets)', if such a cover exists,
+and returns  `fail'  otherwise. An exact set-cover is given as a set of
+sets forming a partition of $\{1,\ldots,n\}$.
+
+\beginexample
+gap> G:=PSL(2,5);;
+gap> GRAPE_ExactSetCover(G,[[1,2,3]],6);
+fail
+gap> G:=PGL(2,5);;
+gap> GRAPE_ExactSetCover(G,[[1,2,3]],6);
+[ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+gap> n:=280;;
+gap> G:=OnePrimitiveGroup(NrMovedPoints,n,Size,604800*2);
+J_2.2
+gap> gamma:=First(GeneralizedOrbitalGraphs(G),x->VertexDegrees(x)=[135]);;
+gap> omega:=CliqueNumber(gamma);
+28
+gap> blocks:=CompleteSubgraphsOfGivenSize(ComplementGraph(gamma),n/omega,2);;
+gap> Collected(List(blocks,Length));
+[ [ 10, 2 ] ]
+gap> H:=SylowSubgroup(G,7);;
+gap> partition:=GRAPE_ExactSetCover(G,blocks,n,H);;
+gap> Collected(List(partition,Length));
+[ [ 10, 28 ] ]
+gap> Union(partition)=[1..n];
+true
+\endexample
+

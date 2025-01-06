@@ -1,8 +1,8 @@
 ##############################################################################
 ##
-##  grape.g (Version 4.9.0)    GRAPE Library     Leonard Soicher
+##  grape.g (Version 4.9.2)    GRAPE Library     Leonard Soicher
 ##
-##  Copyright (C) 1992-2022 Leonard Soicher, School of Mathematical Sciences, 
+##  Copyright (C) 1992-2024 Leonard Soicher, School of Mathematical Sciences, 
 ##                      Queen Mary University of London, London E1 4NS, U.K.
 ##
 # This version includes code by Jerry James (debugged by LS) 
@@ -1725,7 +1725,6 @@ else
 fi;
 end);
 
-
 DeclareOperation("ConnectedComponent",[IsRecord,IsPosInt]);
 InstallMethod(ConnectedComponent,"for GRAPE graph",[IsRecord,IsPosInt],0, 
 function(gamma,v)
@@ -2858,7 +2857,7 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 # of  [1..d].  There is no harm (except perhaps for efficiency) in
 # giving  dovector  the value  [1..d].
 #
-local IsFixedPoint,HasLargerEntry,k,smallorder,weights,weighted,
+local IsFixedPoint,HasLargerEntry,k,smallorder,smallorder1,weights,weighted,
       originalG,originalgamma,includingallmaximalreps, 
       CompleteSubgraphsSearch,K,clique,cliquenumber,chromaticnumber,
       weightpositions,
@@ -2977,9 +2976,10 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 #
 # The variables  usecclique,  StartCcliqueInput,  ProcessPartialSolution,  
 # cclique_in,  cclique_out,  cclique_in_file,  cclique_out_string, 
-# smallorder,  originalG,  allsubs,  allmaxes,  weights,  weightvectors,  
-# weightpositions,  weighted,  partialcolour,  dovector,  IsFixedPoint,  
-# and  HasLargerEntry   are global.  (originalG  is the group of automorphisms 
+# smallorder,  smallorder1,  originalG,  allsubs,  allmaxes,  weights,  
+# weightvectors,  weightpositions,  weighted,  partialcolour,  dovector,  
+# IsFixedPoint,  and   HasLargerEntry   are global.  
+# (originalG  is the group of automorphisms 
 # associated with the original graph.)  
 #
 # If  allsubs=2  then the returned complete subgraphs will be 
@@ -3051,8 +3051,8 @@ CompleteSubgraphsSearch1 := function(mask,kvector,forbidmask)
 # forbidmask  is the empty set. 
 #
 # The variables n,  A,  names,  allmaxes,  allsubs,  partialcolour, 
-# weights,  weightvectors,  weightpositions,  weighted,  dovector,  
-# and  HasLargerEntry  are global.
+# weights,  weightvectors,  weightpositions,  weighted,  
+# dovector,  and  HasLargerEntry  are global.
 #
 # The parameter  mask  may be changed by this function, and if 
 # allmaxes=true  then  forbidmask  may be changed by this function.
@@ -3241,30 +3241,33 @@ if (allmaxes and Length(kvector)=1) or Length(kvector)>1 then
    od;
 fi;
 #
-# Now order the elements in active{[1..endconsider]}, and the corresponding 
-# elements of nadj.
+# Now, if Length(kvector)=1 or kvector[doposition]>1 then
+# order the elements in active{[1..endconsider]} 
+# and the corresponding elements of nadj.
 #
-for i in [1..endconsider] do
-   minptr:=i;
-   for j in [i+1..endconsider] do
-      if nadj[j]<nadj[minptr] then
-         minptr:=j;
-      fi;
-   od; 
-   a:=active[i];
-   active[i]:=active[minptr];
-   active[minptr]:=a;
-   a:=nadj[i];
-   nadj[i]:=nadj[minptr];
-   nadj[minptr]:=a;
-   mm:=A[active[i]];
-   for j in [i+1..endconsider] do
-      if mm[active[j]] then
-         nadj[j]:=nadj[j]-1;
-      fi;
+if Length(kvector)=1 or kvector[doposition]>1 then
+   for i in [1..endconsider] do
+      minptr:=i;
+      for j in [i+1..endconsider] do
+         if nadj[j]<nadj[minptr] then
+            minptr:=j;
+         fi;
+      od; 
+      a:=active[i];
+      active[i]:=active[minptr];
+      active[minptr]:=a;
+      a:=nadj[i];
+      nadj[i]:=nadj[minptr];
+      nadj[minptr]:=a;
+      mm:=A[active[i]];
+      for j in [i+1..endconsider] do
+         if mm[active[j]] then
+            nadj[j]:=nadj[j]-1;
+         fi;
+      od;
    od;
-od;
-if k>=0 and partialcolour then 
+fi;
+if k>=0 and partialcolour and kvector[doposition]>1 then 
    # We do (perhaps partial) proper vertex-colouring.
    col:=[];
    cw:=[]; # cw[j] will record the largest weight (entry) in the doposition of 
@@ -4302,6 +4305,72 @@ fi;
 return Length(MaximumClique(gamma));
 end); 
 
+BindGlobal("GRAPE_ExactSetCover",function(arg)
+#
+# Let  n:=arg[3]  be a non-negative integer, 
+# let  G:=arg[1]  be a permutation group on  [1..n],  
+# let  blocks:=arg[2]  be a list of non-empty subsets of  [1..n],
+# and let  H:=arg[4]  (default: Group(()))  be a subgroup of  G.
+#
+# Then this function returns an H-invariant exact set-cover
+# of  [1..n]  by elements from  Concatenation(Orbits(G,blocks,OnSets)),  
+# if such a cover exists, and returns  `fail'  otherwise. 
+# 
+local G,blocks,n,H,gamma,hom,i,j,wts,K,N;
+if not Length(arg) in [3,4] then
+   Error("GRAPE_ExactSetCover should have 3 or 4 arguments");
+fi;
+n:=arg[3];
+if not IsInt(n) and n>=0 then
+   Error("<n> must be a non-negative integer");
+fi;
+G:=arg[1];
+if not (IsPermGroup(G) and LargestMovedPoint(G)<=n) then
+   Error("<G> must be a permutation group on [1..<n>]"); 
+fi;
+blocks:=arg[2];
+if not IsList(blocks) and 
+   ForAll(blocks,x->IsSet(x) and x<>[] and IsSubset([1..n],x)) then
+   Error("<blocks> must be a list of non-empty subsets of [1..<n>]");
+fi;
+if IsBound(arg[4]) then
+   H:=arg[4];
+   if not IsSubgroup(G,H) then
+      Error("<H> must be a subgroup of <G>");
+   fi;
+else
+   H:=Group(());
+fi;
+if n=0 then
+   return [];
+elif blocks=[] then
+   return fail;
+fi;
+gamma:=Graph(G,blocks,OnSets,function(x,y) return Intersection(x,y)=[]; end);
+if Size(H)>1 then
+   hom:=ActionHomomorphism(G,VertexNames(gamma),OnSets);
+   N:=Image(hom,Normalizer(G,H));
+   H:=Image(hom,H);
+   gamma:=CollapsedCompleteOrbitsGraph(H,gamma,N);
+else
+   AssignVertexNames(gamma,List(VertexNames(gamma),x->[x]));
+fi;
+wts:=[];
+for i in [1..gamma.order] do
+   wts[i]:=ListWithIdenticalEntries(n,0); 
+   for j in Concatenation(gamma.names[i]) do 
+      wts[i][j]:=1;
+   od;
+od;
+K:=CompleteSubgraphsOfGivenSize(gamma,ListWithIdenticalEntries(n,1),
+   0,true,true,wts);
+if K=[] then
+   return fail;
+else
+   return Union(gamma.names{K[1]});
+fi;
+end);
+      
 BindGlobal("GRAPE_CliqueCovering",function(arg)
 #
 # Let  gamma:=arg[1]  be a simple graph and let  k:=arg[2]  be 
@@ -4350,7 +4419,7 @@ cliquecovering := function(delta,k,start,olddelta)
 # In addition, we assume that on the initial call to this recursive function 
 # that m is an integer and delta.names=[1..delta.order]. 
 #
-local m,C,CC,c,d,t,s,cov,newdelta,D,K,A,translation,wts,i,j; 
+local m,C,CC,c,d,t,s,cov,newdelta,K,A,translation,i,exclude,eps,dtranslation; 
 if IsInt(start) then
    m:=start;
 else
@@ -4369,17 +4438,43 @@ elif k=1 then
    fi;
 fi;
 if not IsInt(start) then
-  translation:=Difference(Vertices(olddelta),start);
-  # translation[i] is the vertex in olddelta corresponding to 
-  # the i-th vertex in delta. 
+   translation:=Difference(Vertices(olddelta),start);
+   # translation[i] is the vertex in olddelta corresponding to 
+   # the i-th vertex in delta. 
 fi;
 s:=m;
 while s*k>=delta.order do 
    if exhaustive_search then
-      if IsTrivial(delta.group) then 
-         C:=CompleteSubgraphsOfGivenSize(delta,s,1,true);
-      else 
-         C:=CompleteSubgraphsOfGivenSize(delta,s,2,true);
+      if s=m and (not IsInt(start)) then
+         # Some vertices of delta may be excluded from 
+         # the returned maximal cliques of size s. 
+         exclude:=[];
+         for i in [1..delta.order] do
+            if translation[i]>start[1] then
+               break;
+            fi;
+            Add(exclude,i);
+         od;
+         if Length(exclude)>0 then
+            exclude:=Union(Orbits(delta.group,exclude));
+            dtranslation:=Difference(Vertices(delta),exclude);
+            eps:=InducedSubgraph(delta,dtranslation,delta.group);
+            # dtranslation[i] is the vertex in delta corresponding to 
+            # the i-th vertex in eps. 
+            C:=CompleteSubgraphsOfGivenSize(eps,s,2,true);
+            C:=Set(C,c->dtranslation{c});
+            C:=Filtered(C,c->
+               Length(Intersection(List(c,x->Adjacency(delta,x))))=0);
+            # Each element of C must be a maximal clique of delta.
+         else
+            C:=CompleteSubgraphsOfGivenSize(delta,s,2,true);
+         fi;
+      else
+         if IsTrivial(delta.group) then 
+            C:=CompleteSubgraphsOfGivenSize(delta,s,1,true);
+         else 
+            C:=CompleteSubgraphsOfGivenSize(delta,s,2,true);
+         fi;
       fi;
       if not IsInt(start) then
          CC:=[];
@@ -4399,23 +4494,14 @@ while s*k>=delta.order do
       fi;
       if s*k=delta.order and Size(delta.group)<=smallorder then
          # Use exact cover.
-         D:=Graph(delta.group,C,OnSets,
-               function(x,y) return Intersection(x,y)=[]; end);
-         wts:=List([1..D.order],x->ListWithIdenticalEntries(delta.order,0));
-         for i in [1..D.order] do
-            for j in D.names[i] do 
-               wts[i][j]:=1;
-            od;
-         od;
-         K:=CompleteSubgraphsOfGivenSize(D,
-               ListWithIdenticalEntries(delta.order,1),0,false,true,wts);
-         if K=[] then 
+         K:=GRAPE_ExactSetCover(delta.group,C,delta.order);
+         if K=fail then
             return fail;
          else
-            return List(K[1],x->delta.names{D.names[x]});
+            return List(K,x->delta.names{x});
          fi;
       elif not IsTrivial(delta.group) then
-         C:=Set(List(C,x->SmallestImageSet(delta.group,x))); 
+         C:=Set(C,x->SmallestImageSet(delta.group,x)); 
       fi;
    else
       C:=CompleteSubgraphsOfGivenSize(delta,s,0,true);
@@ -4503,23 +4589,58 @@ for c in cov do
    Sort(c);
 od;
 Sort(cov);
-# 
-# Check.
-#
-if not IsSet(cov) 
-   or Length(cov)>k 
-   or not ForAll(cov,x->x<>[] and IsSet(x)) 
-   or Union(cov)<>Vertices(gamma) 
-   or Sum(List(cov,Length))<>gamma.order
-   or not ForAll(cov,x->IsCompleteGraph(InducedSubgraph(gamma,x))) then
-   # This should never happen.
-   Error("BUG: returned cov is not a clique k-covering given as a set of pairwise disjoint non-empty cliques"); 
-fi;
-#
-# End of check. 
-#
 return cov;
 end);
+
+BindGlobal("IsVertexColouring",function(arg)
+#
+# Let  gamma:=arg[1]  be a simple graph, let  C:=arg[2]  be a list of 
+# positive integers of length  OrderGraph(gamma),  and let  k:=arg[3]  
+# be a non-negative integer (default: Length(C)).  
+#
+# Then this function returns  true  if  C  is a vertex k-colouring 
+# of  gamma,  and returns  false  if not.  (The list  C  is a vertex 
+# k-colouring of  gamma  iff  C[v]<>C[w]  whenever  [v,w]  is an edge of  
+# gamma,  and the number of distinct elements of  C  (the colours) is
+# at most  k.  A proper vertex-colouring of  gamma  is the same thing 
+# as a vertex OrderGraph(gamma)-colouring of  gamma.)
+# 
+local gamma,C,k,v,w;  
+if not Length(arg) in [2,3] then
+   Error("IsVertexColouring should have 2 or 3 arguments");
+fi;
+gamma:=arg[1];
+if not IsSimpleGraph(gamma) then
+   Error("<gamma> must be a simple graph");
+fi;
+C:=arg[2];
+if not (IsList(C) and Length(C)=OrderGraph(gamma) and ForAll(C,IsPosInt)) then
+   Error("<C> must be a list of length OrderGraph(<gamma>) of positive integers"); 
+fi;
+if IsBound(arg[3]) then
+   k:=arg[3];
+   if not (IsInt(k) and k>=0) then
+      Error("<k> must be a non-negative integer"); 
+   fi;
+else
+   k:=OrderGraph(gamma);
+fi;
+if Length(Set(C))>k then
+   # too many colours
+   return false;
+fi; 
+for v in Vertices(gamma) do
+   for w in Adjacency(gamma,v) do
+      if v<w then
+         if C[v]=C[w] then
+            # The adjacent vertices v and w have the same colour.
+            return false;
+         fi;
+      fi;
+   od;
+od;
+return true;
+end); 
 
 BindGlobal("VertexColouring",function(arg)
 #
@@ -4652,7 +4773,11 @@ for i in [1..Length(gamma.representatives)] do
    fi; 
 od;
 if maxcolour<=k then 
-   #  C  is a k-colouring.
+   #  C  is a vertex k-colouring of  gamma.
+   if not IsVertexColouring(gamma,C,k) then
+      # This should not happen!
+      Error("BUG: <C> should be a (proper) vertex <k>-colouring of <gamma>");
+   fi;
    if IsBound(gamma.maximumClique) and Length(gamma.maximumClique)=Length(Set(C)) then
       #  C  is a minimum vertex-colouring of  gamma.
       gamma.minimumVertexColouring:=Immutable(C);
@@ -4675,6 +4800,10 @@ for i in [1..Length(cov)] do
       C[j]:=i;
    od;
 od;
+if not IsVertexColouring(gamma,C,k) then
+   # This should not happen!
+   Error("BUG: <C> should be a (proper) vertex <k>-colouring of <gamma>");
+fi;
 if IsBound(gamma.maximumClique) and Length(gamma.maximumClique)=Length(Set(C)) then
    #  C  is a minimum vertex-colouring of  gamma.
    gamma.minimumVertexColouring:=Immutable(C);
