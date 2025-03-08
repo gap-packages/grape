@@ -56,7 +56,7 @@ GRAPE_DREADNAUT_INPUT_USE_STRING := false;
 
 GRAPE_CLIQUE_C1:=1;
 GRAPE_CLIQUE_C2:=infinity;
-GRAPE_CLIQUE_SETSTAB:=false;
+GRAPE_CLIQUE_SETSTAB:=true;
 
 GRAPE_CCLIQUE:=true;
    # If true, use the external  cclique  program if it exists and
@@ -4461,20 +4461,21 @@ while s*k>=delta.order do
             eps:=InducedSubgraph(delta,dtranslation,delta.group);
             # dtranslation[i] is the vertex in delta corresponding to 
             # the i-th vertex in eps. 
-            C:=CompleteSubgraphsOfGivenSize(eps,s,2,true);
+            C:=CompleteSubgraphsOfGivenSize(eps,s,1,true);
+            C:=Set(C,c->SmallestImageSet(eps.group,c));
             C:=Set(C,c->dtranslation{c});
             C:=Filtered(C,c->
                Length(Intersection(List(c,x->Adjacency(delta,x))))=0);
             # Each element of C must be a maximal clique of delta.
          else
-            C:=CompleteSubgraphsOfGivenSize(delta,s,2,true);
+            C:=CompleteSubgraphsOfGivenSize(delta,s,1,true);
+            C:=Set(C,c->SmallestImageSet(delta.group,c));
          fi;
       else
-         if IsTrivial(delta.group) then 
-            C:=CompleteSubgraphsOfGivenSize(delta,s,1,true);
-         else 
-            C:=CompleteSubgraphsOfGivenSize(delta,s,2,true);
-         fi;
+         C:=CompleteSubgraphsOfGivenSize(delta,s,1,true);
+         if not IsTrivial(delta.group) then
+            C:=Set(C,c->SmallestImageSet(delta.group,c));
+         fi; 
       fi;
       if not IsInt(start) then
          CC:=[];
