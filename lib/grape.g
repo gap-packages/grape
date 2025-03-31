@@ -2768,7 +2768,9 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 #                weightvectors[v^((g)theta)] = weightvectors[v]^g
 #
 # (where the first action is OnPoints, and the second action is the assumed 
-# one of  GG  on integer d-vectors).  
+# one of  GG  on integer d-vectors). If d=1, we may take GG to be gamma.group,
+# theta to be the identity map, and the action of GG on vector positions to
+# be trivial.
 #
 # Note that, in particular, this implies that  Set(weightvectors)  
 # is invariant under  GG,  and that the weight of a vertex is constant 
@@ -2886,6 +2888,7 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 # The parameter  forbidden  is a  gamma.group-invariant  set of
 # vertex-names not in  sofar,  such that, for every element  f  in  forbidden, 
 # all required solutions have already been found containing  sofar union {f}. 
+# No returned clique will have a vertex in the given parameter  forbidden.
 # The value of  forbidden  may be changed by this function.
 #
 # If  allsubs>0  then this function returns a list of complete 
@@ -2893,8 +2896,8 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 # the elements in  sofar,  is a list of solutions containing 
 # a transversal of the distinct  originalG-orbits  of all the originally 
 # required solutions (maximal complete or otherwise) which contain sofar, 
-# except possibly those orbits containing a solution  S  having an  
-# element in  forbidden. 
+# except possibly some orbits containing a solution having an
+# element in the given parameter  forbidden.
 #
 # If  allsubs=0  then this function returns (a list of) 
 # at most one complete subgraph, and returns (a list of) one
@@ -3497,7 +3500,7 @@ for j in [1..Length(J)] do
                delta:=NewGroupGraph(H,delta);
                ans1:=CompleteSubgraphsSearch(delta,
                         kvector-weightvectors[names[rep]],newsofar,
-                        Intersection(delta.names,Union(Orbits(HH,forbidden))));
+                        Union(Orbits(HH,Intersection(delta.names,forbidden))));
             else
                ans1:=CompleteSubgraphsSearch(delta,
                         kvector-weightvectors[names[rep]],newsofar,
@@ -3591,7 +3594,7 @@ gamma:=ShallowCopy(gamma);
 gamma.names:=Immutable([1..gamma.order]);
 k:=Sum(kvector);
 if k<0 then
-   # We are computing maximal complete subgraphs (not of given size).
+   # We are computing complete subgraphs (not of given size).
    if Length(kvector)<>1 then
       Error("cannot have Sum(<kvector>)<0 if Length(<kvector>)<>1");
    fi;
