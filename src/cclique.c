@@ -361,10 +361,10 @@ if(Gamma_d==1 && allmaxes)
          /* vertex  i  is joined to every element of  sofar. */
          break;
       }
-   /* Push active vertices joined to  active[i]  beyond endconsider. */
+   /* Push active vertices joined to vertex  i  beyond endconsider. */
    j=1;
    while(j<=endconsider)
-      if(!Gamma[active[j]][active[i]])
+      if(!Gamma[active[j]][i])
          j++;
       else
          {

@@ -54,7 +54,7 @@ GRAPE_DREADNAUT_INPUT_USE_STRING := false;
    # Using a string is faster than using a file, but may use
    # too much storage.
 
-GRAPE_CLIQUE_C1:=1;
+GRAPE_CLIQUE_C1:=4;
 GRAPE_CLIQUE_C2:=infinity;
 GRAPE_CLIQUE_SETSTAB:=true;
 
@@ -2857,7 +2857,7 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 # of  [1..d].  There is no harm (except perhaps for efficiency) in
 # giving  dovector  the value  [1..d].
 #
-local IsFixedPoint,HasLargerEntry,k,smallorder,smallorder1,weights,weighted,
+local IsFixedPoint,HasLargerEntry,k,weights,weighted,
       originalG,originalgamma,includingallmaximalreps, 
       CompleteSubgraphsSearch,K,clique,cliquenumber,chromaticnumber,
       weightpositions,
@@ -2976,7 +2976,7 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 #
 # The variables  usecclique,  StartCcliqueInput,  ProcessPartialSolution,  
 # cclique_in,  cclique_out,  cclique_in_file,  cclique_out_string, 
-# smallorder,  smallorder1,  originalG,  allsubs,  allmaxes,  weights,  
+# originalG,  allsubs,  allmaxes,  weights,  
 # weightvectors,  weightpositions,  weighted,  partialcolour,  dovector,  
 # IsFixedPoint,  and   HasLargerEntry   are global.  
 # (originalG  is the group of automorphisms 
@@ -3676,13 +3676,6 @@ for j in [1..Length(J)] do
                for a in ans1 do
                   Add(ans,a);
                od;
-            elif Size(gamma.group)<=smallorder then
-               # perform isomorph rejection using explicit orbits
-               ans1:=List(ans1,x->Set(W{x}));
-               ans1:=List(Orbits(gamma.group,ans1,OnSets),x->names{x[1]});
-               for a in ans1 do
-                  Add(ans,a);
-               od;
             else
                # perform isomorph rejection using SmallestImageSet
                ans2:=List(ans1,x->
@@ -3734,9 +3727,6 @@ fi;
 if not IsSimpleGraph(gamma) then
    Error("<gamma> must be a simple graph");
 fi;
-smallorder:=24; # Any group with order <= smallorder is considered small,
-                # and we calculate orbits on cliques explicitly for these
-                # groups when  allsubs=2.
 originalgamma:=gamma;
 originalG:=gamma.group;
 gamma:=ShallowCopy(gamma);
@@ -3752,7 +3742,7 @@ if IsString(GRAPE_CCLIQUE) then
    StartCcliqueInput(originalgamma,weightvectors,allsubs,allmaxes);
 fi;
 if k<0 then
-   # We are computing maximal complete subgraphs (not of given size).
+   # We are computing complete subgraphs (not of given size).
    if Length(kvector)<>1 then
       Error("cannot have Sum(<kvector>)<0 if Length(<kvector>)<>1");
    fi;
