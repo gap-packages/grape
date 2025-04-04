@@ -3732,8 +3732,7 @@ originalG:=gamma.group;
 gamma:=ShallowCopy(gamma);
 gamma.names:=Immutable([1..gamma.order]);
 k:=Sum(kvector);
-usecclique := GRAPE_CCLIQUE=true and GRAPE_CCLIQUE_EXE<>fail 
-   and k>0 and allsubs in [0,1];
+usecclique := GRAPE_CCLIQUE=true and GRAPE_CCLIQUE_EXE<>fail and k>0;
 startedccliqueinput:=false;
 if IsString(GRAPE_CCLIQUE) then
    if k<=0 then
@@ -3839,6 +3838,10 @@ if usecclique and startedccliqueinput and (allsubs<>0 or K=[]) then
       K:=[K[1]];
    fi;
    Sort(K);
+   if allsubs=2 and Length(K)>1 then
+      # Perform final isomorph rejection
+      K:=Set(K,x->SmallestImageSet(originalG,x));
+   fi;
 fi; 
 # 
 # Now K should be a correct result to return.
