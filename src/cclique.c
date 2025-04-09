@@ -26,8 +26,6 @@
 
 typedef unsigned char byte;
 
-static FILE *cclique_err;
-
 byte **Gamma; 
 /* the (0,1)-adjacency matrix, with indexing starting at 1 */
 
@@ -60,7 +58,7 @@ int *IntArray(int n)
 int *a;
 if((a=(int *)malloc(((unsigned)n)*sizeof(int)))==NULL)
    {
-   fprintf(cclique_err,
+   fprintf(stderr,
       "\n*** error trying to allocate memory for integer array\n"); 
    exit(EXIT_FAILURE);
    }
@@ -73,7 +71,7 @@ byte *ByteArray(int n)
 byte *a;
 if((a=(byte *)malloc(((unsigned)n)*sizeof(byte)))==NULL)
    {
-   fprintf(cclique_err,
+   fprintf(stderr,
       "\n*** error trying to allocate memory for byte array\n"); 
    exit(EXIT_FAILURE);
    }
@@ -87,7 +85,7 @@ int **a;
 int i;
 if((a=(int **)malloc(((unsigned)m)*sizeof(int *)))==NULL)
    {
-   fprintf(cclique_err,
+   fprintf(stderr,
       "\n*** error trying to allocate memory for an m by n int array\n"); 
    exit(EXIT_FAILURE);
    }
@@ -103,7 +101,7 @@ byte **a;
 int i;
 if((a=(byte **)malloc(((unsigned)m)*sizeof(byte *)))==NULL)
    {
-   fprintf(cclique_err,
+   fprintf(stderr,
       "\n*** error trying to allocate memory for an m by n byte array\n"); 
    exit(EXIT_FAILURE);
    }
@@ -568,23 +566,23 @@ long int case_count,startwork,endwork;
 char **strptr;
 if(argc<3)
    {
-   fprintf(cclique_err,"\nerror: command must have at least 2 arguments.\n");
+   fprintf(stderr,"\nerror: command must have at least 2 arguments.\n");
    exit(EXIT_FAILURE);
    }
 startwork=strtol(argv[1],strptr,10);
 endwork=strtol(argv[2],strptr,10);
 f_count=0;
 InitialiseSolutions();
-cclique_err = fopen("cclique.err","w");
+stderr = fopen("cclique.err","w");
 m=scanf("%d %d %d %d",&isolevel,&allmaxes,&Gamma_order,&Gamma_d);
 if (isolevel!=0 && isolevel!=1) 
    {
-   fprintf(cclique_err,"\nerror: isolevel must be  0  or  1\n");
+   fprintf(stderr,"\nerror: isolevel must be  0  or  1\n");
    exit(EXIT_FAILURE);
    }
 if (allmaxes!=0 && allmaxes!=1) 
    {
-   fprintf(cclique_err,"\nerror: allmaxes must be  0  or  1\n");
+   fprintf(stderr,"\nerror: allmaxes must be  0  or  1\n");
    exit(EXIT_FAILURE);
    }
 Gamma=ByteArrayArray(Gamma_order+1,Gamma_order+1);
@@ -596,7 +594,7 @@ for(i=1; i<=Gamma_order; i++)
       m=scanf("%d",&num);
       if(num!=0 && num!=1)
          {
-         fprintf(cclique_err,"\nerror: adjacency matrix entries must be 0 or 1\n");
+         fprintf(stderr,"\nerror: adjacency matrix entries must be 0 or 1\n");
          exit(EXIT_FAILURE);
          }
       Gamma[i][j]=(byte)num;

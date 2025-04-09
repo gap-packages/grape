@@ -54,11 +54,11 @@ GRAPE_DREADNAUT_INPUT_USE_STRING := false;
    # Using a string is faster than using a file, but may use
    # too much storage.
 
-GRAPE_CLIQUE_C1:=4;
+GRAPE_CLIQUE_C1:=8;
 GRAPE_CLIQUE_C2:=infinity;
-GRAPE_CLIQUE_SETSTAB:=true;
+GRAPE_CLIQUE_SETSTAB:=false;
 
-GRAPE_CCLIQUE:=true;
+GRAPE_CCLIQUE:=false;
    # If true, use the external  cclique  program if it exists and
    # is appropriate to use;  if false then use GAP code only for 
    # clique finding and classifying. 
@@ -3032,7 +3032,7 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 #
 local k,n,i,j,delta,adj,rep,a,b,ans,ans1,ans2,names,W,H,HH,newsofar,
       G,orb,kk,ll,mm,active,nadj,verticesremoved,J,doposition,
-      A,nactive,nactivevector,activecountvector,wt,indorbwtsum,nm,
+      A,nactive,nactivevector,activecountvector,wt,nm,
       CompleteSubgraphsSearch1;
 
 CompleteSubgraphsSearch1 := function(mask,kvector,forbidmask)
@@ -3241,33 +3241,30 @@ if (allmaxes and Length(kvector)=1) or Length(kvector)>1 then
    od;
 fi;
 #
-# Now, if Length(kvector)=1 or kvector[doposition]>1 then
-# order the elements in active{[1..endconsider]} 
+# Now order the elements in active{[1..endconsider]} 
 # and the corresponding elements of nadj.
 #
-if Length(kvector)=1 or kvector[doposition]>1 then
-   for i in [1..endconsider] do
-      minptr:=i;
-      for j in [i+1..endconsider] do
-         if nadj[j]<nadj[minptr] then
-            minptr:=j;
-         fi;
-      od; 
-      a:=active[i];
-      active[i]:=active[minptr];
-      active[minptr]:=a;
-      a:=nadj[i];
-      nadj[i]:=nadj[minptr];
-      nadj[minptr]:=a;
-      mm:=A[active[i]];
-      for j in [i+1..endconsider] do
-         if mm[active[j]] then
-            nadj[j]:=nadj[j]-1;
-         fi;
-      od;
+for i in [1..endconsider] do
+   minptr:=i;
+   for j in [i+1..endconsider] do
+      if nadj[j]<nadj[minptr] then
+         minptr:=j;
+      fi;
+   od; 
+   a:=active[i];
+   active[i]:=active[minptr];
+   active[minptr]:=a;
+   a:=nadj[i];
+   nadj[i]:=nadj[minptr];
+   nadj[minptr]:=a;
+   mm:=A[active[i]];
+   for j in [i+1..endconsider] do
+      if mm[active[j]] then
+         nadj[j]:=nadj[j]-1;
+      fi;
    od;
-fi;
-if k>=0 and partialcolour and kvector[doposition]>1 then 
+od;
+if k>=0 and partialcolour then 
    # We do (perhaps partial) proper vertex-colouring.
    col:=[];
    cw:=[]; # cw[j] will record the largest weight (entry) in the doposition of 
@@ -3399,7 +3396,8 @@ if HasLargerEntry(kvector,nactivevector) then
 fi;
 # now k<0 or nactive >= k > 0.
 G:=gamma.group;
-if Size(G)<=GRAPE_CLIQUE_C1 and Length(active)<=GRAPE_CLIQUE_C2 then
+if (IsTrivial(G) or (Length(kvector)=1 and (allsubs=2 or GRAPE_CLIQUE_SETSTAB) 
+   and Size(G)<=GRAPE_CLIQUE_C1)) and Length(active)<=GRAPE_CLIQUE_C2 then
    # Make input for cclique or use CompleteSubgraphsSearch1, 
    # as appropriate.
    if k>0 and (usecclique or IsString(GRAPE_CCLIQUE)) then
@@ -3577,7 +3575,6 @@ for i in [1..Length(activecountvector)] do
       fi;
    fi;
 od;
-indorbwtsum:=0;
 for j in [1..Length(J)] do 
    i:=1;
    for kk in [2..Length(J)] do 
@@ -3620,93 +3617,84 @@ for j in [1..Length(J)] do
       # with  wt=0. (Note that if  wt=0  then we must have  
       # Length(kvector)>1,  and so  k>=0,  mm=[].)
       # 
-      if k>=0 and Length(mm)=0 and indorbwtsum+wt < kvector[doposition] 
-                           and Length(Intersection(orb,adj))=0 then
-         #
-         # Ignore the independent (active) orbit  orb,  and add  wt  to the 
-         # running total  indorbwtsum.
-         #
-         indorbwtsum:=indorbwtsum+wt;
-      else 
-         newsofar:=Union(sofar,[names[rep]]);
-         if allsubs<>2 and (not allmaxes) and not GRAPE_CLIQUE_SETSTAB then
-            # We can strip out all forbidden vertices since in this case:
-            #   (1) we are stabilizing each successive sofar with 
-            #       (a constituent image of) a subgroup of 
-            #       the previous stabilizer of sofar, and
-            #       so the set of non-forbidden vertices will *always* be 
-            #       invariant under further  gamma.groups;  
-            #   (2) we need not check whether our complete subgraphs are maximal
-            delta:=InducedSubgraph(gamma,
-                                   Filtered(adj,x->not (names[x] in forbidden)),
-                                   ProbablyStabilizer(gamma.group,rep));
+      newsofar:=Union(sofar,[names[rep]]);
+      if allsubs<>2 and (not allmaxes) and not GRAPE_CLIQUE_SETSTAB then
+         # We can strip out all forbidden vertices since in this case:
+         #   (1) we are stabilizing each successive sofar with 
+         #       (a constituent image of) a subgroup of 
+         #       the previous stabilizer of sofar, and
+         #       so the set of non-forbidden vertices will *always* be 
+         #       invariant under further  gamma.groups;  
+         #   (2) we need not check whether our complete subgraphs are maximal
+         delta:=InducedSubgraph(gamma,
+                                 Filtered(adj,x->not (names[x] in forbidden)),
+                                 ProbablyStabilizer(gamma.group,rep));
+          ans1:=CompleteSubgraphsSearch(delta,
+                   kvector-weightvectors[names[rep]],newsofar,[]);
+      elif allsubs<>2 and not GRAPE_CLIQUE_SETSTAB then
+         delta:=InducedSubgraph(gamma,adj,
+                                ProbablyStabilizer(gamma.group,rep));
+         ans1:=CompleteSubgraphsSearch(delta,
+                  kvector-weightvectors[names[rep]],newsofar,
+                  Intersection(delta.names,forbidden));
+      else
+         # allsubs=2 or GRAPE_CLIQUE_SETSTAB
+         delta:=InducedSubgraph(gamma,adj,Stabilizer(gamma.group,rep));
+         HH:=Stabilizer(originalG,newsofar,OnSets);
+         if not IsFixedPoint(HH,names[rep]) then 
+            H:=Action(HH,names{adj},OnPoints);
+            delta:=NewGroupGraph(H,delta);
             ans1:=CompleteSubgraphsSearch(delta,
-                     kvector-weightvectors[names[rep]],newsofar,[]);
-         elif allsubs<>2 and not GRAPE_CLIQUE_SETSTAB then
-            delta:=InducedSubgraph(gamma,adj,
-                                   ProbablyStabilizer(gamma.group,rep));
+                     kvector-weightvectors[names[rep]],newsofar,
+                     Intersection(delta.names,Union(Orbits(HH,forbidden))));
+         else
             ans1:=CompleteSubgraphsSearch(delta,
                      kvector-weightvectors[names[rep]],newsofar,
                      Intersection(delta.names,forbidden));
-         else
-            # allsubs=2 or GRAPE_CLIQUE_SETSTAB
-            delta:=InducedSubgraph(gamma,adj,Stabilizer(gamma.group,rep));
-            HH:=Stabilizer(originalG,newsofar,OnSets);
-            if not IsFixedPoint(HH,names[rep]) then 
-               H:=Action(HH,names{adj},OnPoints);
-               delta:=NewGroupGraph(H,delta);
-               ans1:=CompleteSubgraphsSearch(delta,
-                        kvector-weightvectors[names[rep]],newsofar,
-                        Intersection(delta.names,Union(Orbits(HH,forbidden))));
-            else
-               ans1:=CompleteSubgraphsSearch(delta,
-                        kvector-weightvectors[names[rep]],newsofar,
-                        Intersection(delta.names,forbidden));
-            fi; 
+         fi; 
+      fi;
+      if Length(ans1)>0 then
+         for a in ans1 do
+            Add(a,names[rep]);
+         od;
+         if allsubs=0 then
+             return ans1;
          fi;
-         if Length(ans1)>0 then
+         if allsubs<>2 or Length(ans1)=1 or IsFixedPoint(gamma.group,rep) then
+            # isomorph rejection is unnecessary
             for a in ans1 do
-               Add(a,names[rep]);
+               Add(ans,a);
             od;
-            if allsubs=0 then
-                return ans1;
-            fi;
-            if allsubs<>2 or Length(ans1)=1 or IsFixedPoint(gamma.group,rep) then
-               # isomorph rejection is unnecessary
-               for a in ans1 do
-                  Add(ans,a);
-               od;
-            else
-               # perform isomorph rejection using SmallestImageSet
-               ans2:=List(ans1,x->
-	                SmallestImageSet(gamma.group,Set(W{x}))); 
-	       SortParallel(ans2,ans1);		
-	       Add(ans,ans1[1]);
-               for a in [2..Length(ans1)] do
-		  if ans2[a]<>ans2[a-1] then
-                     # new  gamma.group  orbit representative
-                     Add(ans,ans1[a]);
+         else
+            # perform isomorph rejection using SmallestImageSet
+            ans2:=List(ans1,x->
+              SmallestImageSet(gamma.group,Set(W{x}))); 
+            SortParallel(ans2,ans1);		
+	    Add(ans,ans1[1]);
+            for a in [2..Length(ans1)] do
+	       if ans2[a]<>ans2[a-1] then
+                  # new  gamma.group  orbit representative
+                  Add(ans,ans1[a]);
+               fi;
+            od;
+         fi;
+      fi;
+      if j < Length(J) then
+         AddRowVector(nactivevector,Sum(weightvectors{names{orb}}),-1);
+         if HasLargerEntry(kvector,nactivevector) then
+            break;
+         fi;
+         for kk in [1..Length(J)] do
+            if nadj[kk]<>n then
+               adj:=gamma.adjacencies[J[kk]];
+               for a in orb do
+                  if a in adj then 
+                     nadj[kk]:=nadj[kk]-1;
                   fi;
                od;
             fi;
-         fi;
-         if j < Length(J) then
-            AddRowVector(nactivevector,Sum(weightvectors{names{orb}}),-1);
-            if HasLargerEntry(kvector,nactivevector) then
-               break;
-            fi;
-            for kk in [1..Length(J)] do
-               if nadj[kk]<>n then
-                  adj:=gamma.adjacencies[J[kk]];
-                  for a in orb do
-                     if a in adj then 
-                        nadj[kk]:=nadj[kk]-1;
-                     fi;
-                  od;
-               fi;
-            od;
-            UniteSet(forbidden,names{orb});
-         fi;
+         od;
+         UniteSet(forbidden,names{orb});
       fi;
    fi;
 od;
