@@ -54,7 +54,7 @@ GRAPE_DREADNAUT_INPUT_USE_STRING := false;
    # Using a string is faster than using a file, but may use
    # too much storage.
 
-GRAPE_CLIQUE_C1:=8;
+GRAPE_CLIQUE_C1:=4;
 GRAPE_CLIQUE_C2:=infinity;
 GRAPE_CLIQUE_SETSTAB:=false;
 
@@ -2790,8 +2790,10 @@ BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 #
 #                weightvectors[v^((g)theta)] = weightvectors[v]^g
 #
-# (where the first action is OnPoints, and the second action is the assumed 
-# one of  GG  on integer d-vectors).  
+# (where the first action is OnPoints, and the second action is the assumed
+# one of  GG  on integer d-vectors). If d=1, we may take GG to be gamma.group,
+# theta to be the identity map, and the action of GG on vector positions to
+# be trivial.
 #
 # Note that, in particular, this implies that  Set(weightvectors)  
 # is invariant under  GG,  and that the weight of a vertex is constant 
@@ -2993,6 +2995,7 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 # The parameter  forbidden  is a  gamma.group-invariant  set of
 # vertex-names not in  sofar,  such that, for every element  f  in  forbidden, 
 # all required solutions have already been found containing  sofar union {f}. 
+# No returned clique will have a vertex in the given parameter  forbidden.
 # The value of  forbidden  may be changed by this function.
 #
 # If  allsubs>0  then this function returns a list of complete 
@@ -3000,8 +3003,8 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 # the elements in  sofar,  is a list of solutions containing 
 # a transversal of the distinct  originalG-orbits  of all the originally 
 # required solutions (maximal complete or otherwise) which contain sofar, 
-# except possibly those orbits containing a solution  S  having an  
-# element in  forbidden. 
+# except possibly some orbits containing a solution having an  
+# element in the given parameter  forbidden. 
 #
 # If  allsubs=0  then this function returns (a list of) 
 # at most one complete subgraph, and returns (a list of) one
@@ -3037,8 +3040,8 @@ local k,n,i,j,delta,adj,rep,a,b,ans,ans1,ans2,names,W,H,HH,newsofar,
 
 CompleteSubgraphsSearch1 := function(mask,kvector,forbidmask)
 #
-# This function does the work of  CompleteSubgraphsSearch  
-# when the group associated with the graph is trivial.  
+# This function does the work of  CompleteSubgraphsSearch,   
+# but assuming the group associated to the graph is trivial.
 # The parameters  mask  and  forbidmask  are boolean lists of length  n,  
 # and the global variable  A  has value an  n x n  adjacency matrix 
 # for a graph  gamma  (given as a length  n  list of boolean lists).  
@@ -3241,8 +3244,8 @@ if (allmaxes and Length(kvector)=1) or Length(kvector)>1 then
    od;
 fi;
 #
-# Now order the elements in active{[1..endconsider]} 
-# and the corresponding elements of nadj.
+# Now order the elements in active{[1..endconsider]}, and the corresponding 
+# elements of nadj.
 #
 for i in [1..endconsider] do
    minptr:=i;
@@ -3396,8 +3399,8 @@ if HasLargerEntry(kvector,nactivevector) then
 fi;
 # now k<0 or nactive >= k > 0.
 G:=gamma.group;
-if (IsTrivial(G) or (Length(kvector)=1 and (allsubs=2 or GRAPE_CLIQUE_SETSTAB) 
-   and Size(G)<=GRAPE_CLIQUE_C1)) and Length(active)<=GRAPE_CLIQUE_C2 then
+if (IsTrivial(G) or (Length(kvector)=1 and Size(G)<=GRAPE_CLIQUE_C1)) 
+   and Length(active)<=GRAPE_CLIQUE_C2 then
    # Make input for cclique or use CompleteSubgraphsSearch1, 
    # as appropriate.
    if k>0 and (usecclique or IsString(GRAPE_CCLIQUE)) then
@@ -3646,7 +3649,7 @@ for j in [1..Length(J)] do
             delta:=NewGroupGraph(H,delta);
             ans1:=CompleteSubgraphsSearch(delta,
                      kvector-weightvectors[names[rep]],newsofar,
-                     Intersection(delta.names,Union(Orbits(HH,forbidden))));
+                     Union(Orbits(HH,Intersection(delta.names,forbidden))));
          else
             ans1:=CompleteSubgraphsSearch(delta,
                      kvector-weightvectors[names[rep]],newsofar,
