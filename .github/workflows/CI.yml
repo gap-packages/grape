@@ -60,7 +60,7 @@ jobs:
         with:
           only-needed: true
       - uses: gap-actions/process-coverage@v2
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -79,7 +79,7 @@ jobs:
       - uses: gap-actions/build-pkg@cygwin-v1
       - uses: gap-actions/run-pkg-tests@cygwin-v2
       - uses: gap-actions/process-coverage@cygwin-v2
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
