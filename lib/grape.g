@@ -3581,7 +3581,7 @@ smallorder:=8; # to try to optimize isomorph rejection.
 # If allsubs=2, we perform isomorph rejection via explicit orbits 
 # on cliques when the group associated with the graph under 
 # consideration has  order<=smallorder. 
-smallorder1:=8; # to try to optimise when  CompleteSubgraphsSearch1  
+smallorder1:=4; # to try to optimise when  CompleteSubgraphsSearch1  
 # is used for unweighted graphs. 
 # In  CompleteSubgraphsSearch,  if the graph under consideration 
 # is unweighted, and the group associated with that graph 
