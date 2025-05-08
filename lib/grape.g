@@ -3788,6 +3788,153 @@ end);
 
 BindGlobal("Cliques",CompleteSubgraphs);
 
+HCompleteSubgraphsOfGivenSize := function(arg) 
+#
+# This interface to CompleteSubgraphsMain does the same job
+# as CompleteSubgraphsOfGivenSize, except that parameters are 
+# right-shifted by 1, with the new first parameter being a 
+# list of subgroups of  G:=arg[2].group,  and having the extra 
+# constraint that each returned clique must be H-invariant 
+# for some H in arg[1]. If L:=arg[1]  is a permutation
+# group, then it is replaced by the list  [L]. 
+#
+local gamma,k,kvector,allsubs,allmaxes,partialcolour,weights,weightvectors,
+   L,G,result,H,delta,delta_weightvectors,K,isclique,iscliquemaximal;
+
+isclique := {simplegraph,vertexsubset} -> 
+   IsSet(vertexsubset) and IsSubset([1..simplegraph.order],vertexsubset)
+   and ForAll(vertexsubset, x->
+          Length(Intersection(Adjacency(simplegraph,x),vertexsubset))
+          = Length(vertexsubset)-1);
+
+iscliquemaximal := {simplegraph,clique} -> simplegraph.order=0 or
+   (clique<>[] and Intersection(List(clique,x->Adjacency(simplegraph,x)))=[]); 
+
+if not (Length(arg) in [3..7]) then
+   Error("must have 3, 4, 5, 6 or 7 parameters");
+fi;
+L:=arg[1];
+if IsPermGroup(L) then
+   L:=[L];
+fi;
+gamma:=arg[2];
+k:=arg[3];
+if IsBound(arg[4]) then
+   allsubs:=arg[4];
+else
+   allsubs:=1;
+fi;
+if allsubs=false then
+   allsubs:=0;
+elif allsubs=true then
+   allsubs:=1;
+elif not (allsubs in [0,1,2]) then
+   Error("<arg[4]> must be boolean or in [0,1,2]");
+fi;
+if IsBound(arg[5]) then
+   allmaxes:=arg[5];
+else 
+   allmaxes:=false;
+fi;
+if IsBound(arg[6]) then
+   partialcolour:=arg[6];
+else 
+   partialcolour:=true;
+fi;
+if IsRat(partialcolour) then
+   partialcolour:=true;  # for backward compatibility
+fi;  
+if not (IsList(L) and IsGraph(gamma) and (IsInt(k) or IsList(k)) 
+        and IsBool(allmaxes) and IsBool(partialcolour)
+        and (not IsBound(arg[6]) or IsList(arg[6])) ) then    
+   Error("usage: HCompleteSubgraphsOfGivenSize( <List> or <PermGroup>, ",
+        "<Graph>, <Int> or <List> ",
+	"[, <Int> or <Bool> [, <Bool> [, <Bool> or <Rat> [, <List> ]]]] )");
+fi;
+G:=gamma.group;
+if not (ForAll(L,IsPermGroup) and ForAll(L,x->IsSubgroup(G,x))) then
+   Error("Every element of <L> must be a subgroup of <gamma>.group");
+fi;
+if not IsSimpleGraph(gamma) then 
+   Error("<gamma> must be a simple graph");
+fi;
+if IsInt(k) then
+   kvector:=[k];
+else
+   kvector:=k;
+fi;
+if Length(kvector)=0 or ForAny(kvector,x->x<0) then 
+   Error("<kvector> must be a non-empty list of non-negative integers");
+fi;
+if IsBound(arg[7]) then
+   weights:=arg[7];
+   if Length(weights)<>gamma.order then
+      Error("<weights> not of length <gamma>.order");
+   fi;
+   if Length(weights)>0 and IsInt(weights[1]) then
+      if ForAny(weights,w->not IsInt(w) or w<=0) then
+          Error("all weights must be positive integers (or all lists)");
+      elif ForAny(GeneratorsOfGroup(gamma.group),g->
+   	     ForAny([1..gamma.order],i->weights[i^g]<>weights[i])) then
+         Error("integer vertex-weights not <gamma>.group-invariant");
+      fi;
+      weightvectors:=List(weights,x->[x]);
+   else
+      weightvectors:=weights;
+   fi;
+else
+   weightvectors:=List([1..gamma.order],x->[1]);
+fi;
+if ForAny(weightvectors,x->not IsList(x) or Length(x)<>Length(kvector)) then
+   Error("Each weight-vector must be a list of the same length as <kvector>");
+elif ForAny(weightvectors,x->ForAny(x,y->not IsInt(y) or y<0)
+        or ForAll(x,y->y=0)) then
+   Error("Each weight-vector must be a list of ",
+         "non-zero vectors of non-negative integers");
+fi;
+if ForAny(L,IsTrivial) then
+   return CompleteSubgraphsMain(gamma,kvector,allsubs,allmaxes,
+             partialcolour,weightvectors,[1..Length(kvector)]);
+fi;
+result:=[]; # initialization
+L:=ShallowCopy(L);
+SortBy(L,Size);
+L:=Reversed(L);
+gamma:=ShallowCopy(gamma);
+AssignVertexNames(gamma,Immutable([1..gamma.order]));
+for H in L do
+   delta:=CollapsedCompleteOrbitsGraph(H,gamma,Normalizer(G,H));
+   delta_weightvectors:=
+      List([1..delta.order],i->Sum(weightvectors{delta.names[i]}));
+   if allsubs=0 and (not allmaxes) then
+      K:=CompleteSubgraphsMain(delta,kvector,0,false,
+            partialcolour,delta_weightvectors,[1..Length(kvector)]);
+   else
+      K:=CompleteSubgraphsMain(delta,kvector,2,allmaxes,
+            partialcolour,delta_weightvectors,[1..Length(kvector)]);
+   fi;
+   K:=Set(K,x->Union(List(x,y->VertexName(delta,y))));
+   #
+   # Check
+   #
+   if not ForAll(K,x->isclique(gamma,x)) then
+      Error("BUG: all elements of K should be cliques of gamma");
+   fi;
+   if allmaxes then
+      K:=Filtered(K,x->iscliquemaximal(gamma,x));
+   fi;
+   if allsubs=0 and Length(K)>0 then
+      return [K[1]];
+   elif allsubs=2 then
+      K:=Set(K,x->SmallestImageSet(G,x));
+   fi;
+   UniteSet(result,K);
+od; 
+return result;
+end;
+
+BindGlobal("HCliquesOfGivenSize",HCompleteSubgraphsOfGivenSize);
+
 BindGlobal("CayleyGraph",function(arg)
 #
 # Given a group  G=arg[1]  and a list  gens=arg[2]  of 
