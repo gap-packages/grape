@@ -3788,24 +3788,18 @@ end);
 
 BindGlobal("Cliques",CompleteSubgraphs);
 
-HCompleteSubgraphsOfGivenSize := function(arg) 
+BindGlobal("HCompleteSubgraphsOfGivenSize",function(arg) 
 #
 # This interface to CompleteSubgraphsMain does the same job
 # as CompleteSubgraphsOfGivenSize, except that parameters are 
-# right-shifted by 1, with the new first parameter being a 
-# list of subgroups of  G:=arg[2].group,  and having the extra 
-# constraint that each returned clique must be H-invariant 
-# for some H in arg[1]. If L:=arg[1]  is a permutation
-# group, then it is replaced by the list  [L]. 
+# right-shifted by 1, with the new first parameter  L:=arg[1] 
+# being a list of subgroups of  G:=arg[2].group,  and having 
+# the extra constraint that each returned clique must be 
+# H-invariant for some H in L. (If L is a permutation
+# group, then it is first replaced by the list  [L].)
 #
-local gamma,k,kvector,allsubs,allmaxes,partialcolour,weights,weightvectors,
-   L,G,result,H,delta,delta_weightvectors,K,isclique,iscliquemaximal;
-
-isclique := {simplegraph,vertexsubset} -> 
-   IsSet(vertexsubset) and IsSubset([1..simplegraph.order],vertexsubset)
-   and ForAll(vertexsubset, x->
-          Length(Intersection(Adjacency(simplegraph,x),vertexsubset))
-          = Length(vertexsubset)-1);
+local L,gamma,kvector,allsubs,allmaxes,partialcolour,weights,weightvectors,
+   G,result,H,delta,delta_weightvectors,K,iscliquemaximal;
 
 iscliquemaximal := {simplegraph,clique} -> simplegraph.order=0 or
    (clique<>[] and Intersection(List(clique,x->Adjacency(simplegraph,x)))=[]); 
@@ -3818,7 +3812,10 @@ if IsPermGroup(L) then
    L:=[L];
 fi;
 gamma:=arg[2];
-k:=arg[3];
+kvector:=arg[3];
+if IsInt(kvector) then
+   kvector:=[kvector];
+fi;
 if IsBound(arg[4]) then
    allsubs:=arg[4];
 else
@@ -3843,10 +3840,10 @@ else
 fi;
 if IsRat(partialcolour) then
    partialcolour:=true;  # for backward compatibility
-fi;  
-if not (IsList(L) and IsGraph(gamma) and (IsInt(k) or IsList(k)) 
-        and IsBool(allmaxes) and IsBool(partialcolour)
-        and (not IsBound(arg[6]) or IsList(arg[6])) ) then    
+fi; 
+if not (IsList(L) and IsGraph(gamma) and IsList(kvector) 
+        and IsInt(allsubs) and IsBool(allmaxes) and IsBool(partialcolour)
+        and (not IsBound(arg[7]) or IsList(arg[7])) ) then    
    Error("usage: HCompleteSubgraphsOfGivenSize( <List> or <PermGroup>, ",
         "<Graph>, <Int> or <List> ",
 	"[, <Int> or <Bool> [, <Bool> [, <Bool> or <Rat> [, <List> ]]]] )");
@@ -3857,11 +3854,6 @@ if not (ForAll(L,IsPermGroup) and ForAll(L,x->IsSubgroup(G,x))) then
 fi;
 if not IsSimpleGraph(gamma) then 
    Error("<gamma> must be a simple graph");
-fi;
-if IsInt(k) then
-   kvector:=[k];
-else
-   kvector:=k;
 fi;
 if Length(kvector)=0 or ForAny(kvector,x->x<0) then 
    Error("<kvector> must be a non-empty list of non-negative integers");
@@ -3896,12 +3888,12 @@ if ForAny(L,IsTrivial) then
    return CompleteSubgraphsMain(gamma,kvector,allsubs,allmaxes,
              partialcolour,weightvectors,[1..Length(kvector)]);
 fi;
-result:=[]; # initialization
+result:=[];  # initialization
 L:=ShallowCopy(L);
 SortBy(L,Size);
 L:=Reversed(L);
 gamma:=ShallowCopy(gamma);
-AssignVertexNames(gamma,Immutable([1..gamma.order]));
+AssignVertexNames(gamma,[1..gamma.order]);
 for H in L do
    delta:=CollapsedCompleteOrbitsGraph(H,gamma,Normalizer(G,H));
    delta_weightvectors:=
@@ -3915,11 +3907,16 @@ for H in L do
    fi;
    K:=Set(K,x->Union(List(x,y->VertexName(delta,y))));
    #
-   # Check
+   # Check. Could be removed later if all works well.
    #
-   if not ForAll(K,x->isclique(gamma,x)) then
-      Error("BUG: all elements of K should be cliques of gamma");
+   if not ForAll(K,x->Sum(weightvectors{x})=kvector 
+             and IsCompleteGraph(InducedSubgraph(gamma,x))) then
+      Error("BUG: all elements of K should be cliques of gamma",
+            " whose weight-vectors sum to kvector");
    fi;
+   #
+   # End of check.
+   #
    if allmaxes then
       K:=Filtered(K,x->iscliquemaximal(gamma,x));
    fi;
@@ -3931,7 +3928,7 @@ for H in L do
    UniteSet(result,K);
 od; 
 return result;
-end;
+end);
 
 BindGlobal("HCliquesOfGivenSize",HCompleteSubgraphsOfGivenSize);
 
