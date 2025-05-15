@@ -3695,7 +3695,7 @@ else
 fi;
 if IsRat(partialcolour) then
    partialcolour:=true;  # for backward compatibility
-fi;  
+fi;
 if not (IsGraph(gamma) and (IsInt(k) or IsList(k)) and IsBool(allmaxes) 
                        and IsBool(partialcolour)
         and (not IsBound(arg[6]) or IsList(arg[6])) ) then    
@@ -3736,8 +3736,12 @@ if IsBound(arg[6]) then
 else
    weightvectors:=List([1..gamma.order],x->[1]);
 fi;
-if ForAny(weightvectors,x->Length(x)<>Length(kvector)) then
-   Error("All weight-vectors must be the same length as <kvector>");
+if ForAny(weightvectors,x->not IsList(x) or Length(x)<>Length(kvector)) then
+   Error("Each weight-vector must be a list of the same length as <kvector>");
+elif ForAny(weightvectors,x->ForAny(x,y->not IsInt(y) or y<0)
+        or ForAll(x,y->y=0)) then
+   Error("Each weight-vector must be a list of ",
+         "non-zero vectors of non-negative integers");
 fi;
 return CompleteSubgraphsMain(gamma,kvector,allsubs,allmaxes,partialcolour,
                              weightvectors,[1..Length(kvector)]);
@@ -3909,8 +3913,8 @@ for H in L do
    #
    # Check. Could be removed later if all works well.
    #
-   if not ForAll(K,x->Sum(weightvectors{x})=kvector 
-             and IsCompleteGraph(InducedSubgraph(gamma,x))) then
+   if not (ForAll(K,x->Sum(weightvectors{x})=kvector 
+             and IsCompleteGraph(InducedSubgraph(gamma,x)))) then
       Error("BUG: all elements of K should be cliques of gamma",
             " whose weight-vectors sum to kvector");
    fi;
@@ -4252,12 +4256,12 @@ BindGlobal("GRAPE_ExactSetCover",function(arg)
 # of  [1..n]  by elements from  Concatenation(Orbits(G,blocks,OnSets)),  
 # if such a cover exists, and returns  `fail'  otherwise. 
 # 
-local G,blocks,n,H,gamma,hom,i,j,wts,K,N;
+local G,blocks,n,H,gamma,hom,i,j,wts,K,leastreps,m,positions;
 if not Length(arg) in [3,4] then
    Error("GRAPE_ExactSetCover should have 3 or 4 arguments");
 fi;
 n:=arg[3];
-if not IsInt(n) and n>=0 then
+if not (IsInt(n) and n>=0) then
    Error("<n> must be a non-negative integer");
 fi;
 G:=arg[1];
@@ -4265,8 +4269,8 @@ if not (IsPermGroup(G) and LargestMovedPoint(G)<=n) then
    Error("<G> must be a permutation group on [1..<n>]"); 
 fi;
 blocks:=arg[2];
-if not IsList(blocks) and 
-   ForAll(blocks,x->IsSet(x) and x<>[] and IsSubset([1..n],x)) then
+if not (IsList(blocks) and 
+   ForAll(blocks,x->IsSet(x) and x<>[] and IsSubset([1..n],x))) then
    Error("<blocks> must be a list of non-empty subsets of [1..<n>]");
 fi;
 if IsBound(arg[4]) then
@@ -4285,21 +4289,28 @@ fi;
 gamma:=Graph(G,blocks,OnSets,function(x,y) return Intersection(x,y)=[]; end);
 if Size(H)>1 then
    hom:=ActionHomomorphism(G,VertexNames(gamma),OnSets);
-   N:=Image(hom,Normalizer(G,H));
-   H:=Image(hom,H);
-   gamma:=CollapsedCompleteOrbitsGraph(H,gamma,N);
+   gamma:=CollapsedCompleteOrbitsGraph(Image(hom,H),gamma,
+      Image(hom,Normalizer(G,H)));
 else
    AssignVertexNames(gamma,List(VertexNames(gamma),x->[x]));
 fi;
 wts:=[];
+leastreps:=Set(OrbitsDomain(H,[1..n]),Minimum);
+m:=Length(leastreps);
 for i in [1..gamma.order] do
-   wts[i]:=ListWithIdenticalEntries(n,0); 
-   for j in Concatenation(gamma.names[i]) do 
+   wts[i]:=ListWithIdenticalEntries(m,0); 
+   if Size(H)>1 then
+      positions:=List(Intersection(leastreps,Union(gamma.names[i])),
+         rep->PositionSorted(leastreps,rep));
+   else
+      positions:=gamma.names[i][1];
+   fi;
+   for j in positions do
       wts[i][j]:=1;
    od;
 od;
-K:=CompleteSubgraphsOfGivenSize(gamma,ListWithIdenticalEntries(n,1),
-   0,true,true,wts);
+K:=CompleteSubgraphsOfGivenSize(gamma,ListWithIdenticalEntries(m,1),
+   0,true,false,wts);
 if K=[] then
    return fail;
 else
