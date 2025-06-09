@@ -2740,7 +2740,7 @@ return delta;
 end);
 
 BindGlobal("CompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
-                                       partialcolour,weightvectors,dovector)
+                                      partialcolour,weightvectors,dovector)
 #
 # This function, not for the user, subsumes the tasks formerly 
 # done by  CompleteSubgraphs  and  CompleteSubgraphsOfGivenSize. 
@@ -3666,13 +3666,13 @@ BindGlobal("GCompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 #
 # This function, not for the user, does what CompleteSubgraphsMain
 # does, but with the additional (helpful) constraint that every 
-# returned clique is G-invariant, where the additional parameter G
-# is a subgroup of gamma.group.
+# returned clique is G-invariant, where the additional parameter
+# G is a given subgroup of gamma.group.
 # 
 # Some notes:
 #
 # When  G  is trivial, the return value of this function is 
-# that specified by  CompleteSubgraphsMain. 
+# that specified by  CompleteSubgraphsMain (without the parameter G). 
 #
 # If  G  is *not* trivial and  allsubs=1,  then the
 # returned set of cliques will be (exactly) a set of
@@ -3686,13 +3686,27 @@ BindGlobal("GCompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 # If  allmaxes=true  the constraint holds that a returned
 # G-invariant clique must be maximal *in gamma*.
 # 
-local iscliquemaximal,delta,delta_weightvectors,K,clique,A,L,S,smallest;
+local IsClique,IsCliqueMaximal,
+   delta,delta_weightvectors,K,clique,A,L,S,smallest;
 
-iscliquemaximal := function(simplegraph,clique)
+IsClique := function(simplegraph,vertexsubset)
+#
+# Assumes that <simplegraph> is a simple graph and that <vertexsubset>
+# is a subset of the vertices of this graph. This function then returns 
+# `true' if <vertexsubset> is a clique of <simplegraph>, and `false' if not.
+#
+if not IsSet(vertexsubset) then
+   Error("<vertexsubset> must be a set");
+fi;
+return ForAll(vertexsubset,x->
+   Size(Intersection(Adjacency(simplegraph,x),vertexsubset))=Length(vertexsubset)-1);
+end;
+
+IsCliqueMaximal := function(simplegraph,clique)
 #
 # Assumes that <simplegraph> is a simple graph and that <clique>
-# is a clique of this graph. This function then returns true if 
-# <clique> is a maximal clique of <simplegraph>, and false if not.
+# is a clique of this graph. This function then returns `true' if 
+# <clique> is a maximal clique of <simplegraph>, and `false' if not.
 #
 if simplegraph.order=0 then
    return true;
@@ -3713,29 +3727,41 @@ gamma:=ShallowCopy(gamma);
 AssignVertexNames(gamma,[1..gamma.order]);
 delta:=CollapsedCompleteOrbitsGraph(G,gamma,Normalizer(gamma.group,G));
 if Length(kvector)=1 and kvector[1]<0 then
-   delta_weightvectors:=List([1..delta.order],x->[1]);
+   delta_weightvectors:=List([1..delta.order],i->[1]);
 else 
    # computing cliques of given size
    delta_weightvectors:=
       List([1..delta.order],i->Sum(weightvectors{delta.names[i]}));
 fi;
-if allsubs=0 and not allmaxes then
-   K:=CompleteSubgraphsMain(delta,kvector,0,false,true,delta_weightvectors,dovector);
-else
-   K:=CompleteSubgraphsMain(delta,kvector,2,allmaxes,true,delta_weightvectors,dovector);
-fi;
+if allsubs=0 then
+   K:=CompleteSubgraphsMain(delta,kvector,0,allmaxes,true,delta_weightvectors,dovector);
+   if K=[] then
+      return [];
+   fi;
+   clique:=Union(List(K[1],y->VertexName(delta,y)));
+   if not IsClique(gamma,clique) then
+      Error("<clique> is not a clique of <gamma>");
+   fi;
+   if not allmaxes or IsCliqueMaximal(gamma,clique) then
+      return [clique];
+   fi;
+fi; 
+K:=CompleteSubgraphsMain(delta,kvector,2,allmaxes,true,delta_weightvectors,dovector);
 K:=Set(K,x->Union(List(x,y->VertexName(delta,y))));
+if not ForAll(K,x->IsClique(gamma,x)) then
+   Error("not all elements of <K> are cliques of <gamma>");
+fi;
 if allmaxes then
    if allsubs=0 then
-      clique:=First(K,x->iscliquemaximal(gamma,x));
+      # Did we find a maximal clique of gamma?
+      clique:=First(K,x->IsCliqueMaximal(gamma,x));
       if clique=fail then
          return [];
       else
          return [clique];
       fi;
-   else
-      K:=Filtered(K,x->iscliquemaximal(gamma,x));
    fi;
+   K:=Filtered(K,x->IsCliqueMaximal(gamma,x));
 fi;
 if allsubs<>2 or Length(K)<=1 or IsNormal(gamma.group,G) then
    # No further gamma.group-equivalence checks are required.
@@ -3750,7 +3776,7 @@ S:=[];
 for clique in K do
    A:=Stabilizer(gamma.group,clique,OnSets);
    if Size(G)=Size(A) or IsCyclic(A) or
-      (Gcd(Size(G),Size(A)/Size(G))=1 and (IsNilpotentGroup(G) or IsSolvableGroup(A))) then 
+      (Gcd(Size(G),Size(A)/Size(G))=1 and (IsSupersolvableGroup(G) or IsSolvableGroup(A))) then 
       # G is a "friendly" subgroup of A.
       # See: L.H. Soicher, On classifying objects with specified 
       # groups of automorphisms, friendly subgroups, and Sylow tower 
@@ -3760,11 +3786,12 @@ for clique in K do
       # It follows that isomorph-rejection of gamma.group-images 
       # of  clique  has already been handled by the normalizer
       # in gamma.group of G, and so no further isomorph-rejection 
-      # (using gamma.group) is needed.
+      # (using gamma.group) is needed w.r.t.  clique.
       Add(L,clique);
    else
       smallest:=SmallestImageSet(gamma.group,clique,A);
       if not (smallest in S) then 
+         # New isomorphism class representative.
          AddSet(S,smallest);
          Add(L,clique);
       fi;
@@ -3818,13 +3845,10 @@ if not (IsGraph(gamma) and (IsInt(k) or IsList(k))
         and (not IsBound(arg[6]) or IsList(arg[6])) 
         and IsPermGroup(G) ) then    
    Error("usage: CompleteSubgraphsOfGivenSize( <Graph>, <Int> or <List> ",
-	"[, <Int> or <Bool> [, <Bool> [, <Bool> or <Rat> [, <List> ", 
-        "[, <PermGroup> ]]]]] )");
+      "[, <Int> or <Bool> [, <Bool> [, <Bool> or <Rat> [, <List> ", 
+      "[, <PermGroup> ]]]]] )");
 fi;
 if IsInt(k) then
-   if k<0 then 
-      Error("<k> must be non-negative");
-   fi;
    kvector:=[k];
 else
    kvector:=k;
@@ -3859,14 +3883,14 @@ if ForAny(weightvectors,x->not IsList(x) or Length(x)<>Length(kvector)) then
    Error("Each weight-vector must be a list of the same length as <kvector>");
 elif ForAny(weightvectors,x->ForAny(x,y->not IsInt(y) or y<0)
         or ForAll(x,y->y=0)) then
-   Error("Each weight-vector must be a list of ",
-         "non-zero vectors of non-negative integers");
+   Error("Each weight-vector must be a ",
+      "non-zero vector of non-negative integers");
 fi;
 if not IsSubgroup(gamma.group,G) then
    Error("<G> must be a subgroup of <gamma>.group");
 fi;
 return GCompleteSubgraphsMain(gamma,kvector,allsubs,allmaxes,partialcolour,
-                             weightvectors,[1..Length(kvector)],G);
+          weightvectors,[1..Length(kvector)],G);
 end);
 
 BindGlobal("CliquesOfGivenSize",CompleteSubgraphsOfGivenSize);
@@ -3914,7 +3938,7 @@ if not IsSubgroup(gamma.group,G) then
    Error("<G> must be a subgroup of <gamma>.group");
 fi;
 return GCompleteSubgraphsMain(gamma,[k],allsubs,allmaxes,
-         true,List([1..gamma.order],x->[1]),[1],G); 
+          true,List([1..gamma.order],x->[1]),[1],G); 
 end);
 
 BindGlobal("Cliques",CompleteSubgraphs);
