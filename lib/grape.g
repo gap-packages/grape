@@ -3661,8 +3661,8 @@ fi;
 return K;
 end);
 
-BindGlobal("GCompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
-                                       partialcolour,weightvectors,dovector,G)
+BindGlobal("GCompleteSubgraphsMain",function(G,gamma,kvector,allsubs,allmaxes,
+                                       partialcolour,weightvectors,dovector)
 #
 # This function, not for the user, does what CompleteSubgraphsMain
 # does, but with the additional (helpful) constraint that every 
@@ -3672,7 +3672,7 @@ BindGlobal("GCompleteSubgraphsMain",function(gamma,kvector,allsubs,allmaxes,
 # Some notes:
 #
 # When  G  is trivial, the return value of this function is 
-# that specified by  CompleteSubgraphsMain (without the parameter G). 
+# that specified by  CompleteSubgraphsMain  (without the parameter G). 
 #
 # If  G  is *not* trivial and  allsubs=1,  then the
 # returned set of cliques will be (exactly) a set of
@@ -3804,9 +3804,18 @@ BindGlobal("CompleteSubgraphsOfGivenSize",function(arg)
 #
 # Interface to GCompleteSubgraphsMain.
 #
-local gamma,k,kvector,allsubs,allmaxes,partialcolour,weights,weightvectors,G;
+local gamma,k,kvector,allsubs,allmaxes,partialcolour,weights,weightvectors,G,i;
 if not (Length(arg) in [2..7]) then
    Error("must have 2, 3, 4, 5, 6 or 7 parameters");
+fi;
+if IsPermGroup(arg[1]) then
+   G:=arg[1];
+   for i in [1..Length(arg)-1] do
+      arg[i]:=arg[i+1];
+   od;
+   Unbind(arg[Length(arg)]);
+else
+   G:=Group(());
 fi;
 gamma:=arg[1];
 k:=arg[2];
@@ -3820,7 +3829,7 @@ if allsubs=false then
 elif allsubs=true then
    allsubs:=1;
 elif not (allsubs in [0,1,2]) then
-   Error("<arg[3]> must be boolean or in [0,1,2]");
+   Error("<allsubs> must be boolean or in [0,1,2]");
 fi;
 if IsBound(arg[4]) then
    allmaxes:=arg[4];
@@ -3835,18 +3844,12 @@ fi;
 if IsRat(partialcolour) then
    partialcolour:=true;  # for backward compatibility
 fi;
-if IsBound(arg[7]) then
-   G:=arg[7];
-else
-   G:=Group(());
-fi;
-if not (IsGraph(gamma) and (IsInt(k) or IsList(k)) 
-        and IsBool(allmaxes) and IsBool(partialcolour)
-        and (not IsBound(arg[6]) or IsList(arg[6])) 
-        and IsPermGroup(G) ) then    
-   Error("usage: CompleteSubgraphsOfGivenSize( <Graph>, <Int> or <List> ",
-      "[, <Int> or <Bool> [, <Bool> [, <Bool> or <Rat> [, <List> ", 
-      "[, <PermGroup> ]]]]] )");
+if not ( IsGraph(gamma) and (IsInt(k) or IsList(k)) 
+         and IsBool(allmaxes) and IsBool(partialcolour)
+         and (not IsBound(arg[6]) or IsList(arg[6])) ) then
+   Error("usage: CompleteSubgraphsOfGivenSize( [ <PermGroup>, ] ",
+         "<Graph>, <Int> or <List> [, <Int> or <Bool> [, <Bool> ",
+         "[, <Bool> or <Rat> [, <List> ]]]] )");
 fi;
 if IsInt(k) then
    kvector:=[k];
@@ -3889,8 +3892,8 @@ fi;
 if not IsSubgroup(gamma.group,G) then
    Error("<G> must be a subgroup of <gamma>.group");
 fi;
-return GCompleteSubgraphsMain(gamma,kvector,allsubs,allmaxes,partialcolour,
-          weightvectors,[1..Length(kvector)],G);
+return GCompleteSubgraphsMain(G,gamma,kvector,allsubs,allmaxes,partialcolour,
+          weightvectors,[1..Length(kvector)]);
 end);
 
 BindGlobal("CliquesOfGivenSize",CompleteSubgraphsOfGivenSize);
@@ -3899,10 +3902,19 @@ BindGlobal("CompleteSubgraphs",function(arg)
 #
 # Interface to  GCompleteSubgraphsMain. 
 #
-local gamma,k,allsubs,allmaxes,G;
+local gamma,k,allsubs,allmaxes,G,i;
 
 if not (Length(arg) in [1..4]) then
    Error("must have 1, 2, 3 or 4 parameters");
+fi;
+if IsPermGroup(arg[1]) then
+   G:=arg[1];
+   for i in [1..Length(arg)-1] do
+      arg[i]:=arg[i+1];
+   od;
+   Unbind(arg[Length(arg)]);
+else
+   G:=Group(());
 fi;
 gamma:=arg[1];
 if IsBound(arg[2]) then
@@ -3920,16 +3932,11 @@ if allsubs=false then
 elif allsubs=true then
    allsubs:=1;
 elif not (allsubs in [0,1,2]) then
-   Error("<arg[3]> must be boolean or in [0,1,2]");
+   Error("<allsubs> must be boolean or in [0,1,2]");
 fi;
 allmaxes:=(k<0); 
-if IsBound(arg[4]) then
-   G:=arg[4];
-else
-   G:=Group(());
-fi;
-if not (IsGraph(gamma) and IsInt(k) and IsPermGroup(G)) then
-   Error("usage: CompleteSubgraphs( <Graph> [,<Int> [,<Int> or <Bool> [,<PermGroup> ]]] )");
+if not (IsGraph(gamma) and IsInt(k)) then
+   Error("usage: CompleteSubgraphs( [<PermGroup>, ] <Graph> [,<Int> [,<Int> or <Bool> ]] )");
 fi;
 if not IsSimpleGraph(gamma) then 
    Error("<gamma> not a simple graph");
@@ -3937,8 +3944,8 @@ fi;
 if not IsSubgroup(gamma.group,G) then
    Error("<G> must be a subgroup of <gamma>.group");
 fi;
-return GCompleteSubgraphsMain(gamma,[k],allsubs,allmaxes,
-          true,List([1..gamma.order],x->[1]),[1],G); 
+return GCompleteSubgraphsMain(G,gamma,[k],allsubs,allmaxes,
+          true,List([1..gamma.order],x->[1]),[1]); 
 end);
 
 BindGlobal("Cliques",CompleteSubgraphs);
