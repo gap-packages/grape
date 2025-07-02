@@ -67,7 +67,7 @@ jobs:
   test-cygwin:
     name: "master cygwin64"
     # if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
-    runs-on: windows-2019
+    runs-on: windows-2022
     env:
       CHERE_INVOKING: 1
     steps:
