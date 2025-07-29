@@ -156,6 +156,9 @@ gap> ChromaticNumber(JohnsonGraph(7,2));
 \>CompleteSubgraphs( <gamma> )
 \>CompleteSubgraphs( <gamma>, <k> )
 \>CompleteSubgraphs( <gamma>, <k>, <alls> )
+\>CompleteSubgraphs( <G>, <gamma> )
+\>CompleteSubgraphs( <G>, <gamma>, <k> )
+\>CompleteSubgraphs( <G>, <gamma>, <k>, <alls> )
 
 Let <gamma> be a simple graph and <k> an integer. This function returns
 a set <K> of complete subgraphs of <gamma>, where a complete subgraph is
@@ -170,30 +173,45 @@ size, and can also be used to determine the (maximal or otherwise)
 complete subgraphs with given vertex-weight sum in a vertex-weighted
 graph.
 
+The optional parameter <G> must be a subgroup of `<gamma>.group' and
+specifies the (often powerful) constraint that each returned complete
+subgraph must be <G>-invariant. The default for <G> is the trivial
+permutation group, which imposes no constraint.
+
 The optional parameter <alls> controls how many complete subgraphs are
 returned. The valid values for <alls> are 0, 1 (the default), and 2.
 
-*Warning:* Using the default value of 1 for <alls> (see below) means that
-more than one element may be returned for some `<gamma>.group' orbit(s)
-of the required complete subgraphs.  To obtain just one element from each
-`<gamma>.group' orbit of the required complete subgraphs, you must give
-the value 2 to the parameter <alls>.
+*Warning:* Using the default value of 1 for <alls> (see below) means
+that the elements of the returned set need not be inequivalent under
+`<gamma>.group'. To obtain just one element from each `<gamma>.group'
+orbit of the required complete subgraphs, you must give the value 2 to
+the parameter <alls>.
 
-If <alls>=0 (or `false' for backward compatibility) then <K> will contain
-at most one element. In this case, if <k> is negative then <K> will
-contain just one maximal complete subgraph, and if <k> is non-negative
-then <K> will contain a complete subgraph of size <k> if and only if
-such a subgraph is contained in <gamma>.
+If <alls>=0 (or `false' for backward compatibility) then the returned
+set <K> will contain at most one element. In this case, if <k> is
+negative then <K> will contain just one <G>-invariant maximal complete
+subgraph of <gamma> if and only if such a subgraph exists, and if <k>
+is non-negative then <K> will contain a <G>-invariant complete subgraph
+of size <k> of <gamma> if and only if such a subgraph exists.
 
-If <alls>=1 (or `true' for backward compatibility) then <K> will contain
-(perhaps properly) a set of `<gamma>.group' orbit-representatives of
-the maximal (if <k> is negative) or size <k> (if <k> is non-negative)
+If <alls>=1 (or `true' for backward compatibility) and <G> is trivial
+then <K> will contain (perhaps properly) a set of `<gamma>.group'
+orbit-representatives of the maximal (if <k> is negative) or size <k>
+(if <k> is non-negative) complete subgraphs of <gamma>.
+
+If <alls>=1 (or `true' for backward compatibility) and <G> is non-trivial
+then <K> will be a set of representatives for the orbits of the normalizer
+of <G> in `<gamma>.group', for its action on the <G>-invariant maximal
+(if <k> is negative) or <G>-invariant size <k> (if <k> is non-negative)
 complete subgraphs of <gamma>.
 
-If <alls>=2 then <K> will be a set of `<gamma>.group'
+If <alls>=2 then <K> will consist of the <G>-invariant maximal (if <k> is
+negative) or the <G>-invariant size <k> (if <k> is non-negative) complete
+subgraphs of <gamma>, classified up to the action of `<gamma>.group'.
+(This option can be more costly than when <alls>=1.)  In particular, if
+<alls>=2 and <G> is trivial then <K> will be a set of `<gamma>.group'
 orbit-representatives of the maximal (if <k> is negative) or size <k>
-(if <k> is non-negative) complete subgraphs of <gamma>.  This option
-can be more costly than when <alls>=1.
+(if <k> is non-negative) complete subgraphs of <gamma>.
 
 Before applying `CompleteSubgraphs', one may want to associate the full
 automorphism group of <gamma> with <gamma>, via `<gamma> :=
@@ -218,6 +236,13 @@ gap>  CompleteSubgraphs(gamma,3,2);
 [ [ 1, 2, 3 ], [ 1, 2, 5 ] ]
 gap> CompleteSubgraphs(gamma,-1,0);
 [ [ 1, 2, 5 ] ]
+gap> G:=Subgroup(gamma.group,[(2,5)(3,6)(4,7)]);;
+gap> CompleteSubgraphs(G,gamma,-1);
+[ [ 1, 2, 5 ], [ 2, 5, 8, 9 ], [ 8 .. 10 ] ]
+gap> CompleteSubgraphs(G,gamma,-1,2);
+[ [ 1, 2, 5 ], [ 2, 5, 8, 9 ] ]
+gap> CompleteSubgraphs(G,gamma,4);
+[ [ 2, 5, 8, 9 ] ]
 \endexample
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -228,6 +253,11 @@ gap> CompleteSubgraphs(gamma,-1,0);
 \>CompleteSubgraphsOfGivenSize( <gamma>, <k>, <alls>, <maxi> )
 \>CompleteSubgraphsOfGivenSize( <gamma>, <k>, <alls>, <maxi>, <col> )
 \>CompleteSubgraphsOfGivenSize( <gamma>, <k>, <alls>, <maxi>, <col>, <wts> ) 
+\>CompleteSubgraphsOfGivenSize( <G>, <gamma>, <k> )
+\>CompleteSubgraphsOfGivenSize( <G>, <gamma>, <k>, <alls> )
+\>CompleteSubgraphsOfGivenSize( <G>, <gamma>, <k>, <alls>, <maxi> )
+\>CompleteSubgraphsOfGivenSize( <G>, <gamma>, <k>, <alls>, <maxi>, <col> )
+\>CompleteSubgraphsOfGivenSize( <G>, <gamma>, <k>, <alls>, <maxi>, <col>, <wts> ) 
 
 Let <gamma> be a simple graph, and <k> a non-negative integer or vector
 of non-negative integers.  This function returns a set <K> (possibly
@@ -239,71 +269,90 @@ subgraph whose vertex-weights sum to <k>.  The exact nature of the set
 <K> depends on the values of the parameters supplied to this function. A
 complete subgraph is represented by its vertex-set.
 
+The optional parameter <G> must be a subgroup of `<gamma>.group' and
+specifies the (often powerful) constraint that each returned complete
+subgraph must be <G>-invariant. The default for <G> is the trivial
+permutation group, which imposes no constraint.
+
+The optional parameter <maxi> controls whether only maximal complete
+subgraphs of size <k> are returned. (A *maximal complete subgraph* of 
+<gamma> is a complete subgraph of <gamma> which is not properly contained 
+in another complete subgraph of <gamma>.) The default is `false', which 
+means that non-maximal as well as maximal <G>-invariant complete subgraphs 
+of size <k> may be returned. If <maxi>=`true' then only <G>-invariant maximal
+complete subgraphs of size <k> are returned. (Previous to version 4.1
+of {\GRAPE}, <maxi>=`true' meant that it was assumed (but not checked)
+that all complete subgraphs of size <k> were maximal.)
+
 The optional parameter <alls> controls how many complete subgraphs are
 returned. The valid values for <alls> are 0, 1 (the default), and 2.
 
-*Warning:* Using the default value of 1 for <alls> (see below) means that
-more than one element may be returned for some `<gamma>.group' orbit(s)
-of the required complete subgraphs.  To obtain just one element from each
-`<gamma>.group' orbit of the required complete subgraphs, you must give
-the value 2 to the parameter <alls>.
+*Warning:* Using the default value of 1 for <alls> (see below) means
+that the elements of the returned set need not be inequivalent under
+`<gamma>.group'. To obtain just one element from each `<gamma>.group'
+orbit of the required complete subgraphs, you must give the value 2 to
+the parameter <alls>.
 
-If <alls>=0 (or `false' for backward compatibility) then <K> will
-contain at most one element.  If <maxi>=`false' then <K> will contain one
-element if and only if <gamma> contains a complete subgraph of size <k>.
-If <maxi>=`true' then <K> will contain one element if and only if <gamma>
-contains a maximal complete subgraph of size <k>, in which case <K>
-will contain (the vertex-set of) such a maximal complete subgraph.
-(A *maximal complete subgraph* of <gamma> is a complete subgraph of
-<gamma> which is not properly contained in another complete subgraph
-of <gamma>.)
+If <alls>=0 (or `false' for backward compatibility) then <K> will contain
+at most one element.  If <maxi>=`false' then <K> will contain one element
+if and only if <gamma> contains a <G>-invariant complete subgraph of
+size <k>.  If <maxi>=`true' then <K> will contain one element if and
+only if <gamma> contains a <G>-invariant maximal complete subgraph
+of size <k>, in which case <K> will contain (the vertex-set of) such
+a complete subgraph.  
 
-If <alls>=1 (or `true' for backward compatibility) and <maxi>=`false',
-then <K> will contain (perhaps properly) a set of `<gamma>.group'
-orbit-representatives of the size <k> complete subgraphs of <gamma>.
-If <alls>=1 (the default) and <maxi>=`true', then <K> will contain
-(perhaps properly) a set of `<gamma>.group' orbit-representatives of
-the size <k> *maximal* complete subgraphs of <gamma>.
+Now suppose <alls>=1 (or `true' for backward compatibility) and <G>
+is trivial.  These are the default values for these parameters.
+If <maxi>=`false', then <K> will contain (perhaps properly) a set of
+`<gamma>.group' orbit-representatives of the size <k> complete subgraphs
+of <gamma>.  If <maxi>=`true', then <K> will contain (perhaps properly)
+a set of `<gamma>.group' orbit-representatives of the size <k> maximal
+complete subgraphs of <gamma>.
 
-If <alls>=2 and <maxi>=`false', then <K> will be a set of `<gamma>.group'
-orbit-representatives of the size <k> complete subgraphs of <gamma>.
-If <alls>=2 and <maxi>=`true' then <K> will be a set of `<gamma>.group'
-orbit-representatives of the size <k> *maximal* complete subgraphs
-of <gamma>.  This option can be more costly than when <alls>=1.
+On the other hand, suppose <alls>=1 (or `true' for backward
+compatibility) and <G> is non-trivial. If <maxi>=`false' then <K> will
+be a set of representatives for the orbits of the normalizer of <G>
+in `<gamma>.group', for its action on all the <G>-invariant size <k>
+complete subgraphs of <gamma>.  If <maxi>=`true' then <K> will be
+a set of representatives for the orbits of the normalizer of <G> in
+`<gamma>.group', for its action on all the <G>-invariant maximal size
+<k> complete subgraphs of <gamma>.
 
-The optional parameter <maxi> controls whether only maximal complete
-subgraphs of size <k> are returned.  The default is `false', which means
-that non-maximal as well as maximal complete subgraphs of size <k> are
-returned. If <maxi>=`true' then only maximal complete subgraphs of size
-<k> are returned. (Previous to version 4.1 of {\GRAPE}, <maxi>=`true'
-meant that it was assumed (but not checked) that all complete subgraphs
-of size <k> were maximal.)
+Suppose now <alls>=2. If <maxi>=`false' then <K> will consist of the
+<G>-invariant size <k> complete subgraphs of <gamma>, classified up to
+the action of `<gamma>.group'.  If <maxi>=`true' then <K> will consist
+of the <G>-invariant *maximal* size <k> complete subgraphs of <gamma>,
+classified up to the action of `<gamma>.group'.  In particular, if
+<alls>=2 and <G> is trivial then <K> will be a set of `<gamma>.group'
+orbit-representatives of all the size <k> (if <maxi>=`false') or the
+size <k> maximal (if <maxi>=`true') complete subgraphs of <gamma>.
 
 The optional boolean parameter <col> is used to determine whether or not
 partial proper vertex-colouring is used to cut down the search tree. The
-default is `true', which says to use this partial colouring.  For backward
-compatibility, <col> a rational number means the same as <col>=`true'.
+default is `true', which says to use this partial colouring. This is
+usually the best choice. For backward compatibility, <col> a rational
+number means the same as <col>=`true'.
 
 The optional parameter <wts> should be a list of vertex-weights; the list
 should be of length `<gamma>.order', with the <i>-th element being the
 weight of vertex <i>. The weights must be all positive integers if <k>
 is an integer, and all non-zero $d$-vectors of non-negative integers
 if <k> is a $d$-vector. The default is that all weights are equal to~1.
-(Recall that a complete subgraph of *size* <k> means a complete subgraph
-whose vertex-weights sum to <k>.)
+(Recall that, for this function, a complete subgraph of *size* <k> 
+means a complete subgraph whose vertex-weights sum to <k>.)
 
 If <wts> is a list of (positive) integers, then it is required that
 for all $g$ in `<gamma>.group' and all $v$ in `Vertices(<gamma>)',
 we have $<wts>[v^g]=<wts>[v]$.
 
 If <wts> is a list of $d$-vectors then we assume that there is some group
-$G$ and epimorphism $\theta$ from $G$ to `<gamma>.group', such that there
-is an action $\mu$ of $G$ on `[1..$d$]', giving an action of $G$ on the
+$H$ and epimorphism $\theta$ from $H$ to `<gamma>.group', such that there
+is an action $\mu$ of $H$ on `[1..$d$]', giving an action of $H$ on the
 set of integer $d$-vectors, where if $w$ is an integer $d$-vector and
-$g$ in $G$ then $w^g$ is defined by $w^g[\mu(i,g)]=w[i]$ for all $i$
-in `[1..$d$]'. It is then required that for all $g$ in $G$, we have
-$<k>^g=<k>$ and for all $v$ in `Vertices(<gamma>)', $<wts>[v^{g\theta}]
-= <wts>[v]^g$.  These requirements are *not* checked by the function,
+$h$ in $H$ then $w^h$ is defined by $w^h[\mu(i,h)]=w[i]$ for all $i$
+in `[1..$d$]'. It is then required that for all $h$ in $H$, we have
+$<k>^h=<k>$ and for all $v$ in `Vertices(<gamma>)', $<wts>[v^{h\theta}]
+= <wts>[v]^h$.  These requirements are *not* checked by the function,
 and the use of vector-weights is primarily for the {\DESIGN} package
 and advanced users of {\GRAPE}.
 
@@ -314,7 +363,7 @@ An alternative name for this function is
 See also "CompleteSubgraphs".
 
 \beginexample
-gap> gamma:=JohnsonGraph(6,2);                         
+gap> gamma:=JohnsonGraph(6,2);                       
 rec( isGraph := true, order := 15, 
   group := Group([ ( 1, 6,10,13,15, 5)( 2, 7,11,14, 4, 9)( 3, 8,12), 
       ( 2, 6)( 3, 7)( 4, 8)( 5, 9) ]), 
@@ -329,6 +378,17 @@ gap> CompleteSubgraphsOfGivenSize(gamma,4,1,true);
 [  ]
 gap> CompleteSubgraphsOfGivenSize(gamma,5,2,true);
 [ [ 1, 2, 3, 4, 5 ] ]
+gap> G:=SylowSubgroup(gamma.group,3);;
+gap> Size(G);
+9
+gap> CompleteSubgraphsOfGivenSize(G,gamma,2);
+[  ]
+gap> CompleteSubgraphsOfGivenSize(gamma,2);
+[ [ 1, 2 ] ]
+gap> CompleteSubgraphsOfGivenSize(G,gamma,3,2);
+[ [ 2, 4, 11 ] ]
+gap> CompleteSubgraphsOfGivenSize(gamma,3,2);
+[ [ 1, 2, 3 ], [ 1, 2, 6 ] ]
 gap> delta:=NewGroupGraph(Group(()),gamma);;
 gap> CompleteSubgraphsOfGivenSize(delta,5,2,true);
 [ [ 1, 2, 3, 4, 5 ], [ 1, 6, 7, 8, 9 ], [ 2, 6, 10, 11, 12 ], 

@@ -239,11 +239,34 @@ gap> IsIsomorphicGraph( gamma, delta );
 true
 gap> Length(Set(VertexColouring( JohnsonGraph(4,2) )));
 3
+gap> gamma := JohnsonGraph(5,2);;
+gap> CompleteSubgraphs(gamma);
+[ [ 1, 2, 3, 4 ], [ 1, 2, 5 ] ]
+gap>  CompleteSubgraphs(gamma,3,2);
+[ [ 1, 2, 3 ], [ 1, 2, 5 ] ]
+gap> CompleteSubgraphs(gamma,-1,0);
+[ [ 1, 2, 5 ] ]
+gap> G:=Subgroup(gamma.group,[(2,5)(3,6)(4,7)]);;
+gap> CompleteSubgraphs(G,gamma,-1);
+[ [ 1, 2, 5 ], [ 2, 5, 8, 9 ], [ 8 .. 10 ] ]
+gap> CompleteSubgraphs(G,gamma,-1,2);
+[ [ 1, 2, 5 ], [ 2, 5, 8, 9 ] ]
+gap> CompleteSubgraphs(G,gamma,4);
+[ [ 2, 5, 8, 9 ] ]
 gap> gamma:=JohnsonGraph(6,2);;
 gap> CompleteSubgraphsOfGivenSize(gamma,4,1,true);
 [  ]
 gap> Length(CompleteSubgraphsOfGivenSize(gamma,5,2,true));
 1
+gap> G:=SylowSubgroup(gamma.group,3);;
+gap> Size(G);
+9
+gap> CompleteSubgraphsOfGivenSize(G,gamma,2);
+[  ]
+gap> Length(CompleteSubgraphsOfGivenSize(G,gamma,3,2));
+1
+gap> Length(CompleteSubgraphsOfGivenSize(gamma,3,2));
+2
 gap> delta:=NewGroupGraph(Group(()),gamma);;
 gap> CompleteSubgraphsOfGivenSize(delta,5,2,true);
 [ [ 1, 2, 3, 4, 5 ], [ 1, 6, 7, 8, 9 ], [ 2, 6, 10, 11, 12 ], 

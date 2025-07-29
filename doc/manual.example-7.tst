@@ -49,6 +49,13 @@ gap>  CompleteSubgraphs(gamma,3,2);
 [ [ 1, 2, 3 ], [ 1, 2, 5 ] ]
 gap> CompleteSubgraphs(gamma,-1,0);
 [ [ 1, 2, 5 ] ]
+gap> G:=Subgroup(gamma.group,[(2,5)(3,6)(4,7)]);;
+gap> CompleteSubgraphs(G,gamma,-1);
+[ [ 1, 2, 5 ], [ 2, 5, 8, 9 ], [ 8 .. 10 ] ]
+gap> CompleteSubgraphs(G,gamma,-1,2);
+[ [ 1, 2, 5 ], [ 2, 5, 8, 9 ] ]
+gap> CompleteSubgraphs(G,gamma,4);
+[ [ 2, 5, 8, 9 ] ]
 gap> gamma:=JohnsonGraph(6,2);
 rec( isGraph := true, order := 15,
   group := Group([ ( 1, 6,10,13,15, 5)( 2, 7,11,14, 4, 9)( 3, 8,12),
@@ -64,6 +71,17 @@ gap> CompleteSubgraphsOfGivenSize(gamma,4,1,true);
 [  ]
 gap> CompleteSubgraphsOfGivenSize(gamma,5,2,true);
 [ [ 1, 2, 3, 4, 5 ] ]
+gap> G:=SylowSubgroup(gamma.group,3);;
+gap> Size(G);
+9
+gap> CompleteSubgraphsOfGivenSize(G,gamma,2);
+[  ]
+gap> CompleteSubgraphsOfGivenSize(gamma,2);
+[ [ 1, 2 ] ]
+gap> CompleteSubgraphsOfGivenSize(G,gamma,3,2);
+[ [ 2, 4, 11 ] ]
+gap> CompleteSubgraphsOfGivenSize(gamma,3,2);
+[ [ 1, 2, 3 ], [ 1, 2, 6 ] ]
 gap> delta:=NewGroupGraph(Group(()),gamma);;
 gap> CompleteSubgraphsOfGivenSize(delta,5,2,true);
 [ [ 1, 2, 3, 4, 5 ], [ 1, 6, 7, 8, 9 ], [ 2, 6, 10, 11, 12 ],
