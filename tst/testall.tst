@@ -240,20 +240,20 @@ true
 gap> Length(Set(VertexColouring( JohnsonGraph(4,2) )));
 3
 gap> gamma := JohnsonGraph(5,2);;
-gap> CompleteSubgraphs(gamma);
-[ [ 1, 2, 3, 4 ], [ 1, 2, 5 ] ]
-gap>  CompleteSubgraphs(gamma,3,2);
-[ [ 1, 2, 3 ], [ 1, 2, 5 ] ]
-gap> CompleteSubgraphs(gamma,-1,0);
-[ [ 1, 2, 5 ] ]
+gap> Length(CompleteSubgraphs(gamma,3,2));
+2
+gap> Length(CompleteSubgraphs(gamma,-1,0));
+1
 gap> G:=Subgroup(gamma.group,[(2,5)(3,6)(4,7)]);;
-gap> CompleteSubgraphs(G,gamma,-1);
-[ [ 1, 2, 5 ], [ 2, 5, 8, 9 ], [ 8 .. 10 ] ]
-gap> CompleteSubgraphs(G,gamma,-1,2);
-[ [ 1, 2, 5 ], [ 2, 5, 8, 9 ] ]
-gap> CompleteSubgraphs(G,gamma,4);
-[ [ 2, 5, 8, 9 ] ]
-gap> gamma:=JohnsonGraph(6,2);;
+gap> Length(CompleteSubgraphs(G,gamma,-1));
+3
+gap> Length(CompleteSubgraphs(G,gamma,-1,2));
+2
+gap> Length(CompleteSubgraphs(G,gamma,4));
+1
+gap> gamma:=JohnsonGraph(6,2);; 
+gap> Length(CompleteSubgraphsOfGivenSize(gamma,4));
+1
 gap> CompleteSubgraphsOfGivenSize(gamma,4,1,true);
 [  ]
 gap> Length(CompleteSubgraphsOfGivenSize(gamma,5,2,true));
@@ -263,6 +263,8 @@ gap> Size(G);
 9
 gap> CompleteSubgraphsOfGivenSize(G,gamma,2);
 [  ]
+gap> Length(CompleteSubgraphsOfGivenSize(gamma,2));
+1
 gap> Length(CompleteSubgraphsOfGivenSize(G,gamma,3,2));
 1
 gap> Length(CompleteSubgraphsOfGivenSize(gamma,3,2));
@@ -274,10 +276,6 @@ gap> CompleteSubgraphsOfGivenSize(delta,5,2,true);
 gap> Length(CompleteSubgraphsOfGivenSize(delta,5,0));
 1
 gap> CompleteSubgraphsOfGivenSize(delta,5,1,false,true,
->    [1,2,3,4,5,6,7,8,7,6,5,4,3,2,1]);
-[ [ 1, 4 ], [ 2, 3 ], [ 3, 14 ], [ 4, 15 ], [ 5 ], [ 11 ], [ 12, 15 ], 
-  [ 13, 14 ] ]
-gap> CompleteSubgraphsOfGivenSize(delta,5,2,false,false,
 >    [1,2,3,4,5,6,7,8,7,6,5,4,3,2,1]);
 [ [ 1, 4 ], [ 2, 3 ], [ 3, 14 ], [ 4, 15 ], [ 5 ], [ 11 ], [ 12, 15 ], 
   [ 13, 14 ] ]

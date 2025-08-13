@@ -194,24 +194,24 @@ subgraph of <gamma> if and only if such a subgraph exists, and if <k>
 is non-negative then <K> will contain a <G>-invariant complete subgraph
 of size <k> of <gamma> if and only if such a subgraph exists.
 
-If <alls>=1 (or `true' for backward compatibility) and <G> is trivial
+If <alls>=1 (or `true' for backward compatibility) and <G> is *trivial*
 then <K> will contain (perhaps properly) a set of `<gamma>.group'
 orbit-representatives of the maximal (if <k> is negative) or size <k>
 (if <k> is non-negative) complete subgraphs of <gamma>.
 
-If <alls>=1 (or `true' for backward compatibility) and <G> is non-trivial
+If <alls>=1 (or `true' for backward compatibility) and <G> is *non-trivial*
 then <K> will be a set of representatives for the orbits of the normalizer
 of <G> in `<gamma>.group', for its action on the <G>-invariant maximal
 (if <k> is negative) or <G>-invariant size <k> (if <k> is non-negative)
 complete subgraphs of <gamma>.
 
-If <alls>=2 then <K> will consist of the <G>-invariant maximal (if <k> is
-negative) or the <G>-invariant size <k> (if <k> is non-negative) complete
-subgraphs of <gamma>, classified up to the action of `<gamma>.group'.
-(This option can be more costly than when <alls>=1.)  In particular, if
-<alls>=2 and <G> is trivial then <K> will be a set of `<gamma>.group'
-orbit-representatives of the maximal (if <k> is negative) or size <k>
-(if <k> is non-negative) complete subgraphs of <gamma>.
+If <alls>=2 then <K> will consist of a classification of the <G>-invariant
+maximal (if <k> is negative) or the <G>-invariant size <k> (if <k> is
+non-negative) complete subgraphs of <gamma>, classified up to the action
+of `<gamma>.group'.  (This option can be more costly than when <alls>=1.)
+In particular, if <alls>=2 and <G> is trivial then <K> will be a set of
+`<gamma>.group' orbit-representatives of the maximal (if <k> is negative)
+or size <k> (if <k> is non-negative) complete subgraphs of <gamma>.
 
 Before applying `CompleteSubgraphs', one may want to associate the full
 automorphism group of <gamma> with <gamma>, via `<gamma> :=
@@ -224,15 +224,16 @@ See also "CompleteSubgraphsOfGivenSize".
 
 \beginexample
 gap> gamma := JohnsonGraph(5,2);
-rec( isGraph := true, order := 10, 
-  group := Group([ ( 1, 5, 8,10, 4)( 2, 6, 9, 3, 7), ( 2, 5)( 3, 6)( 4, 7) ]),
-  schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 ], 
-  adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], representatives := [ 1 ], 
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7 ] ], 
+  group := Group([ (1,5,8,10,4)(2,6,9,3,7), (2,5)(3,6)(4,7) ]), 
+  isGraph := true, isSimple := true, 
   names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 2, 3 ], [ 2, 4 ], 
-      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], isSimple := true )
+      [ 2, 5 ], [ 3, 4 ], [ 3, 5 ], [ 4, 5 ] ], order := 10, 
+  representatives := [ 1 ], schreierVector := [ -1, 2, 2, 1, 1, 1, 2, 1, 1, 1 
+     ] )
 gap> CompleteSubgraphs(gamma);
 [ [ 1, 2, 3, 4 ], [ 1, 2, 5 ] ]
-gap>  CompleteSubgraphs(gamma,3,2);
+gap> CompleteSubgraphs(gamma,3,2);
 [ [ 1, 2, 3 ], [ 1, 2, 5 ] ]
 gap> CompleteSubgraphs(gamma,-1,0);
 [ [ 1, 2, 5 ] ]
@@ -301,31 +302,24 @@ only if <gamma> contains a <G>-invariant maximal complete subgraph
 of size <k>, in which case <K> will contain (the vertex-set of) such
 a complete subgraph.  
 
-Now suppose <alls>=1 (or `true' for backward compatibility) and <G>
-is trivial.  These are the default values for these parameters.
-If <maxi>=`false', then <K> will contain (perhaps properly) a set of
-`<gamma>.group' orbit-representatives of the size <k> complete subgraphs
-of <gamma>.  If <maxi>=`true', then <K> will contain (perhaps properly)
-a set of `<gamma>.group' orbit-representatives of the size <k> maximal
-complete subgraphs of <gamma>.
+If <alls>=1 (or `true' for backward compatibility) and <G> is *trivial*
+then <K> will contain (perhaps properly) a set of `<gamma>.group'
+orbit-representatives of the size <k> (if <maxi>=`false') or the maximal
+size <k> (if <maxi>=`true') complete subgraphs of <gamma>.
 
-On the other hand, suppose <alls>=1 (or `true' for backward
-compatibility) and <G> is non-trivial. If <maxi>=`false' then <K> will
-be a set of representatives for the orbits of the normalizer of <G>
-in `<gamma>.group', for its action on all the <G>-invariant size <k>
-complete subgraphs of <gamma>.  If <maxi>=`true' then <K> will be
-a set of representatives for the orbits of the normalizer of <G> in
-`<gamma>.group', for its action on all the <G>-invariant maximal size
-<k> complete subgraphs of <gamma>.
+If <alls>=1 (or `true' for backward compatibility) and <G> is
+*non-trivial* then <K> will be a set of representatives for the orbits
+of the normalizer of <G> in `<gamma>.group', for its action on the
+<G>-invariant size <k> (if <maxi>=`false') or the <G>-invariant maximal
+size <k> (if <maxi>=`true') complete subgraphs of <gamma>.
 
-Suppose now <alls>=2. If <maxi>=`false' then <K> will consist of the
-<G>-invariant size <k> complete subgraphs of <gamma>, classified up to
-the action of `<gamma>.group'.  If <maxi>=`true' then <K> will consist
-of the <G>-invariant *maximal* size <k> complete subgraphs of <gamma>,
-classified up to the action of `<gamma>.group'.  In particular, if
-<alls>=2 and <G> is trivial then <K> will be a set of `<gamma>.group'
-orbit-representatives of all the size <k> (if <maxi>=`false') or the
-size <k> maximal (if <maxi>=`true') complete subgraphs of <gamma>.
+If <alls>=2 then <K> will consist of a classification of the <G>-invariant
+size <k> (if <maxi>=`false') or the <G>-invariant maximal size <k> (if
+<maxi>=`true') complete subgraphs of <gamma>, classified up to the action
+of `<gamma>.group'. (This option can be more costly than when <alls>=1.)
+In particular, if <alls>=2 and <G> is trivial then <K> will be a set of
+`<gamma>.group' orbit-representatives of the size <k> (if <maxi>=`false')
+or the maximal size <k> (if <maxi>=`true') complete subgraphs of <gamma>.
 
 The optional boolean parameter <col> is used to determine whether or not
 partial proper vertex-colouring is used to cut down the search tree. The
@@ -364,14 +358,13 @@ See also "CompleteSubgraphs".
 
 \beginexample
 gap> gamma:=JohnsonGraph(6,2);                       
-rec( isGraph := true, order := 15, 
-  group := Group([ ( 1, 6,10,13,15, 5)( 2, 7,11,14, 4, 9)( 3, 8,12), 
-      ( 2, 6)( 3, 7)( 4, 8)( 5, 9) ]), 
-  schreierVector := [ -1, 2, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1 ], 
-  adjacencies := [ [ 2, 3, 4, 5, 6, 7, 8, 9 ] ], representatives := [ 1 ], 
+rec( adjacencies := [ [ 2, 3, 4, 5, 6, 7, 8, 9 ] ], 
+  group := Group([ (1,6,10,13,15,5)(2,7,11,14,4,9)(3,8,12), (2,6)(3,7)(4,8)
+      (5,9) ]), isGraph := true, isSimple := true, 
   names := [ [ 1, 2 ], [ 1, 3 ], [ 1, 4 ], [ 1, 5 ], [ 1, 6 ], [ 2, 3 ], 
       [ 2, 4 ], [ 2, 5 ], [ 2, 6 ], [ 3, 4 ], [ 3, 5 ], [ 3, 6 ], [ 4, 5 ], 
-      [ 4, 6 ], [ 5, 6 ] ], isSimple := true )
+      [ 4, 6 ], [ 5, 6 ] ], order := 15, representatives := [ 1 ], 
+  schreierVector := [ -1, 2, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1 ] )
 gap> CompleteSubgraphsOfGivenSize(gamma,4);
 [ [ 1, 2, 3, 4 ] ]
 gap> CompleteSubgraphsOfGivenSize(gamma,4,1,true);
@@ -396,10 +389,11 @@ gap> CompleteSubgraphsOfGivenSize(delta,5,2,true);
 gap> CompleteSubgraphsOfGivenSize(delta,5,0);
 [ [ 1, 2, 3, 4, 5 ] ]
 gap> CompleteSubgraphsOfGivenSize(delta,5,1,false,true,
->       [1,2,3,4,5,6,7,8,7,6,5,4,3,2,1]);
+>    [1,2,3,4,5,6,7,8,7,6,5,4,3,2,1]);
 [ [ 1, 4 ], [ 2, 3 ], [ 3, 14 ], [ 4, 15 ], [ 5 ], [ 11 ], [ 12, 15 ], 
   [ 13, 14 ] ]
 \endexample
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \Section{MaximumClique}
