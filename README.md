@@ -1,5 +1,5 @@
 
-The GRAPE 4.9.2 Package for GAP
+The GRAPE 4.9.3 Package for GAP
 ===============================
 
 GRAPE is a GAP package for computing with graphs and groups, by 
@@ -8,7 +8,7 @@ Hulpke, Jerry James and Max Horn, and including Brendan McKay's nauty
 (Version 2.8.6) package.
 
 The GRAPE package and the source included with this distribution are
-copyright (C) Leonard Soicher 1992-2024, except for the following:
+copyright (C) Leonard Soicher 1992-2025, except for the following:
 
 - the nauty 2.8.6 package; see the copyright notice in the file
 nauty2_8_6/COPYRIGHT
@@ -26,7 +26,7 @@ Referencing GRAPE
 Please reference your use of the GRAPE package in a published work
 as follows:
 
-L.H. Soicher, The GRAPE package for GAP, Version 4.9.2, 2024,
+L.H. Soicher, The GRAPE package for GAP, Version 4.9.3, 2025,
 <https://gap-packages.github.io/grape>.
 
 Questions, remarks, suggestions, and issues

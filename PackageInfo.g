@@ -10,10 +10,10 @@ PackageName := "GRAPE",
 
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers.
-Version := "4.9.2",
+Version := "4.9.3",
 
 ##  Release date of the current version in dd/mm/yyyy format.
-Date := "11/10/2024",
+Date := "27/08/2025",
 
 ##  Machine readable license information (as an SPDX identifier)
 License := "Apache-2.0 AND GPL-2.0-or-later",

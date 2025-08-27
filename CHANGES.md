@@ -1,3 +1,14 @@
+Main changes from GRAPE 4.9.2 to GRAPE 4.9.3 (25 August 2025)
+-------------------------------------------------------------
+
+1. New parameter <G> for functions ``CompleteSubgraphs`` and
+``CompleteSubgraphsOfGivenSize``, to specify that the returned
+complete subgraphs must each be <G>-invariant. See the updated
+documentation for full details.
+
+2. Made small performance improvements for complete subgraphs
+functions and ``GRAPE_ExactSetCover``.
+
 Main changes from GRAPE 4.9.1 to GRAPE 4.9.2 (11 October 2024)
 --------------------------------------------------------------
 

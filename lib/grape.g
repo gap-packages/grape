@@ -1,8 +1,8 @@
 ##############################################################################
 ##
-##  grape.g (Version 4.9.2)    GRAPE Library     Leonard Soicher
+##  grape.g (Version 4.9.3)    GRAPE Library     Leonard Soicher
 ##
-##  Copyright (C) 1992-2024 Leonard Soicher, School of Mathematical Sciences, 
+##  Copyright (C) 1992-2025 Leonard Soicher, School of Mathematical Sciences, 
 ##                      Queen Mary University of London, London E1 4NS, U.K.
 ##
 # This version includes code by Jerry James (debugged by LS) 
