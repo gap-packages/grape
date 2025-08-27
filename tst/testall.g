@@ -1,4 +1,5 @@
 LoadPackage( "grape" );
+LoadPackage( "primgrp" );
 
 if IsBound(GAPInfo.SystemEnvironment.GRAPE_NAUTY) then
     if GAPInfo.SystemEnvironment.GRAPE_NAUTY = "true" then
