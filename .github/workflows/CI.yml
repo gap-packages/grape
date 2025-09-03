@@ -72,7 +72,7 @@ jobs:
       CHERE_INVOKING: 1
     steps:
       - uses: actions/checkout@v5
-      - uses: gap-actions/setup-cygwin@v1
+      - uses: gap-actions/setup-cygwin@v2
       - uses: gap-actions/setup-gap@cygwin-v2
         with:
           GAP_PKGS_TO_BUILD: 'profiling io'
