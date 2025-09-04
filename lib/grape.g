@@ -3674,6 +3674,8 @@ BindGlobal("GCompleteSubgraphsMain",function(G,gamma,kvector,allsubs,allmaxes,
 # When  G  is trivial, the return value of this function is 
 # that specified by  CompleteSubgraphsMain  (without the parameter G). 
 #
+# If  Length(<kvector>) <> 1  then  G  must be trivial. 
+#
 # If  G  is *not* trivial and  allsubs=1,  then the
 # returned set of cliques will be (exactly) a set of
 # Normalizer(gamma.group,G)-orbit representatives of the 
@@ -3720,6 +3722,8 @@ end;
 if IsTrivial(G) then 
    return CompleteSubgraphsMain(gamma,kvector,allsubs,allmaxes,
              partialcolour,weightvectors,dovector);
+elif Length(kvector)<>1 then
+   Error("must have Length(<kvector>)=1 if <G> is non-trivial");
 elif not IsSubgroup(gamma.group,G) then
    Error("<G> not a subgroup of <gamma>.group");
 fi;
@@ -3857,6 +3861,9 @@ else
    kvector:=k;
    if Length(kvector)=0 or ForAny(kvector,x->x<0) then 
       Error("<kvector> must be a non-empty list of non-negative integers");
+   fi;
+   if Length(kvector)<>1 and not IsTrivial(G) then
+      Error("must have Length(<kvector>)=1 if <G> is non-trivial");
    fi;
 fi;
 if not IsSimpleGraph(gamma) then 

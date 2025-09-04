@@ -273,7 +273,8 @@ complete subgraph is represented by its vertex-set.
 The optional parameter <G> must be a subgroup of `<gamma>.group' and
 specifies the (often powerful) constraint that each returned complete
 subgraph must be <G>-invariant. The default for <G> is the trivial
-permutation group, which imposes no constraint.
+permutation group, which imposes no constraint. If <k> is a vector
+of dimension greater than 1, then <G> must be trivial.
 
 The optional parameter <maxi> controls whether only maximal complete
 subgraphs of size <k> are returned. (A *maximal complete subgraph* of 
