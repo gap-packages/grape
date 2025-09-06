@@ -1,4 +1,4 @@
-Main changes from GRAPE 4.9.2 to GRAPE 4.9.3 (05 September 2025)
+Main changes from GRAPE 4.9.2 to GRAPE 4.9.3 (06 September 2025)
 ----------------------------------------------------------------
 
 1. New parameter *G* for functions ``CompleteSubgraphs`` and

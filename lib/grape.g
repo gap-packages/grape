@@ -3819,6 +3819,9 @@ if IsPermGroup(arg[1]) then
    od;
    Unbind(arg[Length(arg)]);
 else
+   if Length(arg)>6 then
+      Error("too many parameters");
+   fi;
    G:=Group(());
 fi;
 gamma:=arg[1];
@@ -3859,12 +3862,12 @@ if IsInt(k) then
    kvector:=[k];
 else
    kvector:=k;
-   if Length(kvector)=0 or ForAny(kvector,x->x<0) then 
-      Error("<kvector> must be a non-empty list of non-negative integers");
-   fi;
-   if Length(kvector)<>1 and not IsTrivial(G) then
-      Error("must have Length(<kvector>)=1 if <G> is non-trivial");
-   fi;
+fi;
+if Length(kvector)=0 or ForAny(kvector,x->x<0) then
+   Error("<kvector> must be a non-empty list of non-negative integers");
+fi;
+if Length(kvector)<>1 and not IsTrivial(G) then
+   Error("must have Length(<kvector>)=1 if <G> is non-trivial");
 fi;
 if not IsSimpleGraph(gamma) then 
    Error("<gamma> not a simple graph");
@@ -3921,6 +3924,9 @@ if IsPermGroup(arg[1]) then
    od;
    Unbind(arg[Length(arg)]);
 else
+   if Length(arg)>3 then
+      Error("too many parameters");
+   fi;
    G:=Group(());
 fi;
 gamma:=arg[1];
