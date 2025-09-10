@@ -2864,26 +2864,34 @@ end;
 
 CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 #
-# This recursive function is called by  CompleteSubgraphsMain  to do all 
-# the real work.  It is assumed that on the call from  CompleteSubgraphsMain,  
-# gammma.names  is bound, and is equal to  [1..gamma.order]. 
-#
-# This function returns a dense list of distinct complete subgraphs of
-# gamma,  each of which is given as a dense list of distinct vertex-names.
+# This recursive function is called by  CompleteSubgraphsMain  to do all
+# the real work.  
 #
 # The variables  smallorder,  smallorder1,  originalG,  
 # allsubs,  allmaxes,  weights,  weightvectors,  weighted, 
 # partialcolour,  dovector,  IsFixedPoint,  and  HasLargerEntry  
-# are global.  (originalG  is the group of automorphisms 
-# associated with the original graph.)  
+# are global to this function.  (originalG  is the group of
+# automorphisms associated with the graph  gamma  on the initial call 
+# from  CompleteSubgraphsMain.)  
 #
-# If  allsubs=2  then the returned complete subgraphs will be 
-# (pairwise) inequivalent under gamma.group. 
-# 
-# The parameter  sofar  is the set of vertices of the original graph 
-# chosen "so far".  We assume that  kvector  is equal to the original
-# kvector  passed to  CompleteSubgraphsMain  minus the sum of the 
-# weightvectors of the elements in  sofar. 
+# This function returns a dense list of distinct complete subgraphs of
+# the simple graph  gamma,  each of which is given as a dense list 
+# of distinct vertex-names.  It is assumed that on the initial call from
+# CompleteSubgraphsMain,  gammma.names  is bound, and is equal to
+# [1..gamma.order].
+#
+# If the entries of the integer list   kvector  are non-negative then the
+# weight-vectors of the vertex-names of each returned complete subgraph
+# will sum to  kvector.  Otherwise,  kvector  should have length  1  and
+# have a negative entry, in which case the returned complete subgraphs 
+# will be maximal in  gamma  if  allmaxes=true  and have no constraint
+# if  allmaxes=false.
+#
+# The parameter  sofar  is the set of vertex-names of the original graph 
+# (passed from  CompleteSubgraphsMain)  chosen "so far".
+# We assume that  kvector  is equal to the original  kvector  passed
+# from  CompleteSubgraphsMain  minus the sum of the weight-vectors
+# of the elements in  sofar. 
 #
 # The parameter  forbidden  is a  gamma.group-invariant  set of
 # vertex-names not in  sofar,  such that, for every element  f  in  forbidden, 
@@ -2891,26 +2899,30 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 # No returned clique will have a vertex in the given parameter  forbidden.
 # The value of  forbidden  may be changed by this function.
 #
-# If  allsubs>0  then this function returns a list of complete 
+# If  allsubs=0:  this function returns (a list of) 
+# at most one complete subgraph, and returns a list  c  of one
+# complete subgraph if and only if  c union sofar  is a solution
+# (including being a maximal complete subgraph if  allmaxes=true)
+# required by  CompleteSubgraphsMain.
+#
+# If  allsubs>0:  this function returns a list of complete 
 # subgraphs which, when each of its elements is augmented by 
 # the elements in  sofar,  is a list of solutions containing 
-# a transversal of the distinct  originalG-orbits  of all the originally 
-# required solutions (maximal complete or otherwise) which contain sofar, 
-# except possibly some orbits containing a solution having an
-# element in the given parameter  forbidden.
+# a transversal of the distinct  originalG-orbits  of all the solutions
+# required by  CompleteSubgraphsMain  (maximal complete or otherwise)
+# which contain sofar, except possibly some orbits containing a solution 
+# having an element in the given parameter  forbidden.
 #
-# If  allsubs=0  then this function returns (a list of) 
-# at most one complete subgraph, and returns (a list of) one
-# complete subgraph  c  if and only if  c union sofar  is a solution
-# (and also a maximal complete subgraph if  allmaxes=true). 
-#
+# If  allsubs=2:  the returned complete subgraphs will be 
+# (pairwise) inequivalent under gamma.group. 
+# 
 # If  allsubs=2  or  allmaxes:
 #    It is assumed that the set of vertex-names of  gamma  is the set 
-#    of all vertices in the original graph adjacent to each element of  sofar.
-#    It is also assumed that  gamma.group  (in its action on gamma.names)
-#    is contained in the image of the stabilizer in  originalG  of the set  
-#    sofar (in that group's action on  gamma.names), with equality if  
-#    allsubs=2.
+#    of all the vertices in the original graph that are adjacent to each
+#    element of  sofar. It is also assumed that  gamma.group  (in its action
+#    on  gamma.names)  is contained in the image of the stabilizer in
+#    originalG  of the set  sofar  (in that group's action on  gamma.names),
+#    with equality if  allsubs=2.
 #
 # We will be attempting the possible ways of adding 
 # a vertex(-name)  v  to  sofar,  such that  
@@ -2922,7 +2934,7 @@ CompleteSubgraphsSearch := function(gamma,kvector,sofar,forbidden)
 #           
 #      doposition:=First(dovector,x->kvector[x])<>0);
 #
-# 
+#
 # We "dynamically" order the search tree, as described in:
 # W. Myrvold, T. Prsa and N. Walker, A Dynamic programming approach
 # for timing and designing clique algorithms, Algorithms and Experiments
