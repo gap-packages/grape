@@ -18,13 +18,16 @@ concurrency:
 jobs:
   # The CI test job
   test:
-    name: "${{ matrix.ABI }}-bit / ${{ matrix.engine }} / GAP ${{ matrix.gap-branch }}"
-    runs-on: ubuntu-latest
+    name: "${{ matrix.os }} ${{ matrix.ABI }}-bit / ${{ matrix.engine }} / GAP ${{ matrix.gap-branch }}"
+    runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
       matrix:
+        os:
+          - ubuntu
         gap-branch:
           - master
+          - stable-4.15
           - stable-4.14
           - stable-4.13
           - stable-4.12
@@ -38,15 +41,23 @@ jobs:
           - gap-branch: master
             ABI: 32
             engine: nauty
+            os: ubuntu
           - gap-branch: master
             ABI: 64
             engine: bliss
+            os: ubuntu
+          - gap-branch: master
+            ABI: 64
+            engine: nauty
+            os: windows
 
     env:
       GRAPE_NAUTY: ${{ matrix.engine == 'nauty' }}
 
     steps:
       - uses: actions/checkout@v5
+      - uses: gap-actions/setup-cygwin@v2
+        if: ${{ runner.os == 'Windows' }}
       - name: "Install bliss"
         if: ${{ matrix.engine == 'bliss' }}
         run: sudo apt-get install bliss
@@ -54,31 +65,13 @@ jobs:
         with:
           GAPBRANCH: ${{ matrix.gap-branch }}
           ABI: ${{ matrix.ABI }}
-      - uses: gap-actions/build-pkg@v1
-      - uses: gap-actions/run-pkg-tests@v3
-      - uses: gap-actions/run-pkg-tests@v3
+          #GAP_PKGS_TO_BUILD: 'profiling io' # done by setup-gap@v2
+      - uses: gap-actions/build-pkg@v2
+      - uses: gap-actions/run-pkg-tests@v4
+      - uses: gap-actions/run-pkg-tests@v4
         with:
           only-needed: true
       - uses: gap-actions/process-coverage@v2
-      - uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-  test-cygwin:
-    name: "master cygwin64"
-    # if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
-    runs-on: windows-2022
-    env:
-      CHERE_INVOKING: 1
-    steps:
-      - uses: actions/checkout@v5
-      - uses: gap-actions/setup-cygwin@v2
-      - uses: gap-actions/setup-gap@cygwin-v2
-        with:
-          GAP_PKGS_TO_BUILD: 'profiling io'
-      - uses: gap-actions/build-pkg@cygwin-v1
-      - uses: gap-actions/run-pkg-tests@cygwin-v2
-      - uses: gap-actions/process-coverage@cygwin-v2
       - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
