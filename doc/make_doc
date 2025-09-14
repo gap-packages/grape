@@ -3,7 +3,7 @@ set -e
 
 echo "TeXing documentation"
 # delete old stuff to avoid spurious or "hidden errors" caused by their presence
-rm -f manual.aux manual.pdf manual.idx manual.ilg manual.ind manual.lab manual.log manual.six manual.toc
+rm -f manual.{aux,bbl,blg,dvi,idx,ilg,ind,lab,log,pdf,ps,six,toc}
 
 # TeX the manual
 tex manual
