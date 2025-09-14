@@ -1,37 +1,26 @@
 #!/bin/sh
-#############################################################################
-##
-#W  make_doc          make Example Package documentation          Greg Gamble
-##
-## Slightly modified by Leonard Soicher for use with GRAPE.
-## 
-#H  $Id: make_doc,v 4.1 2001/10/07 02:37:40 gap Exp $
-##
-##  This shell script uses TeX, BibTeX and MakeIndex to build the .dvi, Adobe
-##  PDF, PostScript (commented out) and  HTML  (provided  you  have  tth  and
-##  etc/convert.pl) documentation for the Example Package.
-##
-
 set -e
+
 echo "TeXing documentation"
+# delete old stuff to avoid spurious or "hidden errors" caused by their presence
+rm -f manual.aux manual.pdf manual.idx manual.ilg manual.ind manual.lab manual.log manual.six manual.toc
+
 # TeX the manual
 tex manual
-# ... and build its bibliography (uncomment if there is a `manual.bib')
+# ... and build its bibliography
 bibtex manual
-# TeX the manual again to incorporate the ToC ... and build the index
-tex manual; ../../../doc/manualindex manual
+# TeX the manual again to incorporate the ToC
+tex manual
+# ... and build the index
+../../../doc/manualindex manual
 # Finally TeX the manual again to get cross-references right
 tex manual
-# Create the PostScript version (uncomment next line, if needed)
-#dvips -D300 manual -o
+
 # Create PDF version
-pdftex manual; pdftex manual 
+pdftex manual
+pdftex manual
 
 # The HTML version of the manual
 mkdir -p ../htm
 echo "Creating HTML documentation"
-../../../etc/convert.pl -t -c -n grape . ../htm
-
-#############################################################################
-##
-#E
+../../../etc/convert.pl -i -u -c -n grape . ../htm
