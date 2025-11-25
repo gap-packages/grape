@@ -71,7 +71,7 @@ jobs:
       - uses: gap-actions/run-pkg-tests@v4
       - uses: gap-actions/run-pkg-tests@v4
         with:
-          only-needed: true
+          mode: 'onlyneeded'
       - uses: gap-actions/process-coverage@v2
       - uses: codecov/codecov-action@v5
         with:
