@@ -19,37 +19,25 @@ concurrency:
 jobs:
   # The CI test job
   test:
-    name: "${{ matrix.os }} ${{ matrix.ABI }}-bit / ${{ matrix.engine }} / GAP ${{ matrix.gap-branch }}"
+    name: "${{ matrix.os }} / ${{ matrix.engine }} / GAP ${{ matrix.gap-version }}"
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
       matrix:
         os:
           - ubuntu
-        gap-branch:
-          - master
-          - stable-4.16
-          - stable-4.15
-          - stable-4.14
-          - stable-4.13
-          - stable-4.12
-          - stable-4.11
-        ABI:
-          - 64
+        gap-version:
+          - 'devel'
+          - 'latest'
+          - '4.12'
         engine:
           - nauty
 
         include:
-          - gap-branch: master
-            ABI: 32
-            engine: nauty
-            os: ubuntu
-          - gap-branch: master
-            ABI: 64
+          - gap-version: 'devel'
             engine: bliss
             os: ubuntu
-          - gap-branch: master
-            ABI: 64
+          - gap-version: 'devel'
             engine: nauty
             os: windows
 
@@ -63,17 +51,15 @@ jobs:
       - name: "Install bliss"
         if: ${{ matrix.engine == 'bliss' }}
         run: sudo apt-get install bliss
-      - uses: gap-actions/setup-gap@v2
+      - uses: gap-actions/setup-gap@v3
         with:
-          GAPBRANCH: ${{ matrix.gap-branch }}
-          ABI: ${{ matrix.ABI }}
-          #GAP_PKGS_TO_BUILD: 'profiling io' # done by setup-gap@v2
-      - uses: gap-actions/build-pkg@v2
+          gap-version: ${{ matrix.gap-version }}
+      - uses: gap-actions/build-pkg@v3
       - uses: gap-actions/run-pkg-tests@v4
       - uses: gap-actions/run-pkg-tests@v4
         with:
-          mode: 'onlyneeded'
-      - uses: gap-actions/process-coverage@v2
+          mode: onlyneeded
+      - uses: gap-actions/process-coverage@v3
       - uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
