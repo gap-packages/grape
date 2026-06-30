@@ -68,7 +68,7 @@ jobs:
           GAPBRANCH: ${{ matrix.gap-branch }}
           ABI: ${{ matrix.ABI }}
           #GAP_PKGS_TO_BUILD: 'profiling io' # done by setup-gap@v2
-      - uses: gap-actions/build-pkg@v3
+      - uses: gap-actions/build-pkg@v2
       - uses: gap-actions/run-pkg-tests@v4
       - uses: gap-actions/run-pkg-tests@v4
         with:
