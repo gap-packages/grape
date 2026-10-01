@@ -1,5 +1,4 @@
-Main changes from GRAPE 4.9.2 to GRAPE 4.9.3 (06 September 2025)
-----------------------------------------------------------------
+## 4.9.3 (2025-09-06)
 
 1. New parameter *G* for functions ``CompleteSubgraphs`` and
 ``CompleteSubgraphsOfGivenSize``, to specify that the returned
@@ -9,8 +8,7 @@ documentation for full details.
 2. Made small performance improvements for complete subgraphs
 functions and ``GRAPE_ExactSetCover``.
 
-Main changes from GRAPE 4.9.1 to GRAPE 4.9.2 (11 October 2024)
---------------------------------------------------------------
+## 4.9.2 (2024-10-11)
 
 1. Included new functions ``IsVertexColouring`` and
 ``GRAPE_ExactSetCover``.
@@ -23,8 +21,7 @@ currently containing documentation for ``SmallestImageSet`` and
 for the case when all weightvectors are (0,1)-vectors of dimension
 greater than 1.
 
-Main changes from GRAPE 4.9.0 to GRAPE 4.9.1 (30 August 2024)
--------------------------------------------------------------
+## 4.9.1 (2024-08-30)
 
 1. Made an improvement to the proper vertex-colouring search process.
 
@@ -34,8 +31,7 @@ Main changes from GRAPE 4.9.0 to GRAPE 4.9.1 (30 August 2024)
 3. Added further (small) improvements to the documentation, including
 three new references.
 
-Main changes from GRAPE 4.8.5 to GRAPE 4.9.0 (09 December 2022)
----------------------------------------------------------------
+## 4.9.0 (2022-12-09)
 
 1. The included version of nauty is now 2.8.6. You should expect canonical
 labellings produced by nauty to change from previous versions of GRAPE.
@@ -50,8 +46,7 @@ Also, improved the documentation for this function.
 4. Added some tweaks to functions to compute complete subgraphs, which
 should hopefully improve overall performance.
 
-Main changes from GRAPE 4.8.4 to GRAPE 4.8.5 (26 March 2021)
-------------------------------------------------------------
+## 4.8.5 (2021-03-26)
 
 1. Fixed bug in `EdgeOrbitsGraph`, where previously when given an empty
 list of edges, an error occurred and a break loop was entered.
@@ -71,8 +66,7 @@ but may use too much storage. Both possibilities for
 and bliss, some tests for non-simple graphs with colour classes were
 added to the package tests.
 
-Main changes from GRAPE 4.8.3 to GRAPE 4.8.4 (05 March 2021)
-------------------------------------------------------------
+## 4.8.4 (2021-03-05)
 
 1. Simple GRAPE graphs are now output to nauty as nauty undirected graphs
 and are so treated by nauty.  (You should expect canonical labellings
@@ -108,8 +102,7 @@ to make clear that the null orbital graph is not included.
 7. Improvements made to the program documentation for
 'CompleteSubgraphsMain'.
 
-Main changes from GRAPE 4.8.2 to GRAPE 4.8.3 (December 2019)
-------------------------------------------------------------
+## 4.8.3 (2019-12-09)
 
 1. Implemented new components maximumClique and minimumVertexColouring
 for (simple) GRAPE graphs. These components may be set or used by 
@@ -130,8 +123,7 @@ Windows 64-bit execution of nauty.
 7. Central GAP system testing can now run tests using bliss as well
 as the version of nauty included with GRAPE. 
 
-Main changes from GRAPE 4.8.1 to GRAPE 4.8.2 (March 2019)
----------------------------------------------------------
+## 4.8.2 (2019-03-20)
 
 1. Bug fixed in MaximumClique.  This bug caused a wrong answer to be
 returned for an input complete graph (on more than one vertex) for the
@@ -153,8 +145,7 @@ group of the input graph is already known then it is made use of.
 
 8. Information in file COPYING moved to README.md, and file COPYING deleted. 
 
-Main changes from GRAPE 4.8 to GRAPE 4.8.1 (October 2018)
----------------------------------------------------------
+## 4.8.1 (2018-10-24)
 
 1. GRAPE package moved on to github.
 
@@ -163,9 +154,8 @@ Main changes from GRAPE 4.8 to GRAPE 4.8.1 (October 2018)
 3. Documentation for CompleteSubgraphsOfGivenSize improved. 
 
 4. Obsolete POST_RESTORE_FUNCS no longer used.
- 
-Main changes from GRAPE 4.7 to GRAPE 4.8 (June 2018)
-----------------------------------------------------
+
+## 4.8 (2018-06-05)
 
 1. New function: HammingGraph
 
@@ -205,8 +195,7 @@ instead of clique search to classify "bundles".
 
 11. Fixed small efficiency bug in CompleteSubgraphsMain. 
 
-Main changes from GRAPE 4.6.1 to GRAPE 4.7 (January 2016)
----------------------------------------------------------
+## 4.7 (2016-01-08)
 
 1. The included version of nauty is now the final patched 
 version of nauty 2.2.
@@ -222,24 +211,21 @@ to nauty.
 5. Documentation and installation instructions have been revised 
 accordingly.
 
-Main changes from GRAPE 4.6 to GRAPE 4.6.1
-------------------------------------------
+## 4.6.1 (2012-05-17)
 
 1. Except for nauty 2.2, GRAPE is now licensed under the GPL,
 version 2 or higher.
 
 2. Installation instructions revised.
 
-Main changes from GRAPE 4.5 to GRAPE 4.6
-----------------------------------------
+## 4.6 (2012-05-03)
 
 1. GRAPE revised to work fully under Windows (XP or later), with an
 appropriate 32-bit nauty/dreadnaut binary (made by A. Hulpke) included.
 
 2. Installation instructions revised.
 
-Main changes from GRAPE 4.4 to GRAPE 4.5
-----------------------------------------
+## 4.5 (2011-11-23)
 
 1. Makefile.in revised.
 
@@ -247,8 +233,7 @@ Main changes from GRAPE 4.4 to GRAPE 4.5
 
 3. Default banner now used.
 
-Main changes from GRAPE 4.3 to GRAPE 4.4
-----------------------------------------
+## 4.4 (2011-09-09)
 
 1. With much help from Alexander Hulpke, and using new features in GAP
 4.5, the interface between GRAPE and dreadnaut is now done entirely in
@@ -276,8 +261,7 @@ and EnumColadj removed.  It appears no one uses them now, and their
 functionality can largely be handled by current documented GAP/GRAPE
 functions.
 
-Main changes from GRAPE 4.2 to GRAPE 4.3
-----------------------------------------
+## 4.3 (2006-06-30)
 
 1. GRAPE can now be installed via ``/bin/sh configure ../..; make``.
 
@@ -311,8 +295,7 @@ from GAP 4.4.5.
 
 10. grape.bib moved to manual.bib.
 
-Main changes from GRAPE 4.1 to GRAPE 4.2
-----------------------------------------
+## 4.2 (2003-09-22)
 
 1. Including Steve Linton's SmallestImageSet function, and using
 this function for faster isomorph rejection in functions CompleteSubgraphs,
@@ -336,8 +319,7 @@ conflict with the xgap package.
 7. Output streams are now used in AutGroupGraph and
 SetAutGroupCanonicalLabelling.
 
-Main changes from GRAPE 4.0 to GRAPE 4.1
-----------------------------------------
+## 4.1
 
 1. Extended functionality of CompleteSubgraphsOfGivenSize so that a 
 user can request only *maximal* complete subgraphs of a given size to
@@ -386,8 +368,7 @@ be returned.
 
 12. A p2c translation of tcfrontend4.p is now supplied and used.
 
-Main changes from GRAPE 2.31 to GRAPE 4.0
------------------------------------------
+## 4.0
 
 1. GRAPE 4.0 is compatible with GAP4, but not with GAP3.
 
@@ -433,8 +414,7 @@ CliquesOfGivenSize  is another name for  CompleteSubgraphsOfGivenSize.
 
 12. The documentation has been expanded and improved.
 
-Main changes from GRAPE 2.2 to GRAPE 2.31
------------------------------------------
+## 2.31
 
 1. The new  CompleteSubgraphsOfGivenSize,  which allows for searching in
 a vertex-weighted graph for cliques with a given vertex-weight sum.
@@ -455,4 +435,3 @@ zero-vertex graph to be bipartite, with bicomponents = [[],[]]).
 6. A bug fixed in the function UnderlyingGraph. That bug had
 the effect that if the returned graph had loops, then it 
 might have had its isSimple component erroneously set to true.
-
