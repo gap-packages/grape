@@ -17,6 +17,8 @@ binaries: Makefile
 	rm -f $(NAUTYDIR)/*.o
 
 clean: Makefile
+	cd $(NAUTYDIR) && rm -f *.o config.log config.cache config.status makefile
+	cd $(NAUTYDIR) && ./configure --enable-generic
 	make -C $(NAUTYDIR) clean
 	rm -rf $(BINDIR)
 
